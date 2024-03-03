@@ -1,0 +1,7 @@
+{
+  "name": "ionic-learning-platform-commercep",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
