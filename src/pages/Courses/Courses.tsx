@@ -1,34 +1,73 @@
 import {
+  IonCol,
   IonContent,
-  IonLabel,
+  IonGrid,
+  IonIcon,
+  IonImg,
+  IonItem,
+  IonList,
   IonPage,
-  IonSegment,
-  IonSegmentButton,
+  IonRow,
+  IonText,
+  IonTitle,
+  SegmentChangeEventDetail,
 } from "@ionic/react";
-import React from "react";
+import React, { useState } from "react";
+import { coursesNavItems, categories } from "../../constants";
+import InfoIcon from "../../assets/icons/info.svg";
+import categoryIcon from "../../assets/icons/category.svg";
 import Header from "../../components/Header/Header";
-import styles from './Courses.module.scss'
+import SegmentNavPanel from "../../components/SegmentNavPanel/SegmentNavPanel";
+import InsetBtn from "../../components/InsetBtn/InsetBtn";
+import styles from "./Courses.module.scss";
 
 const Courses: React.FC = () => {
+  const [filter, setFilter] = useState<string | number>("my");
+
+  const onSegmentChange = (event: CustomEvent<SegmentChangeEventDetail>) => {
+    const { value } = event.detail;
+    if (value !== undefined) {
+      setFilter(value);
+    }
+  };
+
   return (
     <IonPage>
       <Header title="Courses" />
       <IonContent className="custom-content-wrapper">
-        <IonSegment scrollable={true} value="my" className={styles.segment} mode="ios">
-          <IonSegmentButton value="my" mode="md">
-            <IonLabel>My Courses</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="available" mode="md">
-            <IonLabel>Available Courses</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="completed" mode="md">
-            <IonLabel>Completed Courses</IonLabel>
-          </IonSegmentButton>
-        </IonSegment>
-        <div>
-          <h1>Courses Page</h1>
-          <p>Welcome to the courses page!</p>
-        </div>
+        <SegmentNavPanel
+          value={filter}
+          setValue={onSegmentChange}
+          items={coursesNavItems}
+        />
+        <IonGrid className={styles.categoriesList}>
+          {categories.map((category) => (
+            <IonRow key={category.id} className={styles.categoriesItem}>
+              <IonCol size="auto">
+                <IonImg src={categoryIcon} />
+              </IonCol>
+              <IonCol>
+                <IonText>
+                  <h3>{category.title}</h3>
+                </IonText>
+                <IonText>
+                  <p>
+                    (Complete all 4 courses to receive a <b>MBA Certificate</b>)
+                  </p>
+                </IonText>
+              </IonCol>
+              <IonCol size="auto">
+                <InsetBtn
+                  icon={InfoIcon}
+                  width="32px"
+                  height="32px"
+                  disabled={false}
+                  onClick={() => {}}
+                />
+              </IonCol>
+            </IonRow>
+          ))}
+        </IonGrid>
       </IonContent>
     </IonPage>
   );

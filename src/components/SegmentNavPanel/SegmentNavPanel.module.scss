@@ -1,0 +1,41 @@
+.segment {
+  --color: var(--ion-color-dark);
+  --background: transparent;
+
+  padding-inline: 16px;
+  padding-top: 12px;
+
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  &:before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 12px;
+    width: 100%;
+    height: 2px;
+    background-color: var(--ion-color-dark);
+  }
+}
+
+.segmentBtn {
+  --padding-start: 0;
+  --padding-end: 0;
+  --color: var(--ion-color-dark);
+  --color-checked: var(--ion-color-primary);
+
+  margin-inline: 12px;
+  min-height: 40px;
+}
+
+.segmentLabel {
+  margin-block: 8px;
+  font-size: 14px;
+  line-height: 14px;
+  font-weight: 700;
+  letter-spacing: normal;
+  text-transform: capitalize;
+}

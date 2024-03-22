@@ -1,10 +1,12 @@
-export const category = {
-  description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet massa ante. Donec eget tellus libero. Ut pulvinar quam et varius accumsan. In efficitur arcu in purus finibus dignissim. Duis ante diam, eleifend malesuada auctor et, consequat eu erat. Morbi lacinia nulla lectus, sed consectetur urna venenatis in. Ut aliquam rhoncus nisi, a sodales lacus malesuada ac. Proin suscipit enim lorem, eu suscipit purus consequat sit amet.",
-  id: 1,
-  image_path: "static/categories/13-02-2024/filosofiya.jpeg",
-  title: "Business Management",
-};
+export const categories = [
+  {
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet massa ante. Donec eget tellus libero. Ut pulvinar quam et varius accumsan. In efficitur arcu in purus finibus dignissim. Duis ante diam, eleifend malesuada auctor et, consequat eu erat. Morbi lacinia nulla lectus, sed consectetur urna venenatis in. Ut aliquam rhoncus nisi, a sodales lacus malesuada ac. Proin suscipit enim lorem, eu suscipit purus consequat sit amet.",
+    id: 1,
+    image_path: "static/categories/13-02-2024/filosofiya.jpeg",
+    title: "Business Management",
+  },
+];
 
 export const courses = [
   {
@@ -29,5 +31,20 @@ export const courses = [
     intro_text:
       "Nullam ex ante, dignissim in elit eget, iaculis auctor lacus. Integer eu rutrum quam. Integer diam mauris, hendrerit quis fermentum vehicula, sagittis sit amet ligula. Sed laoreet commodo ullamcorper",
     icons: [],
+  },
+];
+
+export const coursesNavItems = [
+  {
+    value: "my",
+    label: "my courses",
+  },
+  {
+    value: "available",
+    label: "available courses",
+  },
+  {
+    value: "completed",
+    label: "completed courses",
   },
 ];
