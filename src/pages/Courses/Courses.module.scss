@@ -2,25 +2,3 @@
   padding: 16px;
 }
 
-.categoriesItem {
-  background-color: var(--custom-bg-rgba-secondary);
-  border-radius: var(--custom--border-radius-primary);
-  box-shadow: var(--custom-box-shadow-primary);
-  padding: 12px 10px;
-
-  h3 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--ion-color-dark);
-  }
-
-  p {
-    font-size: 8px;
-    font-weight: 400;
-
-    b {
-      font-weight: 700;
-    }
-  }
-}

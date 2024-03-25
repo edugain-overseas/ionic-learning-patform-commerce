@@ -1,3 +1,10 @@
+export interface CategoryTypes {
+  id: number;
+  description: string;
+  image_path: string;
+  title: string;
+}
+
 export const categories = [
   {
     description:

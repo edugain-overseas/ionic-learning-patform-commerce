@@ -17,11 +17,13 @@ import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
 
+/* Custom styles */
+import "./App.scss";
+
 /* Theme variables */
 import "./theme/variables.css";
 
-/* Custom styles */
-import "./App.scss";
+
 import { CoursesProvider } from "./context/CoursesContext";
 
 setupIonicReact();

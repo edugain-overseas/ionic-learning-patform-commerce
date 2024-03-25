@@ -1,33 +1,11 @@
 <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="-1" y="1" width="7.42857" height="7.42857" rx="2.14286"
-        transform="matrix(-1 0 0 1 19.8047 0)" stroke="url(#paint0_linear_0_1)" stroke-width="2" />
+        transform="matrix(-1 0 0 1 19.8047 0)" stroke="currentColor" stroke-width="2" />
     <rect x="1" y="13.5723" width="7.42857" height="7.42857" rx="2.14286"
-        stroke="url(#paint1_linear_0_1)" stroke-width="2" />
+        stroke="currentColor" stroke-width="2" />
     <rect width="9.42857" height="2.75" rx="1.375" transform="matrix(-1 0 0 1 9.42969 3.4375)"
-        fill="url(#paint2_linear_0_1)" />
+        fill="currentColor" />
     <rect x="12.5703" y="15.8125" width="9.42857" height="2.75" rx="1.375"
-        fill="url(#paint3_linear_0_1)" />
-    <defs>
-        <linearGradient id="paint0_linear_0_1" x1="9.42857" y1="4.71429" x2="-1.84812e-07"
-            y2="4.71429" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#001C54" />
-            <stop offset="1" stop-color="#001C54" />
-        </linearGradient>
-        <linearGradient id="paint1_linear_0_1" x1="9.42857" y1="17.2866" x2="-1.84812e-07"
-            y2="17.2866" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#001C54" />
-            <stop offset="1" stop-color="#001C54" />
-        </linearGradient>
-        <linearGradient id="paint2_linear_0_1" x1="9.42857" y1="1.375" x2="-1.84808e-07"
-            y2="1.37501" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#001C54" />
-            <stop offset="1" stop-color="#001C54" />
-        </linearGradient>
-        <linearGradient id="paint3_linear_0_1" x1="21.9989" y1="17.1875" x2="12.5703" y2="17.1875"
-            gradientUnits="userSpaceOnUse">
-            <stop stop-color="#001C54" />
-            <stop offset="1" stop-color="#001C54" />
-        </linearGradient>
-    </defs>
+        fill="currentColor" />
 </svg>
     

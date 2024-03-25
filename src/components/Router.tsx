@@ -7,6 +7,7 @@ import Home from "../pages/Home/Home";
 import UserProfile from "../pages/UserProfile/UserProfile";
 import Courses from "../pages/Courses/Courses";
 import Menu from "../pages/Menu/Menu";
+import CategoryDetailPage from "../pages/CategoryDetailPage/CategoryDetailPage";
 
 const Router: React.FC = () => {
   return (
@@ -16,6 +17,11 @@ const Router: React.FC = () => {
           <Route path="/home" component={Home} exact />
           <Route path="/my-profile" component={UserProfile} exact />
           <Route path="/courses" component={Courses} exact />
+          <Route
+            path="/courses/category/:categoryId"
+            component={CategoryDetailPage}
+            exact
+          />
           <Route path="/basket" component={Courses} exact />
           <Route path="/menu" component={Menu} exact />
           <Route exact path="/" render={() => <Redirect to="/home" />} />

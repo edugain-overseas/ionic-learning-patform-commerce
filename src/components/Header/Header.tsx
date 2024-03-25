@@ -17,32 +17,81 @@ import styles from "./Header.module.scss";
 
 interface HeaderTypes {
   title: string;
+  secondary: boolean | undefined;
+  left: string[];
+  right: string[];
 }
 
-const Header: React.FC<HeaderTypes> = ({ title }) => {
+const renderBtn = (buttonName: string) => {
+  switch (buttonName) {
+    case "back":
+      return (
+        <IonBackButton
+          key={buttonName}
+          className={styles.backBtn}
+          defaultHref="/"
+          icon={backIcon}
+          text={""}
+        ></IonBackButton>
+      );
+    case "notification":
+      return (
+        <IonButton key={buttonName}>
+          <IonIcon src={bellIcon} className={styles.bellIcon} />
+        </IonButton>
+      );
+    case "list-style":
+      return (
+        <IonButton key={buttonName}>
+          <IonIcon src={rowIcon} className={styles.rowIcon} />
+        </IonButton>
+      );
+    case "search":
+      return (
+        <IonButton key={buttonName}>
+          <IonIcon src={searchIcon} className={styles.searchIcon} />
+        </IonButton>
+      );
+
+    default:
+      break;
+  }
+};
+
+const Header: React.FC<HeaderTypes> = ({
+  title,
+  secondary = false,
+  left = [],
+  right = [],
+}) => {
+  console.log(secondary);
+
   return (
     <IonHeader className={styles.header}>
-      <IonToolbar className={styles.toolbar}>
+      <IonToolbar
+        className={`${secondary ? styles.secondary : ""} ${styles.toolbar}`}
+      >
         <IonButtons slot="start">
-          <IonBackButton
+          {left.map((name) => renderBtn(name))}
+          {/* <IonBackButton
             className={styles.backBtn}
             defaultHref="/"
-            color="primary"
             icon={backIcon}
             text={""}
           ></IonBackButton>
           <IonButton>
             <IonIcon src={bellIcon} className={styles.bellIcon} />
-          </IonButton>
+          </IonButton> */}
         </IonButtons>
         <IonTitle className={styles.title}>{title}</IonTitle>
         <IonButtons slot="end">
-          <IonButton>
+          {right.map((name) => renderBtn(name))}
+          {/* <IonButton>
             <IonIcon src={rowIcon} className={styles.rowIcon} />
           </IonButton>
           <IonButton>
             <IonIcon src={searchIcon} className={styles.searchIcon} />
-          </IonButton>
+          </IonButton> */}
         </IonButtons>
       </IonToolbar>
     </IonHeader>
