@@ -11,7 +11,6 @@ import CoursesIcon from "../assets/icons/tabs/courses.svg";
 import MyProfileIcon from "../assets/icons/tabs/my-profile.svg";
 import BasketIcon from "../assets/icons/tabs/basket.svg";
 import MenuIcon from "../assets/icons/tabs/menu.svg";
-import TabBar from "./TabBar";
 
 interface TabsTypes {
   children: ReactNode;
