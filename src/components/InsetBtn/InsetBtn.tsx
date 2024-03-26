@@ -2,11 +2,11 @@ import React from "react";
 import styles from "./InsetBtn.module.scss";
 
 interface InsetBtnTypes {
-  icon: string | undefined;
-  width: string | undefined;
-  height: string | undefined;
-  onClick: () => void | undefined;
-  disabled: boolean | undefined;
+  icon?: React.ReactNode;
+  width?: string | undefined;
+  height?: string | undefined;
+  onClick?: () => void | undefined;
+  disabled?: boolean | undefined;
 }
 
 const InsetBtn: React.FC<InsetBtnTypes> = ({
@@ -23,9 +23,7 @@ const InsetBtn: React.FC<InsetBtnTypes> = ({
       onClick={onClick}
       disabled={disabled}
     >
-      <div>
-        <img src={icon} />
-      </div>
+      <div>{icon}</div>
     </button>
   );
 };

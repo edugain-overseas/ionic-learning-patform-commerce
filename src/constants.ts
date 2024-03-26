@@ -5,6 +5,28 @@ export interface CategoryTypes {
   title: string;
 }
 
+export interface courseTypes {
+  quantity_test?: null | number;
+  skills_text: string;
+  title: string;
+  c_type: string;
+  about_text: string;
+  id: number;
+  c_duration: string;
+  category_id: number;
+  image_path: null | string;
+  c_award: string;
+  price: number;
+  c_language: string;
+  old_price: number;
+  c_level: string;
+  is_published: boolean;
+  c_access: string;
+  quantity_lecture: null | number;
+  intro_text: string;
+  icons: any[];
+}
+
 export const categories = [
   {
     description:

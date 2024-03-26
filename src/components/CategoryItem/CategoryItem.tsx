@@ -1,5 +1,11 @@
 import React from "react";
-import { IonContent, IonPopover, IonRouterLink, IonText } from "@ionic/react";
+import {
+  IonContent,
+  IonIcon,
+  IonPopover,
+  IonRouterLink,
+  IonText,
+} from "@ionic/react";
 import { CategoryTypes } from "../../constants";
 import categoryIcon from "../../assets/icons/category.svg";
 import infoIcon from "../../assets/icons/info.svg";
@@ -35,7 +41,7 @@ const CategoryItem: React.FC<CategoryItemTypes> = ({ category }) => {
       </IonRouterLink>
       <div className={styles.infoBtn} id="info-trigger">
         <InsetBtn
-          icon={infoIcon}
+          icon={<IonIcon src={infoIcon} />}
           width="32px"
           height="32px"
           disabled={false}

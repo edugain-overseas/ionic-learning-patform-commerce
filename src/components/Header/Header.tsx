@@ -64,7 +64,6 @@ const Header: React.FC<HeaderTypes> = ({
   left = [],
   right = [],
 }) => {
-  console.log(secondary);
 
   return (
     <IonHeader className={styles.header}>
