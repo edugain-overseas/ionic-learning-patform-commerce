@@ -93,14 +93,22 @@
 }
 
 .modal {
-  bottom: 61px;
   --border-radius: 20px;
+  bottom: 61px;
+  padding-bottom: 61px;
+  box-shadow: var(--custom-box-shadow-primary);
 
   .modalContentWrapper {
-    --padding-top: 18px;
-    --padding-block: 18px;
-    --padding-start: 18px;
-    --padding-end: 18px;
+    --background: url("../../assets/images/background.png");
+    --overflow: auto;
+    // --padding-bottom: 80px;
+  }
+
+  .background {
+    background-color: var(--custom-bg-rgba-primary);
+    padding: 18px;
+    padding-bottom: 140px;
+    min-height: 100%;
   }
 
   .modalHeader {
@@ -117,5 +125,11 @@
     span {
       color: var(--ion-color-light);
     }
+  }
+
+  .coursesList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 }

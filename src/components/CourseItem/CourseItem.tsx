@@ -17,19 +17,26 @@ interface CourseItemTypes {
 const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
   return (
     <li className={styles.itemWrapper}>
-      <IonRouterLink routerLink={`/courses/${course.id}`}>
-        <div className={styles.courseAvatarWrapper}>
+      <IonRouterLink
+        routerLink={`/courses/${course.id}`}
+        className={styles.link}
+      >
+        <div
+          className={styles.courseAvatarWrapper}
+          style={{ background: `url(${subject})` }}
+        >
           <img src={subject} alt={course.title} />
         </div>
         <div className={styles.courseInfo}>
-          <div className={styles.col}>
-            <h3 className={styles.courseTitle}>{course.title}</h3>
+          <div className={styles.colLeft}>
+            <h3 className={styles.courseTitle}>
+              {course.title} {course.title}
+            </h3>
             <div className={styles.progress}>
-              <span>Progress:</span>
-              <ProgressBar value={progress} width={172} height={10} />
+              <span>Progress: Not purchased</span>
             </div>
           </div>
-          <div className={styles.col}>
+          <div className={styles.colRight}>
             <CardPrice oldPrice={course.old_price} price={course.price} />
             <InsetBtn
               icon={<IonIcon className={styles.basketIcon} src={basket} />}

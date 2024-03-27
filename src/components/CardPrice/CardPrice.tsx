@@ -32,7 +32,6 @@ const CardPrice: React.FC<CardPriceTypes> = ({
     >
       {oldPrice && (
         <div className={styles.oldPriceWrapper}>
-          <span className={styles.dollarSign}>$</span>
           <div className={styles.info}>
             <span className={styles.label}>Old price</span>
             <span className={styles.value}>{priceFormatter(oldPrice)}</span>

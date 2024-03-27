@@ -8,6 +8,7 @@ import UserProfile from "../pages/UserProfile/UserProfile";
 import Courses from "../pages/Courses/Courses";
 import Menu from "../pages/Menu/Menu";
 import CategoryDetailPage from "../pages/CategoryDetailPage/CategoryDetailPage";
+import CourseDetailPage from "../pages/CourseDetailPage/CourseDetailPage";
 
 const Router: React.FC = () => {
   return (
@@ -22,6 +23,10 @@ const Router: React.FC = () => {
             component={CategoryDetailPage}
             exact
           />
+          <Route path="/course/:courseId/" component={CourseDetailPage} exact>
+            <Route path="/course/:courseId/tasks" component={Menu} />
+            <Route path="/course/:courseId/exam" component={Menu} />
+          </Route>
           <Route path="/basket" component={Courses} exact />
           <Route path="/menu" component={Menu} exact />
           <Route exact path="/" render={() => <Redirect to="/home" />} />

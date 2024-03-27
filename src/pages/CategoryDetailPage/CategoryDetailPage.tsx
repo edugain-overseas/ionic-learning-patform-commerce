@@ -124,21 +124,38 @@ const CategoryDetailPage: React.FC = () => {
           keyboardClose={false}
           backdropDismiss={false}
           backdropBreakpoint={1}
-          canDismiss={false}
+          // canDismiss={false}
           onIonBreakpointDidChange={handleBreackpointsChange}
         >
-          <IonContent className={styles.modalContentWrapper}>
-            <div className={styles.modalHeader}>
-              <div>{filter}</div>
-              <div>
-                <span>Purchased:</span> 3 / 4
+          <IonContent className={styles.modalContentWrapper} scrollY={true}>
+            <div className={styles.background}>
+              <div className={styles.modalHeader}>
+                <div>{filter}</div>
+                <div>
+                  <span>Purchased:</span> 3 / 4
+                </div>
               </div>
+              <ul className={styles.coursesList}>
+                {courses.map((course) => (
+                  <CourseItem course={course} key={course.id} />
+                ))}
+                {courses.map((course) => (
+                  <CourseItem course={course} key={course.id} />
+                ))}
+                {courses.map((course) => (
+                  <CourseItem course={course} key={course.id} />
+                ))}
+                {courses.map((course) => (
+                  <CourseItem course={course} key={course.id} />
+                ))}
+                {courses.map((course) => (
+                  <CourseItem course={course} key={course.id} />
+                ))}
+                {courses.map((course) => (
+                  <CourseItem course={course} key={course.id} />
+                ))}
+              </ul>
             </div>
-            <ul className={styles.coursesList}>
-              {courses.map((course) => (
-                <CourseItem course={course} key={course.id} />
-              ))}
-            </ul>
           </IonContent>
         </IonModal>
       )}

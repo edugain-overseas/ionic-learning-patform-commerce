@@ -41,7 +41,7 @@ const CategoryItem: React.FC<CategoryItemTypes> = ({ category }) => {
       </IonRouterLink>
       <div className={styles.infoBtn} id="info-trigger">
         <InsetBtn
-          icon={<IonIcon src={infoIcon} />}
+          icon={<IonIcon src={infoIcon} style={{ fontSize: "16px" }} />}
           width="32px"
           height="32px"
           disabled={false}
