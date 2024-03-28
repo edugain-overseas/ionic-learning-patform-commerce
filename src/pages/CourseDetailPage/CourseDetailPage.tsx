@@ -25,7 +25,7 @@ const CourseDetailPage: React.FC = () => {
         component={CourseExamPage}
         exact
       />
-      <Redirect from="/" to={`/courses/course/${courseId}`} />
+      <Redirect from="/" to={`/courses/course/:courseId`} />
     </IonPage>
   );
 };

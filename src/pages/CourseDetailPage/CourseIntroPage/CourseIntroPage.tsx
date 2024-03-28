@@ -28,7 +28,8 @@ const CourseIntroPage: React.FC = () => {
   console.log("course id " + courseId);
 
   return (
-    <IonPage>
+    // <IonPage>
+    <>
       <IonHeader className={styles.header}>
         <IonBackButton
           defaultHref="/courses"
@@ -58,7 +59,8 @@ const CourseIntroPage: React.FC = () => {
           </div>
         </div>
       </IonContent>
-    </IonPage>
+    </>
+    // </IonPage>
   );
 };
 
