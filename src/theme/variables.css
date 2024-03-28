@@ -13,6 +13,7 @@ http://ionicframework.com/docs/theming/ */
   --custom-bg-rgba-thirtiary: rgba(255, 255, 255, 0.45);
   --custom-bg-rgba-fourth: rgba(255, 255, 255, 0.3);
   --custom-box-shadow-tabs: 0 -2px 12px 0 rgba(0, 0, 0, 0.08);
+  --custom-box-shadow-content: 0 0 16px 0 rgba(0, 0, 0, 0.12);
   --custom-box-shadow-primary: 0 2px 12px 0 rgba(0, 0, 0, 0.08);
   --custom-box-shadow-secondary: 0 0 4px 0 rgba(0, 0, 0, 0.16);
   --custom-box-shadow-thirtiary: 0 0 2px 0 rgba(0, 0, 0, 0.16);

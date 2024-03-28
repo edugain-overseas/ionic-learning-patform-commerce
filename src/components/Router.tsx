@@ -23,10 +23,10 @@ const Router: React.FC = () => {
             component={CategoryDetailPage}
             exact
           />
-          <Route path="/course/:courseId/" component={CourseDetailPage} exact>
-            <Route path="/course/:courseId/tasks" component={Menu} />
-            <Route path="/course/:courseId/exam" component={Menu} />
-          </Route>
+          <Route
+            path="/courses/course/:courseId"
+            component={CourseDetailPage}
+          />
           <Route path="/basket" component={Courses} exact />
           <Route path="/menu" component={Menu} exact />
           <Route exact path="/" render={() => <Redirect to="/home" />} />

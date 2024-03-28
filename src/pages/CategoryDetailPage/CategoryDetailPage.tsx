@@ -5,6 +5,7 @@ import {
   IonSegment,
   IonSegmentButton,
   SegmentChangeEventDetail,
+  useIonViewDidLeave,
   useIonViewWillEnter,
   useIonViewWillLeave,
 } from "@ionic/react";
@@ -29,9 +30,17 @@ const CategoryDetailPage: React.FC = () => {
   const topContentRef = useRef<HTMLDivElement>(null);
   const [showDetail, setShowDetail] = useState(true);
 
-  useIonViewWillLeave(() => setIsOpenModal(false));
+  useIonViewWillLeave(() => {
+    console.log("will leave");
+
+    // setIsOpenModal(false);
+  });
+
+  useIonViewDidLeave(() => setIsOpenModal(false));
 
   useIonViewWillEnter(() => {
+    console.log("will enter");
+
     const topContent = topContentRef?.current;
 
     if (topContent) {
@@ -47,7 +56,7 @@ const CategoryDetailPage: React.FC = () => {
     }
   });
 
-  const handleBreackpointsChange = (e: any) => {
+  const handleBreackpointsChange = (e: CustomEvent) => {
     const { breakpoint } = e.detail;
     if (breakpoint === maxBreakpoint) setShowDetail(false);
     else setShowDetail(true);
@@ -68,7 +77,7 @@ const CategoryDetailPage: React.FC = () => {
         left={["back"]}
         right={["notification", "list-style"]}
       />
-      <IonContent>
+      <IonContent scrollY={false}>
         <div className={styles.topContentWrapper} ref={topContentRef}>
           {showDetail && (
             <>
@@ -127,7 +136,11 @@ const CategoryDetailPage: React.FC = () => {
           // canDismiss={false}
           onIonBreakpointDidChange={handleBreackpointsChange}
         >
-          <IonContent className={styles.modalContentWrapper} scrollY={true}>
+          <IonContent
+            className={styles.modalContentWrapper}
+            scrollY={true}
+            forceOverscroll={true}
+          >
             <div className={styles.background}>
               <div className={styles.modalHeader}>
                 <div>{filter}</div>

@@ -1,0 +1,65 @@
+.header {
+  position: absolute;
+  padding: 12px 14px;
+
+  .bakcBtn {
+    --icon-font-size: 20px;
+    color: var(--ion-color-dark);
+    width: 32px;
+    height: 32px;
+    background-color: var(--custom-bg-rgba-primary);
+    border-radius: var(--custom--border-radius-primary);
+    box-shadow: var(--custom-box-shadow-primary);
+  }
+}
+
+.pageWrapper {
+  position: relative;
+  overflow: auto;
+  height: calc(100%);
+  padding-top: 200px;
+
+  .coursePoster {
+    display: block;
+    width: 100%;
+    margin-bottom: -10px;
+    position: fixed;
+    top: 0;
+  }
+}
+
+.contentBackground {
+  background: url("../../../assets/images/background.png");
+  position: sticky;
+  top: 68px;
+  border-radius: 10px;
+  overflow: hidden;
+  height: calc(100% + 132px);
+  box-shadow: var(--custom-box-shadow-content);
+  padding-top: 28px;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: var(--custom-bg-rgba-primary);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+  }
+}
+
+.contentInner {
+  padding: 16px;
+  padding-top: 0;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.contenWrapper {
+    height: 1800px;
+}
+
+.scroll {
+  overflow: scroll;
+}

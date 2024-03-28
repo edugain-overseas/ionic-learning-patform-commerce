@@ -17,9 +17,9 @@ import styles from "./Header.module.scss";
 
 interface HeaderTypes {
   title: string;
-  secondary: boolean | undefined;
-  left: string[];
-  right: string[];
+  secondary?: boolean | undefined;
+  left?: string[];
+  right?: string[];
 }
 
 const renderBtn = (buttonName: string) => {
@@ -64,7 +64,6 @@ const Header: React.FC<HeaderTypes> = ({
   left = [],
   right = [],
 }) => {
-
   return (
     <IonHeader className={styles.header}>
       <IonToolbar
@@ -72,25 +71,10 @@ const Header: React.FC<HeaderTypes> = ({
       >
         <IonButtons slot="start">
           {left.map((name) => renderBtn(name))}
-          {/* <IonBackButton
-            className={styles.backBtn}
-            defaultHref="/"
-            icon={backIcon}
-            text={""}
-          ></IonBackButton>
-          <IonButton>
-            <IonIcon src={bellIcon} className={styles.bellIcon} />
-          </IonButton> */}
         </IonButtons>
         <IonTitle className={styles.title}>{title}</IonTitle>
         <IonButtons slot="end">
           {right.map((name) => renderBtn(name))}
-          {/* <IonButton>
-            <IonIcon src={rowIcon} className={styles.rowIcon} />
-          </IonButton>
-          <IonButton>
-            <IonIcon src={searchIcon} className={styles.searchIcon} />
-          </IonButton> */}
         </IonButtons>
       </IonToolbar>
     </IonHeader>
