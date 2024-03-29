@@ -7,7 +7,7 @@ interface CardPriceTypes {
   oldPrice?: number;
   orientation?: string;
   onClick?: () => void;
-  size?: string;
+  variant?: string;
 }
 
 const CardPrice: React.FC<CardPriceTypes> = ({
@@ -15,6 +15,7 @@ const CardPrice: React.FC<CardPriceTypes> = ({
   oldPrice,
   orientation = "vertical",
   onClick = () => {},
+  variant = "default",
 }) => {
   const handleClick = (e: any) => {
     e.preventDefault();
@@ -38,7 +39,10 @@ const CardPrice: React.FC<CardPriceTypes> = ({
           </div>
         </div>
       )}
-      <div className={styles.priceWrapper}>
+      <div
+        className={styles.priceWrapper}
+        style={{ color: variant === "primary" ? "#001c54" : "#7e8ca8" }}
+      >
         <span className={styles.dollarSign}>$</span>
         <div className={styles.info}>
           <span className={styles.label}>New price</span>

@@ -1,18 +1,4 @@
-import {
-  IonCol,
-  IonContent,
-  IonGrid,
-  IonIcon,
-  IonImg,
-  IonItem,
-  IonList,
-  IonPage,
-  IonPopover,
-  IonRow,
-  IonText,
-  IonTitle,
-  SegmentChangeEventDetail,
-} from "@ionic/react";
+import { IonContent, IonPage, SegmentChangeEventDetail } from "@ionic/react";
 import React, { useState } from "react";
 import { coursesNavItems, categories } from "../../constants";
 import Header from "../../components/Header/Header";

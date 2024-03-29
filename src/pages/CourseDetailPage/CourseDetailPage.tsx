@@ -1,5 +1,5 @@
 import React from "react";
-import { IonPage} from "@ionic/react";
+import { IonPage } from "@ionic/react";
 import { Redirect, Route, useParams } from "react-router";
 import CourseIntroPage from "./CourseIntroPage/CourseIntroPage";
 import CourseTasksPage from "./CourseTasksPage/CourseTasksPage";
@@ -25,7 +25,7 @@ const CourseDetailPage: React.FC = () => {
         component={CourseExamPage}
         exact
       />
-      <Redirect from="/" to={`/courses/course/:courseId`} />
+      <Redirect from="/" to={`/courses/course/${courseId}`} />
     </IonPage>
   );
 };

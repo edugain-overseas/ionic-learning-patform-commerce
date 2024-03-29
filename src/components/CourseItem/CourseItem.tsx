@@ -3,12 +3,11 @@ import { IonIcon, IonRouterLink } from "@ionic/react";
 import { courseTypes } from "../../constants";
 import subject from "../../assets/images/subject_image.png";
 import basket from "../../assets/icons/tabs/basket.svg";
-import ProgressBar from "../ProgressBar/ProgressBar";
 import CardPrice from "../CardPrice/CardPrice";
 import InsetBtn from "../InsetBtn/InsetBtn";
 import styles from "./CourseItem.module.scss";
 
-const progress = 25;
+// const progress = 25;
 
 interface CourseItemTypes {
   course: courseTypes;
@@ -19,9 +18,8 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
     <li className={styles.itemWrapper}>
       <IonRouterLink
         className={styles.link}
-        routerLink={`/courses/course/${course.id}/`}
+        routerLink={`/courses/course/${course.id}`}
         routerDirection="root"
-        
       >
         <div
           className={styles.courseAvatarWrapper}

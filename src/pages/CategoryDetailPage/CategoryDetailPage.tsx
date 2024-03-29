@@ -7,7 +7,6 @@ import {
   SegmentChangeEventDetail,
   useIonViewDidLeave,
   useIonViewWillEnter,
-  useIonViewWillLeave,
 } from "@ionic/react";
 import React, { useRef, useState } from "react";
 import { useParams } from "react-router";
@@ -30,23 +29,14 @@ const CategoryDetailPage: React.FC = () => {
   const topContentRef = useRef<HTMLDivElement>(null);
   const [showDetail, setShowDetail] = useState(true);
 
-  useIonViewWillLeave(() => {
-    console.log("will leave");
-
-    // setIsOpenModal(false);
-  });
-
   useIonViewDidLeave(() => setIsOpenModal(false));
 
   useIonViewWillEnter(() => {
-    console.log("will enter");
-
     const topContent = topContentRef?.current;
 
     if (topContent) {
       const topContentHeight = topContent.clientHeight;
       const pageHeight = document.body.clientHeight;
-      console.log(topContentHeight, pageHeight);
       const minBreakpoint = (pageHeight - topContentHeight - 61) / pageHeight;
       const maxBreakpoint =
         (pageHeight - topContentHeight + 100 - 61) / pageHeight;
