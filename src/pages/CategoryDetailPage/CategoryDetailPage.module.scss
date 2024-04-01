@@ -92,43 +92,71 @@
   }
 }
 
-.modal {
-  --border-radius: 20px;
-  bottom: 61px;
-  padding-bottom: 61px;
-  box-shadow: var(--custom-box-shadow-primary);
+.bottomOuter {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  transition: height var(--custom-tr-time-min) linear;
+}
 
-  .modalContentWrapper {
-    --background: url("../../assets/images/background.png");
-    --overflow: auto;
-  }
+.background {
+  background: url("../../assets/images/background.png");
+  max-height: calc(100% - 56px);
+  border-radius: 10px;
+  overflow-y: hidden;
 
-  .background {
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
     background-color: var(--custom-bg-rgba-primary);
-    padding: 18px;
-    padding-bottom: 140px;
-    min-height: 100%;
-  }
-
-  .modalHeader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-
-    color: var(--ion-color-dark);
-    text-transform: capitalize;
-    font-size: 14px;
-    font-weight: 700;
-
-    span {
-      color: var(--ion-color-light);
-    }
-  }
-
-  .coursesList {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
   }
 }
+
+.controllerWrapper {
+  position: relative;
+  z-index: 1;
+  height: 20px;
+  padding-block: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .controller {
+    width: 45px;
+    height: 100%;
+    border-radius: 6px;
+    background-color: var(--ion-color-light);
+  }
+}
+
+.bottomInner {
+  height: calc(100% - 20px);
+  overflow-y: auto;
+  padding-inline: 18px;
+  position: relative;
+  z-index: 1;
+}
+
+.innerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+
+  color: var(--ion-color-dark);
+  text-transform: capitalize;
+  font-size: 14px;
+  font-weight: 700;
+
+  span {
+    color: var(--ion-color-light);
+  }
+}
+
+.coursesList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+// }

@@ -21,6 +21,8 @@ http://ionicframework.com/docs/theming/ */
   --custom--border-radius-primary: 5px;
 
   --custom-tr-time-max: 0.4s;
+  --custom-tr-time-mid: 0.3s;
+  --custom-tr-time-min: 0.2s;
 
   --ion-color-primary: #d00000;
   --ion-color-primary-rgb: 208, 0, 0;

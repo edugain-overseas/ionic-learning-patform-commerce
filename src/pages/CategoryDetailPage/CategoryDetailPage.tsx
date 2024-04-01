@@ -1,14 +1,14 @@
 import {
+  GestureDetail,
   IonContent,
-  IonModal,
   IonPage,
   IonSegment,
   IonSegmentButton,
   SegmentChangeEventDetail,
-  useIonViewDidLeave,
-  useIonViewWillEnter,
+  createGesture,
+  useIonViewDidEnter,
 } from "@ionic/react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { categories, courses } from "../../constants";
 import categoryContrastIcon from "../../assets/icons/category-contrast.svg";
@@ -21,35 +21,80 @@ const progress = 25;
 
 const CategoryDetailPage: React.FC = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
-  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [filter, setFilter] = useState<string>("All");
-  const [minBreakpoint, setMinbreakpoints] = useState(0);
-  const [maxBreakpoint, setMaxbreakpoints] = useState(0);
+  const [currentHeight, setCurrentHeight] = useState(0);
   const category = categories.find(({ id }) => id === +categoryId);
   const topContentRef = useRef<HTMLDivElement>(null);
   const [showDetail, setShowDetail] = useState(true);
+  const bottomSheet = useRef<HTMLDivElement>(null);
+  const bottomSheetController = useRef<HTMLButtonElement>(null);
 
-  useIonViewDidLeave(() => setIsOpenModal(false));
-
-  useIonViewWillEnter(() => {
-    const topContent = topContentRef?.current;
-
-    if (topContent) {
-      const topContentHeight = topContent.clientHeight;
-      const pageHeight = document.body.clientHeight;
-      const minBreakpoint = (pageHeight - topContentHeight - 61) / pageHeight;
-      const maxBreakpoint =
-        (pageHeight - topContentHeight + 100 - 61) / pageHeight;
-      setMinbreakpoints(minBreakpoint);
-      setMaxbreakpoints(maxBreakpoint);
-      setIsOpenModal(true);
+  useIonViewDidEnter(() => {
+    const parentElementHeight =
+      bottomSheet.current?.parentElement?.clientHeight;
+    if (parentElementHeight && topContentRef.current?.clientHeight) {
+      setCurrentHeight(parentElementHeight - 162);
     }
   });
 
-  const handleBreackpointsChange = (e: CustomEvent) => {
-    const { breakpoint } = e.detail;
-    if (breakpoint === maxBreakpoint) setShowDetail(false);
-    else setShowDetail(true);
+  useEffect(() => {
+    if (bottomSheetController.current && bottomSheet.current?.clientHeight) {
+      const target = bottomSheetController.current;
+      const parentElementHeight =
+        bottomSheet.current?.parentElement?.clientHeight;
+
+      if (topContentRef.current?.clientHeight && parentElementHeight) {
+        console.log("re");
+
+        const maxHeight = parentElementHeight - 66;
+        const minHeight = parentElementHeight - 162;
+
+        const gesture = createGesture({
+          el: target,
+          direction: "y",
+          threshold: 10,
+          onMove: (detail) => onMove(detail),
+          gestureName: "bottomSheet",
+          onEnd: () => onEnd(maxHeight, minHeight),
+        });
+
+        gesture.enable();
+      }
+    }
+  }, [bottomSheetController.current, bottomSheet.current?.clientHeight]);
+
+  const onMove = (detail: GestureDetail) => {
+    if (bottomSheet.current && currentHeight) {
+      bottomSheet.current.style.height = `${currentHeight - detail.deltaY}px`;
+    }
+  };
+
+  const onEnd = (maxHeight: number, minHeight: number) => {
+    const parentElementHeight =
+      bottomSheet.current?.parentElement?.clientHeight;
+
+    if (
+      bottomSheet.current?.clientHeight &&
+      topContentRef.current?.clientHeight &&
+      parentElementHeight
+    ) {
+      const resultHeight =
+        bottomSheet.current.clientHeight < maxHeight ? minHeight : maxHeight;
+      bottomSheet.current.style.height = `${resultHeight}px`;
+
+      if (maxHeight === resultHeight) {
+        console.log(maxHeight, minHeight);
+
+        setShowDetail(false);
+        setCurrentHeight(maxHeight);
+      } else {
+        setShowDetail(true);
+        setCurrentHeight(minHeight);
+      }
+      console.log("end");
+
+      setCurrentHeight(resultHeight);
+    }
   };
 
   const onSegmentChange = (event: CustomEvent<SegmentChangeEventDetail>) => {
@@ -112,56 +157,51 @@ const CategoryDetailPage: React.FC = () => {
             </IonSegmentButton>
           </IonSegment>
         </div>
-      </IonContent>
-      {minBreakpoint !== 0 && maxBreakpoint !== 0 && (
-        <IonModal
-          className={styles.modal}
-          isOpen={isOpenModal}
-          initialBreakpoint={minBreakpoint}
-          breakpoints={[minBreakpoint, maxBreakpoint]}
-          showBackdrop={false}
-          keyboardClose={false}
-          backdropDismiss={false}
-          backdropBreakpoint={1}
-          // canDismiss={false}
-          onIonBreakpointDidChange={handleBreackpointsChange}
+        <div
+          className={`${styles.bottomOuter} ${styles.background}`}
+          ref={bottomSheet}
+          style={{
+            height: `${currentHeight}px`,
+            minHeight: `calc(100% - 162px)`,
+            maxHeight: `calc(100% - 66px)`,
+          }}
         >
-          <IonContent
-            className={styles.modalContentWrapper}
-            scrollY={true}
-            forceOverscroll={true}
-          >
-            <div className={styles.background}>
-              <div className={styles.modalHeader}>
-                <div>{filter}</div>
-                <div>
-                  <span>Purchased:</span> 3 / 4
-                </div>
+          <div className={styles.controllerWrapper}>
+            <button
+              ref={bottomSheetController}
+              className={styles.controller}
+            ></button>
+          </div>
+          <div className={styles.bottomInner}>
+            <div className={styles.innerHeader}>
+              <div>{filter}</div>
+              <div>
+                <span>Purchased:</span> 3 / 4
               </div>
-              <ul className={styles.coursesList}>
-                {courses.map((course) => (
-                  <CourseItem course={course} key={course.id} />
-                ))}
-                {courses.map((course) => (
-                  <CourseItem course={course} key={course.id} />
-                ))}
-                {courses.map((course) => (
-                  <CourseItem course={course} key={course.id} />
-                ))}
-                {courses.map((course) => (
-                  <CourseItem course={course} key={course.id} />
-                ))}
-                {courses.map((course) => (
-                  <CourseItem course={course} key={course.id} />
-                ))}
-                {courses.map((course) => (
-                  <CourseItem course={course} key={course.id} />
-                ))}
-              </ul>
             </div>
-          </IonContent>
-        </IonModal>
-      )}
+            <ul className={styles.coursesList}>
+              {courses.map((course) => (
+                <CourseItem course={course} key={course.id} />
+              ))}
+              {courses.map((course) => (
+                <CourseItem course={course} key={course.id} />
+              ))}
+              {courses.map((course) => (
+                <CourseItem course={course} key={course.id} />
+              ))}
+              {courses.map((course) => (
+                <CourseItem course={course} key={course.id} />
+              ))}
+              {courses.map((course) => (
+                <CourseItem course={course} key={course.id} />
+              ))}
+              {courses.map((course) => (
+                <CourseItem course={course} key={course.id} />
+              ))}
+            </ul>
+          </div>
+        </div>
+      </IonContent>
     </IonPage>
   );
 };

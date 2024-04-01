@@ -17,11 +17,12 @@
   position: relative;
   overflow: auto;
   height: calc(100%);
-  padding-top: 200px;
+  padding-top: 190px;
 
   .coursePoster {
     display: block;
     width: 100%;
+    min-height: 200px;
     margin-bottom: -10px;
     position: fixed;
     top: 0;
@@ -29,13 +30,9 @@
 }
 
 .contentBackground {
-  //   background: url("../../../assets/images/background.png");
-  //   background-position-y: 10px;
-  //   background-clip: content-box;
-  //   box-sizing: content-box;
   padding-top: 12px;
   position: sticky;
-  top: 68px;
+  // top: 68px;
   overflow: hidden;
   height: calc(100% + 132px);
 
@@ -369,7 +366,7 @@
     }
 
     .buyIcon {
-        font-size: 22px;
+      font-size: 22px;
     }
   }
 }
