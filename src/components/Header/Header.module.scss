@@ -2,10 +2,17 @@
   box-shadow: none;
 }
 
+.transparent {
+  .toolbar {
+    box-shadow: none;
+    --background: transparent;
+  }
+}
+
 .toolbar {
   --min-height: 56px;
   --border-style: none;
-  --padding-start: 20px;
+  --padding-start: 14px;
   --padding-end: 14px;
   --ion-toolbar-color: var(--ion-color-dark);
 
@@ -27,9 +34,22 @@
   }
 }
 
+.leftButtonsWrapper {
+  gap: 8px;
+}
+
 .backBtn {
   --icon-font-size: 20px;
-  width: 20px;
+  --padding-start: 0;
+  --padding-end: 0;
+  min-width: 32px;
+  width: 32px;
+}
+
+.notificationBtn {
+  --padding-start: 0;
+  --padding-end: 0;
+  width: 32px;
 }
 
 .title {

@@ -32,8 +32,12 @@ const CategoryDetailPage: React.FC = () => {
   useIonViewDidEnter(() => {
     const parentElementHeight =
       bottomSheet.current?.parentElement?.clientHeight;
+      console.dir(bottomSheet.current?.parentElement);
+      
     if (parentElementHeight && topContentRef.current?.clientHeight) {
-      setCurrentHeight(parentElementHeight - 162);
+      console.log(parentElementHeight);
+      
+      setCurrentHeight(parentElementHeight - 162 + 61);
     }
   });
 
@@ -46,13 +50,12 @@ const CategoryDetailPage: React.FC = () => {
       if (topContentRef.current?.clientHeight && parentElementHeight) {
         console.log("re");
 
-        const maxHeight = parentElementHeight - 66;
-        const minHeight = parentElementHeight - 162;
+        const maxHeight = parentElementHeight - 66 + 61;
+        const minHeight = parentElementHeight - 162 + 61;
 
         const gesture = createGesture({
           el: target,
           direction: "y",
-          threshold: 10,
           onMove: (detail) => onMove(detail),
           gestureName: "bottomSheet",
           onEnd: () => onEnd(maxHeight, minHeight),
@@ -65,7 +68,9 @@ const CategoryDetailPage: React.FC = () => {
 
   const onMove = (detail: GestureDetail) => {
     if (bottomSheet.current && currentHeight) {
-      bottomSheet.current.style.height = `${currentHeight - detail.deltaY}px`;
+      bottomSheet.current.style.height = `${
+        currentHeight - detail.deltaY
+      }px`;
     }
   };
 
@@ -78,6 +83,8 @@ const CategoryDetailPage: React.FC = () => {
       topContentRef.current?.clientHeight &&
       parentElementHeight
     ) {
+      console.log(minHeight, maxHeight);
+      
       const resultHeight =
         bottomSheet.current.clientHeight < maxHeight ? minHeight : maxHeight;
       bottomSheet.current.style.height = `${resultHeight}px`;
@@ -112,7 +119,7 @@ const CategoryDetailPage: React.FC = () => {
         left={["back"]}
         right={["notification", "list-style"]}
       />
-      <IonContent scrollY={false}>
+      <IonContent scrollY={false} fullscreen className={styles.contentWrapper}>
         <div className={styles.topContentWrapper} ref={topContentRef}>
           {showDetail && (
             <>
@@ -162,8 +169,9 @@ const CategoryDetailPage: React.FC = () => {
           ref={bottomSheet}
           style={{
             height: `${currentHeight}px`,
-            minHeight: `calc(100% - 162px)`,
-            maxHeight: `calc(100% - 66px)`,
+            minHeight: `calc(100% - 218px)`,
+            // maxHeight: `calc(100% - 112px)`,
+            // maxHeight: `100%`,
           }}
         >
           <div className={styles.controllerWrapper}>

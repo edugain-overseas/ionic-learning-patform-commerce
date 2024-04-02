@@ -4,6 +4,7 @@ import {
   IonButtons,
   IonHeader,
   IonIcon,
+  IonImg,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -13,13 +14,15 @@ import searchIcon from "../../assets/icons/header/search.svg";
 import backIcon from "../../assets/icons/header/back.svg";
 import rowIcon from "../../assets/icons/header/list-style-row.svg";
 // import gridIcon from "../../assets/icons/header/list-style-grid.svg";
+import logoIEU from "../../assets/icons/logoIEU.svg";
 import styles from "./Header.module.scss";
 
 interface HeaderTypes {
-  title: string;
+  title?: string;
   secondary?: boolean | undefined;
   left?: string[];
   right?: string[];
+  mode?: string;
 }
 
 const renderBtn = (buttonName: string) => {
@@ -36,7 +39,7 @@ const renderBtn = (buttonName: string) => {
       );
     case "notification":
       return (
-        <IonButton key={buttonName}>
+        <IonButton key={buttonName} className={styles.notificationBtn}>
           <IonIcon src={bellIcon} className={styles.bellIcon} />
         </IonButton>
       );
@@ -52,7 +55,8 @@ const renderBtn = (buttonName: string) => {
           <IonIcon src={searchIcon} className={styles.searchIcon} />
         </IonButton>
       );
-
+    case "logo":
+      return <IonImg src={logoIEU} alt="IEU logo" className={styles.logo} key={buttonName}/>;
     default:
       break;
   }
@@ -63,16 +67,21 @@ const Header: React.FC<HeaderTypes> = ({
   secondary = false,
   left = [],
   right = [],
+  mode,
 }) => {
   return (
-    <IonHeader className={styles.header}>
+    <IonHeader
+      className={`${styles.header} ${
+        mode === "transparent" ? styles.transparent : ""
+      }`}
+    >
       <IonToolbar
         className={`${secondary ? styles.secondary : ""} ${styles.toolbar}`}
       >
-        <IonButtons slot="start">
+        <IonButtons slot="start" className={styles.leftButtonsWrapper}>
           {left.map((name) => renderBtn(name))}
         </IonButtons>
-        <IonTitle className={styles.title}>{title}</IonTitle>
+        {title && <IonTitle className={styles.title}>{title}</IonTitle>}
         <IonButtons slot="end">
           {right.map((name) => renderBtn(name))}
         </IonButtons>
