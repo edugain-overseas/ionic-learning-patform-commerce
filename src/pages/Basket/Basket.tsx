@@ -2,7 +2,7 @@ import React from 'react'
 
 const Basket: React.FC = () => {
   return (
-    <div>: React.FC</div>
+    <div>Basket</div>
   )
 }
 

@@ -1,0 +1,50 @@
+.avatarWrapper {
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+
+  &:hover .editBtn {
+    opacity: 1;
+  }
+
+  img {
+    border: 2px solid var(--border-color-main);
+    border-radius: 50%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .editBtn {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-color: var(--content-secondary);
+    height: 30%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    opacity: 0;
+    transition: opacity var(--transition-time-min) ease;
+
+    svg {
+      width: 10px;
+      height: 10px;
+    }
+
+    span {
+      color: var(--content-contr-color);
+      font-family: Inter, sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+    }
+
+    input {
+      display: none;
+    }
+  }
+}

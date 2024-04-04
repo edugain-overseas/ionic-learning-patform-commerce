@@ -23,7 +23,6 @@ import "./App.scss";
 /* Theme variables */
 import "./theme/variables.css";
 
-
 import { CoursesProvider } from "./context/CoursesContext";
 
 setupIonicReact();

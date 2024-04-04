@@ -1,0 +1,12 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--ion-color-light);
+    border-radius: 50%;
+
+    svg {
+        width: 54%;
+        height: 54%;
+    }
+}
