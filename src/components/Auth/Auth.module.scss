@@ -1,0 +1,88 @@
+.formWrapper {
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  backdrop-filter: blur(16px);
+}
+
+.formHeader {
+  display: flex;
+  flex-direction: column;
+
+  .title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ion-color-dark);
+    line-height: 24px;
+  }
+
+  .link {
+    color: var(--ion-color-light);
+    font-size: 12px;
+    line-height: 32px;
+
+    .modalReTrigger {
+      font-weight: 600;
+      color: var(--ion-color-dark);
+    }
+  }
+}
+
+.inputsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.btnsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .btnsDivider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      color: var(--ion-color-light);
+      font-family: Roboto;
+      font-weight: 400;
+      line-height: 1;
+      padding-inline: 10px;
+    }
+
+    &::before {
+      content: "";
+      flex-grow: 1;
+      height: 1px;
+      background-color: var(--ion-color-light);
+      border-radius: 30px;
+      box-shadow: var(--custom-box-shadow-primary);
+    }
+    &::after {
+      content: "";
+      flex-grow: 1;
+      height: 1px;
+      background-color: var(--ion-color-light);
+      border-radius: 30px;
+      box-shadow: var(--custom-box-shadow-primary);
+    }
+  }
+
+  span {
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .formBtnIcon {
+    font-size: 15px;
+  }
+
+  .googleBtn {
+    flex-direction: row-reverse;
+  }
+}

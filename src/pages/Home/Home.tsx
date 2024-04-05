@@ -1,13 +1,14 @@
-import { IonContent, IonIcon, IonImg, IonPage } from "@ionic/react";
-import Header from "../../components/Header/Header";
+import { IonContent, IonIcon, IonImg, IonModal, IonPage } from "@ionic/react";
+import { useState } from "react";
 import benefits from "../../assets/images/home-slider-bg.png";
 import userIcon from "../../assets/icons/tabs/my-profile.svg";
-import singInIcon from "../../assets/icons/sing-in.svg";
+import singInIcon from "../../assets/icons/auth/sing-in.svg";
 import search from "../../assets/icons/header/search.svg";
+import Header from "../../components/Header/Header";
 import CommonButton from "../../components/CommonButton/CommonButton";
 import InsetBtn from "../../components/InsetBtn/InsetBtn";
+import LoginForm from "../../components/Auth/LoginForm";
 import styles from "./Home.module.scss";
-import { useState } from "react";
 
 const Home: React.FC = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -66,6 +67,7 @@ const Home: React.FC = () => {
             label="Sing up"
             icon={<IonIcon src={userIcon} className={styles.btnIcon} />}
             onClick={() => {}}
+            id="sing-up"
           />
           <CommonButton
             width={104}
@@ -76,8 +78,26 @@ const Home: React.FC = () => {
             label="Sing in"
             icon={<IonIcon src={singInIcon} className={styles.btnIcon} />}
             onClick={() => {}}
+            id="sing-in"
           />
         </div>
+
+        <IonModal
+          breakpoints={[0, 1]}
+          initialBreakpoint={1}
+          trigger="sing-up"
+          className={styles.modal}
+        >
+          <div style={{ height: "300px" }}>Sing up</div>
+        </IonModal>
+        <IonModal
+          breakpoints={[0, 1]}
+          initialBreakpoint={1}
+          trigger="sing-in"
+          className={styles.modal}
+        >
+          <LoginForm />
+        </IonModal>
       </IonContent>
     </IonPage>
   );

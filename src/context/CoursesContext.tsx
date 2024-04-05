@@ -20,13 +20,7 @@ interface CoursesProviderType {
 const CoursesContext = createContext<CoursesContextType | undefined>(undefined);
 
 // Custom hook to use the context
-export const useCourses = () => {
-  const context = useContext(CoursesContext);
-  if (!context) {
-    throw new Error("useCourses must be used within a CoursesProvider");
-  }
-  return context;
-};
+export const useCourses = () => useContext(CoursesContext);
 
 // Provider component
 export const CoursesProvider: React.FC<CoursesProviderType> = ({

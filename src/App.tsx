@@ -24,13 +24,16 @@ import "./App.scss";
 import "./theme/variables.css";
 
 import { CoursesProvider } from "./context/CoursesContext";
+import { UserProvider } from "./context/UserContext";
 
 setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp className="App">
     <CoursesProvider>
-      <Router />
+      <UserProvider>
+        <Router />
+      </UserProvider>
     </CoursesProvider>
   </IonApp>
 );
