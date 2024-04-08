@@ -31,3 +31,14 @@ export const menuNav = [
     iconSrc: instructionsIcon,
   },
 ];
+
+export const instructionsNav = [
+  {
+    label: "General instructions",
+    value: "general",
+  },
+  {
+    label: "Courses instructions",
+    value: "courses",
+  },
+];

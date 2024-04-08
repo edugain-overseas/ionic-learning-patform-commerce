@@ -19,7 +19,7 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
       <IonRouterLink
         className={styles.link}
         routerLink={`/courses/course/${course.id}`}
-        routerDirection="root"
+        routerDirection="forward"
       >
         <div
           className={styles.courseAvatarWrapper}

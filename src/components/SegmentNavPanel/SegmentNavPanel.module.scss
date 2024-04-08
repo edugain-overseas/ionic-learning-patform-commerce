@@ -26,6 +26,7 @@
   --padding-end: 0;
   --color: var(--ion-color-dark);
   --color-checked: var(--ion-color-primary);
+  --ripple-color: rgba(var(--ion-color-primary-rgb), 0.05);
 
   margin-inline: 12px;
   min-height: 40px;

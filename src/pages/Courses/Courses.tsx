@@ -7,14 +7,7 @@ import CategoryItem from "../../components/CategoryItem/CategoryItem";
 import styles from "./Courses.module.scss";
 
 const Courses: React.FC = () => {
-  const [filter, setFilter] = useState<string | number>("my");
-
-  const onSegmentChange = (event: CustomEvent<SegmentChangeEventDetail>) => {
-    const { value } = event.detail;
-    if (value !== undefined) {
-      setFilter(value);
-    }
-  };
+  const [filter, setFilter] = useState<string>("my");
 
   return (
     <IonPage>
@@ -27,7 +20,7 @@ const Courses: React.FC = () => {
       <IonContent className="custom-content-wrapper">
         <SegmentNavPanel
           value={filter}
-          setValue={onSegmentChange}
+          setValue={setFilter}
           items={coursesNavItems}
         />
         <ul className={styles.categoriesList}>

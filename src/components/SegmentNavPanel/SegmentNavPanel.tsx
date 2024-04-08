@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import styles from "./SegmentNavPanel.module.scss";
 import {
   IonLabel,
@@ -10,7 +10,7 @@ import {
 interface SegmentNavPanelTypes {
   items: { value: string; label: string }[];
   value: string | number;
-  setValue: (event: CustomEvent<SegmentChangeEventDetail>) => void;
+  setValue: Dispatch<SetStateAction<string>>;
 }
 
 const SegmentNavPanel: React.FC<SegmentNavPanelTypes> = ({
@@ -18,30 +18,25 @@ const SegmentNavPanel: React.FC<SegmentNavPanelTypes> = ({
   value,
   setValue,
 }) => {
+  const onChange = (event: CustomEvent<SegmentChangeEventDetail>) => {
+    const { value } = event.detail;
+    if (value !== undefined) {
+      setValue(`${value}`);
+    }
+  };
+
   return (
     <IonSegment
       scrollable={true}
       value={value}
       className={styles.segment}
-      onIonChange={setValue}
+      onIonChange={onChange}
     >
-      <IonSegmentButton value="my" mode="md" className={styles.segmentBtn}>
-        <IonLabel className={styles.segmentLabel}>My Courses</IonLabel>
-      </IonSegmentButton>
-      <IonSegmentButton
-        value="available"
-        mode="md"
-        className={styles.segmentBtn}
-      >
-        <IonLabel className={styles.segmentLabel}>Available Courses</IonLabel>
-      </IonSegmentButton>
-      <IonSegmentButton
-        value="completed"
-        mode="md"
-        className={styles.segmentBtn}
-      >
-        <IonLabel className={styles.segmentLabel}>Completed Courses</IonLabel>
-      </IonSegmentButton>
+      {items.map(({ label, value }) => (
+        <IonSegmentButton value={value} mode="md" className={styles.segmentBtn}>
+          <IonLabel className={styles.segmentLabel}>{label}</IonLabel>
+        </IonSegmentButton>
+      ))}
     </IonSegment>
   );
 };

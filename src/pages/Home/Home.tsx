@@ -9,6 +9,7 @@ import CommonButton from "../../components/CommonButton/CommonButton";
 import InsetBtn from "../../components/InsetBtn/InsetBtn";
 import LoginForm from "../../components/Auth/LoginForm";
 import styles from "./Home.module.scss";
+import SingupForm from "../../components/Auth/SingupForm";
 
 const Home: React.FC = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -88,7 +89,7 @@ const Home: React.FC = () => {
           trigger="sing-up"
           className={styles.modal}
         >
-          <div style={{ height: "300px" }}>Sing up</div>
+          <SingupForm />
         </IonModal>
         <IonModal
           breakpoints={[0, 1]}
