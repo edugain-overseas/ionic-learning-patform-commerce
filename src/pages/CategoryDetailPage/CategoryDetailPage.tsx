@@ -32,11 +32,11 @@ const CategoryDetailPage: React.FC = () => {
   useIonViewDidEnter(() => {
     const parentElementHeight =
       bottomSheet.current?.parentElement?.clientHeight;
-      console.dir(bottomSheet.current?.parentElement);
-      
+    console.dir(bottomSheet.current?.parentElement);
+
     if (parentElementHeight && topContentRef.current?.clientHeight) {
       console.log(parentElementHeight);
-      
+
       setCurrentHeight(parentElementHeight - 162 + 61);
     }
   });
@@ -68,9 +68,7 @@ const CategoryDetailPage: React.FC = () => {
 
   const onMove = (detail: GestureDetail) => {
     if (bottomSheet.current && currentHeight) {
-      bottomSheet.current.style.height = `${
-        currentHeight - detail.deltaY
-      }px`;
+      bottomSheet.current.style.height = `${currentHeight - detail.deltaY}px`;
     }
   };
 
@@ -84,7 +82,7 @@ const CategoryDetailPage: React.FC = () => {
       parentElementHeight
     ) {
       console.log(minHeight, maxHeight);
-      
+
       const resultHeight =
         bottomSheet.current.clientHeight < maxHeight ? minHeight : maxHeight;
       bottomSheet.current.style.height = `${resultHeight}px`;
@@ -170,8 +168,6 @@ const CategoryDetailPage: React.FC = () => {
           style={{
             height: `${currentHeight}px`,
             minHeight: `calc(100% - 218px)`,
-            // maxHeight: `calc(100% - 112px)`,
-            // maxHeight: `100%`,
           }}
         >
           <div className={styles.controllerWrapper}>

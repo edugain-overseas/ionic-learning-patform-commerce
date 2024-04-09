@@ -13,6 +13,7 @@ import CourseDetailPage from "../pages/CourseDetailPage/CourseDetailPage";
 import AboutIEU from "../pages/AboutIEU/AboutIEU";
 import Instructions from "../pages/Instructions/Instructions";
 import NotFound from "../pages/NotFound/NotFound";
+import Basket from "../pages/Basket/Basket";
 
 const Router: React.FC = () => {
   return (
@@ -26,7 +27,7 @@ const Router: React.FC = () => {
             <Route path="/courses" component={Courses} exact />
             <Route path="/aboutIEU" component={AboutIEU} exact />
             <Route path="/instructions" component={Instructions} exact />
-            <Route path="/basket" component={Courses} exact />
+            <Route path="/basket" component={Basket} exact />
 
             <Route
               path="/courses/category/:categoryId"

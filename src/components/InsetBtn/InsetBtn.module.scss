@@ -29,5 +29,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: background-color var(--custom-tr-time-min) ease;
   }
 }

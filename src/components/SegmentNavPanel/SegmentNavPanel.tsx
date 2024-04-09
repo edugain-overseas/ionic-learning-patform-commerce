@@ -33,7 +33,12 @@ const SegmentNavPanel: React.FC<SegmentNavPanelTypes> = ({
       onIonChange={onChange}
     >
       {items.map(({ label, value }) => (
-        <IonSegmentButton value={value} mode="md" className={styles.segmentBtn}>
+        <IonSegmentButton
+          key={label}
+          value={value}
+          mode="md"
+          className={styles.segmentBtn}
+        >
           <IonLabel className={styles.segmentLabel}>{label}</IonLabel>
         </IonSegmentButton>
       ))}

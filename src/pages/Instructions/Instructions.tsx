@@ -1,22 +1,15 @@
-import {
-  IonAccordion,
-  IonAccordionGroup,
-  IonContent,
-  IonIcon,
-  IonItem,
-  IonPage,
-} from "@ionic/react";
+import { IonContent, IonIcon, IonPage } from "@ionic/react";
 import React, { useState } from "react";
-import ChevronIcon from "../../assets/icons/chevron.svg";
 import TaskIcon from "../../assets/icons/task-2-lines.svg";
 import CalendarIcon from "../../assets/icons/calendar.svg";
 import Header from "../../components/Header/Header";
 import SegmentNavPanel from "../../components/SegmentNavPanel/SegmentNavPanel";
 import { instructionsNav } from "../../constants/nav";
 import styles from "./Instructions.module.scss";
+import Accordion from "../../components/Accordion/Accordion";
 
 const Instructions: React.FC = () => {
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState("general");
   return (
     <IonPage>
       <Header
@@ -30,120 +23,135 @@ const Instructions: React.FC = () => {
           value={filter}
           setValue={setFilter}
         />
-        <IonAccordionGroup className={styles.accordionWrapper}>
-          <IonAccordion
-            className={styles.accordionItem}
-            value="first"
-            toggleIcon={ChevronIcon}
-          >
-            <IonItem className={styles.intructionWrapper} slot="header">
-              <div className={styles.iconWrapper}>
-                <IonIcon src={TaskIcon} className={styles.intructionIcon} />
-              </div>
-              <div className={styles.intructionTitleWrapper}>
-                <span className={styles.title}>Welcome letter</span>
-                <div className={styles.updateInfoWrapper}>
-                  <IonIcon
-                    src={CalendarIcon}
-                    className={styles.updateInfoIcon}
-                  />
-                  <span className={styles.updateInfoWrapper}>
-                    Last update: 12.02.2024
-                  </span>
+        <div className={styles.container}>
+          <Accordion
+            header={
+              <div className={styles.header}>
+                <div className={styles.iconWrapper}>
+                  <IonIcon src={TaskIcon} className={styles.intructionIcon} />
+                </div>
+                <div className={styles.intructionTitleWrapper}>
+                  <span className={styles.title}>Welcome letter</span>
+                  <div className={styles.updateInfoWrapper}>
+                    <IonIcon
+                      src={CalendarIcon}
+                      className={styles.updateInfoIcon}
+                    />
+                    <span className={styles.updateInfoText}>
+                      Last update: 12.02.2024
+                    </span>
+                  </div>
                 </div>
               </div>
-            </IonItem>
-            <div slot="content">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
-              tempore perspiciatis, tenetur iure inventore eos. Dicta esse
-              voluptatem unde minus!
-            </div>
-          </IonAccordion>
-          <IonAccordion
-            className={styles.accordionItem}
-            value="second"
-            toggleIcon={ChevronIcon}
-          >
-            <IonItem className={styles.intructionWrapper} slot="header">
-              <div className={styles.iconWrapper}>
-                <IonIcon src={TaskIcon} className={styles.intructionIcon} />
+            }
+            content={
+              <div className={styles.instructionContent}>
+                <span>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Labore, eaque maiores! Perferendis repudiandae nesciunt
+                  quibusdam ipsum reiciendis similique aperiam officiis sequi
+                  blanditiis voluptatem in neque cumque amet quis doloribus
+                  velit, sapiente itaque libero et praesentium sint vitae porro.
+                  Eius nisi quia quo vitae iure laudantium, dicta eligendi
+                  ipsam, aperiam eaque veniam rem a placeat repellendus maxime
+                  aliquam tempore soluta minima quidem vel sit quisquam? Ad
+                  veritatis laboriosam a non, repellat, delectus modi impedit
+                  architecto molestiae alias qui eaque, ullam voluptates! Minus
+                  dolore soluta reprehenderit optio, deleniti voluptate, sequi
+                  sint libero nulla eligendi commodi, debitis aliquam placeat
+                  tempora quaerat ab sit.
+                </span>
               </div>
-              <div className={styles.intructionTitleWrapper}>
-                <span className={styles.title}>Welcome letter</span>
-                <div className={styles.updateInfoWrapper}>
-                  <IonIcon
-                    src={CalendarIcon}
-                    className={styles.updateInfoIcon}
-                  />
-                  <span className={styles.updateInfoWrapper}>
-                    Last update: 12.02.2024
-                  </span>
+            }
+          />
+          <Accordion
+            header={
+              <div className={styles.header}>
+                <div className={styles.iconWrapper}>
+                  <IonIcon src={TaskIcon} className={styles.intructionIcon} />
+                </div>
+                <div className={styles.intructionTitleWrapper}>
+                  <span className={styles.title}>Welcome letter</span>
+                  <div className={styles.updateInfoWrapper}>
+                    <IonIcon
+                      src={CalendarIcon}
+                      className={styles.updateInfoIcon}
+                    />
+                    <span className={styles.updateInfoText}>
+                      Last update: 12.02.2024
+                    </span>
+                  </div>
                 </div>
               </div>
-            </IonItem>
-            <div slot="content">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
-              tempore perspiciatis, tenetur iure inventore eos. Dicta esse
-              voluptatem unde minus!
-            </div>
-          </IonAccordion>
-          <IonAccordion
-            className={styles.accordionItem}
-            value="third"
-            toggleIcon={ChevronIcon}
-          >
-            <IonItem className={styles.intructionWrapper} slot="header">
-              <div className={styles.iconWrapper}>
-                <IonIcon src={TaskIcon} className={styles.intructionIcon} />
+            }
+            content={
+              <div className={styles.instructionContent}>
+                <span>
+                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                  Voluptatum, quia.
+                </span>
               </div>
-              <div className={styles.intructionTitleWrapper}>
-                <span className={styles.title}>Welcome letter</span>
-                <div className={styles.updateInfoWrapper}>
-                  <IonIcon
-                    src={CalendarIcon}
-                    className={styles.updateInfoIcon}
-                  />
-                  <span className={styles.updateInfoWrapper}>
-                    Last update: 12.02.2024
-                  </span>
+            }
+          />
+          <Accordion
+            header={
+              <div className={styles.header}>
+                <div className={styles.iconWrapper}>
+                  <IonIcon src={TaskIcon} className={styles.intructionIcon} />
+                </div>
+                <div className={styles.intructionTitleWrapper}>
+                  <span className={styles.title}>Welcome letter</span>
+                  <div className={styles.updateInfoWrapper}>
+                    <IonIcon
+                      src={CalendarIcon}
+                      className={styles.updateInfoIcon}
+                    />
+                    <span className={styles.updateInfoText}>
+                      Last update: 12.02.2024
+                    </span>
+                  </div>
                 </div>
               </div>
-            </IonItem>
-            <div slot="content">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
-              tempore perspiciatis, tenetur iure inventore eos. Dicta esse
-              voluptatem unde minus!
-            </div>
-          </IonAccordion>
-          <IonAccordion
-            className={styles.accordionItem}
-            value="fourth"
-            toggleIcon={ChevronIcon}
-          >
-            <IonItem className={styles.intructionWrapper} slot="header">
-              <div className={styles.iconWrapper}>
-                <IonIcon src={TaskIcon} className={styles.intructionIcon} />
+            }
+            content={
+              <div className={styles.instructionContent}>
+                <span>
+                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                  Voluptatum, quia.
+                </span>
               </div>
-              <div className={styles.intructionTitleWrapper}>
-                <span className={styles.title}>Welcome letter</span>
-                <div className={styles.updateInfoWrapper}>
-                  <IonIcon
-                    src={CalendarIcon}
-                    className={styles.updateInfoIcon}
-                  />
-                  <span className={styles.updateInfoWrapper}>
-                    Last update: 12.02.2024
-                  </span>
+            }
+          />
+          <Accordion
+            header={
+              <div className={styles.header}>
+                <div className={styles.iconWrapper}>
+                  <IonIcon src={TaskIcon} className={styles.intructionIcon} />
+                </div>
+                <div className={styles.intructionTitleWrapper}>
+                  <span className={styles.title}>Welcome letter</span>
+                  <div className={styles.updateInfoWrapper}>
+                    <IonIcon
+                      src={CalendarIcon}
+                      className={styles.updateInfoIcon}
+                    />
+                    <span className={styles.updateInfoText}>
+                      Last update: 12.02.2024
+                    </span>
+                  </div>
                 </div>
               </div>
-            </IonItem>
-            <div slot="content">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
-              tempore perspiciatis, tenetur iure inventore eos. Dicta esse
-              voluptatem unde minus!
-            </div>
-          </IonAccordion>
-        </IonAccordionGroup>
+            }
+            content={
+              <div className={styles.instructionContent}>
+                <span>
+                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                  Voluptatum, quia.
+                </span>
+              </div>
+            }
+          />
+        </div>
       </IonContent>
     </IonPage>
   );

@@ -1,0 +1,39 @@
+.accordionWrapper {
+  padding: 8px;
+
+  border-radius: var(--custom--border-radius-primary);
+  background: var(--custom-bg-rgba-secondary);
+  box-shadow: var(--custom-box-shadow-primary);
+  backdrop-filter: blur(16px);
+}
+
+.accordionHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.chevronInner {
+  flex: 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.accordionContent {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--custom-tr-time-min) ease;
+}
+
+.chevron {
+  font-size: 24px;
+  color: var(--ion-color-light);
+  transition: rotate var(--custom-tr-time-min) ease,
+    color var(--custom-tr-time-min) ease;
+
+  &.open {
+    rotate: -180deg;
+    color: var(--ion-color-primary-contrast);
+  }
+}

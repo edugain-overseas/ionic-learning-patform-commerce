@@ -1,9 +1,12 @@
-import React from 'react'
+import { IonPage } from "@ionic/react";
+import React from "react";
 
 const Basket: React.FC = () => {
   return (
-    <div>Basket</div>
-  )
-}
+    <IonPage>
+      <div>Basket</div>
+    </IonPage>
+  );
+};
 
-export default Basket
+export default Basket;
