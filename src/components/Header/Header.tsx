@@ -14,6 +14,7 @@ import searchIcon from "../../assets/icons/header/search.svg";
 import backIcon from "../../assets/icons/header/back.svg";
 import rowIcon from "../../assets/icons/header/list-style-row.svg";
 // import gridIcon from "../../assets/icons/header/list-style-grid.svg";
+import SettingsIcon from "../../assets/icons/menu/settings.svg";
 import logoIEU from "../../assets/icons/logoIEU.svg";
 import styles from "./Header.module.scss";
 
@@ -55,8 +56,21 @@ const renderBtn = (buttonName: string) => {
           <IonIcon src={searchIcon} className={styles.searchIcon} />
         </IonButton>
       );
+    case "settings":
+      return (
+        <IonButton key={buttonName}>
+          <IonIcon src={SettingsIcon} className={styles.settingsIcon} />
+        </IonButton>
+      );
     case "logo":
-      return <IonImg src={logoIEU} alt="IEU logo" className={styles.logo} key={buttonName}/>;
+      return (
+        <IonImg
+          src={logoIEU}
+          alt="IEU logo"
+          className={styles.logo}
+          key={buttonName}
+        />
+      );
     default:
       break;
   }

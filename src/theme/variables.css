@@ -7,6 +7,7 @@ http://ionicframework.com/docs/theming/ */
   --ion-background-color-rgb: 0, 0, 0, 0.8;
   --ion-tab-bar-color: #fcfcfc;
 
+  --custom-color-decorate: #ececec;
   --custom-primary-lg: linear-gradient(#b80101, #920000);
   --custom-bg-rgba-primary: rgba(255, 255, 255, 0.8);
   --custom-bg-rgba-secondary: rgba(255, 255, 255, 0.65);
@@ -73,7 +74,7 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-shade: #6f7b94;
   --ion-color-light-tint: #8b98b1;
 
-  --ion-color-medium: #BDC4D2;
+  --ion-color-medium: #bdc4d2;
   --ion-color-medium-rgb: 95, 95, 95;
   --ion-color-medium-contrast: #ffffff;
   --ion-color-medium-contrast-rgb: 255, 255, 255;

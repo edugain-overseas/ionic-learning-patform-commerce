@@ -1,0 +1,68 @@
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+  position: relative;
+
+  h4 {
+    // padding: 20px 32px 16px;
+    text-align: center;
+    font-weight: 600;
+    line-height: 19px;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 1px;
+      right: 24px;
+      left: 24px;
+
+      height: 2px;
+      border-radius: 2px;
+      background-color: var(--content-datail-secondary);
+    }
+  }
+
+  .progressOuter {
+    padding: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    border-radius: 50%;
+    box-shadow: var(--box-shadow-button-inset);
+
+    .progress {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      box-shadow: var(--drop-shadow-button-main);
+    }
+
+    .progressInner {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: var(--bg-default);
+      border-radius: 50%;
+      box-shadow: var(--drop-shadow-button-main);
+    }
+  }
+
+  .infoBtnWrapper {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+  }
+}

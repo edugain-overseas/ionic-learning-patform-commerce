@@ -27,7 +27,7 @@ export interface courseTypes {
   icons: any[];
 }
 
-export const categories = [
+export const categories: CategoryTypes[] = [
   {
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet massa ante. Donec eget tellus libero. Ut pulvinar quam et varius accumsan. In efficitur arcu in purus finibus dignissim. Duis ante diam, eleifend malesuada auctor et, consequat eu erat. Morbi lacinia nulla lectus, sed consectetur urna venenatis in. Ut aliquam rhoncus nisi, a sodales lacus malesuada ac. Proin suscipit enim lorem, eu suscipit purus consequat sit amet.",
@@ -37,7 +37,7 @@ export const categories = [
   },
 ];
 
-export const courses = [
+export const courses: courseTypes[] = [
   {
     quantity_test: null,
     skills_text:

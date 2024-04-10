@@ -1,0 +1,213 @@
+.pageWrapper {
+  --background: transparent;
+  --padding-top: 56px;
+  --padding-bottom: 18px;
+  --padding-start: 18px;
+  --padding-end: 18px;
+  --color: var(--ion-color-dark);
+
+  & > div {
+    border-radius: var(--custom--border-radius-primary);
+    background-color: var(--custom-bg-rgba-secondary);
+    box-shadow: var(--custom-box-shadow-primary);
+    backdrop-filter: blur(16px);
+  }
+}
+
+.mainInfoBlock {
+  margin-bottom: 16px;
+
+  .topWrapper {
+    padding: 16px 20px 16px 124px;
+    margin-bottom: 10px;
+    position: relative;
+
+    .blockLable {
+      position: absolute;
+      top: 0;
+      right: 18px;
+      transform: translateY(-50%);
+      width: 80px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--custom--border-radius-primary);
+      background-color: var(--ion-color-primary);
+      box-shadow: var(--custom-box-shadow-secondary);
+
+      color: var(--ion-color-primary-contrast);
+      font-family: Roboto;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .avatarInner {
+      position: absolute;
+      top: -28px;
+      left: 14px;
+      border-radius: 50%;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: -4px;
+        left: -4px;
+        width: calc(100% + 8px);
+        height: calc(100% + 8px);
+        background: linear-gradient(
+          to bottom,
+          var(--custom-bg-rgba-secondary),
+          var(--custom-bg-rgba-secondary) 32px,
+          transparent 32px
+        );
+        border-radius: 50%;
+        filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.08));
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 85%;
+        height: 21%;
+        background-image: url("../../assets/icons/user-avatar-substract.svg");
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+    }
+
+    .usernameWrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .usernameLabel {
+        font-size: 10px;
+        font-weight: 400;
+      }
+
+      .username {
+        font-size: 18px;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .achives {
+    padding: 0 8px 16px;
+    display: flex;
+    gap: 8px;
+
+    .achiveItem {
+      flex-basis: calc(100% / 3 - (8px * 2 / 3));
+      max-width: calc(100% / 3 - (8px * 2 / 3));
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      .achiveIcon {
+        position: relative;
+        font-size: 24px;
+        margin-bottom: 10px;
+        contain: none;
+
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: -6px;
+          width: 18px;
+          height: 1.4px;
+          background-color: var(--ion-color-light);
+          left: 50%;
+          transform: translateX(-50%);
+          border-radius: 30px;
+        }
+      }
+
+      .achiveValue {
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+
+      .achiveLabel {
+        color: var(--ion-color-light);
+        font-size: 8px;
+        font-weight: 400;
+      }
+    }
+  }
+}
+
+.profileData {
+  margin-bottom: 16px;
+
+  .profileDataHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 4px;
+
+    .mainTitle {
+      font-family: Roboto;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .secondaryTitle {
+      color: var(--ion-color-light);
+      font-size: 10px;
+      font-weight: 500;
+    }
+  }
+
+  .profileDetails {
+    padding-top: 22px;
+    padding-inline: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      height: 2px;
+      top: 10px;
+      left: 4px;
+      right: 4px;
+      background-color: var(--ion-color-light);
+    }
+
+    .profileDataItem {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+
+      .label {
+        color: var(--ion-color-light);
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .value {
+        font-size: 16px;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.progressData {
+    display: flex;
+    gap: 16px;
+
+    & > div {
+        flex: 1;
+    }
+}
