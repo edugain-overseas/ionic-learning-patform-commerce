@@ -1,5 +1,5 @@
-import { IonContent, IonIcon, IonPage } from "@ionic/react";
-import React from "react";
+import { IonContent, IonIcon, IonImg, IonModal, IonPage } from "@ionic/react";
+import React, { useState } from "react";
 import avatar from "../../assets/images/subject_image.png";
 import ClockIcon from "../../assets/icons/clock.svg";
 import TaskProgressIcon from "../../assets/icons/task-progress.svg";
@@ -10,8 +10,20 @@ import TextOverrflowEllipsis from "../../components/TextOverrflowEllipsis/TextOv
 import styles from "./UserProfile.module.scss";
 import Accordion from "../../components/Accordion/Accordion";
 import CircleProgressCard from "../../components/CircleProgressCard/CircleProgressCard";
+import { certificates } from "../../constants";
+import InfoBtn from "../../components/InfoBtn/InfoBtn";
 
 const UserProfile: React.FC = () => {
+  const [certificateIndex, setCertificateIndex] = useState(0);
+  const [isOpenModalCerficate, setIsOpenModalCerficate] = useState(false);
+
+  const handleCertificateClick = (index: number) => {
+    setCertificateIndex(index);
+    setIsOpenModalCerficate(true);
+  };
+
+  console.log(isOpenModalCerficate);
+
   return (
     <IonPage>
       <Header
@@ -109,13 +121,65 @@ const UserProfile: React.FC = () => {
         </div>
         <div className={styles.progressData}>
           <div className={styles.gradeWrapper}>
-            <CircleProgressCard cardTitle="Grade Point Average" width={90} />
+            <CircleProgressCard
+              cardTitle="Grade Point Average"
+              width={90}
+              strokeWidth={4}
+              strokeColor="#FCC400"
+              progressTitle={
+                <div className={styles.progressContent}>
+                  <span className={styles.label}>Average</span>
+                  <span className={styles.value}>172(B)</span>
+                </div>
+              }
+            />
           </div>
           <div className={styles.progressWrapper}>
-            <CircleProgressCard cardTitle="Your progress" width={90}/>
+            <CircleProgressCard
+              cardTitle="Your progress"
+              width={90}
+              strokeWidth={4}
+              strokeColor="#39ba6d"
+              progressTitle={
+                <div className={styles.progressContent}>
+                  <span className={styles.label}>Completed</span>
+                  <span className={styles.value}>75%</span>
+                </div>
+              }
+            />
           </div>
         </div>
-        <div className={styles.certificatesData}></div>
+        <div className={styles.certificatesData}>
+          <div className={styles.certificatesHeader}>
+            <span className={styles.certificatesTitle}>
+              Certificates of completed courses
+            </span>
+            <InfoBtn info="Certificates" id="Certificates" />
+          </div>
+          <ul className={styles.certificatesList}>
+            {certificates.map(({ name }, index) => (
+              <li
+                className={styles.certificateItem}
+                key={name}
+                id="certificate"
+                onClick={() => handleCertificateClick(index)}
+              >
+                <span className={styles.certificateTitle}>{name}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <IonModal
+          className={styles.certificateModal}
+          isOpen={isOpenModalCerficate}
+          onDidDismiss={() => setIsOpenModalCerficate(false)}
+          breakpoints={[0, 1]}
+          initialBreakpoint={1}
+        >
+          {certificates[certificateIndex].images.map(({ src }, index) => (
+            <img src={src} key={index} />
+          ))}
+        </IonModal>
       </IonContent>
     </IonPage>
   );

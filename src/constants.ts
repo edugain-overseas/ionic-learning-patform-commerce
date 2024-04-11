@@ -1,3 +1,5 @@
+import certificate from "./assets/images/certificate-sample.png";
+
 export interface CategoryTypes {
   id: number;
   description: string;
@@ -63,17 +65,46 @@ export const courses: courseTypes[] = [
   },
 ];
 
-export const coursesNavItems = [
+export const certificates = [
   {
-    value: "my",
-    label: "my courses",
+    name: "Certificate 1",
+    images: [{ src: certificate }, { src: certificate }],
   },
   {
-    value: "available",
-    label: "available courses",
+    name: "Certificate 2",
+    images: [{ src: certificate }, { src: certificate }],
   },
   {
-    value: "completed",
-    label: "completed courses",
+    name: "Certificate 3",
+    images: [{ src: certificate }, { src: certificate }],
+  },
+  {
+    name: "Certificate 4",
+    images: [{ src: certificate }, { src: certificate }],
+  },
+  {
+    name: "Certificate 5",
+    images: [{ src: certificate }, { src: certificate }],
+  },
+  {
+    name: "Certificate 6",
+    images: [{ src: certificate }, { src: certificate }],
+  },
+  {
+    name: "Certificate 7",
+    images: [{ src: certificate }, { src: certificate }],
+  },
+  {
+    name: "Certificate 8",
+    images: [{ src: certificate }, { src: certificate }],
+  },
+  {
+    name: "Certificate 9",
+    images: [{ src: certificate }, { src: certificate }],
+  },
+
+  {
+    name: "Certificate 10",
+    images: [{ src: certificate }, { src: certificate }],
   },
 ];

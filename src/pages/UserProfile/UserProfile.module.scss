@@ -11,12 +11,11 @@
     background-color: var(--custom-bg-rgba-secondary);
     box-shadow: var(--custom-box-shadow-primary);
     backdrop-filter: blur(16px);
+    margin-bottom: 16px;
   }
 }
 
 .mainInfoBlock {
-  margin-bottom: 16px;
-
   .topWrapper {
     padding: 16px 20px 16px 124px;
     margin-bottom: 10px;
@@ -144,8 +143,10 @@
   }
 }
 
-.profileData {
-  margin-bottom: 16px;
+div.profileData {
+  background: none;
+  box-shadow: none;
+  backdrop-filter: none;
 
   .profileDataHeader {
     display: flex;
@@ -203,11 +204,116 @@
   }
 }
 
-.progressData {
-    display: flex;
-    gap: 16px;
+div.progressData {
+  display: flex;
+  gap: 16px;
+  background-color: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
 
-    & > div {
-        flex: 1;
+  & > div {
+    flex: 1;
+    border-radius: var(--custom--border-radius-primary);
+    background-color: var(--custom-bg-rgba-secondary);
+    box-shadow: var(--custom-box-shadow-primary);
+    backdrop-filter: blur(16px);
+  }
+
+  .progressContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+
+    .label {
+      color: var(--ion-color-light);
+      font-size: 8px;
+      font-weight: 500;
     }
+
+    .value {
+      font-size: 16px;
+      font-weight: 700;
+    }
+  }
+}
+
+.certificatesData {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 0;
+
+  .certificatesHeader {
+    padding: 12px 8px 12px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    position: relative;
+
+    &:before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      right: 12px;
+      left: 12px;
+      height: 2px;
+      background-color: var(--ion-color-light);
+      border-radius: 10px;
+    }
+
+    .certificatesTitle {
+      font-family: Roboto;
+      font-size: 14px;
+      font-weight: 700;
+    }
+  }
+
+  .certificatesList {
+    padding-inline: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 19px;
+    padding-bottom: 12px;
+
+    .certificateItem {
+      padding-inline-start: 20px;
+      position: relative;
+      color: var(--ion-color-dark);
+
+      &:before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        width: 4px;
+        height: 4px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background-color: currentColor;
+      }
+      &:not(:last-child) {
+        &:after {
+          content: "";
+          position: absolute;
+          bottom: -10px;
+          left: 0;
+          right: 0;
+          height: 1px;
+          border-radius: 10px;
+          background-color: var(--ion-color-light);
+        }
+      }
+    }
+
+    .certificateTitle {
+      font-size: 14px;
+      font-weight: 400;
+    }
+  }
+}
+
+.certificateModal {
+  --height: auto;
 }

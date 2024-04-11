@@ -4,7 +4,7 @@ import infoIcon from "../../assets/icons/info.svg";
 import InsetBtn from "../InsetBtn/InsetBtn";
 import styles from "./InfoBtn.module.scss";
 
-const InfoBtn: React.FC<{ info: string }> = ({ info }) => {
+const InfoBtn: React.FC<{ info: string; id: string }> = ({ info, id }) => {
   return (
     <>
       <InsetBtn
@@ -13,9 +13,10 @@ const InfoBtn: React.FC<{ info: string }> = ({ info }) => {
         height="32px"
         disabled={false}
         onClick={() => {}}
+        id={id}
       />
-      <IonPopover trigger="info-trigger">
-        <IonContent className={styles.infoContent}>
+      <IonPopover trigger={id}>
+        <IonContent className={styles.infoContent} scrollY={false}>
           <IonText>{info}</IonText>
         </IonContent>
       </IonPopover>

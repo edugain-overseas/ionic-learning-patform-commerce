@@ -42,3 +42,18 @@ export const instructionsNav = [
     value: "courses",
   },
 ];
+
+export const coursesNavItems = [
+  {
+    value: "my",
+    label: "my courses",
+  },
+  {
+    value: "available",
+    label: "available courses",
+  },
+  {
+    value: "completed",
+    label: "completed courses",
+  },
+];

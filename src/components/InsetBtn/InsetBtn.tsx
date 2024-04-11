@@ -8,6 +8,7 @@ interface InsetBtnTypes {
   backgroundColor?: string | undefined;
   onClick?: () => void | undefined;
   disabled?: boolean | undefined;
+  id?: string;
 }
 
 const InsetBtn: React.FC<InsetBtnTypes> = ({
@@ -17,6 +18,7 @@ const InsetBtn: React.FC<InsetBtnTypes> = ({
   backgroundColor,
   onClick = () => {},
   disabled = false,
+  id = undefined,
 }) => {
   return (
     <button
@@ -24,6 +26,7 @@ const InsetBtn: React.FC<InsetBtnTypes> = ({
       className={styles.insetBtn}
       onClick={onClick}
       disabled={disabled}
+      id={id ? id : undefined}
     >
       <div style={backgroundColor ? { backgroundColor: backgroundColor } : {}}>
         {icon}

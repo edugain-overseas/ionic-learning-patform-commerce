@@ -1,29 +1,31 @@
 .wrapper {
   width: 100%;
-  height: 100%;
+  // height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 36px;
+  gap: 16px;
   position: relative;
+  padding-bottom: 32px;
 
   h4 {
-    // padding: 20px 32px 16px;
-    text-align: center;
+    width: 100%;
+    padding: 8px;
+    margin: 0;
+    font-size: 12px;
     font-weight: 600;
-    line-height: 19px;
     position: relative;
+    text-align: center;
 
     &::after {
       content: "";
       position: absolute;
-      bottom: 1px;
-      right: 24px;
-      left: 24px;
-
+      bottom: 0px;
+      right: 18px;
+      left: 18px;
       height: 2px;
       border-radius: 2px;
-      background-color: var(--content-datail-secondary);
+      background-color: var(--ion-color-light);
     }
   }
 
@@ -38,31 +40,30 @@
     box-shadow: var(--box-shadow-button-inset);
 
     .progress {
-      width: 100%;
-      height: 100%;
+      display: flex;
       border-radius: 50%;
       box-shadow: var(--drop-shadow-button-main);
     }
 
     .progressInner {
       position: absolute;
-      width: 140px;
-      height: 140px;
+      width: 72px;
+      height: 72px;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: var(--bg-default);
+      background-color: var(--custom-bg-rgba-primary);
       border-radius: 50%;
-      box-shadow: var(--drop-shadow-button-main);
+      box-shadow: 0px 0px 6.176px rgba(0, 0, 0, 0.08);
     }
   }
 
   .infoBtnWrapper {
     position: absolute;
-    right: 16px;
-    bottom: 16px;
+    right: 8px;
+    bottom: 8px;
   }
 }

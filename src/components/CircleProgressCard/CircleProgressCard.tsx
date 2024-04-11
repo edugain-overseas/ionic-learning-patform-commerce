@@ -4,8 +4,8 @@ import CircleProgressBar from "../CircleProgressBar/CircleProgressBar";
 import styles from "./CircleProgressCard.module.scss";
 
 interface CircleProgressCardTypes {
-  cardTitle?: string;
-  progressTitle?: string;
+  cardTitle: string;
+  progressTitle?: string | React.ReactNode;
   strokeBackgroundColor?: string;
   progress?: number;
   strokeColor?: string;
@@ -43,7 +43,10 @@ const CircleProgressCard: React.FC<CircleProgressCardTypes> = ({
         <div className={styles.progressInner}>{progressTitle}</div>
       </div>
       <div className={styles.infoBtnWrapper}>
-        <InfoBtn info="The average score is calculated based on all courses you have completed" />
+        <InfoBtn
+          info={cardTitle}
+          id={cardTitle}
+        />
       </div>
     </div>
   );

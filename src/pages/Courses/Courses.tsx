@@ -1,6 +1,7 @@
 import { IonContent, IonPage, SegmentChangeEventDetail } from "@ionic/react";
 import React, { useState } from "react";
-import { coursesNavItems, categories } from "../../constants";
+import { coursesNavItems } from "../../constants/nav";
+import { categories } from "../../constants";
 import Header from "../../components/Header/Header";
 import SegmentNavPanel from "../../components/SegmentNavPanel/SegmentNavPanel";
 import CategoryItem from "../../components/CategoryItem/CategoryItem";
