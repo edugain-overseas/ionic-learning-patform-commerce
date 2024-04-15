@@ -314,74 +314,71 @@ div.progressData {
   }
 }
 
-.certificateModal {
-  --height: auto;
+.cetrificateModalWrapper {
+  padding-block: 20px;
 
-  .cetrificateModalWrapper {
-    padding-block: 20px;
+  .certificatesModalHeader {
+    margin-inline: 14px;
+    text-align: center;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    border-bottom: 2px solid var(--ion-color-light);
 
-    .certificatesModalHeader {
-      margin-inline: 14px;
-      text-align: center;
-      padding-bottom: 12px;
-      margin-bottom: 16px;
-      border-bottom: 2px solid var(--ion-color-light);
-
-      span {
-        font-family: Roboto;
-        font-size: 14px;
-        font-weight: 700;
-      }
-    }
-
-    .certificateModalDownload {
-      padding-top: 16px;
-      margin-top: 8px;
-      margin-inline: 14px;
-      border-top: 2px solid var(--ion-color-light);
-      display: flex;
-      justify-content: center;
-      color: var(--ion-color-light);
-
-      button {
-        font-family: Roboto;
-        font-size: 14px;
-        font-weight: 600;
-      }
-
-      .docDownloadIcon {
-        font-size: 14px;
-      }
+    span {
+      font-family: Roboto;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ion-color-dark);
     }
   }
 
-  .swiper {
-    padding-bottom: 16px;
-    --swiper-pagination-bottom: 0;
+  .certificateModalDownload {
+    padding-top: 16px;
+    margin-top: 8px;
+    margin-inline: 14px;
+    border-top: 2px solid var(--ion-color-light);
+    display: flex;
+    justify-content: center;
+    color: var(--ion-color-light);
 
-    .slide {
-      width: auto;
+    button {
+      font-family: Roboto;
+      font-size: 14px;
+      font-weight: 600;
     }
 
-    .customBullet {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      background-color: var(--ion-tab-bar-color);
-      box-shadow: var(--custom-box-shadow-secondary-inset);
-      position: relative;
+    .docDownloadIcon {
+      font-size: 14px;
+    }
+  }
+}
 
-      &::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background-color: var(--ion-color-light);
-      }
+div.swiper {
+  padding-bottom: 16px;
+  --swiper-pagination-bottom: 0;
+
+  .slide {
+    width: auto;
+  }
+
+  .customBullet {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: var(--ion-tab-bar-color);
+    box-shadow: var(--custom-box-shadow-secondary-inset);
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--ion-color-light);
     }
   }
 }

@@ -1,4 +1,4 @@
-import { IonContent, IonIcon, IonImg, IonModal, IonPage } from "@ionic/react";
+import { IonContent, IonIcon, IonImg, IonPage } from "@ionic/react";
 import { useState } from "react";
 import benefits from "../../assets/images/home-slider-bg.png";
 import userIcon from "../../assets/icons/tabs/my-profile.svg";
@@ -10,6 +10,7 @@ import InsetBtn from "../../components/InsetBtn/InsetBtn";
 import LoginForm from "../../components/Auth/LoginForm";
 import styles from "./Home.module.scss";
 import SingupForm from "../../components/Auth/SingupForm";
+import SheetModalAuto from "../../components/SheetModalAuto/SheetModalAuto";
 
 const Home: React.FC = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -83,22 +84,12 @@ const Home: React.FC = () => {
           />
         </div>
 
-        <IonModal
-          breakpoints={[0, 1]}
-          initialBreakpoint={1}
-          trigger="sing-up"
-          className={styles.modal}
-        >
+        <SheetModalAuto trigger="sing-up">
           <SingupForm />
-        </IonModal>
-        <IonModal
-          breakpoints={[0, 1]}
-          initialBreakpoint={1}
-          trigger="sing-in"
-          className={styles.modal}
-        >
+        </SheetModalAuto>
+        <SheetModalAuto trigger="sing-in">
           <LoginForm />
-        </IonModal>
+        </SheetModalAuto>
       </IonContent>
     </IonPage>
   );

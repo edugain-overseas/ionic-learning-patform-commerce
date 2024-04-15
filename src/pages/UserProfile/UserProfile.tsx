@@ -1,4 +1,4 @@
-import { IonContent, IonIcon, IonModal, IonPage } from "@ionic/react";
+import { IonContent, IonIcon, IonPage } from "@ionic/react";
 import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { certificates } from "../../constants";
@@ -13,6 +13,7 @@ import TextOverrflowEllipsis from "../../components/TextOverrflowEllipsis/TextOv
 import Accordion from "../../components/Accordion/Accordion";
 import CircleProgressCard from "../../components/CircleProgressCard/CircleProgressCard";
 import InfoBtn from "../../components/InfoBtn/InfoBtn";
+import SheetModalAuto from "../../components/SheetModalAuto/SheetModalAuto";
 import CommonButton from "../../components/CommonButton/CommonButton";
 import styles from "./UserProfile.module.scss";
 
@@ -23,7 +24,7 @@ import "swiper/css/pagination";
 // import required modules
 import { Pagination } from "swiper/modules";
 
-import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
+// import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 
 const pagination = {
   clickable: true,
@@ -65,7 +66,6 @@ const UserProfile: React.FC = () => {
       //   encoding: Encoding.UTF8,
       // });
 
-      // Show success message or perform any other action upon successful download
       console.log("File downloaded successfully:", fileName);
     } catch (error) {
       console.error("Error downloading file:", error);
@@ -217,12 +217,9 @@ const UserProfile: React.FC = () => {
             ))}
           </ul>
         </div>
-        <IonModal
-          className={styles.certificateModal}
+        <SheetModalAuto
           isOpen={isOpenModalCerficate}
-          onDidDismiss={() => setIsOpenModalCerficate(false)}
-          breakpoints={[0, 1]}
-          initialBreakpoint={1}
+          onDidDissmiss={() => setIsOpenModalCerficate(false)}
         >
           <div className={styles.cetrificateModalWrapper}>
             <div className={styles.certificatesModalHeader}>
@@ -260,7 +257,7 @@ const UserProfile: React.FC = () => {
               />
             </div>
           </div>
-        </IonModal>
+        </SheetModalAuto>
       </IonContent>
     </IonPage>
   );

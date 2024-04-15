@@ -145,6 +145,21 @@ ion-menu::part(container) {
 }
 
 //modal
+
+// ion-modal {
+//   --height: auto;
+//   --ion-backdrop-color: var(--custom-bg-rgba-primary);
+//   --box-shadow: var(--custom-box-shadow-content);
+//   --background: var(--custom-bg-rgba-primary);
+//   --border-radius: 16px;
+
+//   backdrop-filter: blur(5px);
+
+//   &::part(content) {
+//     backdrop-filter: blur(16px);
+//   }
+// }
+
 ion-modal::part(handle) {
   width: 45px;
   border-radius: 6px;
