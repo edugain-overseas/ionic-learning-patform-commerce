@@ -143,3 +143,18 @@
 ion-menu::part(container) {
   contain: none;
 }
+
+//modal
+ion-modal::part(handle) {
+  width: 45px;
+  border-radius: 6px;
+  background-color: var(--ion-color-light);
+  top: 8px;
+  height: 4px;
+
+  &::before {
+    padding-block: 8px;
+    width: 45px;
+    height: 4px;
+  }
+}
