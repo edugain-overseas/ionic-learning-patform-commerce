@@ -382,3 +382,8 @@ div.swiper {
     }
   }
 }
+
+.editDataModal {
+  bottom: 60px;
+  --height: calc(100% - 16px);
+}

@@ -1,0 +1,42 @@
+.wrapper {
+  margin-top: -12px;
+  --ion-background-color: transparent;
+  --padding-bottom: 24px;
+}
+
+.headerToolbar {
+  --min-height: auto;
+}
+
+.avatarWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+
+  margin-bottom: 16px;
+
+  color: var(--ion-color-light);
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 17.643px;
+}
+
+.formWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-inline: 32px;
+  color: var(--ion-color-light);
+  margin-bottom: 18px;
+}
+
+.formBtns {
+  display: flex;
+  justify-content: space-evenly;
+  color: var(--ion-color-light);
+  font-size: 14px;
+  font-weight: 600;
+}

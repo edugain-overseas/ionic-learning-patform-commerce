@@ -10,13 +10,19 @@ import Accordion from "../../components/Accordion/Accordion";
 
 const Instructions: React.FC = () => {
   const [filter, setFilter] = useState("general");
+
+  const headerProps = {
+    title: "Instructions",
+    left: [{ name: "back" }],
+    right: [
+      { name: "notification", onClick: () => {} },
+      { name: "search", onClick: () => {} },
+    ],
+  };
+
   return (
     <IonPage>
-      <Header
-        left={["back"]}
-        right={["notification", "search"]}
-        title="Instructions"
-      />
+      <Header {...headerProps} />
       <IonContent>
         <SegmentNavPanel
           items={instructionsNav}

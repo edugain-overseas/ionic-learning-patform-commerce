@@ -23,6 +23,7 @@ import "swiper/css/pagination";
 
 // import required modules
 import { Pagination } from "swiper/modules";
+import EditProfileData from "../../components/EditProfileData/EditProfileData";
 
 // import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 
@@ -72,13 +73,18 @@ const UserProfile: React.FC = () => {
     }
   };
 
+  const headerProps = {
+    left: [{ name: "back" }],
+    title: "My Profile",
+    right: [
+      { name: "notification", onClick: () => {} },
+      { name: "settings", id: "open-edit-profile-modal", onClick: () => {} },
+    ],
+  };
+
   return (
     <IonPage>
-      <Header
-        left={["back"]}
-        title="My Profile"
-        right={["notification", "settings"]}
-      />
+      <Header {...headerProps} />
       <IonContent className={styles.pageWrapper}>
         <div className={styles.mainInfoBlock}>
           <div className={styles.topWrapper}>
@@ -257,6 +263,12 @@ const UserProfile: React.FC = () => {
               />
             </div>
           </div>
+        </SheetModalAuto>
+        <SheetModalAuto
+          trigger="open-edit-profile-modal"
+          className={styles.editDataModal}
+        >
+          <EditProfileData />
         </SheetModalAuto>
       </IonContent>
     </IonPage>

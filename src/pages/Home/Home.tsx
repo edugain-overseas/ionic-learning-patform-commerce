@@ -14,13 +14,19 @@ import SheetModalAuto from "../../components/SheetModalAuto/SheetModalAuto";
 
 const Home: React.FC = () => {
   const [searchValue, setSearchValue] = useState("");
+
+  const headerProps = {
+    left: [{ name: "logo" }],
+    right: [
+      { name: "notification", onClick: () => {} },
+      { name: "search", onClick: () => {} },
+    ],
+    mode: "transparent",
+  };
+
   return (
     <IonPage className={styles.page}>
-      <Header
-        left={["logo"]}
-        right={["notification", "search"]}
-        mode="transparent"
-      />
+      <Header {...headerProps} />
       <IonContent fullscreen className={styles.homeContent} scrollY={false}>
         <div className={styles.contentWrapper}>
           <div className={styles.titleWrapper}>

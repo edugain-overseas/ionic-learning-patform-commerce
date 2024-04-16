@@ -15,24 +15,35 @@ import backIcon from "../../assets/icons/header/back.svg";
 import rowIcon from "../../assets/icons/header/list-style-row.svg";
 // import gridIcon from "../../assets/icons/header/list-style-grid.svg";
 import SettingsIcon from "../../assets/icons/menu/settings.svg";
+import SaveIcon from "../../assets/icons/save.svg";
 import logoIEU from "../../assets/icons/logoIEU.svg";
 import styles from "./Header.module.scss";
+
+interface buttonPropsTypes {
+  name: string;
+  id?: string;
+  onClick?: () => void;
+  className?: string;
+}
 
 interface HeaderTypes {
   title?: string;
   secondary?: boolean | undefined;
-  left?: string[];
-  right?: string[];
+  left?: buttonPropsTypes[];
+  right?: buttonPropsTypes[];
   mode?: string;
+  toolbarClassName?: string;
 }
 
-const renderBtn = (buttonName: string) => {
-  switch (buttonName) {
+const renderBtn = (props: buttonPropsTypes) => {
+  switch (props.name) {
     case "back":
       return (
         <IonBackButton
-          key={buttonName}
-          className={styles.backBtn}
+          key={props.name}
+          className={`${styles.backBtn} ${
+            props.className ? props.className : ""
+          }`}
           defaultHref="/"
           icon={backIcon}
           text={""}
@@ -40,25 +51,45 @@ const renderBtn = (buttonName: string) => {
       );
     case "notification":
       return (
-        <IonButton key={buttonName} className={styles.notificationBtn}>
+        <IonButton
+          key={props.name}
+          className={`${styles.notificationBtn} ${
+            props.className ? props.className : ""
+          }`}
+          onClick={props.onClick}
+          id={props.id}
+        >
           <IonIcon src={bellIcon} className={styles.bellIcon} />
         </IonButton>
       );
     case "list-style":
       return (
-        <IonButton key={buttonName}>
+        <IonButton
+          key={props.name}
+          className={props.className ? props.className : ""}
+          id={props.id}
+        >
           <IonIcon src={rowIcon} className={styles.rowIcon} />
         </IonButton>
       );
     case "search":
       return (
-        <IonButton key={buttonName}>
+        <IonButton
+          key={props.name}
+          className={props.className ? props.className : ""}
+          onClick={props.onClick}
+          id={props.id}
+        >
           <IonIcon src={searchIcon} className={styles.searchIcon} />
         </IonButton>
       );
     case "settings":
       return (
-        <IonButton key={buttonName}>
+        <IonButton
+          key={props.name}
+          className={props.className ? props.className : ""}
+          id={props.id}
+        >
           <IonIcon src={SettingsIcon} className={styles.settingsIcon} />
         </IonButton>
       );
@@ -67,9 +98,21 @@ const renderBtn = (buttonName: string) => {
         <IonImg
           src={logoIEU}
           alt="IEU logo"
-          className={styles.logo}
-          key={buttonName}
+          className={`${styles.logo} ${props.className ? props.className : ""}`}
+          key={props.name}
+          onClick={props.onClick}
+          id={props.id}
         />
+      );
+    case "save":
+      return (
+        <IonButton
+          key={props.name}
+          className={props.className ? props.className : ""}
+          id={props.id}
+        >
+          <IonIcon src={SaveIcon} className={styles.saveIcon} />
+        </IonButton>
       );
     default:
       break;
@@ -82,6 +125,7 @@ const Header: React.FC<HeaderTypes> = ({
   left = [],
   right = [],
   mode,
+  toolbarClassName,
 }) => {
   return (
     <IonHeader
@@ -90,10 +134,12 @@ const Header: React.FC<HeaderTypes> = ({
       }`}
     >
       <IonToolbar
-        className={`${secondary ? styles.secondary : ""} ${styles.toolbar}`}
+        className={`${secondary ? styles.secondary : ""} ${styles.toolbar} ${
+          toolbarClassName ? toolbarClassName : ""
+        }`}
       >
         <IonButtons slot="start" className={styles.leftButtonsWrapper}>
-          {left.map((name) => renderBtn(name))}
+          {left.map((props) => renderBtn(props))}
         </IonButtons>
         {title && <IonTitle className={styles.title}>{title}</IonTitle>}
         <IonButtons slot="end">

@@ -7,6 +7,7 @@ interface SheetModalAutoTypes {
   isOpen?: boolean;
   onDidDissmiss?: () => void;
   trigger?: string;
+  className?: string;
 }
 
 const SheetModalAuto: React.FC<SheetModalAutoTypes> = ({
@@ -14,6 +15,7 @@ const SheetModalAuto: React.FC<SheetModalAutoTypes> = ({
   isOpen,
   onDidDissmiss,
   trigger,
+  className,
 }) => {
   const modalRef = useRef<HTMLIonModalElement>(null);
 
@@ -24,7 +26,7 @@ const SheetModalAuto: React.FC<SheetModalAutoTypes> = ({
   return (
     <IonModal
       ref={modalRef}
-      className={styles.modal}
+      className={`${styles.modal} ${className ? className : ""}`}
       isOpen={isOpen}
       onDidDismiss={onDidDissmiss}
       breakpoints={[0, 1]}

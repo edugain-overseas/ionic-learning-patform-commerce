@@ -1,0 +1,28 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.inputName {
+  color: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  padding-inline-start: 8px;
+}
+
+.input {
+  display: block;
+  height: 32px;
+
+  border-radius: var(--custom--border-radius-primary);
+  background: var(--custom-bg-rgba-fourth);
+  box-shadow: var(--custom-box-shadow-secondary-inset);
+  border: none;
+  outline: none;
+  padding-inline: 8px;
+
+  color: var(--ion-color-dark);
+  font-size: 16px;
+  font-weight: 500;
+}

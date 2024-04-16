@@ -109,14 +109,19 @@ const CategoryDetailPage: React.FC = () => {
     }
   };
 
+  const headerProps = {
+    title: "My Courses",
+    secondary: true,
+    left: [{ name: "back" }],
+    right: [
+      { name: "notification", onClick: () => {} },
+      { name: "list-style", onClick: () => {} },
+    ],
+  };
+
   return (
     <IonPage className={styles.papeWrapper}>
-      <Header
-        title="My Courses"
-        secondary={true}
-        left={["back"]}
-        right={["notification", "list-style"]}
-      />
+      <Header {...headerProps} />
       <IonContent scrollY={false} fullscreen className={styles.contentWrapper}>
         <div className={styles.topContentWrapper} ref={topContentRef}>
           {showDetail && (

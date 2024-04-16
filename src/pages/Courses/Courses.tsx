@@ -1,4 +1,4 @@
-import { IonContent, IonPage, SegmentChangeEventDetail } from "@ionic/react";
+import { IonContent, IonPage } from "@ionic/react";
 import React, { useState } from "react";
 import { coursesNavItems } from "../../constants/nav";
 import { categories } from "../../constants";
@@ -10,14 +10,18 @@ import styles from "./Courses.module.scss";
 const Courses: React.FC = () => {
   const [filter, setFilter] = useState<string>("my");
 
+  const headerProps = {
+    title: "Courses",
+    left: [{ name: "back" }, { name: "notification", onClick: () => {} }],
+    right: [
+      { name: "list-style", onClick: () => {} },
+      { name: "search", onClick: () => {} },
+    ],
+  };
+
   return (
     <IonPage>
-      <Header
-        title="Courses"
-        secondary={false}
-        left={["back", "notification"]}
-        right={["list-style", "search"]}
-      />
+      <Header {...headerProps} />
       <IonContent className="custom-content-wrapper">
         <SegmentNavPanel
           value={filter}

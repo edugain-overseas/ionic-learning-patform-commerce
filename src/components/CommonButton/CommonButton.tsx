@@ -13,7 +13,7 @@ interface CommonButtonTypes {
   color?: string;
   backgroundColor?: string;
   className?: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const CommonButton: React.FC<CommonButtonTypes> = ({
