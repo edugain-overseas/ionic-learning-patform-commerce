@@ -10,7 +10,7 @@ import {
 } from "@ionic/react";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
-import { categories, courses } from "../../constants";
+import { useCourses } from "../../context/CoursesContext";
 import categoryContrastIcon from "../../assets/icons/category-contrast.svg";
 import Header from "../../components/Header/Header";
 import styles from "./CategoryDetailPage.module.scss";
@@ -21,9 +21,16 @@ const progress = 25;
 
 const CategoryDetailPage: React.FC = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
+  const category = useCourses()?.categories.find(
+    ({ id }) => id === +categoryId
+  );
+
+  const courses = useCourses()?.courses.filter(
+    (course) => course.category_id === +categoryId
+  );
+
   const [filter, setFilter] = useState<string>("All");
   const [currentHeight, setCurrentHeight] = useState(0);
-  const category = categories.find(({ id }) => id === +categoryId);
   const topContentRef = useRef<HTMLDivElement>(null);
   const [showDetail, setShowDetail] = useState(true);
   const bottomSheet = useRef<HTMLDivElement>(null);
@@ -33,9 +40,14 @@ const CategoryDetailPage: React.FC = () => {
     const parentElementHeight =
       bottomSheet.current?.parentElement?.clientHeight;
     if (parentElementHeight && topContentRef.current?.clientHeight) {
-      setCurrentHeight(bottomSheet.current.clientHeight);
+      setCurrentHeight(
+        Math.max(
+          parentElementHeight - topContentRef.current?.clientHeight + 61,
+          bottomSheet.current.clientHeight
+        )
+      );
     }
-  }, []);
+  });
 
   useEffect(() => {
     if (bottomSheetController.current && bottomSheet.current?.clientHeight) {
@@ -44,9 +56,8 @@ const CategoryDetailPage: React.FC = () => {
         bottomSheet.current?.parentElement?.clientHeight;
 
       if (topContentRef.current?.clientHeight && parentElementHeight) {
-
-        const maxHeight = parentElementHeight - 66 + 61;
-        const minHeight = parentElementHeight - 162 + 61;
+        const maxHeight = parentElementHeight + 61 - 56;
+        const minHeight = parentElementHeight + 61 - 152;
 
         const gesture = createGesture({
           el: target,
@@ -180,22 +191,7 @@ const CategoryDetailPage: React.FC = () => {
               </div>
             </div>
             <ul className={styles.coursesList}>
-              {courses.map((course) => (
-                <CourseItem course={course} key={course.id} />
-              ))}
-              {courses.map((course) => (
-                <CourseItem course={course} key={course.id} />
-              ))}
-              {courses.map((course) => (
-                <CourseItem course={course} key={course.id} />
-              ))}
-              {courses.map((course) => (
-                <CourseItem course={course} key={course.id} />
-              ))}
-              {courses.map((course) => (
-                <CourseItem course={course} key={course.id} />
-              ))}
-              {courses.map((course) => (
+              {courses?.map((course) => (
                 <CourseItem course={course} key={course.id} />
               ))}
             </ul>

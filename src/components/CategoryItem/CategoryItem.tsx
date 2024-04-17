@@ -1,12 +1,12 @@
 import React from "react";
 import { IonRouterLink, IonText } from "@ionic/react";
-import { CategoryTypes } from "../../constants";
+import { CategoryType } from "../../context/CoursesContext";
 import categoryIcon from "../../assets/icons/category.svg";
-import styles from "./CategoryItem.module.scss";
 import InfoBtn from "../InfoBtn/InfoBtn";
+import styles from "./CategoryItem.module.scss";
 
 interface CategoryItemTypes {
-  category: CategoryTypes;
+  category: CategoryType;
 }
 
 const CategoryItem: React.FC<CategoryItemTypes> = ({ category }) => {
@@ -33,10 +33,12 @@ const CategoryItem: React.FC<CategoryItemTypes> = ({ category }) => {
         </div>
       </IonRouterLink>
       <div className={styles.infoBtn}>
-        <InfoBtn
-          info={category.description}
-          id={`info-${category.id}-trigger`}
-        />
+        {category.description && (
+          <InfoBtn
+            info={category.description}
+            id={`info-${category.id}-trigger`}
+          />
+        )}
       </div>
     </li>
   );

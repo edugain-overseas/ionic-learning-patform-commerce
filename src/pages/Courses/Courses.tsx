@@ -1,13 +1,15 @@
 import { IonContent, IonPage } from "@ionic/react";
 import React, { useState } from "react";
 import { coursesNavItems } from "../../constants/nav";
-import { categories } from "../../constants";
+import { useCourses } from "../../context/CoursesContext";
 import Header from "../../components/Header/Header";
 import SegmentNavPanel from "../../components/SegmentNavPanel/SegmentNavPanel";
 import CategoryItem from "../../components/CategoryItem/CategoryItem";
 import styles from "./Courses.module.scss";
 
 const Courses: React.FC = () => {
+  const categories = useCourses()?.categories;
+
   const [filter, setFilter] = useState<string>("my");
 
   const headerProps = {
@@ -29,7 +31,7 @@ const Courses: React.FC = () => {
           items={coursesNavItems}
         />
         <ul className={styles.categoriesList}>
-          {categories.map((category) => (
+          {categories?.map((category) => (
             <CategoryItem category={category} key={category.id} />
           ))}
         </ul>

@@ -6,11 +6,13 @@ import basket from "../../assets/icons/tabs/basket.svg";
 import CardPrice from "../CardPrice/CardPrice";
 import InsetBtn from "../InsetBtn/InsetBtn";
 import styles from "./CourseItem.module.scss";
+import { CourseType } from "../../context/CoursesContext";
+import { serverName } from "../../http/server";
 
 // const progress = 25;
 
 interface CourseItemTypes {
-  course: courseTypes;
+  course: CourseType;
 }
 
 const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
@@ -23,14 +25,14 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
       >
         <div
           className={styles.courseAvatarWrapper}
-          style={{ background: `url(${subject})` }}
+          style={{ backgroundImage: `url(${serverName}/${course.image_path})` }}
         >
-          <img src={subject} alt={course.title} />
+          <img src={`${serverName}/${course.image_path}`} alt={course.title} />
         </div>
         <div className={styles.courseInfo}>
           <div className={styles.colLeft}>
             <h3 className={styles.courseTitle}>
-              {course.title} {course.title}
+              {course.title}
             </h3>
             <div className={styles.progress}>
               <span>Progress: Not purchased</span>

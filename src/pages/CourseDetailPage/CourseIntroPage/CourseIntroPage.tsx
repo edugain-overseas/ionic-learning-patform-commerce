@@ -11,15 +11,20 @@ import basket from "../../../assets/icons/tabs/basket.svg";
 import coursePoster from "../../../assets/images/subject_image.png";
 import devices from "../../../assets/images/devices.png";
 import styles from "./CourseIntroPage.module.scss";
-import { categories, courses } from "../../../constants";
 import CourseItem from "../../../components/CourseItem/CourseItem";
 import CardPrice from "../../../components/CardPrice/CardPrice";
 import DoubleScrollLayout from "../../../components/DoubleScrollLayout/DoubleScrollLayout";
+import { useCourses } from "../../../context/CoursesContext";
+import { serverName } from "../../../http/server";
 
 const CourseIntroPage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
-  const course = courses.find(({ id }) => id === +courseId);
-  const category = categories.find(({ id }) => id === course?.category_id);
+  const courses = useCourses()?.courses;
+  const course = courses?.find(({ id }) => id === +courseId);
+  const category = useCourses()?.categories.find(
+    ({ id }) => id === course?.category_id
+  );
+  console.log(course);
 
   return (
     <>
@@ -33,7 +38,7 @@ const CourseIntroPage: React.FC = () => {
       </IonHeader>
       <IonContent>
         <DoubleScrollLayout
-          posterSrc={coursePoster}
+          posterSrc={`${serverName}/${course?.image_path}`}
           topLabel={`Category: ${category?.title}`}
         >
           <div className={`${styles.contentHeader} ${styles.contentBlock}`}>
@@ -122,13 +127,7 @@ const CourseIntroPage: React.FC = () => {
             <div className={`${styles.titleWrapper} ${styles.titleMargin}`}>
               <span className={styles.title}>About this course</span>
             </div>
-            <p className={styles.infoText}>
-              This course introduces basic economic concepts that are
-              fundamental to understand many of the issues faced by business
-              firms. Learn the processes that govern the production and
-              consumption of goods and services in a global economy:
-              Microeconomics and Macroeconomics.
-            </p>
+            <p className={styles.infoText}>{course?.about_text}</p>
             <p className={styles.infoText}>
               Understand important principles like price elasticity and the law
               of supply and demand. This course also includes the different
@@ -169,7 +168,7 @@ const CourseIntroPage: React.FC = () => {
               Students also bought
             </span>
             <ul className={styles.coursesList}>
-              {courses.map((course) => (
+              {courses?.map((course) => (
                 <CourseItem course={course} key={course.id} />
               ))}
             </ul>
