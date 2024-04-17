@@ -3,9 +3,13 @@ import React from "react";
 import Header from "../../../components/Header/Header";
 
 const CourseExamPage = () => {
+  const headerProps = {
+    title: "Intro",
+    left: [{ name: "back" }],
+  };
   return (
     <IonPage>
-      <Header title="intro" left={["back"]} />
+      <Header {...headerProps} />
     </IonPage>
   );
 };
