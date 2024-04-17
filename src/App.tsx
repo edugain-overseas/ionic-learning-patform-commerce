@@ -25,35 +25,45 @@ import "./theme/variables.css";
 
 import { CoursesProvider } from "./context/CoursesContext";
 import { UserProvider } from "./context/UserContext";
-// import { StatusBar, Style } from "@capacitor/status-bar";
-// import { useEffect } from "react";
+import { ListStyleProvider } from "./context/ListStyleContext";
+import { StatusBar, Style } from "@capacitor/status-bar";
+import { useEffect } from "react";
+import { Capacitor } from "@capacitor/core";
 
-// // Call this function to set the status bar style and color
-// const setStatusBarStyleAndColor = async () => {
-//   await StatusBar.setStyle({ style: Style.Dark }); // Set status bar text to light
-//   await StatusBar.setBackgroundColor({ color: "#00000000" }); // Set status bar background color to transparent
-// };
+// Call this function to set the status bar style and color
+const setStatusBarStyleAndColor = async () => {
+  if (Capacitor.isPluginAvailable("StatusBar")) {
+    await StatusBar.setStyle({ style: Style.Dark }); // Set status bar text to light
+    await StatusBar.setBackgroundColor({ color: "#00000000" }); // Set status bar background color to transparent
+  }
+};
 
-// // Call this function to set the status bar to overlay the web view
-// const setStatusBarOverlay = async () => {
-//   await StatusBar.setOverlaysWebView({ overlay: true });
-// };
-
-// useEffect(() => {
-//   setStatusBarOverlay();
-//   setStatusBarStyleAndColor();
-// }, []);
+// Call this function to set the status bar to overlay the web view
+const setStatusBarOverlay = async () => {
+  if (Capacitor.isPluginAvailable("StatusBar")) {
+    await StatusBar.setOverlaysWebView({ overlay: true });
+  }
+};
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp className="App">
-    <CoursesProvider>
-      <UserProvider>
-        <Router />
-      </UserProvider>
-    </CoursesProvider>
-  </IonApp>
-);
+const App: React.FC = () => {
+  useEffect(() => {
+    setStatusBarOverlay();
+    setStatusBarStyleAndColor();
+  }, []);
+
+  return (
+    <IonApp className="App">
+      <CoursesProvider>
+        <UserProvider>
+          <ListStyleProvider>
+            <Router />
+          </ListStyleProvider>
+        </UserProvider>
+      </CoursesProvider>
+    </IonApp>
+  );
+};
 
 export default App;

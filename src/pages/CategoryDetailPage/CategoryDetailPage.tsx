@@ -32,14 +32,10 @@ const CategoryDetailPage: React.FC = () => {
   useIonViewDidEnter(() => {
     const parentElementHeight =
       bottomSheet.current?.parentElement?.clientHeight;
-    console.dir(bottomSheet.current?.parentElement);
-
     if (parentElementHeight && topContentRef.current?.clientHeight) {
-      console.log(parentElementHeight);
-
-      setCurrentHeight(parentElementHeight - 162 + 61);
+      setCurrentHeight(bottomSheet.current.clientHeight);
     }
-  });
+  }, []);
 
   useEffect(() => {
     if (bottomSheetController.current && bottomSheet.current?.clientHeight) {
@@ -48,7 +44,6 @@ const CategoryDetailPage: React.FC = () => {
         bottomSheet.current?.parentElement?.clientHeight;
 
       if (topContentRef.current?.clientHeight && parentElementHeight) {
-        console.log("re");
 
         const maxHeight = parentElementHeight - 66 + 61;
         const minHeight = parentElementHeight - 162 + 61;
@@ -68,6 +63,7 @@ const CategoryDetailPage: React.FC = () => {
 
   const onMove = (detail: GestureDetail) => {
     if (bottomSheet.current && currentHeight) {
+      bottomSheet.current.style.transition = "none";
       bottomSheet.current.style.height = `${currentHeight - detail.deltaY}px`;
     }
   };
@@ -81,23 +77,18 @@ const CategoryDetailPage: React.FC = () => {
       topContentRef.current?.clientHeight &&
       parentElementHeight
     ) {
-      console.log(minHeight, maxHeight);
-
       const resultHeight =
         bottomSheet.current.clientHeight < maxHeight ? minHeight : maxHeight;
       bottomSheet.current.style.height = `${resultHeight}px`;
 
       if (maxHeight === resultHeight) {
-        console.log(maxHeight, minHeight);
-
         setShowDetail(false);
         setCurrentHeight(maxHeight);
       } else {
         setShowDetail(true);
         setCurrentHeight(minHeight);
       }
-      console.log("end");
-
+      bottomSheet.current.style.transition = "height 0.2s ease-out";
       setCurrentHeight(resultHeight);
     }
   };

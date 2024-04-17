@@ -1,13 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { instance } from "../http/instance";
 
-// Define the shape of the course object
 interface Course {
   id: string;
   name: string;
 }
 
-// Define the shape of the context
 interface CoursesContextType {
   courses: Course[];
 }
@@ -16,13 +14,10 @@ interface CoursesProviderType {
   children: React.ReactNode;
 }
 
-// Create the context
 const CoursesContext = createContext<CoursesContextType | undefined>(undefined);
 
-// Custom hook to use the context
 export const useCourses = () => useContext(CoursesContext);
 
-// Provider component
 export const CoursesProvider: React.FC<CoursesProviderType> = ({
   children,
 }) => {
