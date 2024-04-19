@@ -300,6 +300,12 @@
   }
 }
 
+.coursesList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .courseCategoryLabel {
   position: absolute;
   top: 0;

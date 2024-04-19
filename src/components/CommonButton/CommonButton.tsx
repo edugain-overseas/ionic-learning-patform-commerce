@@ -3,6 +3,7 @@ import styles from "./CommonButton.module.scss";
 
 interface CommonButtonTypes {
   id?: string;
+  type?: "button" | "submit" | "reset" | undefined;
   width?: number;
   height?: number;
   block?: boolean;
@@ -18,6 +19,7 @@ interface CommonButtonTypes {
 
 const CommonButton: React.FC<CommonButtonTypes> = ({
   id,
+  type = "button",
   width,
   height,
   block = false,
@@ -28,12 +30,16 @@ const CommonButton: React.FC<CommonButtonTypes> = ({
   color,
   backgroundColor,
   className,
-  onClick = () => {},
+  onClick,
 }) => {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onClick();
+    if (type !== "submit") {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    console.log('click');
+    
+    onClick && onClick();
   };
   return (
     <button
@@ -48,6 +54,7 @@ const CommonButton: React.FC<CommonButtonTypes> = ({
       }}
       onClick={handleClick}
       id={id}
+      type={type}
     >
       {label && <span className={styles.label}>{label}</span>}
       {icon && icon}

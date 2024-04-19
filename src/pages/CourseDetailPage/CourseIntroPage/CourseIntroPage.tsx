@@ -168,9 +168,11 @@ const CourseIntroPage: React.FC = () => {
               Students also bought
             </span>
             <ul className={styles.coursesList}>
-              {courses?.map((course) => (
-                <CourseItem course={course} key={course.id} />
-              ))}
+              {courses
+                ?.filter(({ id }) => id !== course?.id)
+                .map((course) => (
+                  <CourseItem course={course} key={course.id} />
+                ))}
             </ul>
           </div>
         </DoubleScrollLayout>

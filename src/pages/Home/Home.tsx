@@ -1,5 +1,6 @@
 import { IonContent, IonIcon, IonImg, IonPage } from "@ionic/react";
 import { useState } from "react";
+import { useUser } from "../../context/UserContext";
 import benefits from "../../assets/images/home-slider-bg.png";
 import userIcon from "../../assets/icons/tabs/my-profile.svg";
 import singInIcon from "../../assets/icons/auth/sing-in.svg";
@@ -8,11 +9,24 @@ import Header from "../../components/Header/Header";
 import CommonButton from "../../components/CommonButton/CommonButton";
 import InsetBtn from "../../components/InsetBtn/InsetBtn";
 import LoginForm from "../../components/Auth/LoginForm";
-import styles from "./Home.module.scss";
 import SingupForm from "../../components/Auth/SingupForm";
 import SheetModalAuto from "../../components/SheetModalAuto/SheetModalAuto";
+import PasswordRecoveryForm from "../../components/Auth/PasswordRecoveryForm";
+import styles from "./Home.module.scss";
 
 const Home: React.FC = () => {
+  const isUserLoggedIn = useUser()?.user.accessToken !== null;
+
+  const [modals, setModals] = useState<
+    {
+      name: string;
+      ref: React.RefObject<HTMLIonModalElement> | null;
+    }[]
+  >([
+    { name: "sing-up", ref: null },
+    { name: "sing-in", ref: null },
+    { name: "password-recovery", ref: null },
+  ]);
   const [searchValue, setSearchValue] = useState("");
 
   const headerProps = {
@@ -65,36 +79,69 @@ const Home: React.FC = () => {
             />
           </div>
         </div>
-        <div className={styles.authPanel}>
-          <CommonButton
-            width={104}
-            height={32}
-            borderRadius={5}
-            color="#fcfcfc"
-            backgroundColor="#d00000"
-            label="Sing up"
-            icon={<IonIcon src={userIcon} className={styles.btnIcon} />}
-            onClick={() => {}}
-            id="sing-up"
-          />
-          <CommonButton
-            width={104}
-            height={32}
-            borderRadius={5}
-            color="#fcfcfc"
-            backgroundColor="#001C54"
-            label="Sing in"
-            icon={<IonIcon src={singInIcon} className={styles.btnIcon} />}
-            onClick={() => {}}
-            id="sing-in"
-          />
-        </div>
-
-        <SheetModalAuto trigger="sing-up">
-          <SingupForm />
+        {!isUserLoggedIn && (
+          <>
+            <div className={styles.authPanel}>
+              <CommonButton
+                width={104}
+                height={32}
+                borderRadius={5}
+                color="#fcfcfc"
+                backgroundColor="#d00000"
+                label="Sing up"
+                icon={<IonIcon src={userIcon} className={styles.btnIcon} />}
+                onClick={() => {
+                  modals
+                    .find((modal) => modal.name === "sing-up")
+                    ?.ref?.current?.present();
+                }}
+              />
+              <CommonButton
+                width={104}
+                height={32}
+                borderRadius={5}
+                color="#fcfcfc"
+                backgroundColor="#001C54"
+                label="Sing in"
+                icon={<IonIcon src={singInIcon} className={styles.btnIcon} />}
+                onClick={() => {
+                  modals
+                    .find((modal) => modal.name === "sing-in")
+                    ?.ref?.current?.present();
+                }}
+              />
+            </div>
+          </>
+        )}
+        <SheetModalAuto
+          setModal={(modalRef) =>
+            setModals((prev) => [
+              ...prev.filter((modal) => modal.name !== "sing-up"),
+              { name: "sing-up", ref: modalRef },
+            ])
+          }
+        >
+          <SingupForm modals={modals} />
         </SheetModalAuto>
-        <SheetModalAuto trigger="sing-in">
-          <LoginForm />
+        <SheetModalAuto
+          setModal={(modalRef) =>
+            setModals((prev) => [
+              ...prev.filter((modal) => modal.name !== "sing-in"),
+              { name: "sing-in", ref: modalRef },
+            ])
+          }
+        >
+          <LoginForm modals={modals} />
+        </SheetModalAuto>
+        <SheetModalAuto
+          setModal={(modalRef) =>
+            setModals((prev) => [
+              ...prev.filter((modal) => modal.name !== "password-recovery"),
+              { name: "password-recovery", ref: modalRef },
+            ])
+          }
+        >
+          <PasswordRecoveryForm />
         </SheetModalAuto>
       </IonContent>
     </IonPage>

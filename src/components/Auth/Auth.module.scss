@@ -19,11 +19,11 @@
   .link {
     color: var(--ion-color-light);
     font-size: 12px;
-    line-height: 32px;
 
     .modalReTrigger {
       font-weight: 600;
       color: var(--ion-color-dark);
+      line-height: 32px;
     }
   }
 }
@@ -32,6 +32,10 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+
+  & > label:only-child > span:first-child {
+    min-width: auto;
+  }
 }
 
 .btnsWrapper {
@@ -83,5 +87,21 @@
 
   .googleBtn {
     flex-direction: row-reverse;
+  }
+}
+
+.passwordRecoveryBtnWrapper {
+  visibility: hidden;
+  position: absolute;
+  height: 0;
+  overflow: hidden;
+  transition: height var(--custom-tr-time-min);
+
+  &.show {
+    visibility: visible;
+    position: relative;
+    display: block;
+    height: 32px;
+    overflow: visible;
   }
 }

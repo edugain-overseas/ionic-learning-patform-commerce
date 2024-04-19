@@ -7,14 +7,32 @@ import UserInfo from "../UserInfo/UserInfo";
 import MenuNav from "./MenuNav";
 import styles from "./Menu.module.scss";
 import InsetBtn from "../InsetBtn/InsetBtn";
+import { useUser } from "../../context/UserContext";
+import { useRef } from "react";
 
 const Menu = () => {
+  const isUserLoggedIn = useUser()?.user.accessToken !== null;
+  const menuRef = useRef<HTMLIonMenuElement>(null);
+  const logout = useUser()?.logout;
+
+  const handleLogout = async () => {
+    if (logout) {
+      try {
+        await logout();
+        menuRef.current?.close();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   return (
     <IonMenu
       type="reveal"
       menuId="main"
       contentId="main-content"
       className="custom-menu"
+      ref={menuRef}
     >
       <div className={styles.container}>
         <div className={styles.header}>
@@ -29,14 +47,16 @@ const Menu = () => {
         <div className={styles.footer}>
           <div className={styles.footerTools}>
             <ul className={styles.footerNavItems}>
-              <li>
-                <button>
-                  <div className={styles.iconWrapper}>
-                    <IonIcon src={Logout} className={styles.footerIcon} />
-                  </div>
-                  <span>Log out</span>
-                </button>
-              </li>
+              {isUserLoggedIn && (
+                <li>
+                  <button onClick={handleLogout}>
+                    <div className={styles.iconWrapper}>
+                      <IonIcon src={Logout} className={styles.footerIcon} />
+                    </div>
+                    <span>Log out</span>
+                  </button>
+                </li>
+              )}
               <li>
                 <button>
                   <IonIcon src={Settings} className={styles.footerIcon} />

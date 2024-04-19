@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { IonIcon } from "@ionic/react";
-import { validatePassword } from "../../../utils/inputsValidateHandler";
 import EyeOpen from "../../../assets/icons/auth/eye-open.svg";
 import EyeHide from "../../../assets/icons/auth/eye-hide.svg";
 import styles from "./Inputs.module.scss";
+import { UseFormRegisterReturn } from "react-hook-form";
 
 interface InputPasswordTypes {
   name: string;
-  value: string;
-  onChange: (value: string) => void;
+  placeholder: string;
+  registerProps: UseFormRegisterReturn;
+  error?: string;
+  status?: "valid" | "error" | false;
   height?: string;
   width?: string;
   block?: boolean;
@@ -19,11 +21,13 @@ interface InputPasswordTypes {
 
 const InputPassword: React.FC<InputPasswordTypes> = ({
   name,
+  placeholder,
+  registerProps,
+  error,
+  status,
   width,
   height,
   block = false,
-  value,
-  onChange,
   isError = false,
   resetError = () => {},
   disabled = false,
@@ -37,13 +41,7 @@ const InputPassword: React.FC<InputPasswordTypes> = ({
 
   return (
     <label
-      className={`${styles.inputWrapper} ${
-        validatePassword(value) && !isError
-          ? styles.valid
-          : isError
-          ? styles.error
-          : ""
-      }`}
+      className={`${styles.inputWrapper} ${status ? styles[status] : ""}`}
       style={{
         width: block ? "100%" : width ? width : "auto",
         height: height ? height : "auto",
@@ -54,23 +52,19 @@ const InputPassword: React.FC<InputPasswordTypes> = ({
           name === "New password" ? styles.newPassword : ""
         }`}
       >
-        {name}
+        {placeholder}
       </span>
       <div className={styles.inputInner}>
         <input
+          {...registerProps}
           type={isShow ? "text" : "password"}
-          name={name}
-          value={value}
-          onChange={(e) => {
-            resetError();
-            onChange(e.target.value);
-          }}
           disabled={disabled}
         />
         <span className={styles.showBtn} onClick={(e) => handleClick(e)}>
           {!isShow ? <IonIcon src={EyeHide} /> : <IonIcon src={EyeOpen} />}
         </span>
       </div>
+      <p className={styles.errorMessage}>{error}</p>
     </label>
   );
 };

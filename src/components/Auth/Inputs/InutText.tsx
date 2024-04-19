@@ -5,11 +5,14 @@ import {
   validateCode,
 } from "../../../utils/inputsValidateHandler";
 import styles from "./Inputs.module.scss";
+import { UseFormRegisterReturn } from "react-hook-form";
 
 interface InputTextTypes {
   name: string;
-  value: string;
-  onChange: (value: string) => void;
+  placeholder: string;
+  registerProps: UseFormRegisterReturn;
+  error?: string;
+  status?: "valid" | "error" | false;
   width?: string;
   height?: string;
   block?: boolean;
@@ -33,24 +36,20 @@ const isStateValid = (name: string, value: string) => {
 
 const InputText: React.FC<InputTextTypes> = ({
   name,
+  placeholder,
+  registerProps,
+  error,
+  status,
   width,
   height,
   block = false,
-  value,
-  onChange,
   isError = false,
   resetError = () => {},
   disabled = false,
 }) => {
   return (
     <label
-      className={`${styles.inputWrapper} ${
-        isStateValid(name, value) && !isError
-          ? styles.valid
-          : isError
-          ? styles.error
-          : ""
-      }`}
+      className={`${styles.inputWrapper} ${status ? styles[status] : ""}`}
       style={{
         width: block ? "100%" : width ? width : "auto",
         height: height ? height : "auto",
@@ -61,18 +60,10 @@ const InputText: React.FC<InputTextTypes> = ({
           name === "Recovery code" ? styles.newPassword : ""
         }`}
       >
-        {name}
+        {placeholder}
       </span>
-      <input
-        type="text"
-        name={name}
-        value={value}
-        onChange={(e) => {
-          resetError();
-          onChange(e.target.value);
-        }}
-        disabled={disabled}
-      />
+      <input type="text" {...registerProps} disabled={disabled} />
+      <p className={styles.errorMessage}>{error}</p>
     </label>
   );
 };

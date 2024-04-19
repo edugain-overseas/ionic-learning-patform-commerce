@@ -1,21 +1,25 @@
 import { IonModal, useIonViewWillLeave } from "@ionic/react";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import styles from "./SheetModalAuto.module.scss";
 
 interface SheetModalAutoTypes {
   children: React.ReactNode;
+  ref?: React.RefObject<HTMLIonModalElement>;
   isOpen?: boolean;
   onDidDissmiss?: () => void;
   trigger?: string;
   className?: string;
+  setModal?: (modalRef: React.RefObject<HTMLIonModalElement>) => void;
 }
 
 const SheetModalAuto: React.FC<SheetModalAutoTypes> = ({
   children,
+  ref,
   isOpen,
   onDidDissmiss,
   trigger,
   className,
+  setModal,
 }) => {
   const modalRef = useRef<HTMLIonModalElement>(null);
 
@@ -23,9 +27,13 @@ const SheetModalAuto: React.FC<SheetModalAutoTypes> = ({
     modalRef.current?.dismiss();
   }, []);
 
+  useEffect(() => {
+    setModal && setModal(modalRef);
+  }, []);
+
   return (
     <IonModal
-      ref={modalRef}
+      ref={ref ? ref : modalRef}
       className={`${styles.modal} ${className ? className : ""}`}
       isOpen={isOpen}
       onDidDismiss={onDidDissmiss}

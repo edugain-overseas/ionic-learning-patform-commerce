@@ -7,6 +7,7 @@ import {
   SegmentChangeEventDetail,
   createGesture,
   useIonViewDidEnter,
+  useIonViewWillEnter,
 } from "@ionic/react";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
@@ -29,14 +30,15 @@ const CategoryDetailPage: React.FC = () => {
     (course) => course.category_id === +categoryId
   );
 
-  const [filter, setFilter] = useState<string>("All");
-  const [currentHeight, setCurrentHeight] = useState(0);
   const topContentRef = useRef<HTMLDivElement>(null);
-  const [showDetail, setShowDetail] = useState(true);
   const bottomSheet = useRef<HTMLDivElement>(null);
   const bottomSheetController = useRef<HTMLButtonElement>(null);
 
-  useIonViewDidEnter(() => {
+  const [filter, setFilter] = useState<string>("All");
+  const [currentHeight, setCurrentHeight] = useState(0);
+  const [showDetail, setShowDetail] = useState(true);
+
+  useIonViewWillEnter(() => {
     const parentElementHeight =
       bottomSheet.current?.parentElement?.clientHeight;
     if (parentElementHeight && topContentRef.current?.clientHeight) {
@@ -174,7 +176,7 @@ const CategoryDetailPage: React.FC = () => {
           ref={bottomSheet}
           style={{
             height: `${currentHeight}px`,
-            minHeight: `calc(100% - 218px)`,
+            minHeight: `calc(100% -  208px)`,
           }}
         >
           <div className={styles.controllerWrapper}>
