@@ -10,6 +10,20 @@ interface IconType {
   icon_title: string;
 }
 
+export interface LessonType {
+  course_id: number;
+  description: string;
+  id: number;
+  image_path: string;
+  is_published: boolean;
+  number: number;
+  scheduled_time: number;
+  title: string;
+  type: string;
+  status?: string;
+  question_amount?: number;
+}
+
 export interface CourseType {
   id: number;
   title: string;
@@ -25,7 +39,7 @@ export interface CourseType {
   image_path: string;
   intro_text?: string;
   is_published: boolean;
-  lessons: [];
+  lessons: LessonType[];
   old_price?: number;
   price: number;
   quantity_lecture: number;
@@ -44,6 +58,7 @@ export interface CategoryType {
 interface CoursesContextType {
   courses: CourseType[];
   categories: CategoryType[];
+  getCourseDetailById: (courseId: string | number) => Promise<void>;
 }
 
 interface CoursesProviderType {
@@ -59,6 +74,20 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
 }) => {
   const [courses, setCourses] = useState<CourseType[]>([]);
   const [categories, setCategories] = useState<CategoryType[]>([]);
+
+  const getCourseDetailById = async (courseId: number | string) => {
+    try {
+      const data = (await instance.get(`/course/get/${courseId}`)).data;
+      setCourses((prev) => [
+        ...prev.filter((course) => course.id !== data.id),
+        { ...data },
+      ]);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
 
   useEffect(() => {
     const getAllCourses = async () => {
@@ -88,7 +117,9 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
   }, []);
 
   return (
-    <CoursesContext.Provider value={{ courses, categories }}>
+    <CoursesContext.Provider
+      value={{ courses, categories, getCourseDetailById }}
+    >
       {children}
     </CoursesContext.Provider>
   );

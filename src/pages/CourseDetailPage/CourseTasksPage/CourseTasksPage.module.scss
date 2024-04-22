@@ -1,0 +1,108 @@
+.pageContentWrapper {
+  --background: transparent;
+  --padding-start: 18px;
+  --padding-end: 18px;
+}
+
+.courseStats {
+  padding: 12px;
+
+  border-radius: var(--custom--border-radius-primary);
+  background: var(--custom-bg-rgba-secondary);
+  box-shadow: var(--custom-box-shadow-primary);
+  backdrop-filter: blur(16px);
+
+  .type {
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: capitalize;
+    color: var(--ion-color-dark);
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  .details {
+    .detailsTitle {
+      color: var(--ion-color-light);
+      font-size: 10px;
+      font-weight: 500;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .statsList {
+      display: flex;
+      gap: 16px;
+    }
+
+    .statsItem {
+      display: flex;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .statIcon {
+      font-size: 16px;
+    }
+
+    .statTextWrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .statLabel {
+      color: var(--ion-color-light);
+      font-size: 8px;
+      font-weight: 500;
+    }
+
+    .statValue {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ion-color-dark);
+    }
+  }
+}
+
+.tasksList {
+  padding-block: 16px 32px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.progressModal {
+  --height: 432px;
+  --box-shadow: var(--custom-box-shadow-primary);
+  --background: var(--custom-bg-rgba-secondary);
+  bottom: 60px;
+  transition: bottom var(--custom-tr-time-min) ease-in,
+    backdrop-filter var(--custom-tr-time-min) ease-in,
+    background-color var(--custom-tr-time-min) ease-in;
+
+  &.fullHeight {
+    bottom: 0;
+    backdrop-filter: blur(5px);
+    background-color: var(--custom-bg-rgba-secondary);
+
+    &::part(handle) {
+      transform: rotate(180deg);
+    }
+  }
+
+  &::part(content) {
+    padding-top: 28px;
+  }
+
+  &::part(handle) {
+    height: 8px;
+    background: url("../../../assets/icons/chevron-modal.svg");
+    transition: transform var(--custom-tr-time-min) ease-in;
+  }
+
+  .modalContent {
+    --background: transparent;
+  }
+}

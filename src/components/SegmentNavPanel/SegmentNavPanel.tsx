@@ -2,35 +2,41 @@ import React, { Dispatch, SetStateAction } from "react";
 import styles from "./SegmentNavPanel.module.scss";
 import {
   IonLabel,
+  IonRouterLink,
   IonSegment,
   IonSegmentButton,
   SegmentChangeEventDetail,
 } from "@ionic/react";
+import { useHistory, useLocation } from "react-router";
 
 interface SegmentNavPanelTypes {
   items: { value: string; label: string }[];
-  value: string | number;
-  setValue: Dispatch<SetStateAction<string>>;
+  value?: string | number;
+  setValue?: Dispatch<SetStateAction<string>>;
+  routerNav?: boolean;
 }
 
 const SegmentNavPanel: React.FC<SegmentNavPanelTypes> = ({
   items,
   value,
   setValue,
+  routerNav = false,
 }) => {
+  const pathmane = useLocation().pathname;
+  const history = useHistory();
   const onChange = (event: CustomEvent<SegmentChangeEventDetail>) => {
     const { value } = event.detail;
     if (value !== undefined) {
-      setValue(`${value}`);
+      setValue && setValue(`${value}`);
     }
   };
 
   return (
     <IonSegment
       scrollable={true}
-      value={value}
+      value={routerNav ? pathmane : value}
       className={styles.segment}
-      onIonChange={onChange}
+      onIonChange={setValue && onChange}
     >
       {items.map(({ label, value }) => (
         <IonSegmentButton
@@ -38,6 +44,14 @@ const SegmentNavPanel: React.FC<SegmentNavPanelTypes> = ({
           value={value}
           mode="md"
           className={styles.segmentBtn}
+          onClick={
+            routerNav
+              ? (e) => {
+                  e.preventDefault();
+                  history.push(value);
+                }
+              : undefined
+          }
         >
           <IonLabel className={styles.segmentLabel}>{label}</IonLabel>
         </IonSegmentButton>

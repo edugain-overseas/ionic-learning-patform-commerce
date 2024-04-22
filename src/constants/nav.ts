@@ -57,3 +57,9 @@ export const coursesNavItems = [
     label: "completed courses",
   },
 ];
+
+export const courseNavItems = (courseId: string) => [
+  { value: `/courses/course/${courseId}`, label: "Intro" },
+  { value: `/courses/course/${courseId}/tasks`, label: "Materials | Tasks" },
+  { value: `/courses/course/${courseId}/exam`, label: "Exam | Certificate" },
+];

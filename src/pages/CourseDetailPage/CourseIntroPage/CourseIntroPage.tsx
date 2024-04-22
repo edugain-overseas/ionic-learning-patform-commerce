@@ -1,5 +1,8 @@
 import { IonBackButton, IonContent, IonHeader, IonIcon } from "@ionic/react";
 import { useParams } from "react-router";
+import { useCourses } from "../../../context/CoursesContext";
+import { serverName } from "../../../http/server";
+import { useUser } from "../../../context/UserContext";
 import back from "../../../assets/icons/header/back.svg";
 import file from "../../../assets/icons/file.svg";
 import laptop from "../../../assets/icons/laptop.svg";
@@ -8,14 +11,12 @@ import schollOnline from "../../../assets/icons/introPage/school-online.svg";
 import clockBig from "../../../assets/icons/introPage/clock.svg";
 import certificate from "../../../assets/icons/introPage/certificate.svg";
 import basket from "../../../assets/icons/tabs/basket.svg";
-import coursePoster from "../../../assets/images/subject_image.png";
 import devices from "../../../assets/images/devices.png";
-import styles from "./CourseIntroPage.module.scss";
 import CourseItem from "../../../components/CourseItem/CourseItem";
 import CardPrice from "../../../components/CardPrice/CardPrice";
 import DoubleScrollLayout from "../../../components/DoubleScrollLayout/DoubleScrollLayout";
-import { useCourses } from "../../../context/CoursesContext";
-import { serverName } from "../../../http/server";
+import CourseNavPanel from "../../../components/CourseNavPanel/CourseNavPanel";
+import styles from "./CourseIntroPage.module.scss";
 
 const CourseIntroPage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -24,7 +25,11 @@ const CourseIntroPage: React.FC = () => {
   const category = useCourses()?.categories.find(
     ({ id }) => id === course?.category_id
   );
-  console.log(course);
+  const isCoursePurchased = useUser()?.user.courses.find(
+    (userCourse) => userCourse.course_id === +courseId
+  );
+
+  console.log(useUser()?.user.courses, courseId);
 
   return (
     <>
@@ -176,14 +181,20 @@ const CourseIntroPage: React.FC = () => {
             </ul>
           </div>
         </DoubleScrollLayout>
-        <div className={styles.buyCourse}>
-          <div className={styles.priceWrapper}>
-            <CardPrice price={course?.price} variant="primary" />
-          </div>
-          <button className={styles.buyCourseBtn}>
-            <span>Buy</span>
-            <IonIcon className={styles.buyIcon} src={basket} />
-          </button>
+        <div className={styles.bottomBar}>
+          {!isCoursePurchased ? (
+            <CourseNavPanel />
+          ) : (
+            <>
+              <div className={styles.priceWrapper}>
+                <CardPrice price={course?.price} variant="primary" />
+              </div>
+              <button className={styles.buyCourseBtn}>
+                <span>Buy</span>
+                <IonIcon className={styles.buyIcon} src={basket} />
+              </button>
+            </>
+          )}
         </div>
       </IonContent>
     </>

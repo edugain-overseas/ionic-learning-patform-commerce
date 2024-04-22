@@ -6,6 +6,13 @@ interface UserProviderType {
   children: React.ReactNode;
 }
 
+interface UserCourseType {
+  course_id: number;
+  status: string;
+  progress: number;
+  grade: number;
+}
+
 interface UserType {
   accessToken: string | null;
   userId: number | null;
@@ -20,7 +27,7 @@ interface UserType {
   balance: number;
   previousAvatars: [];
   activeTime: null | number;
-  courses: [];
+  courses: UserCourseType[];
   changedName: boolean;
   changedSurname: boolean;
   chats: [];
@@ -269,7 +276,8 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
         if (
           error.response &&
           error.response.status === 401 &&
-          error.response.data.detail === "Access token expired"
+          (error.response.data.detail === "Access token expired" ||
+            error.response.data.detail === "Authentication token expired")
         ) {
           console.log("Access token expired. Attempting to refresh...");
           try {

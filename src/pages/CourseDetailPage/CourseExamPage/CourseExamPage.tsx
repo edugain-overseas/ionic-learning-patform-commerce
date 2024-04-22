@@ -2,7 +2,7 @@ import { IonPage } from "@ionic/react";
 import React from "react";
 import Header from "../../../components/Header/Header";
 
-const CourseExamPage = () => {
+const CourseExamPage: React.FC = () => {
   const headerProps = {
     title: "Intro",
     left: [{ name: "back" }],
