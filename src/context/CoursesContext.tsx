@@ -10,6 +10,25 @@ interface IconType {
   icon_title: string;
 }
 
+export interface LectureContentType {
+  a_id: number;
+  a_type: "text";
+  a_title: string;
+  a_number: 1;
+  a_text: string;
+  hidden: false;
+  files: [];
+  links: [];
+}
+
+export interface LectureDataType {
+  lecture_id: number;
+  lecture_speeches?: string[];
+  attributes?: LectureContentType[];
+}
+
+export interface TestDataType {}
+
 export interface LessonType {
   course_id: number;
   description: string;
@@ -21,7 +40,8 @@ export interface LessonType {
   title: string;
   type: string;
   status?: string;
-  question_amount?: number;
+  count_questions?: number;
+  lessonData?: LectureDataType | TestDataType;
 }
 
 export interface CourseType {
@@ -59,6 +79,10 @@ interface CoursesContextType {
   courses: CourseType[];
   categories: CategoryType[];
   getCourseDetailById: (courseId: string | number) => Promise<void>;
+  getLessonById: (
+    lessonId: string | number,
+    courseId: number | string
+  ) => Promise<void>;
 }
 
 interface CoursesProviderType {
@@ -86,6 +110,35 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
     } catch (error) {
       console.log(error);
       throw error;
+    }
+  };
+
+  const getLessonById = async (
+    lessonId: number | string,
+    courseId: number | string
+  ) => {
+    try {
+      const data = (await instance.get(`/lesson/get/${lessonId}`)).data;
+      setCourses((prev: CourseType[]) => {
+        const otherCourses = prev.filter((course) => course.id !== +courseId);
+        const targetCourse = prev.find((course) => course.id === +courseId);
+        if (targetCourse) {
+          const updatedLessons = targetCourse.lessons.map((lesson) => {
+            if (lesson.id === +lessonId) {
+              return { ...lesson, lessonData: data.lecture_info };
+            }
+            return lesson;
+          });
+          const updatedTargetCourse = {
+            ...targetCourse,
+            lessons: updatedLessons,
+          };
+          return [...otherCourses, updatedTargetCourse];
+        }
+        return prev;
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -118,7 +171,7 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
 
   return (
     <CoursesContext.Provider
-      value={{ courses, categories, getCourseDetailById }}
+      value={{ courses, categories, getCourseDetailById, getLessonById }}
     >
       {children}
     </CoursesContext.Provider>

@@ -121,6 +121,30 @@ const renderBtn = (props: buttonPropsTypes) => {
           <IonIcon src={SaveIcon} className={styles.saveIcon} />
         </IonButton>
       );
+    case "prevLesson":
+      return (
+        <IonButton
+          key={props.name}
+          className={`${styles.backBtn} ${
+            props.className ? props.className : ""
+          }`}
+          id={props.id}
+        >
+          <IonIcon src={backIcon} className={styles.backIcon} />
+        </IonButton>
+      );
+    case "nextLesson":
+      return (
+        <IonButton
+          key={props.name}
+          className={`${styles.nextBtnBtn} ${
+            props.className ? props.className : ""
+          }`}
+          id={props.id}
+        >
+          <IonIcon src={backIcon} className={styles.nextIcon} />
+        </IonButton>
+      );
     default:
       break;
   }
@@ -148,7 +172,7 @@ const Header: React.FC<HeaderTypes> = ({
         <IonButtons slot="start" className={styles.leftButtonsWrapper}>
           {left.map((props) => renderBtn(props))}
         </IonButtons>
-        {title && <IonTitle className={styles.title}>{title}</IonTitle>}
+        {title && <IonTitle size="small" className={styles.title}>{title}</IonTitle>}
         <IonButtons slot="end">
           {right.map((name) => renderBtn(name))}
         </IonButtons>

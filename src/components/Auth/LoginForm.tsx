@@ -40,18 +40,37 @@ const LoginForm: React.FC<{
       await user?.login(data);
       modals.find((modal) => modal.name === "sing-in")?.ref?.current?.dismiss();
     } catch (error: any) {
-      if (error.response.data.detail === "Invalid username") {
+      console.log(error);
+      
+      if (error.response?.data?.detail === "Invalid username") {
         setError("username", {
           type: "server response",
           message: error.response.data.detail,
         });
-      } else if (error.response.data.detail === "Invalid password") {
+      } else if (error.response?.data?.detail === "Invalid password") {
         setError("password", {
           type: "server response",
           message: error.response.data.detail,
         });
+      } else if (
+        error.response.status === 409
+      ) {
+        user?.setUser((prev) => ({ ...prev, username: data.username }));
+        handleOpenUserActivation();
       }
     }
+  };
+
+  const handleOpenSingUp = () => {
+    modals.find((modal) => modal.name === "sing-in")?.ref?.current?.dismiss();
+    modals.find((modal) => modal.name === "sing-up")?.ref?.current?.present();
+  };
+
+  const handleOpenUserActivation = () => {
+    modals.find((modal) => modal.name === "sing-in")?.ref?.current?.dismiss();
+    modals
+      .find((modal) => modal.name === "user-activation")
+      ?.ref?.current?.present();
   };
 
   return (
@@ -65,7 +84,9 @@ const LoginForm: React.FC<{
         <span className={styles.title}>Sing in</span>
         <span className={styles.link}>
           If you don't have an account yet,{" "}
-          <span className={styles.modalReTrigger}>sign up here!</span>
+          <span className={styles.modalReTrigger} onClick={handleOpenSingUp}>
+            sign up here!
+          </span>
         </span>
       </div>
       <div className={styles.inputsWrapper}>

@@ -90,6 +90,8 @@ export const useUser = () => useContext(UserContext);
 
 export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
   const [user, setUser] = useState<UserType>(initialState);
+  console.log(user.accessToken);
+  
   const [error, setError] = useState<AxiosError | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -101,7 +103,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
         withCredentials: true,
       });
 
-      const newAccessToken = response.data.access_token;
+      const newAccessToken = response.data.access_token;      
 
       setUser((prev) => ({ ...prev, accessToken: newAccessToken }));
       instance.defaults.headers["Authorization"] = `Bearer ${newAccessToken}`;
@@ -173,7 +175,12 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
       const response = await instance.post("/user/activate", credentials, {
         withCredentials: true,
       });
-      console.log(response.data);
+      setUser((prev) => ({
+        ...prev,
+        accessToken: response.data.access_token,
+        username: response.data.username,
+        userId: response.data.user_id,
+      }));
     } catch (error) {
       setError(error as AxiosError);
       throw error;

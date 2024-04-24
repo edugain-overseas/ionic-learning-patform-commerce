@@ -6,6 +6,7 @@ import { useCourses } from "../../context/CoursesContext";
 import CourseIntroPage from "./CourseIntroPage/CourseIntroPage";
 import CourseTasksPage from "./CourseTasksPage/CourseTasksPage";
 import CourseExamPage from "./CourseExamPage/CourseExamPage";
+import TaskPage from "../TaskPage/TaskPage";
 
 const CourseDetailPage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -35,7 +36,15 @@ const CourseDetailPage: React.FC = () => {
         component={CourseExamPage}
         exact
       />
-      <Redirect from="/courses/course" to={`/courses/course/${courseId}`} exact/>
+      <Route
+        path={`/courses/course/:courseId/tasks/:taskId`}
+        component={TaskPage}
+      />
+      <Redirect
+        from="/courses/course"
+        to={`/courses/course/${courseId}`}
+        exact
+      />
     </IonPage>
   );
 };

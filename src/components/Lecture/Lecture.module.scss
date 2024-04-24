@@ -1,0 +1,23 @@
+.lectureHeader {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--ion-color-light);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+
+  .title {
+    color: var(--custom-content-color-primary);
+    text-align: center;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+
+    .titleValue {
+      color: var(--ion-color-dark);
+    //   white-space: nowrap;
+    }
+  }
+}

@@ -68,8 +68,10 @@ const UserActivationForm: React.FC<{
         <span className={styles.title}>Email verification</span>
         <span className={styles.link}>
           Let us know that this email address belongs to you. Enter the code
-          from the email sent to,{" "}
-          <span className={styles.modalReTrigger}>{user?.user.email}</span>
+          from the email sent to{" "}
+          <span className={styles.modalReTrigger}>
+            {user?.user.email ? user?.user.email : "your email"}
+          </span>
         </span>
       </div>
       <div className={styles.inputsWrapper}>

@@ -57,18 +57,29 @@ const SingupForm: React.FC<{
     } catch (error: any) {
       console.log(error);
 
-      if (error.response.data.detail === "Invalid username") {
+      if (
+        error.response.data.detail ===
+        `User with username ${data.username} does exist`
+      ) {
         setError("username", {
           type: "server response",
           message: error.response.data.detail,
         });
-      } else if (error.response.data.detail === "Invalid password") {
-        setError("password", {
+      } else if (
+        error.response.data.detail ===
+        `User with email ${data.email} does exist`
+      ) {
+        setError("email", {
           type: "server response",
           message: error.response.data.detail,
         });
       }
     }
+  };
+
+  const handleOpenLogin = () => {
+    modals.find((modal) => modal.name === "sing-up")?.ref?.current?.dismiss();
+    modals.find((modal) => modal.name === "sing-in")?.ref?.current?.present();
   };
 
   return (
@@ -82,7 +93,9 @@ const SingupForm: React.FC<{
         <span className={styles.title}>Sing up</span>
         <span className={styles.link}>
           If you don't have an account yet,{" "}
-          <span className={styles.modalReTrigger}>sign up here!</span>
+          <span className={styles.modalReTrigger} onClick={handleOpenLogin}>
+            sign in here!
+          </span>
         </span>
       </div>
       <div className={styles.inputsWrapper}>

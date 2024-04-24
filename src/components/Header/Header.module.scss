@@ -19,6 +19,7 @@
   border-bottom-left-radius: 14px;
   border-bottom-right-radius: 14px;
   box-shadow: var(--custom-box-shadow-primary);
+  backdrop-filter: blur(28px);
 
   &.secondary {
     // --background: var(--ion-color-primary);
@@ -45,6 +46,18 @@
   --padding-end: 0;
   min-width: 32px;
   width: 32px;
+}
+
+.nextBtnBtn {
+  --icon-font-size: 20px;
+  --padding-start: 0;
+  --padding-end: 0;
+  min-width: 32px;
+  width: 32px;
+}
+
+.nextIcon {
+  transform: rotate(180deg);
 }
 
 .notificationBtn {

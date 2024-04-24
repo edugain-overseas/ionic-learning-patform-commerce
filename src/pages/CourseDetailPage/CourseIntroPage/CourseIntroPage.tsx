@@ -29,6 +29,8 @@ const CourseIntroPage: React.FC = () => {
     (userCourse) => userCourse.course_id === +courseId
   );
 
+  console.log(useUser()?.user, courseId);
+
   return (
     <>
       <IonHeader className={styles.header} mode="ios">

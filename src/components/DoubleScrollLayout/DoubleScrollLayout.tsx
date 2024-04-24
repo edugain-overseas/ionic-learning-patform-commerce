@@ -5,12 +5,14 @@ interface DoubleScrollLayoutTypes {
   children: React.ReactNode;
   topLabel?: string;
   posterSrc: string;
+  posterPosition?: "fixed" | "absolute";
 }
 
 const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
   children,
   topLabel,
   posterSrc,
+  posterPosition = "fixed",
 }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [scroll, setScroll] = useState(false);
@@ -31,7 +33,11 @@ const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
   }, [contentRef.current]);
   return (
     <div className={styles.pageWrapper} ref={contentRef}>
-      <img src={posterSrc} className={styles.poster} />
+      <img
+        src={posterSrc}
+        className={styles.poster}
+        style={{ position: posterPosition }}
+      />
       <div className={styles.contentBackground}>
         <div
           className={`${styles.contentInner}  ${scroll ? styles.scroll : ""}`}

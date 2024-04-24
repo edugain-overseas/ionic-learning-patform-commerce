@@ -2,12 +2,13 @@
   position: relative;
   overflow: auto;
   height: calc(100%);
-  padding-top: 190px;
+  padding-top: 178px;
 
   .poster {
     display: block;
     width: 100%;
-    min-height: 200px;
+    height: 256px;
+    object-fit: cover;
     margin-bottom: -10px;
     position: fixed;
     top: 0;

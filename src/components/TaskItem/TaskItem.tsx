@@ -13,11 +13,14 @@ interface TaskItemType {
 }
 
 const TaskItem: React.FC<TaskItemType> = ({ task }) => {
-  console.log(task);
 
   return (
     <IonItem
-      routerLink={task.status !== "blocked" ? "/" : undefined}
+      routerLink={
+        task.status !== "blocked"
+          ? `/courses/course/${task.course_id}/tasks/${task.id}`
+          : undefined
+      }
       routerDirection="forward"
       button
       detail={false}
@@ -65,9 +68,9 @@ const TaskItem: React.FC<TaskItemType> = ({ task }) => {
               {task.type === "test" && (
                 <div className={styles.taskProp}>
                   <IonIcon src={QuestonIcon} className={styles.taskPropIcon} />
-                  <span className={styles.taskPropText}>{`Questions: ${
-                    task.question_amount || 8
-                  }`}</span>
+                  <span
+                    className={styles.taskPropText}
+                  >{`Questions: ${task.count_questions}`}</span>
                 </div>
               )}
             </>
