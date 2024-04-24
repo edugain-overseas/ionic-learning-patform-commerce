@@ -43,22 +43,32 @@ const SingupForm: React.FC<{
 
   const onSubmit = async (data: FormValues) => {
     console.log(data);
-    // try {
-    //   await user?.login(data);
-    //   modals.find((modal) => modal.name === "sing-up")?.ref?.current?.dismiss();
-    // } catch (error: any) {
-    //   if (error.response.data.detail === "Invalid username") {
-    //     setError("username", {
-    //       type: "server response",
-    //       message: error.response.data.detail,
-    //     });
-    //   } else if (error.response.data.detail === "Invalid password") {
-    //     setError("password", {
-    //       type: "server response",
-    //       message: error.response.data.detail,
-    //     });
-    //   }
-    // }
+    try {
+      await user?.singup(data);
+      user?.setUser((prev) => ({
+        ...prev,
+        username: data.username,
+        email: data.email,
+      }));
+      modals.find((modal) => modal.name === "sing-up")?.ref?.current?.dismiss();
+      modals
+        .find((modal) => modal.name === "user-activation")
+        ?.ref?.current?.present();
+    } catch (error: any) {
+      console.log(error);
+
+      if (error.response.data.detail === "Invalid username") {
+        setError("username", {
+          type: "server response",
+          message: error.response.data.detail,
+        });
+      } else if (error.response.data.detail === "Invalid password") {
+        setError("password", {
+          type: "server response",
+          message: error.response.data.detail,
+        });
+      }
+    }
   };
 
   return (

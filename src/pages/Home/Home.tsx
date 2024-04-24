@@ -13,6 +13,7 @@ import SingupForm from "../../components/Auth/SingupForm";
 import SheetModalAuto from "../../components/SheetModalAuto/SheetModalAuto";
 import PasswordRecoveryForm from "../../components/Auth/PasswordRecoveryForm";
 import styles from "./Home.module.scss";
+import UserActivationForm from "../../components/Auth/UserActivationForm";
 
 const Home: React.FC = () => {
   const isUserLoggedIn = useUser()?.user.accessToken !== null;
@@ -142,6 +143,16 @@ const Home: React.FC = () => {
           }
         >
           <PasswordRecoveryForm />
+        </SheetModalAuto>
+        <SheetModalAuto
+          setModal={(modalRef) =>
+            setModals((prev) => [
+              ...prev.filter((modal) => modal.name !== "user-activation"),
+              { name: "user-activation", ref: modalRef },
+            ])
+          }
+        >
+          <UserActivationForm modals={modals}/>
         </SheetModalAuto>
       </IonContent>
     </IonPage>

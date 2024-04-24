@@ -28,7 +28,6 @@
   margin-top: -10px;
   background-color: var(--custom-bg-rgba-primary);
   border-radius: var(--custom--border-radius-primary);
-
   box-shadow: var(--custom-box-shadow-primary);
   backdrop-filter: blur(16px);
   padding: 6px 12px;
@@ -44,6 +43,7 @@
     span {
       font-size: 12px;
       font-weight: 700;
+      color: var(--ion-color-dark);
       //   line-height: 16px;
       max-height: 100%;
       width: 100%;

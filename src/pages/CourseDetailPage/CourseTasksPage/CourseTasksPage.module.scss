@@ -94,6 +94,7 @@
 
   &::part(content) {
     padding-top: 28px;
+    backdrop-filter: blur(28px);
   }
 
   &::part(handle) {
@@ -104,5 +105,118 @@
 
   .modalContent {
     --background: transparent;
+    --padding-start: 18px;
+    --padding-end: 18px;
+  }
+
+  .modalHeader {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--ion-color-dark);
+
+    .progressWrappper {
+      .progressTitle {
+        font-family: Roboto;
+        font-size: 14px;
+        line-height: 16px;
+        font-weight: 700;
+        color: var(--ion-color-dark);
+        display: inline-block;
+        margin-bottom: 4px;
+      }
+
+      .progressInner {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        color: var(--ion-color-light);
+
+        .progressLabel {
+          font-size: 8px;
+          line-height: 12px;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .examIcon {
+      font-size: 22px;
+    }
+  }
+
+  .listWrapper {
+    padding-top: 12px;
+    li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      span {
+        color: var(--ion-color-light);
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      &:not(:last-child) {
+        margin-bottom: 10px;
+      }
+    }
+  }
+
+  .progressIconOuter {
+    width: 22px;
+    height: 22px;
+    padding: 3px;
+    flex-shrink: 0;
+
+    border-radius: 5px;
+    background: var(--custom-bg-rgba-fourth);
+    box-shadow: var(--custom-box-shadow-secondary-inset);
+    position: relative;
+
+    &.success {
+      &:before {
+        content: "";
+        background-color: var(--ion-color-success);
+      }
+      .progressIconInner {
+        border-color: var(--ion-color-success);
+      }
+    }
+
+    &.inProgress {
+      &:before {
+        content: "";
+        background-color: var(--ion-color-dark);
+      }
+      .progressIconInner {
+        border-color: var(--ion-color-dark);
+      }
+    }
+
+    &:before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: transparent;
+
+      border-radius: 1px;
+    }
+  }
+
+  .progressIconInner {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    box-shadow: var(--custom-box-shadow-thirtiary);
+
+    border: 2px solid transparent;
   }
 }

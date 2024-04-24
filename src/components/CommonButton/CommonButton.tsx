@@ -36,9 +36,7 @@ const CommonButton: React.FC<CommonButtonTypes> = ({
     if (type !== "submit") {
       e.preventDefault();
       e.stopPropagation();
-    }
-    console.log('click');
-    
+    }    
     onClick && onClick();
   };
   return (

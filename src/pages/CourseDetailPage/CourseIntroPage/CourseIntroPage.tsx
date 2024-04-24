@@ -29,8 +29,6 @@ const CourseIntroPage: React.FC = () => {
     (userCourse) => userCourse.course_id === +courseId
   );
 
-  console.log(useUser()?.user.courses, courseId);
-
   return (
     <>
       <IonHeader className={styles.header} mode="ios">
@@ -182,7 +180,7 @@ const CourseIntroPage: React.FC = () => {
           </div>
         </DoubleScrollLayout>
         <div className={styles.bottomBar}>
-          {!isCoursePurchased ? (
+          {isCoursePurchased ? (
             <CourseNavPanel />
           ) : (
             <>

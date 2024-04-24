@@ -16,23 +16,8 @@ interface InputTextTypes {
   width?: string;
   height?: string;
   block?: boolean;
-  isError?: boolean;
-  resetError?: () => void;
   disabled?: boolean;
 }
-
-const isStateValid = (name: string, value: string) => {
-  switch (name) {
-    case "Email":
-      return validateEmail(value);
-    case "Verificarion code":
-      return validateCode(value);
-    case "Recovery code":
-      return validateCode(value);
-    default:
-      return validateText(value);
-  }
-};
 
 const InputText: React.FC<InputTextTypes> = ({
   name,
@@ -43,8 +28,6 @@ const InputText: React.FC<InputTextTypes> = ({
   width,
   height,
   block = false,
-  isError = false,
-  resetError = () => {},
   disabled = false,
 }) => {
   return (

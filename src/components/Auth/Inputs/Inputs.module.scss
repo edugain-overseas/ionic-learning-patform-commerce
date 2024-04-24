@@ -1,6 +1,5 @@
 .inputWrapper {
   display: flex;
-  // gap: 24px;
   align-items: center;
   width: 100%;
   height: 28px;
@@ -30,8 +29,8 @@
     outline: none;
   }
 
-  input[name="Verificarion code"],
-  input[name="Recovery code"] {
+  input[name="verification-code"],
+  input[name="recovery-code"] {
     letter-spacing: 0.5em;
   }
 }

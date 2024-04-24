@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  SetStateAction,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { instance } from "../http/instance";
 import { AxiosError } from "axios";
 
@@ -35,6 +41,7 @@ interface UserType {
 
 interface UserContextType {
   user: UserType;
+  setUser: React.Dispatch<React.SetStateAction<UserType>>;
   login: (credentials: { username: string; password: string }) => Promise<void>;
   singup: (credentials: {
     username: string;
@@ -151,6 +158,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
       console.log(response.data);
     } catch (error) {
       setError(error as AxiosError);
+      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -168,6 +176,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
       console.log(response.data);
     } catch (error) {
       setError(error as AxiosError);
+      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -184,6 +193,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
       console.log(response.data);
     } catch (error) {
       setError(error as AxiosError);
+      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -299,6 +309,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
     <UserContext.Provider
       value={{
         user,
+        setUser,
         login,
         singup,
         verifyEmail,
