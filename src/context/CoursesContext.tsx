@@ -12,22 +12,71 @@ interface IconType {
 
 export interface LectureContentType {
   a_id: number;
-  a_type: "text";
+  a_type: "text" | "present" | "audio" | "video" | "file" | "link" | "picture";
   a_title: string;
   a_number: 1;
   a_text: string;
-  hidden: false;
-  files: [];
-  links: [];
+  hiden: false;
+  downloadAllowed?: boolean;
+  files?: {
+    file_name: string;
+    file_size: number;
+    file_path: string;
+    file_id: number;
+  }[];
+  links?: {
+    link_id: number;
+    link: string;
+    anchor: string;
+  }[];
+}
+
+export interface TestContentType {
+  q_id: number;
+  q_text: string;
+  q_number: number;
+  q_score: number;
+  q_type:
+    | "test"
+    | "multiple_choice"
+    | "answer_with_photo"
+    | "question_with_photo"
+    | "matching"
+    | "boolean";
+  hidden: boolean;
+  image_path: null | string;
+  count_correct?: number;
+  answers:
+    | {
+        a_id: number;
+        a_text: string;
+        is_correct: boolean;
+        image_path?: string;
+      }[]
+    | {
+        left?: { value: string; id: number }[];
+        right?: { value: string; id: number }[];
+      };
 }
 
 export interface LectureDataType {
-  lecture_id: number;
+  lecture_id?: number;
   lecture_speeches?: string[];
-  attributes?: LectureContentType[];
+  attributes: LectureContentType[];
 }
 
-export interface TestDataType {}
+export interface TestDataType {
+  test_id?: number;
+  score?: number;
+  attempts?: number;
+  questions: TestContentType[];
+}
+
+// type LessonDataByType = LessonType extends { type: "lecture" }
+//   ? LectureDataType
+//   : TestDataType;
+
+export type LessonDataUnionType = LectureDataType | TestDataType;
 
 export interface LessonType {
   course_id: number;
@@ -38,10 +87,10 @@ export interface LessonType {
   number: number;
   scheduled_time: number;
   title: string;
-  type: string;
+  type: "test" | "lecture" | "exam";
   status?: string;
   count_questions?: number;
-  lessonData?: LectureDataType | TestDataType;
+  lessonData?: LessonDataUnionType;
 }
 
 export interface CourseType {
@@ -125,7 +174,11 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
         if (targetCourse) {
           const updatedLessons = targetCourse.lessons.map((lesson) => {
             if (lesson.id === +lessonId) {
-              return { ...lesson, lessonData: data.lecture_info };
+              return {
+                ...lesson,
+                lessonData:
+                  data.type === "test" ? data.test_data : data.lecture_info,
+              };
             }
             return lesson;
           });

@@ -76,7 +76,7 @@ const CourseProgressModal: React.FC<CourseProgressModalType> = () => {
           {course?.lessons
             .sort((a, b) => a.number - b.number)
             .map((lesson) => (
-              <li className={styles.progressItem}>
+              <li className={styles.progressItem} key={lesson.id}>
                 <div
                   className={`${styles.progressIconOuter} ${
                     lesson.status === "completed"

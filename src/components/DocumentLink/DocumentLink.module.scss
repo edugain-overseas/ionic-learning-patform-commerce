@@ -1,0 +1,28 @@
+.attachedDocumentWrapper {
+  display: flex;
+  align-items: center;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
+  & > svg {
+    margin-right: 8px;
+  }
+
+  .documentName {
+    color: var(--content-main);
+    margin-right: 32px;
+  }
+
+  .documentSize {
+    color: var(--content-datail-secondary);
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+}

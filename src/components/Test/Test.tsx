@@ -1,15 +1,16 @@
 import React from "react";
+import TestContent from "./TestContent";
+import styles from "./Test.module.scss";
 import { LessonType, useCourses } from "../../context/CoursesContext";
 import DoubleScrollLayout from "../DoubleScrollLayout/DoubleScrollLayout";
 import { serverName } from "../../http/server";
-import styles from "./Lecture.module.scss";
-import LectureContent from "./LectureContent";
 
-const Lecture: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
+const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
   const coursesInterface = useCourses();
   const course = coursesInterface?.courses.find(
     (course) => course.id === taskData.course_id
   );
+  // const lessonData: TestDataType = taskData?.lessonData;
 
   const lectureNumber =
     course?.lessons &&
@@ -21,10 +22,11 @@ const Lecture: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
   return (
     <DoubleScrollLayout
       posterSrc={`${serverName}/${taskData.image_path}`}
-      topLabel="Lecture"
+      topLabel="Test"
+      isBackgroundBlured={false}
     >
       <div>
-        <div className={styles.lectureHeader}>
+        <div className={styles.testHeader}>
           <div className={styles.title}>
             {`${course?.title}: `}
             <span className={styles.titleValue}>{taskData.title}</span>
@@ -34,12 +36,12 @@ const Lecture: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
             <span className={styles.titleValue}>{lectureNumber}</span>
           </div>
         </div>
-        {taskData?.lessonData && "lecture_id" in taskData.lessonData && (
-          <LectureContent lectureContent={taskData.lessonData.attributes} />
-        )}
+          {taskData?.lessonData && "test_id" in taskData.lessonData && (
+            <TestContent test={taskData} />
+          )}
       </div>
     </DoubleScrollLayout>
   );
 };
 
-export default Lecture;
+export default Test;

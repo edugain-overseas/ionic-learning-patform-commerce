@@ -1,0 +1,32 @@
+.questionBody {
+  display: flex;
+  gap: 40px;
+  padding-block: 16px;
+
+  & .imageWrapper {
+    width: 360px;
+
+    & img {
+      object-fit: cover;
+      height: 100%;
+      aspect-ratio: 16/9;
+    }
+  }
+}
+
+.answersWrapper {
+  padding-block: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.previewImageWrapper {
+  max-width: 95%;
+  max-height: 100%;
+  display: contents;
+  img {
+    width: auto;
+    height: auto;
+  }
+}

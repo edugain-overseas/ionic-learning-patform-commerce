@@ -1,0 +1,154 @@
+.wrapper {
+  width: 80rem;
+  padding: 4rem 8rem;
+  border-radius: 5rem;
+  border: 1rem solid var(--border-color-main);
+  background-color: var(--bg-accent-block);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8rem;
+
+  position: relative;
+
+  &.open {
+    .dropDownWrapper {
+      height: auto;
+      opacity: 1;
+      padding-block: 10rem;
+      transition: opacity var(--transition-time-min) ease-out;
+    }
+
+    .openBtn {
+      svg {
+        transform: rotateZ(0);
+      }
+    }
+  }
+}
+
+.borderless {
+  border-color: transparent;
+}
+
+.value,
+.placeholder {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+}
+
+.value {
+  color: var(--content-main);
+}
+
+.placeholder {
+  color: var(--content-datail-secondary);
+}
+
+.openBtn,
+.clearBtn {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  aspect-ratio: 1;
+  path {
+    transition: fill var(--transition-time-min) ease,
+      fill-opacity var(--transition-time-min) ease;
+  }
+}
+
+.clearBtn:focus,
+.clearBtn:hover {
+  path {
+    fill: var(--bg-button-failture);
+    fill-opacity: 1;
+  }
+}
+
+.openBtn {
+  svg {
+    transform: rotateZ(180deg);
+    transform-origin: center center;
+    transition: transform var(--transition-time-min) ease;
+  }
+}
+
+.dropDownWrapper {
+  height: 0;
+  opacity: 0;
+  padding-block: 4rem;
+  min-width: 100%;
+  max-width: 200%;
+  max-height: 200rem;
+
+  position: absolute;
+  top: calc(100% + 8rem);
+  left: 0;
+  z-index: 10;
+
+  border-radius: 4rem;
+  background: var(--bg-rgba-primary);
+  box-shadow: var(--drop-shadow-button-main);
+  backdrop-filter: blur(16rem);
+
+  overflow-x: hidden;
+  overflow-y: hidden;
+  transition: opacity var(--transition-time-min) ease,
+    height var(--transition-time-min) ease,
+    padding var(--transition-time-min) ease;
+
+  &.open {
+    overflow-y: auto;
+  }
+}
+
+.dropDownList {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  .option {
+    padding-block: 4rem;
+    padding-inline: 14rem;
+    background-color: #fff;
+    border-radius: 4rem;
+
+    .label {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: block;
+
+      color: var(--content-datail-secondary);
+      font-size: 12rem;
+      cursor: pointer;
+    }
+
+    &.selected {
+      background-color: var(--bg-accent-block);
+
+      & .label {
+        font-weight: 500;
+      }
+
+      &:hover,
+      &:focus {
+        background-color: var(--bg-accent-block);
+      }
+    }
+
+    &.disabled {
+      cursor: not-allowed;
+      .label {
+        opacity: 0.5;
+      }
+    }
+
+    &.highlighted {
+      background-color: var(--bg-accent-block);
+    }
+  }
+}

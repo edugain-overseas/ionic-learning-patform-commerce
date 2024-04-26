@@ -129,6 +129,7 @@ const renderBtn = (props: buttonPropsTypes) => {
             props.className ? props.className : ""
           }`}
           id={props.id}
+          onClick={props.onClick}
         >
           <IonIcon src={backIcon} className={styles.backIcon} />
         </IonButton>
@@ -141,6 +142,7 @@ const renderBtn = (props: buttonPropsTypes) => {
             props.className ? props.className : ""
           }`}
           id={props.id}
+          onClick={props.onClick}
         >
           <IonIcon src={backIcon} className={styles.nextIcon} />
         </IonButton>
@@ -172,7 +174,11 @@ const Header: React.FC<HeaderTypes> = ({
         <IonButtons slot="start" className={styles.leftButtonsWrapper}>
           {left.map((props) => renderBtn(props))}
         </IonButtons>
-        {title && <IonTitle size="small" className={styles.title}>{title}</IonTitle>}
+        {title && (
+          <IonTitle size="small" className={styles.title}>
+            {title}
+          </IonTitle>
+        )}
         <IonButtons slot="end">
           {right.map((name) => renderBtn(name))}
         </IonButtons>

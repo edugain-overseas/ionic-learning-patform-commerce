@@ -19,8 +19,6 @@ const CourseTasksPage: React.FC = () => {
     (course) => course.id === +courseId
   );
 
-  console.log(course?.lessons);
-
   const lectures = course?.lessons.filter(
     (lesson) => lesson.type === "lecture"
   );

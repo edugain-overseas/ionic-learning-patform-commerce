@@ -17,7 +17,37 @@
 
     .titleValue {
       color: var(--ion-color-dark);
-    //   white-space: nowrap;
+      //   white-space: nowrap;
     }
+  }
+}
+
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  .sectionTitle {
+    text-align: center;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    text-transform: uppercase;
+    color: var(--ion-color-dark);
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+
+  .sectionContentWrapper {
+    text-align: justify;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 16px;
+    color: var(--ion-color-dark);
+  }
+
+  .section[id="text"] {
   }
 }

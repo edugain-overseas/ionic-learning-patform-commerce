@@ -30,14 +30,16 @@
     border-radius: 10px;
   }
 
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    top: 12px;
-    background-color: var(--custom-bg-rgba-primary);
-    backdrop-filter: blur(10px);
-    border-radius: 10px;
+  &.backgroundBlured {
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      top: 12px;
+      background-color: var(--custom-bg-rgba-primary);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+    }
   }
 }
 

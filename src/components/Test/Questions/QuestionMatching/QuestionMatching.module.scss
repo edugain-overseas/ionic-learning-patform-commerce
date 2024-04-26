@@ -1,0 +1,62 @@
+.matchWrapper {
+}
+
+.oprionsWrapper {
+  padding-block: 16px;
+  display: flex;
+
+  border-bottom: 1px solid var(--content-datail-secondary);
+
+  & p {
+    color: var(--content-datail-secondary);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+}
+
+.left,
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.left {
+  padding-right: 24px;
+  border-right: 1px solid var(--content-datail-secondary);
+}
+
+.right {
+  padding-left: 24px;
+}
+
+.selectOptionsWrapper {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding-block: 16px;
+
+  & > ul {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .answerOption {
+    display: flex;
+    align-items: center;
+    height: 24px;
+
+    span {
+      color: var(--content-main);
+      font-family: Inter, sans-serif;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+    }
+  }
+}

@@ -6,6 +6,7 @@ interface DoubleScrollLayoutTypes {
   topLabel?: string;
   posterSrc: string;
   posterPosition?: "fixed" | "absolute";
+  isBackgroundBlured?: boolean;
 }
 
 const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
@@ -13,6 +14,7 @@ const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
   topLabel,
   posterSrc,
   posterPosition = "fixed",
+  isBackgroundBlured = true,
 }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [scroll, setScroll] = useState(false);
@@ -38,7 +40,11 @@ const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
         className={styles.poster}
         style={{ position: posterPosition }}
       />
-      <div className={styles.contentBackground}>
+      <div
+        className={`${styles.contentBackground} ${
+          isBackgroundBlured ? styles.backgroundBlured : ""
+        }`}
+      >
         <div
           className={`${styles.contentInner}  ${scroll ? styles.scroll : ""}`}
         >
