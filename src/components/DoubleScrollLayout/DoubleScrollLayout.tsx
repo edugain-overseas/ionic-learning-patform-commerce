@@ -7,6 +7,7 @@ interface DoubleScrollLayoutTypes {
   posterSrc: string;
   posterPosition?: "fixed" | "absolute";
   isBackgroundBlured?: boolean;
+  scrollTriggerValue?: number;
 }
 
 const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
@@ -15,6 +16,7 @@ const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
   posterSrc,
   posterPosition = "fixed",
   isBackgroundBlured = true,
+  scrollTriggerValue = 132,
 }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [scroll, setScroll] = useState(false);
@@ -22,7 +24,7 @@ const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
   useEffect(() => {
     const scroller = contentRef.current;
     const handleScroll = () => {
-      if (scroller && scroller.scrollTop === 132) {
+      if (scroller && scroller.scrollTop === scrollTriggerValue) {
         setScroll(true);
       } else setScroll(false);
     };
@@ -44,6 +46,7 @@ const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
         className={`${styles.contentBackground} ${
           isBackgroundBlured ? styles.backgroundBlured : ""
         }`}
+        style={{ height: `calc(100% + ${scrollTriggerValue}px)` }}
       >
         <div
           className={`${styles.contentInner}  ${scroll ? styles.scroll : ""}`}

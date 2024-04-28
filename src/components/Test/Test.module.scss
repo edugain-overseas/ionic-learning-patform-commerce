@@ -1,3 +1,32 @@
+.answersProgress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+
+  height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  padding: 62px 20px 6px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--custom-box-shadow-primary);
+  backdrop-filter: blur(28px);
+
+  .answersProgressValue {
+    color: var(--ion-color-light);
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}
+
 .testHeader {
   margin: -28px -18px 16px;
   padding: 28px 18px 24px;
@@ -6,10 +35,10 @@
   gap: 8px;
   align-items: center;
 
-  border-radius: 14px;
+  border-radius: 10px 10px 14px 14px;
   background-color: var(--custom-bg-rgba-secondary);
   box-shadow: var(--custom-box-shadow-primary);
-  backdrop-filter: blur(16px);
+  // backdrop-filter: blur(16px);
 
   .title {
     color: var(--custom-content-color-primary);
@@ -44,7 +73,7 @@
   border-radius: 14px;
   background-color: var(--custom-bg-rgba-secondary);
   box-shadow: var(--custom-box-shadow-primary);
-  backdrop-filter: blur(16px);
+  // backdrop-filter: blur(16px);
 
   .questionHeader {
     padding-bottom: 12px;

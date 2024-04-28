@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import QuestionTest from "./Questions/QuestionTest/QuestionTest";
 import QuestionMultipleChoice from "./Questions/QuestionMultipleChoice/QuestionMultipleChoice";
 import QuestionPhotoAnswers from "./Questions/QuestionPhotoAnswers/QuestionPhotoAnswers";
@@ -21,8 +21,15 @@ export interface TestQuestionType {
   imagePath?: string | null;
 }
 
-const TestContent: React.FC<{ test: LessonType }> = ({ test }) => {
+const TestContent: React.FC<{
+  test: LessonType;
+  setAnswersProgress: Dispatch<SetStateAction<number>>;
+}> = ({ test, setAnswersProgress }) => {
   const [studentAnswers, setStudentAnswers] = useState<any[]>([]);
+
+  // const studentAnswersProgress = studentAnswers.filter(
+  //   (answer) => answer.a_id !== 0
+  // );
 
   const {
     id: testId,
@@ -376,24 +383,24 @@ const TestContent: React.FC<{ test: LessonType }> = ({ test }) => {
   //   });
   // };
 
-  // useEffect(() => {
-  //   console.log("update");
-  //   setStudentAnswersLength(
-  //     studentAnswers.filter((ans) => {
-  //       if (
-  //         ans.q_type === "test" ||
-  //         ans.q_type === "boolean" ||
-  //         ans.q_type === "answer_with_photo" ||
-  //         ans.q_type === "question_with_photo"
-  //       )
-  //         return ans.a_id !== 0;
-  //       if (ans.q_type === "multiple_choice") return ans.a_ids.length !== 0;
-  //       if (ans.q_type === "matching") return ans.matching?.length !== 0;
-  //       return false;
-  //     }).length
-  //   );
-  //   // eslint-disable-next-line
-  // }, [studentAnswers]);
+  useEffect(() => {
+    console.log("update");
+    setAnswersProgress(
+      studentAnswers.filter((ans) => {
+        if (
+          ans.q_type === "test" ||
+          ans.q_type === "boolean" ||
+          ans.q_type === "answer_with_photo" ||
+          ans.q_type === "question_with_photo"
+        )
+          return ans.a_id !== 0;
+        if (ans.q_type === "multiple_choice") return ans.a_ids.length !== 0;
+        if (ans.q_type === "matching") return ans.matching?.length !== 0;
+        return false;
+      }).length
+    );
+    // eslint-disable-next-line
+  }, [studentAnswers]);
 
   return <div className={styles.contentWrapper}>{renderTestContent()}</div>;
 };
