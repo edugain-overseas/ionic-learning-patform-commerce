@@ -152,7 +152,7 @@ const Home: React.FC = () => {
             ])
           }
         >
-          <UserActivationForm modals={modals}/>
+          <UserActivationForm modals={modals} />
         </SheetModalAuto>
       </IonContent>
     </IonPage>

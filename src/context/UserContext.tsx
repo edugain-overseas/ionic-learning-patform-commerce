@@ -7,9 +7,18 @@ import React, {
 } from "react";
 import { instance } from "../http/instance";
 import { AxiosError } from "axios";
+import useStorage from "../hooks/useStorage";
 
 interface UserProviderType {
   children: React.ReactNode;
+}
+
+export interface TestAtteptType {
+  attempt_number: number;
+  attempt_score: number;
+  student_id: number;
+  id: number;
+  test_id: number;
 }
 
 interface UserCourseType {
@@ -17,10 +26,11 @@ interface UserCourseType {
   status: string;
   progress: number;
   grade: number;
+  testAttempts?: TestAtteptType[];
 }
 
 interface UserType {
-  accessToken: string | null;
+  accessToken?: string | null | Promise<any>;
   userId: number | null;
   userType: string | null;
   name: string;
@@ -62,10 +72,17 @@ interface UserContextType {
     email: string;
   }) => Promise<void>;
   logout: () => Promise<void>;
+  getStudentTestData: (
+    testId: number | string,
+    courseId: number | string
+  ) => Promise<void>;
 }
 
+const UserContext = createContext<UserContextType | null>(null);
+
+export const useUser = () => useContext(UserContext);
+
 const initialState: UserType = {
-  accessToken: null,
   userId: null,
   userType: null,
   name: "",
@@ -84,14 +101,10 @@ const initialState: UserType = {
   chats: [],
 };
 
-const UserContext = createContext<UserContextType | null>(null);
-
-export const useUser = () => useContext(UserContext);
-
 export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
+  const [accessToken, setAccessToken] = useStorage("accessToken", null);
   const [user, setUser] = useState<UserType>(initialState);
-  console.log(user.accessToken);
-  
+
   const [error, setError] = useState<AxiosError | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -102,14 +115,13 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
       const response = await instance.get("/user/refresh", {
         withCredentials: true,
       });
-
-      const newAccessToken = response.data.access_token;      
-
-      setUser((prev) => ({ ...prev, accessToken: newAccessToken }));
+      const newAccessToken = response.data.access_token;
       instance.defaults.headers["Authorization"] = `Bearer ${newAccessToken}`;
+      setAccessToken(newAccessToken);
       return newAccessToken;
     } catch (error) {
       setUser(initialState);
+      setAccessToken(null);
     } finally {
       setIsLoading(false);
     }
@@ -126,7 +138,6 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
       const response = await instance.post("/user/login", credentialsFormData, {
         withCredentials: true,
       });
-      console.log(response.data);
 
       instance.defaults.headers[
         "Authorization"
@@ -138,6 +149,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
         username: response.data.username,
         userId: response.data.user_id,
       }));
+      setAccessToken(response.data.access_token);
     } catch (error) {
       setError(error as AxiosError);
       throw error;
@@ -177,10 +189,10 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
       });
       setUser((prev) => ({
         ...prev,
-        accessToken: response.data.access_token,
         username: response.data.username,
         userId: response.data.user_id,
       }));
+      setAccessToken(response.data.access_token);
     } catch (error) {
       setError(error as AxiosError);
       throw error;
@@ -243,6 +255,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
       await instance.get("/user/logout", {
         withCredentials: true,
       });
+      setAccessToken(null);
       setUser(initialState);
       instance.defaults.headers["Authorization"] = "";
     } catch (error) {
@@ -282,9 +295,46 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
     }
   };
 
+  const getStudentTestData = async (
+    testId: number | string,
+    courseId: number | string
+  ) => {
+    try {
+      const { data } = await instance.get("/student-test/attempts", {
+        params: {
+          test_id: testId,
+        },
+      });
+      setUser((prev) => {
+        const updatedCourses = prev.courses.map((course) => {
+          if (course.course_id === +courseId) {
+            return {
+              ...course,
+              testAttempts: course.testAttempts
+                ? [
+                    ...course.testAttempts.filter(
+                      (attempt) => attempt.test_id !== +testId
+                    ),
+                    ...data,
+                  ]
+                : data,
+            };
+          }
+          return course;
+        });
+        return { ...prev, courses: updatedCourses };
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    user.accessToken && getUser();
-  }, [user.accessToken]);
+    if (accessToken) {
+      instance.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
+      getUser();
+    }
+  }, [accessToken]);
 
   useEffect(() => {
     instance.interceptors.response.use(
@@ -315,7 +365,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
   return (
     <UserContext.Provider
       value={{
-        user,
+        user: { ...user, accessToken: accessToken },
         setUser,
         login,
         singup,
@@ -324,6 +374,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
         resetPassword,
         setNewPassword,
         logout,
+        getStudentTestData,
       }}
     >
       {children}

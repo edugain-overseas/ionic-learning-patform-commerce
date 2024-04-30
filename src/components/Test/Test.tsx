@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   LessonType,
   TestDataType,
@@ -9,9 +9,12 @@ import TestContent from "./TestContent";
 import DoubleScrollLayout from "../DoubleScrollLayout/DoubleScrollLayout";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import styles from "./Test.module.scss";
+import TestStatusBar from "./TestStatusBar";
+import { useUser } from "../../context/UserContext";
 
 const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
   const coursesInterface = useCourses();
+  const userInterface = useUser();
   const [answersProgress, setAnswersProgress] = useState<number>(0);
   const course = coursesInterface?.courses.find(
     (course) => course.id === taskData.course_id
@@ -21,7 +24,12 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
       (taskData.lessonData as TestDataType)?.questions.length) *
       100
   );
-  console.log(answersProgressValue);
+  const testAttempts = userInterface?.user.courses.find(
+    (course) => course.course_id === taskData.course_id
+  )?.testAttempts;
+
+  console.log("test data: ", taskData.lessonData);
+  console.log("test attempts: ", testAttempts);
 
   const lectureNumber =
     course?.lessons &&
@@ -29,6 +37,14 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
       .filter((lesson) => lesson.type === "lecture")
       .sort((a, b) => a.number - b.number)
       .findIndex((lesson) => lesson.id === taskData.id) + 1;
+
+  useEffect(() => {
+    const testId = (taskData.lessonData as TestDataType)?.test_id;
+    const courseId = taskData.course_id;
+    if (testId && courseId) {
+      userInterface?.getStudentTestData(testId, courseId);
+    }
+  }, [taskData]);
 
   return (
     <>
@@ -45,6 +61,7 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
           />
         </div>
       )}
+      <TestStatusBar testAttempts={testAttempts ? testAttempts : []} />
       <DoubleScrollLayout
         posterSrc={`${serverName}/${taskData.image_path}`}
         topLabel="Test"

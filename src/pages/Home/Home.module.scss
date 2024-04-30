@@ -3,6 +3,10 @@
   background-position-y: 50px;
   background-repeat: no-repeat;
   background-size: contain;
+
+  ion-header ion-toolbar {
+    backdrop-filter: none;
+  }
 }
 
 .homeContent {

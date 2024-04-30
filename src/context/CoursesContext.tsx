@@ -72,10 +72,6 @@ export interface TestDataType {
   questions: TestContentType[];
 }
 
-// type LessonDataByType = LessonType extends { type: "lecture" }
-//   ? LectureDataType
-//   : TestDataType;
-
 export type LessonDataUnionType = LectureDataType | TestDataType;
 
 export interface LessonType {
@@ -194,6 +190,8 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
       console.log(error);
     }
   };
+
+
 
   useEffect(() => {
     const getAllCourses = async () => {
