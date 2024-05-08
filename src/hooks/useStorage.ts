@@ -2,24 +2,23 @@ import { Storage } from "@ionic/storage";
 import { useState, useEffect } from "react";
 
 const store = new Storage();
-await store.create();
 
 const useStorage = (key: string, defaultValue: any) => {
   const [value, setValue] = useState<any>(defaultValue);
 
   useEffect(() => {
     const getStoredValue = async () => {
+      await store.create();
       let currentValue;
       try {
         currentValue = await store.get(key);
-        console.log(currentValue);
       } catch (error) {
         currentValue = defaultValue;
       }
       setValue(currentValue);
     };
     getStoredValue();
-  }, []);
+  }, [key, defaultValue]);
 
   useEffect(() => {
     const setStore = async () => {

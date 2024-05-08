@@ -1,25 +1,25 @@
-import React from "react";
+import { ComponentProps, FC } from "react";
 import styles from "./InputWithLabel.module.scss";
+import { UseFormRegisterReturn } from "react-hook-form";
 
-interface InputWithLabelTypes {
-  value: string;
-  onChange: (value: string) => void;
-  name?: string;
+interface InputWithLabelTypes extends ComponentProps<"input"> {
+  label?: string;
+  placeholder?: string;
+  errorMessage?: string;
+  registerProps?: UseFormRegisterReturn;
 }
 
-const InputWithLabel: React.FC<InputWithLabelTypes> = ({
-  value,
-  onChange,
-  name,
+const InputWithLabel: FC<InputWithLabelTypes> = ({
+  label,
+  errorMessage,
+  registerProps,
+  ...rest
 }) => {
   return (
     <label className={styles.wrapper}>
-      {name && <span className={styles.inputName}>{name}:</span>}
-      <input
-        className={styles.input}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
+      {label && <span className={styles.inputName}>{label}:</span>}
+      <input className={styles.input} {...registerProps} {...rest} />
+      {errorMessage && <span className={styles.error}>{errorMessage}</span>}
     </label>
   );
 };

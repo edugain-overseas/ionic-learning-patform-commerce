@@ -1,33 +1,23 @@
-import styles from "./UserInfo.module.scss";
+import { useUser } from "../../context/UserContext";
 import Avatar from "../Avatar/Avatar";
 import TextOverrflowEllipsis from "../TextOverrflowEllipsis/TextOverrflowEllipsis";
+import styles from "./UserInfo.module.scss";
 
 const UserInfo = () => {
-  const username = "";
+  const userData = useUser()?.user;
 
   return (
     <div className={styles.wrapper}>
-      <Avatar
-        editable={false}
-        size={64}
-        // src={
-        //   // userInfo.avatarURL !== ""
-        //   //   ? `${serverName}/${userInfo.avatarURL}`
-        //   //   : null
-        //   null
-        // }
-      />
+      <Avatar editable={false} size={64} src={userData?.avatarURL} />
       <div className={styles.infoWrapper}>
         <span>Username:</span>
         <span className={styles.fullName}>
-          {username === "" ? "User Name" : username}
+          {userData?.username === "" ? "User Name" : userData?.username}
         </span>
-        {/* {accessToken && ( */}
         <div className={styles.studyInfo}>
-          <TextOverrflowEllipsis text="0 course" />
+          <TextOverrflowEllipsis text={`${userData?.courses.length} course`} />
           <TextOverrflowEllipsis text="0 certificate" />
         </div>
-        {/* )} */}
       </div>
     </div>
   );

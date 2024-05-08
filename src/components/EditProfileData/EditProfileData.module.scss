@@ -33,6 +33,15 @@
   margin-bottom: 18px;
 }
 
+.selectWrapper {
+  & > span {
+    color: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    padding-inline-start: 8px;
+  }
+}
+
 .formBtns {
   display: flex;
   justify-content: space-evenly;

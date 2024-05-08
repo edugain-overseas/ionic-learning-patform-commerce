@@ -8,6 +8,7 @@ import React, {
 import DropDownArrowIcon from "../../assets/icons/chevron.svg";
 import CrossIcon from "../../assets/icons/cross.svg";
 import styles from "./Select.module.scss";
+import { IonIcon } from "@ionic/react";
 
 interface SelectType {
   options: { value: string; label: string; disabled?: boolean }[];
@@ -118,8 +119,8 @@ const Select: React.FC<SelectType> = ({
       id="select"
       tabIndex={0}
       ref={selectRef}
-      className={`${styles.wrapper} ${borderless && styles.borderless} ${
-        isOpen && styles.open
+      className={`${styles.wrapper} ${borderless ? styles.borderless : ""} ${
+        isOpen ? styles.open : ""
       }`}
       style={wrapperStyles}
       onClick={(e) => handleOpen(e)}
@@ -138,12 +139,20 @@ const Select: React.FC<SelectType> = ({
       )}
 
       {value !== "" && allowClear ? (
-        <button className={styles.clearBtn} onClick={(e) => handleClear(e)}>
-          <CrossIcon />
+        <button
+          className={styles.clearBtn}
+          onClick={(e) => handleClear(e)}
+          type="button"
+        >
+          <IonIcon src={CrossIcon} className={styles.clear}/>
         </button>
       ) : (
-        <button className={styles.openBtn} onClick={(e) => handleOpen(e)}>
-          <DropDownArrowIcon />
+        <button
+          className={styles.openBtn}
+          onClick={(e) => handleOpen(e)}
+          type="button"
+        >
+          <IonIcon src={DropDownArrowIcon} className={styles.chevron} />
         </button>
       )}
 

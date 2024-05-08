@@ -4,7 +4,7 @@ import styles from "./SheetModalAuto.module.scss";
 
 interface SheetModalAutoTypes {
   children: React.ReactNode;
-  ref?: React.RefObject<HTMLIonModalElement>;
+  refModal?: React.RefObject<HTMLIonModalElement>;
   isOpen?: boolean;
   onDidDissmiss?: () => void;
   trigger?: string;
@@ -14,7 +14,7 @@ interface SheetModalAutoTypes {
 
 const SheetModalAuto: React.FC<SheetModalAutoTypes> = ({
   children,
-  ref,
+  refModal,
   isOpen,
   onDidDissmiss,
   trigger,
@@ -24,7 +24,9 @@ const SheetModalAuto: React.FC<SheetModalAutoTypes> = ({
   const modalRef = useRef<HTMLIonModalElement>(null);
 
   useIonViewWillLeave(() => {
-    modalRef.current?.dismiss();
+    modalRef.current
+      ? modalRef.current?.dismiss()
+      : refModal?.current?.dismiss();
   }, []);
 
   useEffect(() => {
@@ -33,7 +35,7 @@ const SheetModalAuto: React.FC<SheetModalAutoTypes> = ({
 
   return (
     <IonModal
-      ref={ref ? ref : modalRef}
+      ref={refModal ? refModal : modalRef}
       className={`${styles.modal} ${className ? className : ""}`}
       isOpen={isOpen}
       onDidDismiss={onDidDissmiss}

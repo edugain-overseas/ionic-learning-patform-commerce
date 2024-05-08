@@ -29,7 +29,7 @@ interface UserCourseType {
   testAttempts?: TestAtteptType[];
 }
 
-interface UserType {
+export interface UserType {
   accessToken?: string | null | Promise<any>;
   userId: number | null;
   userType: string | null;
@@ -48,6 +48,15 @@ interface UserType {
   changedSurname: boolean;
   chats: [];
 }
+
+export type UserInfoToUpdateType = {
+  email?: string;
+  password?: string;
+  name?: string;
+  surname?: string;
+  phone?: string;
+  country?: string;
+};
 
 interface UserContextType {
   user: UserType;
@@ -72,6 +81,9 @@ interface UserContextType {
     email: string;
   }) => Promise<void>;
   logout: () => Promise<void>;
+  updateUserInfo: (userInfo: UserInfoToUpdateType) => Promise<void>;
+  updateUsername: (username: string) => Promise<void>;
+  getLastUserImages: () => Promise<void>;
   getStudentTestData: (
     testId: number | string,
     courseId: number | string
@@ -295,6 +307,39 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
     }
   };
 
+  const updateUserInfo = async (userInfo: UserInfoToUpdateType) => {
+    try {
+      await instance.put("/user/update/info", userInfo);
+      setUser((prev) => ({ ...prev, ...userInfo }));
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const updateUsername = async (username: string) => {
+    try {
+      const response = await instance.put(
+        "/user/update/username",
+        { username },
+        { withCredentials: true }
+      );
+      const newToken = response.data.access_token;
+      setAccessToken(newToken);
+      setUser((prev) => ({ ...prev, username }));
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const getLastUserImages = async () => {
+    try {
+      const response = await instance.get("user/my-images");
+      setUser((prev) => ({ ...prev, previousAvatars: response.data }));
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const getStudentTestData = async (
     testId: number | string,
     courseId: number | string
@@ -374,7 +419,10 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
         resetPassword,
         setNewPassword,
         logout,
+        updateUserInfo,
+        updateUsername,
         getStudentTestData,
+        getLastUserImages,
       }}
     >
       {children}

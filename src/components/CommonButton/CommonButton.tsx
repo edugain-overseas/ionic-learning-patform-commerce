@@ -15,6 +15,7 @@ interface CommonButtonTypes {
   backgroundColor?: string;
   className?: string;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 const CommonButton: React.FC<CommonButtonTypes> = ({
@@ -30,13 +31,14 @@ const CommonButton: React.FC<CommonButtonTypes> = ({
   color,
   backgroundColor,
   className,
+  disabled,
   onClick,
 }) => {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     if (type !== "submit") {
       e.preventDefault();
       e.stopPropagation();
-    }    
+    }
     onClick && onClick();
   };
   return (
@@ -53,6 +55,7 @@ const CommonButton: React.FC<CommonButtonTypes> = ({
       onClick={handleClick}
       id={id}
       type={type}
+      disabled={disabled}
     >
       {label && <span className={styles.label}>{label}</span>}
       {icon && icon}

@@ -1,0 +1,70 @@
+.wrapper {
+  padding-inline: 14px;
+}
+
+.header {
+  height: 48px;
+  padding-block: 20px 12px;
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid var(--ion-color-light);
+
+  .title {
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 109.6%;
+    color: var(--ion-color-dark);
+  }
+}
+
+.userAvatars {
+  padding: 16px 4px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--ion-color-light);
+}
+
+.imageSourceList {
+  padding-block: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .sourceItem {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    ion-icon {
+      color: var(--ion-color-light);
+      font-size: 16px;
+    }
+
+    .sourceSpan {
+      font-family: Roboto;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 109.6%;
+      color: var(--ion-color-dark);
+    }
+  }
+}
+
+.footer {
+  padding-block: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 16px;
+  color: var(--ion-color-light);
+
+  .button {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
+}

@@ -1,8 +1,7 @@
 import { IonContent, IonIcon, IonPage } from "@ionic/react";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { certificates } from "../../constants";
-import avatar from "../../assets/images/subject_image.png";
 import ClockIcon from "../../assets/icons/clock.svg";
 import DocumentDownloadIcon from "../../assets/icons/document-download.svg";
 import TaskProgressIcon from "../../assets/icons/task-progress.svg";
@@ -24,6 +23,10 @@ import "swiper/css/pagination";
 // import required modules
 import { Pagination } from "swiper/modules";
 import EditProfileData from "../../components/EditProfileData/EditProfileData";
+import { useUser } from "../../context/UserContext";
+import { serverName } from "../../http/server";
+import { getCountryByCode } from "../../utils/countries";
+import UserAvatarEditor from "../../components/UserAvatarEditor/UserAvatarEditor";
 
 // import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 
@@ -35,8 +38,36 @@ const pagination = {
 };
 
 const UserProfile: React.FC = () => {
+  const userInterface = useUser();
+  const userData = userInterface?.user;
   const [certificateIndex, setCertificateIndex] = useState(0);
   const [isOpenModalCerficate, setIsOpenModalCerficate] = useState(false);
+  const editUserDataModalRef = useRef<HTMLIonModalElement>(null);
+  const editUserAvatarRef = useRef<HTMLIonModalElement>(null);
+
+  const closeEditUserDataModal = () => {
+    if (editUserDataModalRef.current) {
+      editUserDataModalRef.current.dismiss();
+    }
+  };
+
+  const closeEditAvatarModal = () => {
+    if (editUserAvatarRef.current) {
+      editUserAvatarRef.current.dismiss();
+    }
+    if (editUserDataModalRef.current) {
+      editUserDataModalRef.current.present();
+    }
+  };
+
+  const openEditAvatarModal = () => {
+    if (editUserDataModalRef.current) {
+      editUserDataModalRef.current.dismiss();
+    }
+    if (editUserAvatarRef.current) {
+      editUserAvatarRef.current.present();
+    }
+  };
 
   const handleCertificateClick = (index: number) => {
     setCertificateIndex(index);
@@ -90,14 +121,24 @@ const UserProfile: React.FC = () => {
           <div className={styles.topWrapper}>
             <span className={styles.blockLable}>Information</span>
             <div className={styles.avatarInner}>
-              <Avatar src={avatar} size={94} editable={false} />
+              <Avatar
+                src={
+                  userData?.avatarURL
+                    ? `${serverName}/${userData?.avatarURL}`
+                    : undefined
+                }
+                size={94}
+                editable={false}
+              />
             </div>
             <div className={styles.usernameWrapper}>
               <span className={styles.usernameLabel}>
                 <TextOverrflowEllipsis text="Username:" />
               </span>
               <span className={styles.username}>
-                <TextOverrflowEllipsis text="Sam James" />
+                {userData && (
+                  <TextOverrflowEllipsis text={userData?.username} />
+                )}
               </span>
             </div>
           </div>
@@ -114,7 +155,11 @@ const UserProfile: React.FC = () => {
             <li className={styles.achiveItem}>
               <IonIcon src={TaskProgressIcon} className={styles.achiveIcon} />
               <span className={styles.achiveValue}>
-                <TextOverrflowEllipsis text="4 courses" />
+                <TextOverrflowEllipsis
+                  text={`${userData?.courses.length} course${
+                    userData?.courses && userData.courses.length > 1 ? "s" : ""
+                  }`}
+                />
               </span>
               <span className={styles.achiveLabel}>
                 <TextOverrflowEllipsis text="in progress" />
@@ -123,7 +168,14 @@ const UserProfile: React.FC = () => {
             <li className={styles.achiveItem}>
               <IonIcon src={TaskCompletedIcon} className={styles.achiveIcon} />
               <span className={styles.achiveValue}>
-                <TextOverrflowEllipsis text="3 completed" />
+                <TextOverrflowEllipsis
+                  text={`${
+                    userData?.courses &&
+                    userData?.courses.filter(
+                      ({ status }) => status === "completed"
+                    ).length
+                  } completed`}
+                />
               </span>
               <span className={styles.achiveLabel}>
                 <TextOverrflowEllipsis text="courses" />
@@ -143,19 +195,23 @@ const UserProfile: React.FC = () => {
               <ul className={styles.profileDetails}>
                 <li className={styles.profileDataItem}>
                   <span className={styles.label}>Username:</span>
-                  <span className={styles.value}>Sam James</span>
+                  <span className={styles.value}>{userData?.username}</span>
                 </li>
                 <li className={styles.profileDataItem}>
                   <span className={styles.label}>First Name:</span>
-                  <span className={styles.value}>Sam</span>
+                  <span className={styles.value}>
+                    {userData?.name === "" ? "None" : userData?.name}
+                  </span>
                 </li>
                 <li className={styles.profileDataItem}>
                   <span className={styles.label}>Last Name:</span>
-                  <span className={styles.value}>James</span>
+                  <span className={styles.value}>
+                    {userData?.surname === "" ? "None" : userData?.surname}
+                  </span>
                 </li>
                 <li className={styles.profileDataItem}>
                   <span className={styles.label}>Email:</span>
-                  <span className={styles.value}>samj_ames20@gmail.com</span>
+                  <span className={styles.value}>{userData?.email}</span>
                 </li>
                 <li className={styles.profileDataItem}>
                   <span className={styles.label}>Password:</span>
@@ -163,11 +219,19 @@ const UserProfile: React.FC = () => {
                 </li>
                 <li className={styles.profileDataItem}>
                   <span className={styles.label}>Phone namber:</span>
-                  <span className={styles.value}>+380669209415</span>
+                  <span className={styles.value}>
+                    {userData?.phone === "" || !userData?.phone
+                      ? "None"
+                      : userData?.phone}
+                  </span>
                 </li>
                 <li className={styles.profileDataItem}>
                   <span className={styles.label}>Your country:</span>
-                  <span className={styles.value}>Ukraine</span>
+                  <span className={styles.value}>
+                    {userData?.country === "" || !userData?.country
+                      ? "None"
+                      : getCountryByCode(userData.country)}
+                  </span>
                 </li>
               </ul>
             }
@@ -267,8 +331,15 @@ const UserProfile: React.FC = () => {
         <SheetModalAuto
           trigger="open-edit-profile-modal"
           className={styles.editDataModal}
+          refModal={editUserDataModalRef}
         >
-          <EditProfileData />
+          <EditProfileData
+            closeModal={closeEditUserDataModal}
+            openAvatarEditorModal={openEditAvatarModal}
+          />
+        </SheetModalAuto>
+        <SheetModalAuto refModal={editUserAvatarRef}>
+          <UserAvatarEditor closeModal={closeEditAvatarModal} />
         </SheetModalAuto>
       </IonContent>
     </IonPage>
