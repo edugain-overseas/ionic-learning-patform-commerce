@@ -1,10 +1,4 @@
-import React, {
-  SetStateAction,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { instance } from "../http/instance";
 import { AxiosError } from "axios";
 import useStorage from "../hooks/useStorage";
@@ -29,6 +23,13 @@ interface UserCourseType {
   testAttempts?: TestAtteptType[];
 }
 
+interface PreviousAvatar {
+  path: string;
+  is_main: boolean;
+  user_id: number;
+  id: number;
+}
+
 export interface UserType {
   accessToken?: string | null | Promise<any>;
   userId: number | null;
@@ -41,7 +42,7 @@ export interface UserType {
   country: string;
   avatarURL: string;
   balance: number;
-  previousAvatars: [];
+  previousAvatars: PreviousAvatar[];
   activeTime: null | number;
   courses: UserCourseType[];
   changedName: boolean;
@@ -84,6 +85,7 @@ interface UserContextType {
   updateUserInfo: (userInfo: UserInfoToUpdateType) => Promise<void>;
   updateUsername: (username: string) => Promise<void>;
   getLastUserImages: () => Promise<void>;
+  updateUserImage: (formData: FormData) => Promise<void>;
   getStudentTestData: (
     testId: number | string,
     courseId: number | string
@@ -340,6 +342,17 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
     }
   };
 
+  const updateUserImage = async (formData: FormData) => {
+    try {
+      const response = await instance.put("/user/update/image", formData, {
+        headers: { "Content-Type": "application/x-wwww-form-urlencoded" },
+      });
+      setUser((prev) => ({ ...prev, avatarURL: response.data.path }));
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const getStudentTestData = async (
     testId: number | string,
     courseId: number | string
@@ -422,6 +435,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
         updateUserInfo,
         updateUsername,
         getStudentTestData,
+        updateUserImage,
         getLastUserImages,
       }}
     >

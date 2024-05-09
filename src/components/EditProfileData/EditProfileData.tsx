@@ -4,7 +4,6 @@ import { UserInfoToUpdateType, useUser } from "../../context/UserContext";
 import { useForm } from "react-hook-form";
 import { getCountries } from "../../utils/countries";
 import { emailRegex } from "../../constants/regExps";
-import avatar from "../../assets/images/subject_image.png";
 import EditIcon from "../../assets/icons/edit-bottom-line.svg";
 import ReLoadIcon from "../../assets/icons/re-load.svg";
 import SaveIcon from "../../assets/icons/save.svg";
@@ -101,11 +100,15 @@ const EditProfileData: FC<{
 
   return (
     <>
-      <Header {...headerProps} />
-      <IonContent className={styles.wrapper} fullscreen={true}>
+      <IonContent className={styles.wrapper} fullscreen={true} scrollY={true}>
+        <Header {...headerProps} />
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.avatarWrapper}>
-            <Avatar size={96} src={avatar} editable={false} />
+            <Avatar
+              size={96}
+              src={userInterface?.user.avatarURL}
+              editable={false}
+            />
             <CommonButton
               width={152}
               height={32}

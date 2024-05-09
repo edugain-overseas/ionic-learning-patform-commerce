@@ -121,15 +121,7 @@ const UserProfile: React.FC = () => {
           <div className={styles.topWrapper}>
             <span className={styles.blockLable}>Information</span>
             <div className={styles.avatarInner}>
-              <Avatar
-                src={
-                  userData?.avatarURL
-                    ? `${serverName}/${userData?.avatarURL}`
-                    : undefined
-                }
-                size={94}
-                editable={false}
-              />
+              <Avatar src={userData?.avatarURL} size={94} editable={false} />
             </div>
             <div className={styles.usernameWrapper}>
               <span className={styles.usernameLabel}>
@@ -338,7 +330,7 @@ const UserProfile: React.FC = () => {
             openAvatarEditorModal={openEditAvatarModal}
           />
         </SheetModalAuto>
-        <SheetModalAuto refModal={editUserAvatarRef}>
+        <SheetModalAuto refModal={editUserAvatarRef} keyboardClose={false}>
           <UserAvatarEditor closeModal={closeEditAvatarModal} />
         </SheetModalAuto>
       </IonContent>

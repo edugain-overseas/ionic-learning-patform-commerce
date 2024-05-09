@@ -3,6 +3,7 @@ import EditIcon from "../../assets/icons/tabs/my-profile.svg";
 import styles from "./Avatar.module.scss";
 import AvatarFallback from "./AvatarFallback/AvatarFallback";
 import { IonIcon } from "@ionic/react";
+import { serverName } from "../../http/server";
 
 interface AvatarTypes {
   size?: number;
@@ -39,7 +40,11 @@ const Avatar: React.FC<AvatarTypes> = ({
         pointerEvents: editable ? "auto" : "none",
       }}
     >
-      {src ? <img src={src} alt={alt} /> : <AvatarFallback size={size} />}
+      {src ? (
+        <img src={`${serverName}/${src}`} alt={alt} />
+      ) : (
+        <AvatarFallback size={size} />
+      )}
       <button
         className={styles.editBtn}
         onClick={() => inputRef.current?.click()}

@@ -19,11 +19,20 @@
   }
 }
 
+.avatarEditorWrapper {
+  padding-block: 16px;
+  display: flex;
+  justify-content: center;
+}
+
 .userAvatars {
   padding: 16px 4px;
   display: flex;
-  justify-content: space-between;
+  gap: 12px;
   border-bottom: 1px solid var(--ion-color-light);
+  & > * {
+    flex-basis: 1/6;
+  }
 }
 
 .imageSourceList {

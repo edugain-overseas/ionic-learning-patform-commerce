@@ -1,4 +1,5 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
+import { base64ToFile } from "../../utils/base64ToFile";
 import styles from "./UserAvatarEditor.module.scss";
 import CommonButton from "../CommonButton/CommonButton";
 import { IonIcon, IonSpinner } from "@ionic/react";
@@ -8,7 +9,15 @@ import Avatar from "../Avatar/Avatar";
 import cameraIcon from "../../assets/icons/camera.svg";
 import galleryIcon from "../../assets/icons/gallery.svg";
 import InsetBtn from "../InsetBtn/InsetBtn";
-import { Camera, CameraResultType, Photo } from "@capacitor/camera";
+import {
+  Camera,
+  CameraDirection,
+  CameraResultType,
+  CameraSource,
+  Photo,
+} from "@capacitor/camera";
+import AvatarEditorComponent from "./AvatarEditorComponent";
+import AvatarEditor from "react-avatar-editor";
 
 interface UserAvatarEditorPropsType {
   closeModal?: () => void;
@@ -18,6 +27,7 @@ const UserAvatarEditor: FC<UserAvatarEditorPropsType> = ({ closeModal }) => {
   const userInterface = useUser();
   const [image, setImage] = useState<Photo>();
   const [isLoading, setIsLoading] = useState(false);
+  const editorRef = useRef<AvatarEditor>(null);
 
   useEffect(() => {
     userInterface?.getLastUserImages();
@@ -28,31 +38,54 @@ const UserAvatarEditor: FC<UserAvatarEditorPropsType> = ({ closeModal }) => {
       quality: 90,
       allowEditing: true,
       resultType: CameraResultType.Base64,
+      source: CameraSource.Camera,
+      direction: CameraDirection.Front,
     });
     setImage(image);
   };
 
   const pickPhoto = async () => {
-    const image = await Camera.pickImages({
+    const image = await Camera.getPhoto({
       quality: 90,
-      limit: 1,
+      resultType: CameraResultType.Base64,
+      source: CameraSource.Photos,
     });
-    console.log(image);
+    setImage(image);
   };
 
-  console.log(image);
+  const handleSaveNewAvatar = () => {
+    if (editorRef.current) {
+      const canvas = editorRef.current.getImageScaledToCanvas();
+      canvas.toBlob((blob) => {
+        const userId = userInterface?.user.userId;
+        if (userId && blob) {
+          const formData = new FormData();
+          formData.append("image", blob, `user${userId}-avatar-${Date.now()}`);
+          try {
+            userInterface.updateUserImage(formData);
+            closeModal && closeModal();
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      }, "image/png");
+    }
+  };
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
         <span className={styles.title}>Select your profile photo</span>
       </div>
-      {image ? (
-        <div className={styles.avatarEditor}>
-          <img
-            src={`data:image/${image.format};base64, ` + image.base64String}
-          />
-        </div>
+      {image?.base64String ? (
+        <AvatarEditorComponent
+          image={base64ToFile(
+            image.base64String,
+            "name",
+            `image/${image.format}`
+          )}
+          editorRef={editorRef}
+        />
       ) : (
         <>
           <div className={styles.userAvatars}>
@@ -60,7 +93,12 @@ const UserAvatarEditor: FC<UserAvatarEditorPropsType> = ({ closeModal }) => {
               <Avatar size={46} />
             ) : (
               userInterface?.user.previousAvatars.map((avatar) => (
-                <Avatar src={avatar} size={46} key={avatar} />
+                <Avatar
+                  key={avatar.id}
+                  src={avatar.path}
+                  size={46}
+                  editable={false}
+                />
               ))
             )}
           </div>
@@ -112,6 +150,7 @@ const UserAvatarEditor: FC<UserAvatarEditorPropsType> = ({ closeModal }) => {
           type="submit"
           disabled={isLoading}
           className={styles.button}
+          onClick={handleSaveNewAvatar}
         />
       </div>
     </div>

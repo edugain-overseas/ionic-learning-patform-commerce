@@ -1,5 +1,5 @@
 import { IonModal, useIonViewWillLeave } from "@ionic/react";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef, FC } from "react";
 import styles from "./SheetModalAuto.module.scss";
 
 interface SheetModalAutoTypes {
@@ -10,9 +10,10 @@ interface SheetModalAutoTypes {
   trigger?: string;
   className?: string;
   setModal?: (modalRef: React.RefObject<HTMLIonModalElement>) => void;
+  keyboardClose?: boolean;
 }
 
-const SheetModalAuto: React.FC<SheetModalAutoTypes> = ({
+const SheetModalAuto: FC<SheetModalAutoTypes> = ({
   children,
   refModal,
   isOpen,
@@ -20,6 +21,7 @@ const SheetModalAuto: React.FC<SheetModalAutoTypes> = ({
   trigger,
   className,
   setModal,
+  keyboardClose,
 }) => {
   const modalRef = useRef<HTMLIonModalElement>(null);
 
@@ -42,6 +44,7 @@ const SheetModalAuto: React.FC<SheetModalAutoTypes> = ({
       breakpoints={[0, 1]}
       initialBreakpoint={1}
       trigger={trigger}
+      keyboardClose={keyboardClose}
     >
       {children}
     </IonModal>
