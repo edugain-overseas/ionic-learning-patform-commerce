@@ -117,6 +117,7 @@ const renderBtn = (props: buttonPropsTypes) => {
           key={props.name}
           className={props.className ? props.className : ""}
           id={props.id}
+          onClick={props.onClick}
         >
           <IonIcon src={SaveIcon} className={styles.saveIcon} />
         </IonButton>

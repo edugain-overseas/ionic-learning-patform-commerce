@@ -72,6 +72,14 @@ const UserAvatarEditor: FC<UserAvatarEditorPropsType> = ({ closeModal }) => {
     }
   };
 
+  const handleSetAvatar = (imageId: number) => {
+    try {
+      userInterface?.setMainImage(imageId);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
@@ -88,20 +96,23 @@ const UserAvatarEditor: FC<UserAvatarEditorPropsType> = ({ closeModal }) => {
         />
       ) : (
         <>
-          <div className={styles.userAvatars}>
+          <ul className={styles.userAvatars}>
             {userInterface?.user.previousAvatars.length === 0 ? (
-              <Avatar size={46} />
+              <li>
+                <Avatar size={46} />
+              </li>
             ) : (
               userInterface?.user.previousAvatars.map((avatar) => (
-                <Avatar
+                <li
                   key={avatar.id}
-                  src={avatar.path}
-                  size={46}
-                  editable={false}
-                />
+                  onClick={() => !avatar.is_main && handleSetAvatar(avatar.id)}
+                  className={avatar.is_main ? styles.selectedItem : ""}
+                >
+                  <Avatar src={avatar.path} size={46} editable={false} />
+                </li>
               ))
             )}
-          </div>
+          </ul>
           <ul className={styles.imageSourceList}>
             <li className={styles.sourceItem} onClick={takePhoto}>
               <InsetBtn

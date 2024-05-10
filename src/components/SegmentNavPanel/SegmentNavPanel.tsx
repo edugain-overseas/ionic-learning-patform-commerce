@@ -12,7 +12,7 @@ import { useHistory, useLocation } from "react-router";
 interface SegmentNavPanelTypes {
   items: { value: string; label: string }[];
   value?: string | number;
-  setValue?: Dispatch<SetStateAction<string>>;
+  setValue?: Dispatch<SetStateAction<any>>;
   routerNav?: boolean;
 }
 

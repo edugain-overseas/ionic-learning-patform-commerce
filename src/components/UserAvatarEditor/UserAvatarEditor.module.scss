@@ -30,8 +30,13 @@
   display: flex;
   gap: 12px;
   border-bottom: 1px solid var(--ion-color-light);
-  & > * {
+  & > li {
     flex-basis: 1/6;
+  }
+
+  .selectedItem {
+    border-radius: 50%;
+    border: 2px solid var(--ion-color-light);
   }
 }
 

@@ -55,13 +55,13 @@ const App: React.FC = () => {
 
   return (
     <IonApp className="App">
-      <CoursesProvider>
-        <UserProvider>
+      <UserProvider>
+        <CoursesProvider>
           <ListStyleProvider>
             <Router />
           </ListStyleProvider>
-        </UserProvider>
-      </CoursesProvider>
+        </CoursesProvider>
+      </UserProvider>
     </IonApp>
   );
 };

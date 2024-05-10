@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { instance } from "../http/instance";
+import { useUser } from "./UserContext";
 
 interface IconType {
   course_id: number;
@@ -8,6 +9,15 @@ interface IconType {
   icon_path: string;
   icon_text: string;
   icon_title: string;
+}
+
+export interface FileType {
+  file_path: string;
+  id: number;
+  instruction_id: number;
+  file_name: string;
+  file_type: string;
+  file_size: number;
 }
 
 export interface LectureContentType {
@@ -120,9 +130,24 @@ export interface CategoryType {
   discount?: number;
 }
 
+export interface InstructionType {
+  type: "general" | "course";
+  name: string;
+  text: string;
+  category_id: null | number;
+  id: number;
+  title: string;
+  last_update: string;
+  files: FileType[];
+}
+
 interface CoursesContextType {
   courses: CourseType[];
   categories: CategoryType[];
+  instructions: {
+    general: InstructionType[];
+    courses: InstructionType[];
+  };
   getCourseDetailById: (courseId: string | number) => Promise<void>;
   getLessonById: (
     lessonId: string | number,
@@ -141,8 +166,16 @@ export const useCourses = () => useContext(CoursesContext);
 export const CoursesProvider: React.FC<CoursesProviderType> = ({
   children,
 }) => {
+  const accessToken = useUser()?.user.accessToken;
   const [courses, setCourses] = useState<CourseType[]>([]);
   const [categories, setCategories] = useState<CategoryType[]>([]);
+  const [instructions, setInstruction] = useState<{
+    general: InstructionType[];
+    courses: InstructionType[];
+  }>({
+    general: [],
+    courses: [],
+  });
 
   const getCourseDetailById = async (courseId: number | string) => {
     try {
@@ -191,8 +224,6 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
     }
   };
 
-
-
   useEffect(() => {
     const getAllCourses = async () => {
       try {
@@ -216,13 +247,56 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
       }
     };
 
+    const getGeneralInstruction = async () => {
+      try {
+        const response = await instance.get<InstructionType[]>(
+          "/instruction/general"
+        );
+        setInstruction((prev) => ({
+          general: response.data,
+          courses: prev.courses,
+        }));
+      } catch (error) {
+        console.error("Error fetching general instructions:", error);
+      }
+    };
+
     getAllCategories();
     getAllCourses();
+    getGeneralInstruction();
   }, []);
+
+  useEffect(() => {
+    const getCoursesInstructions = async () => {
+      try {
+        const response = await instance.get<InstructionType[]>(
+          "/instruction/courses"
+        );
+        setInstruction((prev) => ({
+          general: prev.general,
+          courses: response.data,
+        }));
+      } catch (error) {
+        console.error("Error fetching courses instructions:", error);
+      }
+    };
+    console.log(accessToken);
+
+    if (accessToken) {
+      instance.defaults.headers.Authorization = `Bearer ${accessToken}`;
+      getCoursesInstructions();
+    }
+  }, [accessToken]);
 
   return (
     <CoursesContext.Provider
-      value={{ courses, categories, getCourseDetailById, getLessonById }}
+      value={{
+        courses,
+        categories,
+        instructions,
+        getCourseDetailById,
+        getLessonById,
+      }}
     >
       {children}
     </CoursesContext.Provider>

@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useRef, useState } from "react";
 import { IonContent, IonIcon, IonSpinner, IonToast } from "@ionic/react";
 import { UserInfoToUpdateType, useUser } from "../../context/UserContext";
 import { useForm } from "react-hook-form";
@@ -37,6 +37,7 @@ const EditProfileData: FC<{
 }> = ({ closeModal, openAvatarEditorModal }) => {
   const userInterface = useUser();
   const userData = userInterface?.user;
+  const formRef = useRef<HTMLFormElement>(null);
 
   const [country, setCountry] = useState<string>(
     userData?.country ? userData.country : ""
@@ -46,6 +47,7 @@ const EditProfileData: FC<{
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    getValues,
   } = useForm<EditUserDataForm>({
     defaultValues: {
       username: userData?.username,
@@ -93,16 +95,24 @@ const EditProfileData: FC<{
   const headerProps = {
     left: [{ name: "prevLesson", onClick: closeModal }],
     title: "Edite profile data",
-    right: [{ name: "save", onClick: () => {} }],
+    right: [
+      {
+        name: "save",
+        onClick: () => {
+          const values = getValues();
+          onSubmit(values);
+        },
+      },
+    ],
     mode: "transparent",
     toolbarClassName: styles.headerToolbar,
   };
 
   return (
     <>
+      <Header {...headerProps} />
       <IonContent className={styles.wrapper} fullscreen={true} scrollY={true}>
-        <Header {...headerProps} />
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
           <div className={styles.avatarWrapper}>
             <Avatar
               size={96}

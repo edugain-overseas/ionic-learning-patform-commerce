@@ -86,6 +86,7 @@ interface UserContextType {
   updateUsername: (username: string) => Promise<void>;
   getLastUserImages: () => Promise<void>;
   updateUserImage: (formData: FormData) => Promise<void>;
+  setMainImage: (imageId: number) => Promise<void>;
   getStudentTestData: (
     testId: number | string,
     courseId: number | string
@@ -353,6 +354,34 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
     }
   };
 
+  const setMainImage = async (imageId: number) => {
+    try {
+      const response = await instance.put(
+        `/user/set-main-image?image_id=${imageId}`
+      );
+      setUser((prev) => {
+        let newAvatarImage = "";
+        const udatedPreviousAvatars = prev.previousAvatars.map((avatar) => {
+          if (avatar.id === imageId) {
+            newAvatarImage = avatar.path;
+          }
+          return {
+            ...avatar,
+            is_main: avatar.id === imageId,
+          };
+        });
+
+        return {
+          ...prev,
+          previousAvatars: udatedPreviousAvatars,
+          avatarURL: newAvatarImage,
+        };
+      });
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const getStudentTestData = async (
     testId: number | string,
     courseId: number | string
@@ -436,6 +465,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
         updateUsername,
         getStudentTestData,
         updateUserImage,
+        setMainImage,
         getLastUserImages,
       }}
     >
