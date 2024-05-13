@@ -4,7 +4,7 @@ import infoIcon from "../../assets/icons/info.svg";
 import InsetBtn from "../InsetBtn/InsetBtn";
 import styles from "./InfoBtn.module.scss";
 
-const InfoBtn: React.FC<{ info: string; id: string }> = ({ info, id }) => {
+const InfoBtn: React.FC<{ info?: string; id: string }> = ({ info, id }) => {
   return (
     <>
       <InsetBtn

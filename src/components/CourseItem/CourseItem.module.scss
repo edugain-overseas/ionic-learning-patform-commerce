@@ -8,6 +8,30 @@
   background-color: var(--custom-bg-rgba-secondary);
   border-radius: var(--custom--border-radius-primary);
   box-shadow: var(--custom-box-shadow-primary);
+
+  &.row {
+    padding: 10px;
+    padding-left: 20px;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 10px;
+      bottom: 10px;
+      left: 8px;
+      width: 4px;
+
+      border-radius: var(--custom--border-radius-primary);
+      background: var(--custom-bg-rgba-fourth);
+      box-shadow: var(--custom-box-shadow-secondary-inset);
+    }
+
+    .courseInfo,
+    .progress {
+      padding: 0;
+    }
+  }
 }
 
 .courseAvatarWrapper {
@@ -15,6 +39,7 @@
   aspect-ratio: 2.24;
   background-size: cover;
   background-repeat: no-repeat;
+  background-position: center;
   padding: 4px;
   margin-bottom: 8px;
   border-radius: var(--custom--border-radius-primary);
@@ -26,13 +51,15 @@
     background-color: var(--custom-bg-rgba-secondary);
     z-index: 1;
   }
-
-  img {
+  .imageWrapper {
     width: 100%;
     height: 100%;
-    object-fit: cover;
     position: relative;
     z-index: 2;
+    overflow: hidden;
+    background-size: calc(100% + 8px);
+    background-repeat: no-repeat;
+    background-position: center;
     border-radius: var(--custom--border-radius-primary);
   }
 }
@@ -50,22 +77,23 @@
     margin: 0;
     font-size: 14px;
     font-weight: 700;
-    max-height: 48px;
+    line-height: 1.2;
     overflow: hidden;
-    text-overflow: ellipsis;
-    display: flex;
-    align-items: center;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    max-height: calc(2.4em);
   }
 
-  .progress {
-    color: var(--ion-color-medium);
-    font-size: 10px;
-    font-weight: 600;
+  // .progress {
+  //   color: var(--ion-color-medium);
+  //   font-size: 10px;
+  //   font-weight: 600;
 
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+  //   display: flex;
+  //   align-items: center;
+  //   gap: 8px;
+  // }
 }
 
 .colRight {
@@ -77,4 +105,15 @@
 .basketIcon {
   font-size: 16px;
   color: var(--ion-color-light);
+}
+
+.progress {
+  padding-inline-start: 4px;
+  color: var(--ion-color-medium);
+  font-size: 10px;
+  font-weight: 600;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }

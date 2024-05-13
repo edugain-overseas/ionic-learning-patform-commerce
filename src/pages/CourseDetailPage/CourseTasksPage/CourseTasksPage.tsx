@@ -1,4 +1,4 @@
-import React from "react";
+import { FC } from "react";
 import { IonContent, IonIcon } from "@ionic/react";
 import { useParams } from "react-router";
 import { useCourses } from "../../../context/CoursesContext";
@@ -9,10 +9,10 @@ import Header from "../../../components/Header/Header";
 import CourseNavPanel from "../../../components/CourseNavPanel/CourseNavPanel";
 import InsetBtn from "../../../components/InsetBtn/InsetBtn";
 import TaskItem from "../../../components/TaskItem/TaskItem";
-import styles from "./CourseTasksPage.module.scss";
 import CourseProgressModal from "../../../components/CourseProgressModal/CourseProgressModal";
+import styles from "./CourseTasksPage.module.scss";
 
-const CourseTasksPage: React.FC = () => {
+const CourseTasksPage: FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
 
   const course = useCourses()?.courses.find(
@@ -30,56 +30,56 @@ const CourseTasksPage: React.FC = () => {
     right: [{ name: "notification" }, { name: "list-style" }],
   };
 
+  const CourseStats = () => (
+    <div className={styles.courseStats}>
+      <span className={styles.type}>Materials | Tasks</span>
+      <div className={styles.details}>
+        <span className={styles.detailsTitle}>Details course:</span>
+        <ul className={styles.statsList}>
+          <li className={styles.statsItem}>
+            <InsetBtn
+              width="32px"
+              height="32px"
+              icon={<IonIcon src={LectureIcon} className={styles.statIcon} />}
+            />
+            <div className={styles.statTextWrapper}>
+              <span className={styles.statLabel}>Lectures:</span>
+              <span className={styles.statValue}>{lectures?.length}</span>
+            </div>
+          </li>
+          <li className={styles.statsItem}>
+            <InsetBtn
+              width="32px"
+              height="32px"
+              icon={<IonIcon src={TestIcon} className={styles.statIcon} />}
+            />
+            <div className={styles.statTextWrapper}>
+              <span className={styles.statLabel}>Tests:</span>
+              <span className={styles.statValue}>{tests?.length}</span>
+            </div>
+          </li>
+          <li className={styles.statsItem}>
+            <InsetBtn
+              width="32px"
+              height="32px"
+              icon={<IonIcon src={LanguagesIcon} className={styles.statIcon} />}
+            />
+            <div className={styles.statTextWrapper}>
+              <span className={styles.statLabel}>Language:</span>
+              <span className={styles.statValue}>English</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
+
   return (
     <>
       <Header {...headerProps} />
       <CourseNavPanel />
       <IonContent className={styles.pageContentWrapper}>
-        <div className={styles.courseStats}>
-          <span className={styles.type}>Materials | Tasks</span>
-          <div className={styles.details}>
-            <span className={styles.detailsTitle}>Details course:</span>
-            <ul className={styles.statsList}>
-              <li className={styles.statsItem}>
-                <InsetBtn
-                  width="32px"
-                  height="32px"
-                  icon={
-                    <IonIcon src={LectureIcon} className={styles.statIcon} />
-                  }
-                />
-                <div className={styles.statTextWrapper}>
-                  <span className={styles.statLabel}>Lectures:</span>
-                  <span className={styles.statValue}>{lectures?.length}</span>
-                </div>
-              </li>
-              <li className={styles.statsItem}>
-                <InsetBtn
-                  width="32px"
-                  height="32px"
-                  icon={<IonIcon src={TestIcon} className={styles.statIcon} />}
-                />
-                <div className={styles.statTextWrapper}>
-                  <span className={styles.statLabel}>Tests:</span>
-                  <span className={styles.statValue}>{tests?.length}</span>
-                </div>
-              </li>
-              <li className={styles.statsItem}>
-                <InsetBtn
-                  width="32px"
-                  height="32px"
-                  icon={
-                    <IonIcon src={LanguagesIcon} className={styles.statIcon} />
-                  }
-                />
-                <div className={styles.statTextWrapper}>
-                  <span className={styles.statLabel}>Language:</span>
-                  <span className={styles.statValue}>English</span>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
+        <CourseStats />
         <ul className={styles.tasksList}>
           {course?.lessons &&
             [...course.lessons]

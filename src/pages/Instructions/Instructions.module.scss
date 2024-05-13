@@ -66,6 +66,10 @@
 .instructionContent {
   padding-top: 22px;
   position: relative;
+  background-image: url("../../assets/images/instruction-content-background.png");
+  background-position-x: center;
+  background-position-y: max(22px, 50%);
+  background-repeat: no-repeat;
 
   &::before {
     content: "";

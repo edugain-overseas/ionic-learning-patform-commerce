@@ -6,9 +6,57 @@ import Header from "../../components/Header/Header";
 import SegmentNavPanel from "../../components/SegmentNavPanel/SegmentNavPanel";
 import CategoryItem from "../../components/CategoryItem/CategoryItem";
 import styles from "./Courses.module.scss";
+import { useUser } from "../../context/UserContext";
 
 const Courses: React.FC = () => {
-  const categories = useCourses()?.categories;
+  const coursesInterface = useCourses();
+  const categories = coursesInterface?.categories;
+  const courses = coursesInterface?.courses;
+  const userCourses = useUser()?.user.courses;
+
+  const handleFilterCategory = () => {
+    switch (filter) {
+      case "my": {
+        let userCoursesIds: number[] = [];
+        userCourses?.forEach((course) => userCoursesIds.push(course.course_id));
+
+        let categoriesWithPurchasedCoursesIds: number[] = [];
+        courses?.forEach((course) => {
+          if (userCoursesIds.includes(course.id)) {
+            categoriesWithPurchasedCoursesIds.push(course.category_id);
+          }
+        });
+
+        return categories?.filter((category) =>
+          categoriesWithPurchasedCoursesIds.includes(category.id)
+        );
+      }
+      case "available":
+        return categories;
+      case "completed": {
+        const completedUserCourses = userCourses?.filter(
+          (course) => course.progress === 100
+        );
+        let userCoursesIds: number[] = [];
+        completedUserCourses?.forEach((course) =>
+          userCoursesIds.push(course.course_id)
+        );
+
+        let categoriesWithPurchasedCoursesIds: number[] = [];
+        courses?.forEach((course) => {
+          if (userCoursesIds.includes(course.id)) {
+            categoriesWithPurchasedCoursesIds.push(course.category_id);
+          }
+        });
+
+        return categories?.filter((category) =>
+          categoriesWithPurchasedCoursesIds.includes(category.id)
+        );
+      }
+      default:
+        break;
+    }
+  };
 
   const [filter, setFilter] = useState<string>("my");
 
@@ -31,7 +79,7 @@ const Courses: React.FC = () => {
           items={coursesNavItems}
         />
         <ul className={styles.categoriesList}>
-          {categories?.map((category) => (
+          {handleFilterCategory()?.map((category) => (
             <CategoryItem category={category} key={category.id} />
           ))}
         </ul>

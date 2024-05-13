@@ -6,19 +6,18 @@ import {
   IonSegmentButton,
   SegmentChangeEventDetail,
   createGesture,
-  useIonViewDidEnter,
   useIonViewWillEnter,
 } from "@ionic/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
+import { useUser } from "../../context/UserContext";
 import categoryContrastIcon from "../../assets/icons/category-contrast.svg";
 import Header from "../../components/Header/Header";
-import styles from "./CategoryDetailPage.module.scss";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import CourseItem from "../../components/CourseItem/CourseItem";
+import styles from "./CategoryDetailPage.module.scss";
 
-const progress = 25;
 
 const CategoryDetailPage: React.FC = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
@@ -29,6 +28,28 @@ const CategoryDetailPage: React.FC = () => {
   const courses = useCourses()?.courses.filter(
     (course) => course.category_id === +categoryId
   );
+
+  const userCourses = useUser()?.user.courses;
+
+  console.log(courses);
+
+  const handleProgress = useMemo(() => {
+    let coursesIds: number[] = [];
+    courses?.forEach((course) => coursesIds.push(course.id));
+
+    const purchasedCoursesData = userCourses?.filter((course) =>
+      coursesIds.includes(course.course_id)
+    );
+    if (courses && purchasedCoursesData) {
+      return Math.round(
+        purchasedCoursesData?.reduce(
+          (total, course) =>
+            course.progress ? total + course.progress : total,
+          0
+        ) / (courses.length ? courses.length : 1)
+      );
+    }
+  }, [userCourses]);
 
   const topContentRef = useRef<HTMLDivElement>(null);
   const bottomSheet = useRef<HTMLDivElement>(null);
@@ -113,6 +134,21 @@ const CategoryDetailPage: React.FC = () => {
     }
   };
 
+  const handleFilterCourses = () => {
+    let userCoursesIds: number[] = [];
+    userCourses?.forEach((course) => userCoursesIds.push(course.course_id));
+    switch (filter) {
+      case "All":
+        return courses;
+      case "In process":
+        return courses?.filter((course) => userCoursesIds.includes(course.id));
+      case "Available":
+        return courses?.filter((course) => !userCoursesIds.includes(course.id));
+      default:
+        break;
+    }
+  };
+
   const headerProps = {
     title: "My Courses",
     secondary: true,
@@ -137,16 +173,17 @@ const CategoryDetailPage: React.FC = () => {
                 <div className={styles.categoryTitle}>
                   <h3>{category?.title}</h3>
                   <p>
-                    (Complete all 4 courses to receive a <b>MBA Certificate</b>)
+                    (Complete all {courses?.length} courses to receive a{" "}
+                    <b>MBA Certificate</b>)
                   </p>
                 </div>
               </div>
               <div className={styles.progressWrapper}>
                 <span className={styles.progressValue}>
-                  Progress: {progress} / 100%
+                  Progress: {handleProgress} / 100%
                 </span>
                 <ProgressBar
-                  value={progress}
+                  value={handleProgress}
                   disabled={false}
                   height={10}
                   showValue={false}
@@ -189,11 +226,18 @@ const CategoryDetailPage: React.FC = () => {
             <div className={styles.innerHeader}>
               <div>{filter}</div>
               <div>
-                <span>Purchased:</span> 3 / 4
+                <span>Purchased:</span>{" "}
+                {`${
+                  userCourses?.filter((userCourse) =>
+                    courses?.find(
+                      (course) => course.id === userCourse.course_id
+                    )
+                  ).length
+                } / ${courses?.length}`}
               </div>
             </div>
             <ul className={styles.coursesList}>
-              {courses?.map((course) => (
+              {handleFilterCourses()?.map((course) => (
                 <CourseItem course={course} key={course.id} />
               ))}
             </ul>

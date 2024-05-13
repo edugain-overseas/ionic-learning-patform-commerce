@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import styles from "./InsetBtn.module.scss";
 
 interface InsetBtnTypes {
@@ -20,11 +20,16 @@ const InsetBtn: React.FC<InsetBtnTypes> = ({
   disabled = false,
   id = undefined,
 }) => {
+  const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onClick();
+  };
   return (
     <button
       style={{ width, height, fontSize: width }}
       className={styles.insetBtn}
-      onClick={onClick}
+      onClick={handleClick}
       disabled={disabled}
       id={id ? id : undefined}
     >
