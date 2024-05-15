@@ -7,6 +7,7 @@ import CourseIntroPage from "./CourseIntroPage/CourseIntroPage";
 import CourseTasksPage from "./CourseTasksPage/CourseTasksPage";
 import CourseExamPage from "./CourseExamPage/CourseExamPage";
 import TaskPage from "../TaskPage/TaskPage";
+import { instance } from "../../http/instance";
 
 const CourseDetailPage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -15,6 +16,9 @@ const CourseDetailPage: React.FC = () => {
 
   useEffect(() => {
     if (courseId && accessToken) {
+      if (!instance.defaults.headers["Authorization"]) {
+        instance.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
+      }
       coursesInterface?.getCourseDetailById(courseId);
     }
   }, [courseId, accessToken]);

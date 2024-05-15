@@ -1,5 +1,6 @@
+import { IonIcon } from "@ionic/react";
 import React from "react";
-// import { ReactComponent as LinkIcon } from "../../../images/icons/link.svg";
+import LinkIcon from "../../assets/icons/link.svg";
 
 const LinkCard: React.FC<{
   text: string;
@@ -13,7 +14,7 @@ const LinkCard: React.FC<{
       rel="noreferrer noopener"
       target="_blank"
     >
-      {/* <LinkIcon /> */}
+      <IonIcon src={LinkIcon} />
       <span>{text ? text : link}</span>
     </a>
   );

@@ -1,27 +1,27 @@
 import React, { useState } from "react";
-import styles from "./Lecture.module.scss";
 import { LectureContentType } from "../../context/CoursesContext";
 import { serverName } from "../../http/server";
 import PDFReader from "../PDFReader/PDFReader";
-import VideoPlayer from "../VideoPlayer/VideoPlayer/VideoPlayer";
 import DocumentLink from "../DocumentLink/DocumentLink";
 import LinkCard from "../LinkCard/LinkCard";
+import styles from "./Lecture.module.scss";
+import ImageGroup from "../ImageGroup/ImageGroup";
+import VideoPlayer from "../VideoPlayer/VideoPlayer";
 
 const LectureContent: React.FC<{ lectureContent: LectureContentType[] }> = ({
   lectureContent,
 }) => {
   const [fullscreen, setFullscreen] = useState(false);
 
+  console.log(lectureContent);
+
   const renderLectureContent = () =>
-    lectureContent?.map((section) => {
+    [...lectureContent]?.map((section) => {
       const {
         a_type: type,
         a_id: id,
         a_title: title,
         a_text: text,
-        downloadAllowed,
-        // fileName,
-        // fileSize,
         hiden,
         files,
         links,
@@ -113,7 +113,7 @@ const LectureContent: React.FC<{ lectureContent: LectureContentType[] }> = ({
                 controls={true}
                 // width="true"
                 // height="auto"
-                controlsList={downloadAllowed ? "" : "nodownload"}
+                // controlsList={downloadAllowed ? "" : "nodownload"}
               ></audio>
               {text && text !== "" && (
                 <div
@@ -138,11 +138,7 @@ const LectureContent: React.FC<{ lectureContent: LectureContentType[] }> = ({
                 className={styles.sectionTitle}
                 dangerouslySetInnerHTML={{ __html: title }}
               ></h3>
-              <div className={styles.videoWrapper}>
-                <VideoPlayer
-                  file={{ filePath: `${serverName}/${encodedFilePathVideo}` }}
-                />
-              </div>
+              <VideoPlayer url={`${serverName}/${encodedFilePathVideo}`} />
               {text && text !== "" && (
                 <div
                   className={styles.sectionContentWrapper}
@@ -212,26 +208,26 @@ const LectureContent: React.FC<{ lectureContent: LectureContentType[] }> = ({
               )}
             </section>
           );
-        // case "picture":
-        //   return (
-        //     <section
-        //       key={id}
-        //       id={type}
-        //       className={hiden ? "hidden" : styles.section}
-        //     >
-        //       <h3
-        //         className={styles.sectionTitle}
-        //         dangerouslySetInnerHTML={{ __html: title }}
-        //       ></h3>
-        //       <ImageGroup imagesData={files} styles={styles} isDesc={true} />
-        //       {text && (
-        //         <div
-        //           className={styles.sectionContentWrapper}
-        //           dangerouslySetInnerHTML={{ __html: text }}
-        //         ></div>
-        //       )}
-        //     </section>
-        //   );
+        case "picture":
+          return (
+            <section
+              key={id}
+              id={type}
+              className={hiden ? "hidden" : styles.section}
+            >
+              <h3
+                className={styles.sectionTitle}
+                dangerouslySetInnerHTML={{ __html: title }}
+              ></h3>
+              <ImageGroup imagesData={files} />
+              {text && (
+                <div
+                  className={styles.sectionContentWrapper}
+                  dangerouslySetInnerHTML={{ __html: text }}
+                ></div>
+              )}
+            </section>
+          );
         default:
           return null;
       }

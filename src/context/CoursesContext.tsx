@@ -29,10 +29,12 @@ export interface LectureContentType {
   hiden: false;
   downloadAllowed?: boolean;
   files?: {
-    file_name: string;
+    filename: string;
     file_size: number;
     file_path: string;
     file_id: number;
+    download_allowed?: boolean;
+    file_description?: string | null;
   }[];
   links?: {
     link_id: number;

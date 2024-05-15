@@ -15,7 +15,6 @@ interface TaskItemType {
 
 const TaskItem: FC<TaskItemType> = ({ task }) => {
   const listStyle = useListStyle()?.listStyle;
-  console.log(listStyle);
 
   const Type = () => (
     <div className={styles.taskProp}>

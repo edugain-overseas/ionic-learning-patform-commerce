@@ -1,0 +1,66 @@
+.container {
+  margin: 0 10px 16px;
+  position: relative;
+
+  //   &:active .controlsContainer,
+  //   &:focus .controlsContainer,
+  //   &:hover .controlsContainer,
+  //   &:focus-within .controlsContainer {
+  //     opacity: 1;
+  //     pointer-events: all;
+  //   }
+}
+
+.video {
+  width: 100%;
+}
+
+.controlsContainer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--custom-tr-time-min) ease-in-out;
+
+  &.active {
+    opacity: 1;
+    pointer-events: inherit;
+  }
+
+  &.fixed {
+    opacity: 1;
+    pointer-events: inherit;
+  }
+}
+
+.playbackControls {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  align-items: center;
+  gap: 32px;
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.22);
+    color: var(--ion-color-primary-contrast);
+  }
+
+  .skipBtn {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+
+  .playPauseBtn {
+    width: 48px;
+    height: 48px;
+    font-size: 22px;
+  }
+}

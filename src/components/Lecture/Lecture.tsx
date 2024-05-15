@@ -7,6 +7,8 @@ import LectureContent from "./LectureContent";
 
 const Lecture: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
   const coursesInterface = useCourses();
+  console.log(taskData);
+
   const course = coursesInterface?.courses.find(
     (course) => course.id === taskData.course_id
   );

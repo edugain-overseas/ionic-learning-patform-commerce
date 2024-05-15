@@ -8,16 +8,16 @@ import styles from "./DocumentLink.module.scss";
 
 const DocumentLink: React.FC<{
   file: {
-    file_name: string;
+    filename?: string;
     file_size: number;
     file_path: string;
   };
 }> = ({ file }) => {
-  const { file_name, file_size, file_path } = file;
+  const { filename, file_size, file_path } = file;
   return (
     <div className={styles.attachedDocumentWrapper}>
       <IonIcon src={DocumentPDFIcon} />
-      <span className={styles.documentName}>{file_name}</span>
+      <span className={styles.documentName}>{filename}</span>
       <span className={styles.documentSize}>{`(${formatFileSize(
         file_size
       )})`}</span>

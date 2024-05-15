@@ -31,8 +31,6 @@ const CategoryDetailPage: React.FC = () => {
 
   const userCourses = useUser()?.user.courses;
 
-  console.log(courses);
-
   const handleProgress = useMemo(() => {
     let coursesIds: number[] = [];
     courses?.forEach((course) => coursesIds.push(course.id));

@@ -17,7 +17,6 @@
 
     .titleValue {
       color: var(--ion-color-dark);
-      //   white-space: nowrap;
     }
   }
 }
@@ -49,5 +48,28 @@
   }
 
   .section[id="text"] {
+  }
+}
+
+.linksWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &:not(:last-child) {
+    margin-bottom: 16px;
+  }
+
+  .linkWrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ion-color-light);
+    text-decoration: underline;
+  }
+
+  ion-icon {
+    font-size: 16px;
+    color: var(--ion-color-dark);
   }
 }
