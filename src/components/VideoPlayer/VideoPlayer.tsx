@@ -1,19 +1,18 @@
-import { FC, MouseEventHandler, useRef, useState } from "react";
-import { IonIcon } from "@ionic/react";
-import playIcon from "../../assets/icons/player/play.svg";
-import pauseIcon from "../../assets/icons/player/pause.svg";
-import skipMinusIcon from "../../assets/icons/player/skip-10-minus.svg";
-import skipPlusIcon from "../../assets/icons/player/skip-10-plus.svg";
-import fullscreenIcon from "../../assets/icons/player/fullscreen.svg";
-import exitFullscreenIcon from "../../assets/icons/player/fullscreen-exit.svg";
+import { FC, useRef, useState } from "react";
 import styles from "./VideoPlayer.module.scss";
+import { formatDuration } from "../../utils/formatDuration";
+import SkipButton from "./SkipButton";
+import PlayPauseBtn from "./PlayPauseBtn";
+import Timeline from "./Timeline";
+import Duration from "./Duration";
+import FullScreenBtn from "./FullScreenBtn";
 
 const VideoPlayer: FC<{ url: string }> = ({ url }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState<boolean>(false);
   const [showControls, setShowControls] = useState<boolean>(true);
-  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
-  const [currenTime, setCurrenTime] = useState<number>(0);
+  const [currentTime, setCurrentTime] = useState<number | string>(0);
   const [duration, setDuration] = useState<number>(0);
 
   const handleLoadedData = () => {
@@ -22,26 +21,33 @@ const VideoPlayer: FC<{ url: string }> = ({ url }) => {
     }
   };
 
-  const togglePlayPause: MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.stopPropagation();
-
-    if (videoRef.current?.paused) {
-      videoRef.current.play();
-    } else {
-      videoRef.current?.pause();
-    }
-  };
-
-  const toggleShowControls: MouseEventHandler<HTMLDivElement> = (e) => {
+  const toggleShowControls = () => {
     setShowControls((prev) => !prev);
   };
 
-  const skip = (duration: number) => {
-    if (videoRef.current) videoRef.current.currentTime += duration;
+  const handleTimeUpdate = () => {
+    const videoCurrentTime = videoRef.current?.currentTime;
+    const videoDuration = videoRef.current?.duration;
+    if (videoCurrentTime) {
+      setCurrentTime(formatDuration(videoCurrentTime));
+
+      if (videoDuration) {
+        const percent = videoCurrentTime / videoDuration;
+
+        containerRef.current?.style.setProperty(
+          "--current-progress",
+          `${percent}`
+        );
+      }
+    }
   };
 
   return (
-    <div className={styles.container} onClick={toggleShowControls}>
+    <div
+      className={styles.container}
+      onClick={toggleShowControls}
+      ref={containerRef}
+    >
       <video
         src={url}
         className={styles.video}
@@ -49,6 +55,7 @@ const VideoPlayer: FC<{ url: string }> = ({ url }) => {
         onPlay={() => setIsVideoPlaying(true)}
         onPause={() => setIsVideoPlaying(false)}
         onLoadedData={handleLoadedData}
+        onTimeUpdate={handleTimeUpdate}
       ></video>
       <div
         className={`${styles.controlsContainer} ${
@@ -56,43 +63,18 @@ const VideoPlayer: FC<{ url: string }> = ({ url }) => {
         } ${!isVideoPlaying ? styles.fixed : ""}`}
       >
         <div className={styles.playbackControls}>
-          <button
-            className={styles.skipBtn}
-            onClick={(e) => {
-              e.stopPropagation();
-              skip(-10);
-            }}
-          >
-            <IonIcon src={skipMinusIcon} />
-          </button>
-          <button className={styles.playPauseBtn} onClick={togglePlayPause}>
-            {isVideoPlaying ? (
-              <IonIcon src={pauseIcon} className={styles.pauseIcon} />
-            ) : (
-              <IonIcon src={playIcon} className={styles.playIcon} />
-            )}
-          </button>
-          <button
-            className={styles.skipBtn}
-            onClick={(e) => {
-              e.stopPropagation();
-              skip(10);
-            }}
-          >
-            <IonIcon src={skipPlusIcon} />
-          </button>
+          <SkipButton videoRef={videoRef.current} skipValue={-10} />
+          <PlayPauseBtn videoRef={videoRef.current} />
+          <SkipButton videoRef={videoRef.current} skipValue={10} />
         </div>
         <div className={styles.bottomTools}>
-          <div className={styles.timeline}>
-            <div className={styles.track}></div>
-          </div>
+          <Timeline
+            videoRef={videoRef.current}
+            containerRef={containerRef.current}
+          />
           <div className={styles.tools}>
-            <div className={styles.duration}>{`${currenTime}/${duration}`}</div>
-            <button className={styles.fullscreen}>
-              <IonIcon
-                src={isFullscreen ? exitFullscreenIcon : fullscreenIcon}
-              />
-            </button>
+            <Duration duration={duration} currentTime={currentTime} />
+            <FullScreenBtn containerRef={containerRef.current} />
           </div>
         </div>
       </div>
