@@ -7,6 +7,7 @@ import LinkCard from "../LinkCard/LinkCard";
 import styles from "./Lecture.module.scss";
 import ImageGroup from "../ImageGroup/ImageGroup";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
+import AudioPlayer from "../AudioPlayer/AudioPlayer";
 
 const LectureContent: React.FC<{ lectureContent: LectureContentType[] }> = ({
   lectureContent,
@@ -95,7 +96,8 @@ const LectureContent: React.FC<{ lectureContent: LectureContentType[] }> = ({
             </section>
           );
         case "audio":
-          const encodedFilePathAudio = filePath?.replace(/ /g, "%20");
+          const encodedFilePathAudio =
+            files && files[0].file_path?.replace(/ /g, "%20");
           return (
             <section
               key={id}
@@ -108,13 +110,7 @@ const LectureContent: React.FC<{ lectureContent: LectureContentType[] }> = ({
                 className={styles.sectionTitle}
                 dangerouslySetInnerHTML={{ __html: title }}
               ></h3>
-              <audio
-                src={`${serverName}${encodedFilePathAudio}`}
-                controls={true}
-                // width="true"
-                // height="auto"
-                // controlsList={downloadAllowed ? "" : "nodownload"}
-              ></audio>
+              <AudioPlayer src={`${serverName}/${encodedFilePathAudio}`} />
               {text && text !== "" && (
                 <div
                   className={styles.sectionContentWrapper}
