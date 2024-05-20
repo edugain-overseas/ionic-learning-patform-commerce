@@ -8,7 +8,8 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import React from "react";
+import {FC} from "react";
+import { useListStyle } from "../../context/ListStyleContext";
 import bellIcon from "../../assets/icons/header/bell.svg";
 import searchIcon from "../../assets/icons/header/search.svg";
 import backIcon from "../../assets/icons/header/back.svg";
@@ -18,7 +19,7 @@ import SettingsIcon from "../../assets/icons/menu/settings.svg";
 import SaveIcon from "../../assets/icons/save.svg";
 import logoIEU from "../../assets/icons/logoIEU.svg";
 import styles from "./Header.module.scss";
-import { useListStyle } from "../../context/ListStyleContext";
+
 
 interface buttonPropsTypes {
   name: string;
@@ -153,7 +154,7 @@ const renderBtn = (props: buttonPropsTypes) => {
   }
 };
 
-const Header: React.FC<HeaderTypes> = ({
+const Header: FC<HeaderTypes> = ({
   title,
   secondary = false,
   left = [],

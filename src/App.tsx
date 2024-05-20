@@ -33,7 +33,7 @@ import { Capacitor } from "@capacitor/core";
 // Call this function to set the status bar style and color
 const setStatusBarStyleAndColor = async () => {
   if (Capacitor.isPluginAvailable("StatusBar")) {
-    await StatusBar.setStyle({ style: Style.Dark }); // Set status bar text to light
+    await StatusBar.setStyle({style: Style.Light})
     await StatusBar.setBackgroundColor({ color: "#00000000" }); // Set status bar background color to transparent
   }
 };
