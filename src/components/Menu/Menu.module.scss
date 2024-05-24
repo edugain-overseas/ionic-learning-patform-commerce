@@ -72,15 +72,20 @@
   }
 
   .footerNavItems {
-    width: calc(234px);
+    width: 232px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 
     li {
       flex: 1;
+      display: flex;
 
       &:not(:last-child) {
         border-right: 1px solid var(--ion-color-primary-contrast);
+      }
+      &:last-child {
+        justify-content: flex-end;
       }
     }
 
@@ -134,5 +139,9 @@
     background: var(--custom-bg-rgba-secondary);
     box-shadow: var(--custom-box-shadow-primary);
     backdrop-filter: blur(16px);
+
+    ion-menu-toggle {
+      height: 32px;
+    }
   }
 }

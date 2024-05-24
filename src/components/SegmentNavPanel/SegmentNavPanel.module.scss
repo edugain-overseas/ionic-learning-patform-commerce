@@ -2,7 +2,7 @@
   --color: var(--ion-color-dark);
   --background: transparent;
 
-  padding-inline: 16px;
+  padding-inline: 14px;
   padding-top: 12px;
 
   &::-webkit-scrollbar {
@@ -14,7 +14,7 @@
     content: "";
     position: absolute;
     bottom: 0;
-    left: 12px;
+    left: 14px;
     width: 100%;
     height: 2px;
     background-color: var(--ion-color-dark);
@@ -26,9 +26,10 @@
   --padding-end: 0;
   --color: var(--ion-color-dark);
   --color-checked: var(--ion-color-primary);
-  --ripple-color: rgba(var(--ion-color-primary-rgb), 0.05);
+  // --ripple-color: rgba(var(--ion-color-primary-rgb), 0.05);
+  --ripple-color: transparent;
 
-  margin-inline: 12px;
+  margin-inline: 18px;
   min-height: 40px;
 }
 

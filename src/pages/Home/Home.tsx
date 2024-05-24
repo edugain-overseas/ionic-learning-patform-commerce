@@ -12,8 +12,9 @@ import LoginForm from "../../components/Auth/LoginForm";
 import SingupForm from "../../components/Auth/SingupForm";
 import SheetModalAuto from "../../components/SheetModalAuto/SheetModalAuto";
 import PasswordRecoveryForm from "../../components/Auth/PasswordRecoveryForm";
-import styles from "./Home.module.scss";
 import UserActivationForm from "../../components/Auth/UserActivationForm";
+import styles from "./Home.module.scss";
+import EqualSpaceContainer from "../../components/EqualSpaceContainer/EqualSpaceContainer";
 
 const Home: React.FC = () => {
   const isUserLoggedIn = useUser()?.user.accessToken !== null;
@@ -83,33 +84,42 @@ const Home: React.FC = () => {
         {!isUserLoggedIn && (
           <>
             <div className={styles.authPanel}>
-              <CommonButton
-                width={104}
-                height={32}
-                borderRadius={5}
-                color="#fcfcfc"
-                backgroundColor="#d00000"
-                label="Sing up"
-                icon={<IonIcon src={userIcon} className={styles.btnIcon} />}
-                onClick={() => {
-                  modals
-                    .find((modal) => modal.name === "sing-up")
-                    ?.ref?.current?.present();
-                }}
-              />
-              <CommonButton
-                width={104}
-                height={32}
-                borderRadius={5}
-                color="#fcfcfc"
-                backgroundColor="#001C54"
-                label="Sing in"
-                icon={<IonIcon src={singInIcon} className={styles.btnIcon} />}
-                onClick={() => {
-                  modals
-                    .find((modal) => modal.name === "sing-in")
-                    ?.ref?.current?.present();
-                }}
+              <EqualSpaceContainer
+                leftItem={
+                  <CommonButton
+                    width={104}
+                    height={32}
+                    borderRadius={5}
+                    color="#fcfcfc"
+                    backgroundColor="#d00000"
+                    label="Sing up"
+                    icon={<IonIcon src={userIcon} className={styles.btnIcon} />}
+                    onClick={() => {
+                      modals
+                        .find((modal) => modal.name === "sing-up")
+                        ?.ref?.current?.present();
+                    }}
+                  />
+                }
+                rightItem={
+                  <CommonButton
+                    width={104}
+                    height={32}
+                    borderRadius={5}
+                    color="#fcfcfc"
+                    backgroundColor="#001C54"
+                    label="Sing in"
+                    icon={
+                      <IonIcon src={singInIcon} className={styles.btnIcon} />
+                    }
+                    onClick={() => {
+                      modals
+                        .find((modal) => modal.name === "sing-in")
+                        ?.ref?.current?.present();
+                    }}
+                  />
+                }
+                containerClassname={styles.btnsWrapper}
               />
             </div>
           </>

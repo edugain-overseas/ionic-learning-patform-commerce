@@ -6,6 +6,10 @@
 
 .headerToolbar {
   --min-height: auto;
+  --padding-start: 6px;
+  --padding-end: 6px;
+  --padding-top: 6px;
+  --padding-bottom: 6px;
 }
 
 .avatarWrapper {
@@ -43,8 +47,7 @@
 }
 
 .formBtns {
-  display: flex;
-  justify-content: space-evenly;
+  padding-inline: 32px;
   color: var(--ion-color-light);
   font-size: 14px;
   font-weight: 600;

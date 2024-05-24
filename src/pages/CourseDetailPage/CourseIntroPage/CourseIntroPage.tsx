@@ -17,6 +17,7 @@ import CardPrice from "../../../components/CardPrice/CardPrice";
 import DoubleScrollLayout from "../../../components/DoubleScrollLayout/DoubleScrollLayout";
 import CourseNavPanel from "../../../components/CourseNavPanel/CourseNavPanel";
 import styles from "./CourseIntroPage.module.scss";
+import Header from "../../../components/Header/Header";
 
 const CourseIntroPage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -29,6 +30,10 @@ const CourseIntroPage: React.FC = () => {
     (userCourse) => userCourse.course_id === +courseId
   );
 
+  const headerProps = {
+    left: [{ name: "back" }],
+  };
+
   return (
     <>
       <IonHeader className={styles.header} mode="ios">
@@ -39,6 +44,7 @@ const CourseIntroPage: React.FC = () => {
           className={styles.bakcBtn}
         />
       </IonHeader>
+      {/* <Header {...headerProps} /> */}
       <IonContent>
         <DoubleScrollLayout
           posterSrc={`${serverName}/${course?.image_path}`}

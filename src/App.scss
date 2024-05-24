@@ -3,27 +3,10 @@
   padding: 0;
   box-sizing: border-box;
   list-style: none;
-  // line-height: 1.2;
-  // font-size: 16px;
 }
 
 .App {
-  // background-image: url("./assets/images/background.png");
-  // background-size: cover;
-  // background-position: center;
-  // background-repeat: no-repeat;
   background: var(--custom-primary-lg);
-
-  // &::after {
-  //   content: "";
-  //   position: absolute;
-  //   top: 0;
-  //   left: 0;
-  //   z-index: -1;
-  //   width: 100%;
-  //   height: 100%;
-  //   background-color: var(--ion-background-color);
-  // }
 }
 
 /* Custom styles for tab bar */
@@ -130,9 +113,14 @@
     opacity: 1;
   }
   &:after {
-    border-top-left-radius: 16px;
-    border-top-right-radius: 16px;
+    border-radius: 16px;
   }
+
+  .ion-page {
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
   ion-header ion-toolbar {
     backdrop-filter: none;
   }
@@ -153,20 +141,6 @@ ion-menu::part(container) {
 }
 
 //modal
-
-// ion-modal {
-//   --height: auto;
-//   --ion-backdrop-color: var(--custom-bg-rgba-primary);
-//   --box-shadow: var(--custom-box-shadow-content);
-//   --background: var(--custom-bg-rgba-primary);
-//   --border-radius: 16px;
-
-//   backdrop-filter: blur(5px);
-
-//   &::part(content) {
-//     backdrop-filter: blur(16px);
-//   }
-// }
 
 ion-modal::part(handle) {
   width: 45px;

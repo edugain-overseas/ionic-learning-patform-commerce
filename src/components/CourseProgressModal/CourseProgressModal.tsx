@@ -7,6 +7,7 @@ import styles from "./CourseProgressModal.module.scss";
 import { useUser } from "../../context/UserContext";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
+import EqualSpaceContainer from "../EqualSpaceContainer/EqualSpaceContainer";
 
 interface CourseProgressModalType {}
 
@@ -50,26 +51,34 @@ const CourseProgressModal: React.FC<CourseProgressModalType> = () => {
     >
       <IonContent scrollY={isModalFullHeight} className={styles.modalContent}>
         <div className={styles.modalHeader}>
-          <div className={styles.progressWrappper}>
-            <span className={styles.progressTitle}>Content:</span>
-            <div className={styles.progressInner}>
-              <span className={styles.progressLabel}>Progress: 25 / 100%</span>
-              <ProgressBar
-                value={courseUserData?.progress}
-                width={80}
-                height={10}
-                showValue={false}
+          <EqualSpaceContainer
+            leftItem={
+              <div className={styles.progressWrappper}>
+                <span className={styles.progressTitle}>Content:</span>
+                <div className={styles.progressInner}>
+                  <span className={styles.progressLabel}>
+                    Progress: 25 / 100%
+                  </span>
+                  <ProgressBar
+                    value={courseUserData?.progress}
+                    width={80}
+                    height={10}
+                    showValue={false}
+                  />
+                </div>
+              </div>
+            }
+            rightItem={
+              <CommonButton
+                icon={<IonIcon src={ExamIcon} className={styles.examIcon} />}
+                label="Exam"
+                backgroundColor="#BDC4D2"
+                color="#fcfcfc"
+                width={102}
+                height={32}
+                borderRadius={5}
               />
-            </div>
-          </div>
-          <CommonButton
-            icon={<IonIcon src={ExamIcon} className={styles.examIcon} />}
-            label="Exam"
-            backgroundColor="#BDC4D2"
-            color="#fcfcfc"
-            width={102}
-            height={32}
-            borderRadius={5}
+            }
           />
         </div>
         <ul className={styles.progressList}>

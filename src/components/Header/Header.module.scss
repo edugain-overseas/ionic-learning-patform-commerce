@@ -22,12 +22,12 @@
   backdrop-filter: blur(28px);
 
   &.secondary {
-    // --background: var(--ion-color-primary);
     --background: transparent;
     --color: var(--ion-color-primary-contrast);
     --ion-toolbar-color: var(--ion-color-primary-contrast);
 
     box-shadow: none;
+    backdrop-filter: none;
 
     .title,
     ion-icon {
@@ -36,8 +36,30 @@
   }
 }
 
-.leftButtonsWrapper {
+.buttonsWrapper {
   gap: 8px;
+  min-width: 80px;
+  min-height: auto;
+
+
+  &[slot="start"] {
+    justify-content: flex-start;
+  }
+  &[slot="end"] {
+    justify-content: flex-end;
+  }
+
+  ion-button {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .settingsBtn {
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+  }
 }
 
 .backBtn {

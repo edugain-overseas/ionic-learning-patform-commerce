@@ -13,6 +13,7 @@ import CommonButton from "../CommonButton/CommonButton";
 import InputWithLabel from "../InputWithLabel/InputWithLabel";
 import Select from "../Select/Select";
 import styles from "./EditProfileData.module.scss";
+import EqualSpaceContainer from "../EqualSpaceContainer/EqualSpaceContainer";
 
 type EditUserDataForm = {
   username?: string;
@@ -209,31 +210,37 @@ const EditProfileData: FC<{
             </div>
           </div>
           <div className={styles.formBtns}>
-            <CommonButton
-              label="Cancel"
-              icon={<IonIcon src={ReLoadIcon} />}
-              width={102}
-              height={32}
-              backgroundColor="transparent"
-              borderRadius={5}
-              border="1px solid #7E8CA8"
-            />
-            <CommonButton
-              label={isSubmitting ? "Saving" : "Save"}
-              icon={
-                isSubmitting ? (
-                  <IonSpinner color="light" />
-                ) : (
-                  <IonIcon src={SaveIcon} />
-                )
+            <EqualSpaceContainer
+              leftItem={
+                <CommonButton
+                  label="Cancel"
+                  icon={<IonIcon src={ReLoadIcon} />}
+                  width={102}
+                  height={32}
+                  backgroundColor="transparent"
+                  borderRadius={5}
+                  border="1px solid #7E8CA8"
+                />
               }
-              width={102}
-              height={32}
-              backgroundColor="transparent"
-              borderRadius={5}
-              border="1px solid #7E8CA8"
-              type="submit"
-              disabled={isSubmitting}
+              rightItem={
+                <CommonButton
+                  label={isSubmitting ? "Saving" : "Save"}
+                  icon={
+                    isSubmitting ? (
+                      <IonSpinner color="light" />
+                    ) : (
+                      <IonIcon src={SaveIcon} />
+                    )
+                  }
+                  width={102}
+                  height={32}
+                  backgroundColor="transparent"
+                  borderRadius={5}
+                  border="1px solid #7E8CA8"
+                  type="submit"
+                  disabled={isSubmitting}
+                />
+              }
             />
           </div>
         </form>
