@@ -26,6 +26,29 @@ const Menu = () => {
     }
   };
 
+  const handleMenuWillOpen = () => {
+    document.querySelectorAll("ion-modal").forEach((modal) => {
+      modal.style.setProperty("scale", "0");
+    });
+  };
+
+  const handleMenuDidOpen = () => {
+    document.querySelectorAll("ion-modal").forEach((modal) => {
+      modal.style.setProperty(
+        "transition",
+        "scale var(--custom-tr-time-min) ease-in-out 500ms"
+      );
+    });
+  };
+
+  const handleMenuDidClose = () => {
+    document.querySelectorAll("ion-modal").forEach((modal) => {
+      modal.style.setProperty("scale", "1");
+      modal.style.removeProperty("transition");
+    });
+    console.log("close");
+  };
+
   return (
     <IonMenu
       type="reveal"
@@ -33,6 +56,9 @@ const Menu = () => {
       contentId="main-content"
       className="custom-menu"
       ref={menuRef}
+      onIonWillOpen={handleMenuWillOpen}
+      onIonDidClose={handleMenuDidClose}
+      onIonDidOpen={handleMenuDidOpen}
     >
       <div className={styles.container}>
         <div className={styles.header}>

@@ -1,9 +1,13 @@
 .segment {
   --color: var(--ion-color-dark);
   --background: transparent;
+  --original-gap: 24;
+  --original-vw: 375;
+  --original-fs: 14;
 
   padding-inline: 14px;
-  padding-top: 12px;
+  padding-block: 18px;
+  gap: calc(var(--original-gap) / var(--original-vw) * 100vw);
 
   &::-webkit-scrollbar {
     width: 0;
@@ -13,7 +17,7 @@
   &:before {
     content: "";
     position: absolute;
-    bottom: 0;
+    bottom: 18px;
     left: 14px;
     width: 100%;
     height: 2px;
@@ -26,17 +30,22 @@
   --padding-end: 0;
   --color: var(--ion-color-dark);
   --color-checked: var(--ion-color-primary);
-  // --ripple-color: rgba(var(--ion-color-primary-rgb), 0.05);
   --ripple-color: transparent;
 
-  margin-inline: 18px;
-  min-height: 40px;
+  min-height: min-content;
+  padding-bottom: 10px;
+
+  &:first-child {
+    margin-left: 18px;
+  }
+  &:last-child {
+    margin-right: 18px;
+  }
 }
 
 .segmentLabel {
-  margin-block: 8px;
-  font-size: 14px;
-  line-height: 14px;
+  font-size: calc(var(--original-fs) / var(--original-vw) * 100vw);
+  line-height: 1.1;
   font-weight: 700;
   letter-spacing: normal;
   text-transform: capitalize;

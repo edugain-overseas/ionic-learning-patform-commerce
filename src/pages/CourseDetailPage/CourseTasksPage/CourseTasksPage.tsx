@@ -1,5 +1,10 @@
-import { FC } from "react";
-import { IonContent, IonIcon } from "@ionic/react";
+import { FC, useRef } from "react";
+import {
+  IonContent,
+  IonIcon,
+  ScrollDetail,
+  useIonViewWillLeave,
+} from "@ionic/react";
 import { useParams } from "react-router";
 import { useCourses } from "../../../context/CoursesContext";
 import LectureIcon from "../../../assets/icons/document-2-lines.svg";
@@ -13,6 +18,7 @@ import CourseProgressModal from "../../../components/CourseProgressModal/CourseP
 import styles from "./CourseTasksPage.module.scss";
 
 const CourseTasksPage: FC = () => {
+  const modalRef = useRef<HTMLIonModalElement>(null);
   const { courseId } = useParams<{ courseId: string }>();
 
   const course = useCourses()?.courses.find(
@@ -28,6 +34,23 @@ const CourseTasksPage: FC = () => {
     title: course?.title,
     left: [{ name: "back" }],
     right: [{ name: "notification" }, { name: "list-style" }],
+  };
+
+  const handleScroll = async (e: CustomEvent<ScrollDetail>) => {
+    const modalHeight = 432;
+    const firstBreakpoint = 24 / modalHeight;
+    const secondBreackpoint = 72 / modalHeight;
+
+    const currentBreackpoint = await modalRef.current?.getCurrentBreakpoint();
+
+    if (e.detail.deltaY > 0 && currentBreackpoint !== firstBreakpoint) {
+      modalRef.current?.setCurrentBreakpoint(firstBreakpoint);
+    } else if (
+      e.detail.deltaY < 0 &&
+      currentBreackpoint !== secondBreackpoint
+    ) {
+      modalRef.current?.setCurrentBreakpoint(secondBreackpoint);
+    }
   };
 
   const CourseStats = () => (
@@ -78,7 +101,11 @@ const CourseTasksPage: FC = () => {
     <>
       <Header {...headerProps} />
       <CourseNavPanel />
-      <IonContent className={styles.pageContentWrapper}>
+      <IonContent
+        className={styles.pageContentWrapper}
+        scrollEvents={true}
+        onIonScroll={handleScroll}
+      >
         <CourseStats />
         <ul className={styles.tasksList}>
           {course?.lessons &&
@@ -86,7 +113,7 @@ const CourseTasksPage: FC = () => {
               .sort((a, b) => a.number - b.number)
               .map((task) => <TaskItem task={task} key={task.id} />)}
         </ul>
-        <CourseProgressModal />
+        <CourseProgressModal modalRef={modalRef} />
       </IonContent>
     </>
   );

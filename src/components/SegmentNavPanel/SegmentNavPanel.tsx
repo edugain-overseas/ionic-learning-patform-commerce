@@ -2,7 +2,6 @@ import React, { Dispatch, SetStateAction } from "react";
 import styles from "./SegmentNavPanel.module.scss";
 import {
   IonLabel,
-  IonRouterLink,
   IonSegment,
   IonSegmentButton,
   SegmentChangeEventDetail,

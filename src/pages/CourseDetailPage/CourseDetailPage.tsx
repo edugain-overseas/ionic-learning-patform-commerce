@@ -44,11 +44,11 @@ const CourseDetailPage: React.FC = () => {
         path={`/courses/course/:courseId/tasks/:taskId`}
         component={TaskPage}
       />
-      <Redirect
+      {/* <Redirect
         from="/courses/course"
         to={`/courses/course/${courseId}`}
         exact
-      />
+      /> */}
     </IonPage>
   );
 };

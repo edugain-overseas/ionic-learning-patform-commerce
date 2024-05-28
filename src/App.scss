@@ -125,9 +125,8 @@
     backdrop-filter: none;
   }
   & + ion-modal {
-    left: 100%;
-    transition: left;
-    transition-delay: var(--custom-tr-time-min);
+    // transition: opacity var(--custom-tr-time-min) ease-in-out
+    //   var(--custom-tr-time-min);
   }
 }
 

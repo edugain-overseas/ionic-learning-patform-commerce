@@ -5,15 +5,18 @@
   bottom: 60px;
   transition: bottom var(--custom-tr-time-min) ease-in,
     backdrop-filter var(--custom-tr-time-min) ease-in;
-  // background-color var(--custom-tr-time-min) ease-in;
 
   &.fullHeight {
     bottom: 0;
     backdrop-filter: blur(5px);
     background-color: var(--custom-bg-rgba-secondary);
 
-    &::part(handle) {
-      transform: rotateX(180deg);
+    .handleButton {
+      transform: translateX(-50%) rotateZ(180deg);
+    }
+
+    .modalContent {
+      --overflow: auto;
     }
   }
 
@@ -22,16 +25,30 @@
     backdrop-filter: blur(28px);
   }
 
-  &::part(handle) {
-    height: 8px;
-    background: url("../../assets/icons/chevron-modal.svg");
-    transition: transform var(--custom-tr-time-min) ease-in;
+  .handleButton {
+    padding-inline: 8px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: none;
+
+    span {
+      width: 45px;
+      height: 8px;
+      background: url("../../assets/icons/chevron-modal.svg");
+    }
   }
 
   .modalContent {
     --background: transparent;
     --padding-start: 18px;
     --padding-end: 18px;
+    --overflow: hidden;
   }
 
   .modalHeader {
