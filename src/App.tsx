@@ -27,11 +27,13 @@ import { CoursesProvider } from "./context/CoursesContext";
 import { UserProvider } from "./context/UserContext";
 import { ListStyleProvider } from "./context/ListStyleContext";
 import { useStatusBar } from "./hooks/useStatusBar";
+import { useKeyboard } from "./hooks/useKeyboard";
 
 setupIonicReact();
 
 const App: React.FC = () => {
   useStatusBar();
+  useKeyboard();
 
   return (
     <IonApp className="App">

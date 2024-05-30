@@ -8,20 +8,25 @@ import MenuNav from "./MenuNav";
 import styles from "./Menu.module.scss";
 import InsetBtn from "../InsetBtn/InsetBtn";
 import { useUser } from "../../context/UserContext";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import Spinner from "../Spinner/Spinner";
 
 const Menu = () => {
   const isUserLoggedIn = useUser()?.user.accessToken !== null;
   const menuRef = useRef<HTMLIonMenuElement>(null);
   const logout = useUser()?.logout;
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogout = async () => {
     if (logout) {
+      setIsLoading(true);
       try {
         await logout();
         menuRef.current?.close();
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -77,7 +82,11 @@ const Menu = () => {
                 <li>
                   <button onClick={handleLogout}>
                     <div className={styles.iconWrapper}>
-                      <IonIcon src={Logout} className={styles.footerIcon} />
+                      {isLoading ? (
+                        <Spinner />
+                      ) : (
+                        <IonIcon src={Logout} className={styles.footerIcon} />
+                      )}
                     </div>
                     <span>Log out</span>
                   </button>

@@ -15,9 +15,10 @@ const VideoPlayer: FC<{ url: string }> = ({ url }) => {
   const [currentTime, setCurrentTime] = useState<number | string>(0);
   const [duration, setDuration] = useState<number>(0);
 
-  const handleLoadedData = () => {
+  const handleLoadedData = (e: any) => {
     if (videoRef.current) {
       setDuration(videoRef.current.duration);
+      console.log(e);
     }
   };
 
@@ -54,8 +55,9 @@ const VideoPlayer: FC<{ url: string }> = ({ url }) => {
         ref={videoRef}
         onPlay={() => setIsVideoPlaying(true)}
         onPause={() => setIsVideoPlaying(false)}
-        onLoadedData={handleLoadedData}
+        onLoadedData={(e) => handleLoadedData(e)}
         onTimeUpdate={handleTimeUpdate}
+        
       ></video>
       <div
         className={`${styles.controlsContainer} ${

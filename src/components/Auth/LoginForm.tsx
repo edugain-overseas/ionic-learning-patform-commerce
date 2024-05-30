@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { IonIcon } from "@ionic/react";
 import { useForm } from "react-hook-form";
 import { useUser } from "../../context/UserContext";
@@ -8,6 +8,7 @@ import InputText from "./Inputs/InutText";
 import InputPassword from "./Inputs/InputPassword";
 import CommonButton from "../CommonButton/CommonButton";
 import styles from "./Auth.module.scss";
+import Spinner from "../Spinner/Spinner";
 
 type FormValues = {
   username: string;
@@ -21,6 +22,7 @@ const LoginForm: React.FC<{
   }[];
 }> = ({ modals }) => {
   const user = useUser();
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -35,13 +37,13 @@ const LoginForm: React.FC<{
   });
 
   const onSubmit = async (data: FormValues) => {
-    console.log(data);
+    setIsLoading(true);
     try {
       await user?.login(data);
       modals.find((modal) => modal.name === "sing-in")?.ref?.current?.dismiss();
     } catch (error: any) {
       console.log(error);
-      
+
       if (error.response?.data?.detail === "Invalid username") {
         setError("username", {
           type: "server response",
@@ -52,12 +54,12 @@ const LoginForm: React.FC<{
           type: "server response",
           message: error.response.data.detail,
         });
-      } else if (
-        error.response.status === 409
-      ) {
+      } else if (error.response.status === 409) {
         user?.setUser((prev) => ({ ...prev, username: data.username }));
         handleOpenUserActivation();
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -119,13 +121,20 @@ const LoginForm: React.FC<{
       <div className={styles.btnsWrapper}>
         <CommonButton
           label="Sing in"
-          icon={<IonIcon src={SingIn} className={styles.formBtnIcon} />}
+          icon={
+            isLoading ? (
+              <Spinner />
+            ) : (
+              <IonIcon src={SingIn} className={styles.formBtnIcon} />
+            )
+          }
           backgroundColor="#001C54"
           color="#fcfcfc"
           block={true}
           height={32}
           borderRadius={5}
           type="submit"
+          disabled={isLoading}
         />
         <div
           className={`${styles.passwordRecoveryBtnWrapper} ${

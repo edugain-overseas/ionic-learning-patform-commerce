@@ -265,7 +265,8 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
   };
 
   const logout = async () => {
-    setIsLoading(true);
+    console.log('logout');
+    
     try {
       await instance.get("/user/logout", {
         withCredentials: true,
@@ -275,8 +276,6 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
       instance.defaults.headers["Authorization"] = "";
     } catch (error) {
       console.log(error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
