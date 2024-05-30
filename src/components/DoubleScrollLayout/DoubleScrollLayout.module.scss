@@ -2,7 +2,7 @@
   position: relative;
   overflow: auto;
   height: calc(100%);
-  padding-top: 178px;
+  padding-top: calc(178px + var(--ion-safe-area-top));
 
   .poster {
     display: block;
