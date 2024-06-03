@@ -28,10 +28,13 @@ import { UserProvider } from "./context/UserContext";
 import { ListStyleProvider } from "./context/ListStyleContext";
 import { useStatusBar } from "./hooks/useStatusBar";
 import { useKeyboard } from "./hooks/useKeyboard";
+import { useState } from "react";
+import SplashScreen from "./pages/SplashScreen/SplashScreen";
 
 setupIonicReact();
 
 const App: React.FC = () => {
+  const [splashScreen, setSplashScreen] = useState(true);
   useStatusBar();
   useKeyboard();
 
@@ -39,7 +42,10 @@ const App: React.FC = () => {
     <IonApp className="App">
       <UserProvider>
         <CoursesProvider>
-          <ListStyleProvider>
+          <ListStyleProvider> 
+            {splashScreen && (
+              <SplashScreen onAnimationEnd={() => setSplashScreen(false)} />
+            )}
             <Router />
           </ListStyleProvider>
         </CoursesProvider>
