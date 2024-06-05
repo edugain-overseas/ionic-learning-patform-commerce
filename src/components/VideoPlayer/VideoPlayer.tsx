@@ -18,7 +18,6 @@ const VideoPlayer: FC<{ url: string }> = ({ url }) => {
   const handleLoadedData = (e: any) => {
     if (videoRef.current) {
       setDuration(videoRef.current.duration);
-      console.log(e);
     }
   };
 

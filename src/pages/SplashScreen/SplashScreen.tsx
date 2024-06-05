@@ -13,7 +13,7 @@ const SplashScreen: FC<{ onAnimationEnd: () => void }> = ({
         animationData={splashAnimation}
         loop={false}
         autoPlay={true}
-        style={{ width: "100vw" }}
+        className={styles.lottieWrapper}
         onComplete={onAnimationEnd}
       />
     </div>

@@ -42,11 +42,13 @@ const App: React.FC = () => {
     <IonApp className="App">
       <UserProvider>
         <CoursesProvider>
-          <ListStyleProvider> 
-            {splashScreen && (
+          <ListStyleProvider>
+            {splashScreen ? (
               <SplashScreen onAnimationEnd={() => setSplashScreen(false)} />
+            ) : (
+              <Router />
             )}
-            <Router />
+            {/* <Router /> */}
           </ListStyleProvider>
         </CoursesProvider>
       </UserProvider>

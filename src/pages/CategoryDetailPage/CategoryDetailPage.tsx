@@ -1,22 +1,12 @@
 import {
-  // GestureDetail,
   IonContent,
   IonPage,
   IonSegment,
   IonSegmentButton,
-  // ScrollCustomEvent,
   ScrollDetail,
   SegmentChangeEventDetail,
-  // createGesture,
-  // useIonViewWillEnter,
 } from "@ionic/react";
-import React, {
-  // UIEventHandler,
-  // useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
 import { useUser } from "../../context/UserContext";
@@ -30,7 +20,7 @@ const maxScrollValue = 96;
 
 const CategoryDetailPage: React.FC = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
-  
+
   const category = useCourses()?.categories.find(
     ({ id }) => id === +categoryId
   );
@@ -62,8 +52,6 @@ const CategoryDetailPage: React.FC = () => {
   const contentRef = useRef<HTMLIonContentElement>(null);
   const topContentRef = useRef<HTMLDivElement>(null);
   const bottomInnerRef = useRef<HTMLDivElement>(null);
-  // const bottomSheet = useRef<HTMLDivElement>(null);
-  // const bottomSheetController = useRef<HTMLButtonElement>(null);
 
   const [filter, setFilter] = useState<string>("All");
 
@@ -77,7 +65,6 @@ const CategoryDetailPage: React.FC = () => {
   const handleScrollEnd = async () => {
     const scrollEl = await contentRef.current?.getScrollElement();
     const currentScroll = scrollEl?.scrollTop;
-    console.log(currentScroll);
 
     if (!currentScroll && currentScroll !== 0) {
       return;
@@ -91,74 +78,6 @@ const CategoryDetailPage: React.FC = () => {
       bottomInnerRef.current?.style.setProperty("overflow", "auto");
     }
   };
-
-  // useIonViewWillEnter(() => {
-  //   const parentElementHeight =
-  //     bottomSheet.current?.parentElement?.clientHeight;
-  //   if (parentElementHeight && topContentRef.current?.clientHeight) {
-  //     setCurrentHeight(
-  //       Math.max(
-  //         parentElementHeight - topContentRef.current?.clientHeight + 61,
-  //         bottomSheet.current.clientHeight
-  //       )
-  //     );
-  //   }
-  // });
-
-  // useEffect(() => {
-  //   if (bottomSheetController.current && bottomSheet.current?.clientHeight) {
-  //     const target = bottomSheetController.current;
-  //     const parentElementHeight =
-  //       bottomSheet.current?.parentElement?.clientHeight;
-
-  //     if (topContentRef.current?.clientHeight && parentElementHeight) {
-  //       const maxHeight = parentElementHeight + 61 - 56;
-  //       const minHeight = parentElementHeight + 61 - 152;
-
-  //       const gesture = createGesture({
-  //         el: target,
-  //         direction: "y",
-  //         onMove: (detail) => onMove(detail),
-  //         gestureName: "bottomSheet",
-  //         onEnd: () => onEnd(maxHeight, minHeight),
-  //       });
-
-  //       gesture.enable();
-  //     }
-  //   }
-  // }, [bottomSheetController.current, bottomSheet.current?.clientHeight]);
-
-  // const onMove = (detail: GestureDetail) => {
-  //   if (bottomSheet.current && currentHeight) {
-  //     bottomSheet.current.style.transition = "none";
-  //     bottomSheet.current.style.height = `${currentHeight - detail.deltaY}px`;
-  //   }
-  // };
-
-  // const onEnd = (maxHeight: number, minHeight: number) => {
-  //   const parentElementHeight =
-  //     bottomSheet.current?.parentElement?.clientHeight;
-
-  //   if (
-  //     bottomSheet.current?.clientHeight &&
-  //     topContentRef.current?.clientHeight &&
-  //     parentElementHeight
-  //   ) {
-  //     const resultHeight =
-  //       bottomSheet.current.clientHeight < maxHeight ? minHeight : maxHeight;
-  //     bottomSheet.current.style.height = `${resultHeight}px`;
-
-  //     if (maxHeight === resultHeight) {
-  //       setShowDetail(false);
-  //       setCurrentHeight(maxHeight);
-  //     } else {
-  //       setShowDetail(true);
-  //       setCurrentHeight(minHeight);
-  //     }
-  //     bottomSheet.current.style.transition = "height 0.2s ease-out";
-  //     setCurrentHeight(resultHeight);
-  //   }
-  // };
 
   const onSegmentChange = (event: CustomEvent<SegmentChangeEventDetail>) => {
     const { value } = event.detail;
@@ -245,15 +164,9 @@ const CategoryDetailPage: React.FC = () => {
             </IonSegmentButton>
           </IonSegment>
         </div>
-        <div
-          className={`${styles.bottomOuter} ${styles.background}`}
-          // ref={bottomSheet}
-        >
+        <div className={`${styles.bottomOuter} ${styles.background}`}>
           <div className={styles.controllerWrapper}>
-            <button
-              // ref={bottomSheetController}
-              className={styles.controller}
-            ></button>
+            <button className={styles.controller}></button>
           </div>
           <div className={styles.bottomInner} ref={bottomInnerRef}>
             <div className={styles.innerHeader}>
