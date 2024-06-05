@@ -1,5 +1,12 @@
+import { useState } from "react";
 import { IonApp, setupIonicReact } from "@ionic/react";
+import { CoursesProvider } from "./context/CoursesContext";
+import { UserProvider } from "./context/UserContext";
+import { ListStyleProvider } from "./context/ListStyleContext";
+import { useStatusBar } from "./hooks/useStatusBar";
+import { useKeyboard } from "./hooks/useKeyboard";
 import Router from "./components/Router";
+import SplashScreen from "./pages/SplashScreen/SplashScreen";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -23,14 +30,6 @@ import "./App.scss";
 /* Theme variables */
 import "./theme/variables.css";
 
-import { CoursesProvider } from "./context/CoursesContext";
-import { UserProvider } from "./context/UserContext";
-import { ListStyleProvider } from "./context/ListStyleContext";
-import { useStatusBar } from "./hooks/useStatusBar";
-import { useKeyboard } from "./hooks/useKeyboard";
-import { useState } from "react";
-import SplashScreen from "./pages/SplashScreen/SplashScreen";
-
 setupIonicReact();
 
 const App: React.FC = () => {
@@ -48,7 +47,6 @@ const App: React.FC = () => {
             ) : (
               <Router />
             )}
-            {/* <Router /> */}
           </ListStyleProvider>
         </CoursesProvider>
       </UserProvider>

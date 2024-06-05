@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { IonContent, useIonRouter } from "@ionic/react";
+import { IonContent,  useIonRouter } from "@ionic/react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
 import Lecture from "../../components/Lecture/Lecture";

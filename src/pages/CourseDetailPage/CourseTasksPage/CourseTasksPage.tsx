@@ -3,7 +3,6 @@ import {
   IonContent,
   IonIcon,
   ScrollDetail,
-  useIonViewWillLeave,
 } from "@ionic/react";
 import { useParams } from "react-router";
 import { useCourses } from "../../../context/CoursesContext";

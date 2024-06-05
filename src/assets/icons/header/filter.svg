@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+    <rect x="-1" y="1" width="7.42857" height="7.42857" rx="2.14286"
+        transform="matrix(-1 0 0 1 24.8047 5)" stroke="currentColor" stroke-width="2" />
+    <rect x="6" y="18.5723" width="7.42857" height="7.42857" rx="2.14286"
+        stroke="currentColor" stroke-width="2" />
+    <rect width="9.42857" height="2.75" rx="1.375" transform="matrix(-1 0 0 1 14.4297 8.4375)"
+        fill="currentColor" />
+    <rect x="17.5703" y="20.8125" width="9.42857" height="2.75" rx="1.375"
+        fill="currentColor" />
+</svg>

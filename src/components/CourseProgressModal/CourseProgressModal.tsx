@@ -2,10 +2,8 @@ import {
   IonContent,
   IonIcon,
   IonModal,
-  useIonViewDidLeave,
-  useIonViewWillLeave,
 } from "@ionic/react";
-import { FC, RefObject, useEffect, useState } from "react";
+import { FC, RefObject, useRef } from "react";
 import ExamIcon from "../../assets/icons/document-grade-A.svg";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import CommonButton from "../CommonButton/CommonButton";
@@ -25,7 +23,9 @@ const secondBreackpoint = 72 / modalHeight;
 
 const CourseProgressModal: FC<CourseProgressModalType> = ({ modalRef }) => {
   const { courseId } = useParams<{ courseId: string }>();
-  const [isModalFullHeight, setIsModalFullHeight] = useState(false);
+  const modalLocalRef = useRef(null);
+  const ref = modalRef === undefined ? modalLocalRef : modalRef;
+  
 
   const courseUserData = useUser()?.user.courses.find(
     (userCourse) => userCourse.course_id === +courseId
@@ -36,25 +36,25 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ modalRef }) => {
 
   const handleBreackpointChange = (e: CustomEvent) => {
     if (e.detail.breakpoint === 1) {
-      modalRef?.current?.classList.add(styles.fullHeight);
+      ref?.current?.classList.add(styles.fullHeight);
     } else {
-      modalRef?.current?.classList.remove(styles.fullHeight);
+      ref?.current?.classList.remove(styles.fullHeight);
     }
   };
 
   const toggleBreackpoint = async () => {
-    const currentBreackpoint = await modalRef?.current?.getCurrentBreakpoint();
+    const currentBreackpoint = await ref?.current?.getCurrentBreakpoint();
     switch (currentBreackpoint) {
       case firstBreakpoint:
-        modalRef?.current?.setCurrentBreakpoint(secondBreackpoint);
+        ref?.current?.setCurrentBreakpoint(secondBreackpoint);
         break;
       case secondBreackpoint:
-        modalRef?.current?.classList.add(styles.fullHeight);
-        modalRef?.current?.setCurrentBreakpoint(1);
+        ref?.current?.classList.add(styles.fullHeight);
+        ref?.current?.setCurrentBreakpoint(1);
         break;
       case 1:
-        modalRef?.current?.classList.remove(styles.fullHeight);
-        modalRef?.current?.setCurrentBreakpoint(firstBreakpoint);
+        ref?.current?.classList.remove(styles.fullHeight);
+        ref?.current?.setCurrentBreakpoint(firstBreakpoint);
         break;
       default:
         break;
@@ -63,7 +63,7 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ modalRef }) => {
 
   return (
     <IonModal
-      ref={modalRef}
+      ref={ref}
       initialBreakpoint={firstBreakpoint}
       breakpoints={[firstBreakpoint, secondBreackpoint, 1]}
       backdropBreakpoint={0.2}

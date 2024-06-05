@@ -47,7 +47,7 @@ const EditProfileData: FC<{
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
     getValues,
   } = useForm<EditUserDataForm>({
     defaultValues: {
@@ -99,6 +99,7 @@ const EditProfileData: FC<{
     right: [
       {
         name: "save",
+        className: isDirty ? styles.saveActive : styles.saveDisabled,
         onClick: () => {
           const values = getValues();
           onSubmit(values);

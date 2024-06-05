@@ -56,40 +56,28 @@
     min-height: 32px;
     flex-grow: 0;
     flex-shrink: 0;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
 
-    --padding-start: 5px;
-    --padding-end: 5px;
-    --padding-top: 5px;
-    --padding-bottom: 5px;
-  }
-
-  .settingsBtn {
     --padding-start: 0;
     --padding-end: 0;
     --padding-top: 0;
     --padding-bottom: 0;
   }
+
+  ion-icon {
+    font-size: 32px;
+  }
 }
 
 .backBtn {
-  --icon-font-size: 20px;
-  --padding-start: 0;
-  --padding-end: 0;
-}
-
-.nextBtnBtn {
-  --icon-font-size: 20px;
+  --icon-font-size: 32px;
   --padding-start: 0;
   --padding-end: 0;
 }
 
 .nextIcon {
   transform: rotate(180deg);
-}
-
-.notificationBtn {
-  --padding-start: 0;
-  --padding-end: 0;
 }
 
 .title {
@@ -99,26 +87,5 @@
   text-align: center;
 }
 
-.bellIcon {
-  width: 22px;
-  height: 22px;
-}
-
-.searchIcon {
-  width: 22px;
-  height: 22px;
-}
-
-.listStyleIcon {
-  width: 22px;
-  height: 22px;
-  color: var(--ion-color-dark);
-}
-
-.settingsIcon {
-  font-size: 32px;
-}
-
 .saveIcon {
-  font-size: 20px;
 }
