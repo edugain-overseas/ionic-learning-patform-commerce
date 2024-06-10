@@ -1,6 +1,6 @@
 .header {
   box-shadow: none;
-  height: calc(56px + var(--ion-safe-area-top));
+  height: calc(56rem + var(--ion-safe-area-top));
 }
 
 .transparent {
@@ -11,16 +11,16 @@
 }
 
 .toolbar {
-  --min-height: 56px;
+  --min-height: 56rem;
   --border-style: none;
-  --padding-start: 14px;
-  --padding-end: 14px;
+  --padding-start: 14rem;
+  --padding-end: 14rem;
   --ion-toolbar-color: var(--ion-color-dark);
 
-  border-bottom-left-radius: 14px;
-  border-bottom-right-radius: 14px;
+  border-bottom-left-radius: 14rem;
+  border-bottom-right-radius: 14rem;
   box-shadow: var(--custom-box-shadow-primary);
-  backdrop-filter: blur(28px);
+  backdrop-filter: blur(28rem);
 
   &.secondary {
     --background: transparent;
@@ -38,8 +38,8 @@
 }
 
 .buttonsWrapper {
-  gap: 8px;
-  min-width: 80px;
+  gap: 8rem;
+  min-width: 80rem;
   min-height: auto;
 
   &[slot="start"] {
@@ -51,9 +51,9 @@
 
   ion-button,
   ion-back-button {
-    width: 32px;
-    min-width: 32px;
-    min-height: 32px;
+    width: 32rem;
+    min-width: 32rem;
+    min-height: 32rem;
     flex-grow: 0;
     flex-shrink: 0;
     margin-inline-start: 0;
@@ -66,12 +66,12 @@
   }
 
   ion-icon {
-    font-size: 32px;
+    font-size: 32rem;
   }
 }
 
 .backBtn {
-  --icon-font-size: 32px;
+  --icon-font-size: 32rem;
   --padding-start: 0;
   --padding-end: 0;
 }
@@ -82,7 +82,7 @@
 
 .title {
   color: var(--ion-color-dark);
-  font-size: 14px;
+  font-size: 14rem;
   font-weight: 700;
   text-align: center;
 }

@@ -123,7 +123,7 @@ const LoginForm: React.FC<{
           label="Sing in"
           icon={
             isLoading ? (
-              <Spinner />
+              <Spinner color="#fff" className={styles.formBtnIcon}/>
             ) : (
               <IonIcon src={SingIn} className={styles.formBtnIcon} />
             )

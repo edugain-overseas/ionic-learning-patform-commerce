@@ -97,7 +97,7 @@ const Menu = () => {
                   <button onClick={handleLogout}>
                     <div className={styles.iconWrapper}>
                       {isLoading ? (
-                        <Spinner />
+                        <Spinner color="dark"/>
                       ) : (
                         <IonIcon src={Logout} className={styles.footerIcon} />
                       )}

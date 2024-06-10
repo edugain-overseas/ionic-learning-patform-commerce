@@ -3,14 +3,14 @@
   --ion-backdrop-color: var(--custom-bg-rgba-primary);
   --box-shadow: var(--custom-box-shadow-content);
   --background: var(--custom-bg-rgba-primary);
-  --border-radius: 16px;
+  --border-radius: 16rem 16rem 0 0;
 
   top: var(--ion-safe-area-top);
-  bottom: var(--keyboard-offset, 0px);
+  bottom: var(--keyboard-offset, 0);
   transition: bottom var(--custom-tr-time-min) ease-in-out;
-  backdrop-filter: blur(5px);
+  // backdrop-filter: blur(5rem);
 
   &::part(content) {
-    backdrop-filter: blur(16px);
+    backdrop-filter: blur(16rem);
   }
 }

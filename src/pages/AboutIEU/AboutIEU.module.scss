@@ -1,10 +1,10 @@
 .header {
   position: absolute;
   padding: 12rem 14rem;
-  padding-top: calc(--ion-safe-area-top + 12rem);
+  padding-top: calc(var(--ion-safe-area-top, 0) + 12rem);
 
   .bakcBtn {
-    --icon-font-size: 20rem;
+    --icon-font-size: 32rem;
     color: var(--ion-color-dark);
     width: 32rem;
     height: 32rem;

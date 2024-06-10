@@ -2,32 +2,32 @@
   position: relative;
   overflow: auto;
   height: calc(100%);
-  padding-top: calc(178px + var(--ion-safe-area-top));
+  padding-top: calc(178rem + var(--ion-safe-area-top));
 
   .poster {
     display: block;
     width: 100%;
-    height: 256px;
+    height: 256rem;
     object-fit: cover;
-    margin-bottom: -10px;
+    margin-bottom: -10rem;
     position: fixed;
     top: 0;
   }
 }
 
 .contentBackground {
-  padding-top: 12px;
+  padding-top: 12rem;
   position: sticky;
   overflow: hidden;
-  // height: calc(100% + 132px);
+  // height: calc(100% + 132rem);
 
   &:before {
     content: "";
     position: absolute;
     inset: 0;
-    top: 12px;
+    top: 12rem;
     background: url("../../assets/images/background.png");
-    border-radius: 10px;
+    border-radius: 16rem 16rem 0 0;
   }
 
   &.backgroundBlured {
@@ -35,23 +35,23 @@
       content: "";
       position: absolute;
       inset: 0;
-      top: 12px;
+      top: 12rem;
       background-color: var(--custom-bg-rgba-primary);
-      backdrop-filter: blur(10px);
-      border-radius: 10px;
+      backdrop-filter: blur(10rem);
+      border-radius: 16rem 16rem 0 0;
     }
   }
 }
 
 .contentInner {
-  padding-inline: 18px;
-  padding-bottom: 82px;
-  padding-top: 28px;
+  padding-inline: 18rem;
+  padding-bottom: 82rem;
+  padding-top: 28rem;
   height: 100%;
   position: relative;
   z-index: 1;
   box-shadow: var(--custom-box-shadow-content);
-  border-radius: 10px;
+  border-radius: 16rem 16rem 0 0;
 }
 
 .scroll {
@@ -62,7 +62,7 @@
   color: var(--ion-color-dark);
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 32rem;
 
   .contentBlock {
     position: relative;
@@ -70,9 +70,9 @@
     &::before {
       content: "";
       width: 100%;
-      height: 4px;
+      height: 4rem;
       position: absolute;
-      bottom: -18px;
+      bottom: -18rem;
       left: 0;
       border-radius: var(--custom--border-radius-primary);
       background-color: var(--custom-bg-rgba-thirtiary);
@@ -84,11 +84,11 @@
 .topLabel {
   position: absolute;
   top: 0;
-  right: 18px;
+  right: 18rem;
   z-index: 2;
 
-  height: 24px;
-  padding-inline: 12px;
+  height: 24rem;
+  padding-inline: 12rem;
   display: flex;
   align-items: center;
 
@@ -97,7 +97,7 @@
   box-shadow: var(--custom-box-shadow-secondary);
 
   font-family: Roboto;
-  font-size: 10px;
+  font-size: 10rem;
   font-weight: 700;
   color: var(--ion-color-primary-contrast);
 }

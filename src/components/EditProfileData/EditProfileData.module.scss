@@ -1,55 +1,55 @@
 .wrapper {
-  margin-top: -12px;
+  margin-top: -12rem;
   --ion-background-color: transparent;
-  --padding-bottom: 24px;
+  --padding-bottom: 24rem;
 }
 
 .headerToolbar {
   --min-height: auto;
-  --padding-start: 6px;
-  --padding-end: 6px;
-  --padding-top: 6px;
-  --padding-bottom: 6px;
+  --padding-start: 6rem;
+  --padding-end: 6rem;
+  --padding-top: 6rem;
+  --padding-bottom: 6rem;
 }
 
 .avatarWrapper {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 16rem;
   align-items: center;
 
-  margin-bottom: 16px;
+  margin-bottom: 16rem;
 
   color: var(--ion-color-light);
   font-family: Roboto;
-  font-size: 14px;
+  font-size: 14rem;
   font-weight: 600;
-  line-height: 17.643px;
+  line-height: 17.643rem;
 }
 
 .formWrapper {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding-inline: 32px;
+  gap: 8rem;
+  padding-inline: 32rem;
   color: var(--ion-color-light);
-  margin-bottom: 18px;
+  margin-bottom: 18rem;
 }
 
 .selectWrapper {
   & > span {
     color: inherit;
-    font-size: 12px;
+    font-size: 12rem;
     font-weight: 500;
-    padding-inline-start: 8px;
+    padding-inline-start: 8rem;
   }
 }
 
 .formBtns {
-  padding-inline: 32px;
+  padding-inline: 32rem;
   color: var(--ion-color-light);
-  font-size: 14px;
+  font-size: 14rem;
   font-weight: 600;
 }
 
