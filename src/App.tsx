@@ -5,6 +5,7 @@ import { UserProvider } from "./context/UserContext";
 import { ListStyleProvider } from "./context/ListStyleContext";
 import { useStatusBar } from "./hooks/useStatusBar";
 import { useKeyboard } from "./hooks/useKeyboard";
+import { useDynaminFontSize } from "./hooks/useDynamicFontSize";
 import Router from "./components/Router";
 import SplashScreen from "./pages/SplashScreen/SplashScreen";
 
@@ -36,6 +37,7 @@ const App: React.FC = () => {
   const [splashScreen, setSplashScreen] = useState(true);
   useStatusBar();
   useKeyboard();
+  useDynaminFontSize();
 
   return (
     <IonApp className="App">

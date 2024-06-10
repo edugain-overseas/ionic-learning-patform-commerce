@@ -14,6 +14,7 @@ import AboutIEU from "../pages/AboutIEU/AboutIEU";
 import Instructions from "../pages/Instructions/Instructions";
 import NotFound from "../pages/NotFound/NotFound";
 import Basket from "../pages/Basket/Basket";
+import { menuEnterPageAnimation } from "../animations/menuAnimations";
 
 const Router: React.FC = () => {
   return (
@@ -42,7 +43,9 @@ const Router: React.FC = () => {
             <Route exact path="/" render={() => <Redirect to="/home" />} />
             <Route component={NotFound} />
           </Tabs>
-          <IonMenuToggle className="custom-toggle-menu">
+          <IonMenuToggle
+            className="custom-toggle-menu"
+          >
             <IonIcon src={MenuIcon} className="custom-tab-icon" />
             <IonLabel>Menu</IonLabel>
           </IonMenuToggle>

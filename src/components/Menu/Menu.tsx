@@ -8,8 +8,12 @@ import MenuNav from "./MenuNav";
 import styles from "./Menu.module.scss";
 import InsetBtn from "../InsetBtn/InsetBtn";
 import { useUser } from "../../context/UserContext";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Spinner from "../Spinner/Spinner";
+import {
+  menuEnterPageAnimation,
+  menuLeavePageAnimation,
+} from "../../animations/menuAnimations";
 
 const Menu = () => {
   const isUserLoggedIn = useUser()?.user.accessToken !== null;
@@ -35,6 +39,10 @@ const Menu = () => {
     document.querySelectorAll("ion-modal").forEach((modal) => {
       modal.style.setProperty("scale", "0");
     });
+
+    const baseEl = document.getElementById("main-content");
+    baseEl?.style.setProperty("border-radius", "16px");
+    menuEnterPageAnimation(baseEl!).play();
   };
 
   const handleMenuDidOpen = () => {
@@ -51,7 +59,12 @@ const Menu = () => {
       modal.style.setProperty("scale", "1");
       modal.style.removeProperty("transition");
     });
-    console.log("close");
+  };
+
+  const handleMenuWillClose = () => {
+    const baseEl = document.getElementById("main-content");
+    baseEl?.style.setProperty("border-radius", "0");
+    menuLeavePageAnimation(baseEl!).play();
   };
 
   return (
@@ -64,6 +77,7 @@ const Menu = () => {
       onIonWillOpen={handleMenuWillOpen}
       onIonDidClose={handleMenuDidClose}
       onIonDidOpen={handleMenuDidOpen}
+      onIonWillClose={handleMenuWillClose}
     >
       <div className={styles.container}>
         <div className={styles.header}>

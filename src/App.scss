@@ -15,15 +15,15 @@
   --ion-tab-bar-color: rgba(252, 252, 252, 0.5);
   --color-selected: var(--ion-color-primary-contrast);
 
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  height: 60px;
+  border-top-left-radius: 10rem;
+  border-top-right-radius: 10rem;
+  height: 60rem;
   padding-right: 20%;
 }
 
 .custom-tab-icon {
   color: var(--ion-tab-bar-color);
-  font-size: 23px;
+  font-size: 23rem;
 }
 
 .tab-selected .custom-tab-icon {
@@ -38,7 +38,7 @@
 
 .custom-toggle-menu {
   width: 20%;
-  height: 60px;
+  height: 60rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -49,7 +49,7 @@
   bottom: 0;
   opacity: 0.5;
 
-  font-size: 10px;
+  font-size: 10rem;
   color: var(--ion-color-primary-contrast);
 }
 
@@ -65,17 +65,17 @@
     content: "";
     position: absolute;
     top: 50%;
-    left: -22px;
+    left: -22rem;
     transform: translateY(-50%);
-    height: calc(100% - 56px);
-    width: 22px;
+    height: calc(100% - 56rem);
+    width: 22rem;
 
-    border-top-left-radius: 16px;
-    border-bottom-left-radius: 16px;
+    border-top-left-radius: 16rem;
+    border-bottom-left-radius: 16rem;
     background: var(--custom-bg-rgba-secondary);
 
     box-shadow: var(--custom-box-shadow-primary);
-    backdrop-filter: blur(16px);
+    backdrop-filter: blur(16rem);
     opacity: 0;
     z-index: -1;
 
@@ -97,42 +97,29 @@
 
 // Menu
 
-.menu-content {
-  scale: 1;
-  transition: scale var(--custom-tr-time-min) ease-in-out,
-    left var(--custom-tr-time-min) ease-in-out;
-}
-
 .ion-page.main.menu-content-open {
-  scale: 0.7;
-  border-radius: 16px;
-  left: 7.5%;
   overflow: visible;
-
   &:before {
     opacity: 1;
   }
   &:after {
-    border-radius: 16px;
+    border-radius: 16rem;
   }
 
   .ion-page {
-    border-radius: 16px;
+    border-radius: 16rem 16rem 0 0;
     overflow: hidden;
   }
 
   ion-header ion-toolbar {
     backdrop-filter: none;
   }
-  & + ion-modal {
-    // transition: opacity var(--custom-tr-time-min) ease-in-out
-    //   var(--custom-tr-time-min);
-  }
+
 }
 
 .custom-menu {
   --background: transparent;
-  --width: 266px;
+  --width: 266rem;
   contain: none;
 }
 ion-menu::part(container) {
@@ -142,15 +129,17 @@ ion-menu::part(container) {
 //modal
 
 ion-modal::part(handle) {
-  width: 45px;
-  border-radius: 6px;
+  width: 45rem;
+  border-radius: 6rem;
   background-color: var(--ion-color-light);
-  top: 8px;
-  height: 4px;
+  top: 8rem;
+  height: 4rem;
 
   &::before {
-    padding-block: 8px;
-    width: 45px;
-    height: 4px;
+    padding-block: 8rem;
+    width: 45rem;
+    height: 4rem;
   }
 }
+
+// global, elements

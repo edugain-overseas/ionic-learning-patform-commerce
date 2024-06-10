@@ -265,8 +265,8 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
   };
 
   const logout = async () => {
-    console.log('logout');
-    
+    console.log("logout");
+
     try {
       await instance.get("/user/logout", {
         withCredentials: true,
@@ -433,6 +433,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
             error.response.data.detail === "Authentication token expired")
         ) {
           console.log("Access token expired. Attempting to refresh...");
+          setAccessToken(null);
           try {
             const newToken = await refreshTokens();
             console.log(error.config);

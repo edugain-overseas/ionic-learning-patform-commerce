@@ -1,6 +1,7 @@
 import { Capacitor } from "@capacitor/core";
 import { StatusBar, Style } from "@capacitor/status-bar";
 import { useEffect } from "react";
+import { pxToRem } from "../utils/pxToRem";
 
 export const useStatusBar = () => {
   // Call this function to set the status bar style and color
@@ -21,10 +22,11 @@ export const useStatusBar = () => {
   useEffect(() => {
     setStatusBarOverlay();
     setStatusBarStyleAndColor();
+
     if (Capacitor.getPlatform() === "android") {
       document
         .getElementById("root")
-        ?.style.setProperty("--ion-safe-area-top", "24px");
+        ?.style.setProperty("--ion-safe-area-top", `${pxToRem(24)}rem`);
     }
   }, []);
 };
