@@ -59,7 +59,7 @@ const PasswordRecoveryForm: React.FC = () => {
           registerProps={register("email", {
             required: "This field is required",
           })}
-          height="32px"
+          height="32rem"
           error={errors.email?.message}
           status={isSubmitted && (errors.email?.message ? "error" : "valid")}
         />

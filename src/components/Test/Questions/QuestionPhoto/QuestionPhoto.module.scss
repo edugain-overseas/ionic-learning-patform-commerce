@@ -1,10 +1,10 @@
 .questionBody {
   display: flex;
-  gap: 40px;
-  padding-block: 16px;
+  gap: 40rem;
+  padding-block: 16rem;
 
   & .imageWrapper {
-    width: 360px;
+    width: 360rem;
 
     & img {
       object-fit: cover;
@@ -15,10 +15,10 @@
 }
 
 .answersWrapper {
-  padding-block: 16px;
+  padding-block: 16rem;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 12rem;
 }
 
 .previewImageWrapper {

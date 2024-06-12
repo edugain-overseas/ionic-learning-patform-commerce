@@ -1,12 +1,12 @@
 .option {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 8rem;
 
   color: var(--ion-color-light);
-  font-size: 12px;
+  font-size: 12rem;
   font-weight: 500;
-  line-height: 16px;
+  line-height: 16rem;
 
   input[type="radio"] {
     display: none;
@@ -25,17 +25,17 @@
 }
 
 .radioBtn {
-  width: 12px;
-  height: 12px;
+  width: 12rem;
+  height: 12rem;
   flex-shrink: 0;
-  border: 1.4px solid var(--ion-color-light);
+  border: 1.4rem solid var(--ion-color-light);
   border-radius: 50%;
   position: relative;
 
   &:before {
     content: "";
-    width: 6px;
-    height: 6px;
+    width: 6rem;
+    height: 6rem;
     border-radius: 50%;
     background-color: transparent;
     position: absolute;

@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import {
   IonIcon,
   IonLabel,
-  IonMenuToggle,
+  IonRippleEffect,
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
@@ -24,21 +24,29 @@ const Tabs: React.FC<TabsTypes> = ({ children }) => {
         {children}
       </IonRouterOutlet>
       <IonTabBar slot="bottom" className="custom-tab-bar" id="main-content">
-        <IonTabButton tab="home" href="/home">
+        <IonTabButton tab="home" href="/home" className="ion-activatable">
           <IonIcon src={HomeIcon} className="custom-tab-icon" />
           <IonLabel>Home</IonLabel>
+          <IonRippleEffect></IonRippleEffect>
         </IonTabButton>
-        <IonTabButton tab="courses" href="/courses">
+        <IonTabButton tab="courses" href="/courses" className="ion-activatable">
           <IonIcon src={CoursesIcon} className="custom-tab-icon" />
           <IonLabel>Courses</IonLabel>
+          <IonRippleEffect></IonRippleEffect>
         </IonTabButton>
-        <IonTabButton tab="profile" href="/my-profile">
+        <IonTabButton
+          tab="profile"
+          href="/my-profile"
+          className="ion-activatable"
+        >
           <IonIcon src={MyProfileIcon} className="custom-tab-icon" />
           <IonLabel>Profile</IonLabel>
+          <IonRippleEffect></IonRippleEffect>
         </IonTabButton>
-        <IonTabButton tab="basket" href="/basket">
+        <IonTabButton tab="basket" href="/basket" className="ion-activatable">
           <IonIcon src={BasketIcon} className="custom-tab-icon" />
           <IonLabel>Basket</IonLabel>
+          <IonRippleEffect></IonRippleEffect>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>

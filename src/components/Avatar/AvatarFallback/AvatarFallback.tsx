@@ -8,9 +8,9 @@ const AvatarFallback = ({ size = 80 }) => {
     <div
       className={styles.wrapper}
       style={{
-        width: `${size}px`,
-        height: `${size}px`,
-        fontSize: `${size * 0.54}px`,
+        width: `${size}rem`,
+        height: `${size}rem`,
+        fontSize: `${size * 0.54}rem`,
       }}
     >
       <IonIcon src={UserIcon} />

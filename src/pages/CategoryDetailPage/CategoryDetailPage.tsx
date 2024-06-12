@@ -10,13 +10,14 @@ import React, { useMemo, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
 import { useUser } from "../../context/UserContext";
+import { remToPx } from "../../utils/pxToRem";
 import categoryContrastIcon from "../../assets/icons/category-contrast.svg";
 import Header from "../../components/Header/Header";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import CourseItem from "../../components/CourseItem/CourseItem";
 import styles from "./CategoryDetailPage.module.scss";
 
-const maxScrollValue = 96;
+const MAX_SCROLL_VALUE = 96;
 
 const CategoryDetailPage: React.FC = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
@@ -53,12 +54,12 @@ const CategoryDetailPage: React.FC = () => {
   const topContentRef = useRef<HTMLDivElement>(null);
   const bottomInnerRef = useRef<HTMLDivElement>(null);
 
-  const [filter, setFilter] = useState<string>("All");
+  const [filter, setFilter] = useState<string>("All courses");
 
   const handleScroll = (e: CustomEvent<ScrollDetail>) => {
     topContentRef.current?.style.setProperty(
       "--hide-coefficient",
-      `${e.detail.scrollTop / maxScrollValue}`
+      `${e.detail.scrollTop / remToPx(MAX_SCROLL_VALUE)}`
     );
   };
 
@@ -70,7 +71,10 @@ const CategoryDetailPage: React.FC = () => {
       return;
     }
 
-    if ((maxScrollValue - currentScroll) / maxScrollValue > 0.5) {
+    if (
+      (remToPx(MAX_SCROLL_VALUE) - currentScroll) / remToPx(MAX_SCROLL_VALUE) >
+      0.5
+    ) {
       contentRef.current?.scrollToTop(150);
       bottomInnerRef.current?.style.setProperty("overflow", "hidden");
     } else {
@@ -90,7 +94,7 @@ const CategoryDetailPage: React.FC = () => {
     let userCoursesIds: number[] = [];
     userCourses?.forEach((course) => userCoursesIds.push(course.course_id));
     switch (filter) {
-      case "All":
+      case "All courses":
         return courses;
       case "In process":
         return courses?.filter((course) => userCoursesIds.includes(course.id));
@@ -153,7 +157,7 @@ const CategoryDetailPage: React.FC = () => {
             mode="ios"
             onIonChange={onSegmentChange}
           >
-            <IonSegmentButton className={styles.segmentBtn} value="All">
+            <IonSegmentButton className={styles.segmentBtn} value="All courses">
               <span>All courses</span>
             </IonSegmentButton>
             <IonSegmentButton className={styles.segmentBtn} value="In process">

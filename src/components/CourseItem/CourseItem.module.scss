@@ -3,24 +3,26 @@
 
 .link {
   display: block;
+  position: relative;
+  color: var(--ion-color-light);
   width: 100%;
-  padding: 8px;
+  padding: 8rem;
   background-color: var(--custom-bg-rgba-secondary);
   border-radius: var(--custom--border-radius-primary);
   box-shadow: var(--custom-box-shadow-primary);
 
   &.row {
-    padding: 10px;
-    padding-left: 20px;
+    padding: 10rem;
+    padding-left: 20rem;
     position: relative;
 
     &::before {
       content: "";
       position: absolute;
-      top: 10px;
-      bottom: 10px;
-      left: 8px;
-      width: 4px;
+      top: 10rem;
+      bottom: 10rem;
+      left: 8rem;
+      width: 4rem;
 
       border-radius: var(--custom--border-radius-primary);
       background: var(--custom-bg-rgba-fourth);
@@ -40,8 +42,8 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  padding: 4px;
-  margin-bottom: 8px;
+  padding: 4rem;
+  margin-bottom: 8rem;
   border-radius: var(--custom--border-radius-primary);
 
   &::after {
@@ -57,7 +59,7 @@
     position: relative;
     z-index: 2;
     overflow: hidden;
-    background-size: calc(100% + 8px);
+    background-size: calc(100% + 8rem);
     background-repeat: no-repeat;
     background-position: center;
     border-radius: var(--custom--border-radius-primary);
@@ -66,16 +68,16 @@
 
 .courseInfo {
   display: flex;
-  gap: 12px;
+  gap: 12rem;
   justify-content: space-between;
-  padding-inline: 4px;
+  padding-inline: 4rem;
   color: var(--ion-color-dark);
 }
 
 .colLeft {
   .courseTitle {
     margin: 0;
-    font-size: 14px;
+    font-size: 14rem;
     font-weight: 700;
     line-height: 1.2;
     overflow: hidden;
@@ -87,33 +89,33 @@
 
   // .progress {
   //   color: var(--ion-color-medium);
-  //   font-size: 10px;
+  //   font-size: 10rem;
   //   font-weight: 600;
 
   //   display: flex;
   //   align-items: center;
-  //   gap: 8px;
+  //   gap: 8rem;
   // }
 }
 
 .colRight {
   display: flex;
-  gap: 8px;
+  gap: 8rem;
   flex-shrink: 0;
 }
 
 .basketIcon {
-  font-size: 16px;
+  font-size: 16rem;
   color: var(--ion-color-light);
 }
 
 .progress {
-  padding-inline-start: 4px;
+  padding-inline-start: 4rem;
   color: var(--ion-color-medium);
-  font-size: 10px;
+  font-size: 10rem;
   font-weight: 600;
 
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 8rem;
 }

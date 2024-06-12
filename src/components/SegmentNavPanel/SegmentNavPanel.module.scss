@@ -1,14 +1,10 @@
 .segment {
   --color: var(--ion-color-dark);
   --background: transparent;
-  --original-gap: 24;
-  --original-vw: 375;
-  --original-fs: 14;
-
-  padding-inline: 14px;
-  padding-block: 18px;
-  gap: calc(var(--original-gap) / var(--original-vw) * 100vw);
-
+  
+  padding-inline: 14rem;
+  padding-block: 18rem;
+  gap: 24rem;
   &::-webkit-scrollbar {
     width: 0;
     height: 0;
@@ -17,8 +13,8 @@
   &:before {
     content: "";
     position: absolute;
-    bottom: 18px;
-    left: 14px;
+    bottom: 18rem;
+    left: 14rem;
     width: 100%;
     height: 2px;
     background-color: var(--ion-color-dark);
@@ -30,21 +26,22 @@
   --padding-end: 0;
   --color: var(--ion-color-dark);
   --color-checked: var(--ion-color-primary);
+  --background-checked: transparent;
   --ripple-color: transparent;
 
   min-height: min-content;
-  padding-bottom: 10px;
+  padding-bottom: 10rem;
 
   &:first-child {
-    margin-left: 18px;
+    margin-left: 18rem;
   }
   &:last-child {
-    margin-right: 18px;
+    margin-right: 18rem;
   }
 }
 
 .segmentLabel {
-  font-size: calc(var(--original-fs) / var(--original-vw) * 100vw);
+  font-size: 14rem;
   line-height: 1.1;
   font-weight: 700;
   letter-spacing: normal;

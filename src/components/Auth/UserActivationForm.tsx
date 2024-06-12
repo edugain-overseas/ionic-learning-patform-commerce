@@ -81,7 +81,7 @@ const UserActivationForm: React.FC<{
           registerProps={register("verificationCode", {
             required: "This field is required",
           })}
-          height="32px"
+          height="32rem"
           error={errors.verificationCode?.message}
           status={
             isSubmitted &&

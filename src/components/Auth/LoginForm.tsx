@@ -7,8 +7,8 @@ import Google from "../../assets/icons/auth/google.svg";
 import InputText from "./Inputs/InutText";
 import InputPassword from "./Inputs/InputPassword";
 import CommonButton from "../CommonButton/CommonButton";
-import styles from "./Auth.module.scss";
 import Spinner from "../Spinner/Spinner";
+import styles from "./Auth.module.scss";
 
 type FormValues = {
   username: string;
@@ -98,7 +98,7 @@ const LoginForm: React.FC<{
           registerProps={register("username", {
             required: "This field is required",
           })}
-          height="32px"
+          height="32rem"
           error={errors.username?.message}
           status={isSubmitted && (errors.username?.message ? "error" : "valid")}
         />
@@ -115,7 +115,7 @@ const LoginForm: React.FC<{
           })}
           error={errors.password?.message}
           status={isSubmitted && (errors.password?.message ? "error" : "valid")}
-          height="32px"
+          height="32rem"
         />
       </div>
       <div className={styles.btnsWrapper}>
@@ -166,7 +166,7 @@ const LoginForm: React.FC<{
           icon={<IonIcon src={Google} className={styles.googleIcon} />}
           backgroundColor="transparent"
           color="#001C54"
-          border="1px solid #7E8CA8"
+          border="1rem solid #7E8CA8"
           block={true}
           height={32}
           borderRadius={5}

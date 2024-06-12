@@ -1,16 +1,16 @@
 .lectureHeader {
-  margin-bottom: 16px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--ion-color-light);
+  margin-bottom: 16rem;
+  padding-bottom: 16rem;
+  border-bottom: 1rem solid var(--ion-color-light);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 8rem;
   align-items: center;
 
   .title {
     color: var(--custom-content-color-primary);
     text-align: center;
-    font-size: 14px;
+    font-size: 14rem;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -24,26 +24,26 @@
 .contentWrapper {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 24rem;
 
   .sectionTitle {
     text-align: center;
-    font-size: 14px;
+    font-size: 14rem;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
     text-transform: uppercase;
     color: var(--ion-color-dark);
     margin-top: 0;
-    margin-bottom: 8px;
+    margin-bottom: 8rem;
   }
 
   .sectionContentWrapper {
     text-align: justify;
-    font-size: 12px;
+    font-size: 12rem;
     font-style: normal;
     font-weight: 500;
-    line-height: 16px;
+    line-height: 16rem;
     color: var(--ion-color-dark);
   }
 
@@ -54,22 +54,22 @@
 .linksWrapper {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 12rem;
 
   &:not(:last-child) {
-    margin-bottom: 16px;
+    margin-bottom: 16rem;
   }
 
   .linkWrapper {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 8rem;
     color: var(--ion-color-light);
     text-decoration: underline;
   }
 
   ion-icon {
-    font-size: 16px;
+    font-size: 16rem;
     color: var(--ion-color-dark);
   }
 }

@@ -20,8 +20,8 @@ const CircleProgressBar: React.FC<CircleProgressBarTypes> = ({
   const strokeDashoffset = strokeDasharray * ((100 - progress) / 100);
   return (
     <svg
-      width={`${width}px`}
-      height={`${width}px`}
+      width={`${width}rem`}
+      height={`${width}rem`}
       viewBox={`0 0 ${width} ${width}`}
       style={{ transform: "rotate(-90deg)" }}
     >
@@ -31,7 +31,7 @@ const CircleProgressBar: React.FC<CircleProgressBarTypes> = ({
         cy={width / 2}
         fill="transparent"
         stroke={backgroundColor}
-        strokeWidth={`${strokeWidth}px`}
+        strokeWidth={`${strokeWidth}rem`}
       ></circle>
       <circle
         r={raduis}
@@ -40,7 +40,7 @@ const CircleProgressBar: React.FC<CircleProgressBarTypes> = ({
         fill="transparent"
         stroke={strokeColor}
         strokeLinecap="round"
-        strokeWidth={`${strokeWidth}px`}
+        strokeWidth={`${strokeWidth}rem`}
         strokeDasharray={strokeDasharray}
         strokeDashoffset={strokeDashoffset}
       ></circle>

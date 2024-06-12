@@ -30,7 +30,9 @@
     gap: 16rem;
 
     .menuNavLink {
-      display: block;
+      display: inline-block;
+      position: relative;
+      color: var(--ion-color-primary-contrast);
     }
 
     .linkWrapper {
@@ -41,7 +43,6 @@
 
     .navItemIcon {
       font-size: 32rem;
-      color: var(--ion-color-primary-contrast);
       flex-shrink: 0;
     }
 
@@ -80,6 +81,8 @@
     li {
       flex: 1;
       display: flex;
+      position: relative;
+      color: var(--ion-color-primary-contrast);
 
       &:not(:last-child) {
         border-right: 1rem solid var(--ion-color-primary-contrast);

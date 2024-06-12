@@ -3,10 +3,11 @@
   box-shadow: var(--custom-box-shadow-secondary-inset);
   padding: calc(0.125em);
   background: transparent;
+  position: relative;
 
   svg {
-    width: 14px;
-    height: 14px;
+    width: 14rem;
+    height: 14rem;
 
     * {
       fill: var(--ion-color-dark);

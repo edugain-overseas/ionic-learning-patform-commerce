@@ -1,5 +1,5 @@
 import React from "react";
-import { IonIcon, IonRouterLink } from "@ionic/react";
+import { IonIcon, IonRippleEffect, IonRouterLink } from "@ionic/react";
 import { CourseType } from "../../context/CoursesContext";
 import { serverName } from "../../http/server";
 import { useUser } from "../../context/UserContext";
@@ -22,11 +22,13 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
   );
 
   const listStyle = useListStyle()?.listStyle;
-  
+
   return (
     <li className={styles.itemWrapper}>
       <IonRouterLink
-        className={`${styles.link} ${listStyle === "row" ? styles.row : ""}`}
+        className={`${styles.link} ${
+          listStyle === "row" ? styles.row : ""
+        } ion-activatable`}
         routerLink={`/courses/course/${course.id}`}
         routerDirection="forward"
       >
@@ -63,8 +65,8 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
                 <CardPrice oldPrice={course.old_price} price={course.price} />
                 <InsetBtn
                   icon={<IonIcon className={styles.basketIcon} src={basket} />}
-                  width="32px"
-                  height="32px"
+                  width="32rem"
+                  height="32rem"
                 />
               </>
             )}
@@ -83,6 +85,7 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
             "Not purchased"
           )}
         </div>
+        <IonRippleEffect></IonRippleEffect>
       </IonRouterLink>
     </li>
   );

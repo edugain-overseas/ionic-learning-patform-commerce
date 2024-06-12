@@ -46,7 +46,7 @@ const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
         className={`${styles.contentBackground} ${
           isBackgroundBlured ? styles.backgroundBlured : ""
         }`}
-        style={{ height: `calc(100% + ${scrollTriggerValue}px)` }}
+        style={{ height: `calc(100% + ${scrollTriggerValue}rem)` }}
       >
         <div
           className={`${styles.contentInner}  ${scroll ? styles.scroll : ""}`}

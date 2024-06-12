@@ -1,16 +1,15 @@
 .accordionWrapper {
-  padding: 8px;
+  padding: 8rem;
 
   border-radius: var(--custom--border-radius-primary);
   background: var(--custom-bg-rgba-secondary);
   box-shadow: var(--custom-box-shadow-primary);
-  // backdrop-filter: blur(16px);s
 }
 
 .accordionHeader {
   display: flex;
   justify-content: space-between;
-  gap: 8px;
+  gap: 8rem;
 }
 
 .chevronInner {
@@ -27,7 +26,7 @@
 }
 
 .chevron {
-  font-size: 24px;
+  font-size: 24rem;
   color: var(--ion-color-light);
   transition: rotate var(--custom-tr-time-min) ease,
     color var(--custom-tr-time-min) ease;

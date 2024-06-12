@@ -1,11 +1,11 @@
 .wrapper {
-  flex-basis: calc((100% - 16px) / 2);
+  flex-basis: calc((100% - 16rem) / 2);
   --padding-start: 0;
   --padding-end: 0;
   --inner-padding-end: 0;
   --inner-padding-start: 0;
   --background: transparent;
-  --border-radius: 5px;
+  --border-radius: 5rem;
 
   &::part(native) {
     flex-direction: column;
@@ -19,7 +19,7 @@
     flex-basis: 100%;
 
     .taskInfo {
-      padding: 8px 12px 12px;
+      padding: 8rem 12rem 12rem;
       margin-top: 0;
       height: auto;
 
@@ -33,16 +33,16 @@
     }
 
     .taskProps {
-      padding-inline-end: 24px;
+      padding-inline-end: 24rem;
       flex-direction: row;
-      gap: 16px;
+      gap: 16rem;
       flex-wrap: wrap;
 
       .taskProp {
         flex: 1;
 
         &:nth-child(odd) {
-          margin-top: -10px;
+          margin-top: -10rem;
         }
 
         &:nth-child(1) {
@@ -61,24 +61,24 @@
 
 .taskInfo {
   width: 100%;
-  height: 108px;
-  margin-top: -10px;
+  height: 108rem;
+  margin-top: -10rem;
   background-color: var(--custom-bg-rgba-primary);
   border-radius: var(--custom--border-radius-primary);
   box-shadow: var(--custom-box-shadow-primary);
-  backdrop-filter: blur(16px);
-  padding: 6px 12px;
+  backdrop-filter: blur(16rem);
+  padding: 6rem 12rem;
 
   .taskTitle {
-    height: 32px;
+    height: 32rem;
     width: 100%;
-    margin-bottom: 6px;
+    margin-bottom: 6rem;
     display: flex;
     align-items: center;
     overflow: hidden;
 
     span {
-      font-size: 12px;
+      font-size: 12rem;
       font-weight: 700;
       color: var(--ion-color-dark);
       max-height: 100%;
@@ -93,23 +93,23 @@
 .taskProps {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 8rem;
 
   .taskProp {
     display: flex;
-    gap: 6px;
+    gap: 6rem;
     align-items: center;
   }
 
   .taskPropIcon {
     flex-shrink: 0;
-    font-size: 12px;
+    font-size: 12rem;
     color: var(--ion-color-medium);
   }
 
   .taskPropText {
     color: var(--ion-color-medium);
-    font-size: 10px;
+    font-size: 10rem;
     font-weight: 500;
     white-space: nowrap;
 

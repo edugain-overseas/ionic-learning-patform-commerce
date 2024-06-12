@@ -17,6 +17,8 @@ import CardPrice from "../../../components/CardPrice/CardPrice";
 import DoubleScrollLayout from "../../../components/DoubleScrollLayout/DoubleScrollLayout";
 import CourseNavPanel from "../../../components/CourseNavPanel/CourseNavPanel";
 import styles from "./CourseIntroPage.module.scss";
+import EqualSpaceContainer from "../../../components/EqualSpaceContainer/EqualSpaceContainer";
+import CommonButton from "../../../components/CommonButton/CommonButton";
 
 const CourseIntroPage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -29,10 +31,6 @@ const CourseIntroPage: React.FC = () => {
     (userCourse) => userCourse.course_id === +courseId
   );
 
-  const headerProps = {
-    left: [{ name: "back" }],
-  };
-
   return (
     <>
       <IonHeader className={styles.header} mode="ios">
@@ -43,8 +41,7 @@ const CourseIntroPage: React.FC = () => {
           className={styles.bakcBtn}
         />
       </IonHeader>
-      {/* <Header {...headerProps} /> */}
-      <IonContent>
+      <IonContent scrollY={false}>
         <DoubleScrollLayout
           posterSrc={`${serverName}/${course?.image_path}`}
           topLabel={`Category: ${category?.title}`}
@@ -188,15 +185,25 @@ const CourseIntroPage: React.FC = () => {
           {isCoursePurchased ? (
             <CourseNavPanel />
           ) : (
-            <>
-              <div className={styles.priceWrapper}>
-                <CardPrice price={course?.price} variant="primary" />
-              </div>
-              <button className={styles.buyCourseBtn}>
-                <span>Buy</span>
-                <IonIcon className={styles.buyIcon} src={basket} />
-              </button>
-            </>
+            <EqualSpaceContainer
+              leftItem={
+                <div className={styles.priceWrapper}>
+                  <CardPrice price={course?.price} variant="primary" />
+                </div>
+              }
+              rightItem={
+                <CommonButton
+                  className={styles.buyCourseBtn}
+                  icon={<IonIcon className={styles.buyIcon} src={basket} />}
+                  label="Buy"
+                  width={104}
+                  height={32}
+                  borderRadius={5}
+                  backgroundColor="#B80101"
+                  color="#fcfcfc"
+                />
+              }
+            ></EqualSpaceContainer>
           )}
         </div>
       </IonContent>

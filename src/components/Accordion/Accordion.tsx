@@ -34,8 +34,8 @@ const Accordion: React.FC<AccordionTypes> = ({ header, content }) => {
                 className={`${styles.chevron} ${isOpen ? styles.open : ""}`}
               />
             }
-            width="32px"
-            height="32px"
+            width="32rem"
+            height="32rem"
             backgroundColor={isOpen ? "#7E8CA8" : undefined}
             onClick={handleToggle}
           />

@@ -43,26 +43,26 @@ const ProgressBar: React.FC<ProgressBarTypes> = ({
     <div
       className={styles.outerWrapper}
       style={{
-        width: `${width}px`,
-        height: `${height}px`,
-        borderRadius: `${width * 0.03}px`,
-        padding: `${width * 0.0175}px`,
+        width: `${width}rem`,
+        height: `${height}rem`,
+        borderRadius: `${width * 0.03}rem`,
+        padding: `${width * 0.0175}rem`,
       }}
     >
       <div
         className={styles.innerWrapper}
-        style={{ borderRadius: `${width * 0.023}px` }}
+        style={{ borderRadius: `${width * 0.023}rem` }}
       >
         <div
           className={`${styles.progress} ${disabled ? styles.disabled : ""}`}
           style={{
             width: value && value <= 100 ? `${value}%` : "100%",
-            borderRadius: `${width * 0.023}px`,
+            borderRadius: `${width * 0.023}rem`,
             backgroundColor: value ? `${handleProgressColor(value)}` : "none",
           }}
         ></div>
         {showValue && (
-          <span style={{ fontSize: `${(10 / 24) * height}px` }}>
+          <span style={{ fontSize: `${(10 / 24) * height}rem` }}>
             {disabled
               ? "Not purchased"
               : value && value >= 100

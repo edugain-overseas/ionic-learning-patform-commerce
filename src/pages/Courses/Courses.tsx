@@ -1,18 +1,23 @@
 import { IonContent, IonPage } from "@ionic/react";
 import React, { useState } from "react";
-import { coursesNavItems } from "../../constants/nav";
+import {
+  coursesPrivateNavItems,
+  coursesPublicNavItems,
+} from "../../constants/nav";
 import { useCourses } from "../../context/CoursesContext";
-import Header from "../../components/Header/Header";
-import SegmentNavPanel from "../../components/SegmentNavPanel/SegmentNavPanel";
-import CategoryItem from "../../components/CategoryItem/CategoryItem";
-import styles from "./Courses.module.scss";
 import { useUser } from "../../context/UserContext";
+import Header from "../../components/Header/Header";
+import CategoryItem from "../../components/CategoryItem/CategoryItem";
+import SegmentNavPanel from "../../components/SegmentNavPanel/SegmentNavPanel";
+import styles from "./Courses.module.scss";
 
 const Courses: React.FC = () => {
+  const userInterface = useUser();
   const coursesInterface = useCourses();
+  const isLoggedIn = userInterface?.user.username !== "";
   const categories = coursesInterface?.categories;
   const courses = coursesInterface?.courses;
-  const userCourses = useUser()?.user.courses;
+  const userCourses = userInterface?.user.courses;
 
   const handleFilterCategory = () => {
     switch (filter) {
@@ -58,13 +63,13 @@ const Courses: React.FC = () => {
     }
   };
 
-  const [filter, setFilter] = useState<string>("my");
+  const [filter, setFilter] = useState<string>(isLoggedIn ? "my" : "available");
 
   const headerProps = {
     title: "Courses",
     left: [{ name: "back" }, { name: "notification", onClick: () => {} }],
     right: [
-      { name: "list-style", onClick: () => {} },
+      { name: "filter", onClick: () => {} },
       { name: "search", onClick: () => {} },
     ],
   };
@@ -76,7 +81,7 @@ const Courses: React.FC = () => {
         <SegmentNavPanel
           value={filter}
           setValue={setFilter}
-          items={coursesNavItems}
+          items={isLoggedIn ? coursesPrivateNavItems : coursesPublicNavItems}
         />
         <ul className={styles.categoriesList}>
           {handleFilterCategory()?.map((category) => (

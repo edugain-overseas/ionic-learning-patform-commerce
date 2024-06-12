@@ -1,4 +1,4 @@
-import { IonIcon, IonMenu, IonMenuToggle } from "@ionic/react";
+import { IonIcon, IonMenu, IonMenuToggle, IonRippleEffect } from "@ionic/react";
 import Close from "../../assets/icons/menu/close.svg";
 import Logout from "../../assets/icons/menu/logout.svg";
 import Settings from "../../assets/icons/menu/settings.svg";
@@ -8,7 +8,7 @@ import MenuNav from "./MenuNav";
 import styles from "./Menu.module.scss";
 import InsetBtn from "../InsetBtn/InsetBtn";
 import { useUser } from "../../context/UserContext";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Spinner from "../Spinner/Spinner";
 import {
   menuEnterPageAnimation,
@@ -41,7 +41,7 @@ const Menu = () => {
     });
 
     const baseEl = document.getElementById("main-content");
-    baseEl?.style.setProperty("border-radius", "16px");
+    baseEl?.style.setProperty("border-radius", "16rem");
     menuEnterPageAnimation(baseEl!).play();
   };
 
@@ -93,32 +93,34 @@ const Menu = () => {
           <div className={styles.footerTools}>
             <ul className={styles.footerNavItems}>
               {isUserLoggedIn && (
-                <li>
+                <li className="ion-activatable">
                   <button onClick={handleLogout}>
                     <div className={styles.iconWrapper}>
                       {isLoading ? (
-                        <Spinner color="dark"/>
+                        <Spinner color="dark" />
                       ) : (
                         <IonIcon src={Logout} className={styles.footerIcon} />
                       )}
                     </div>
                     <span>Log out</span>
                   </button>
+                  <IonRippleEffect></IonRippleEffect>
                 </li>
               )}
-              <li>
+              <li className="ion-activatable">
                 <button>
                   <IonIcon src={Settings} className={styles.footerIcon} />
                   <span>Settings</span>
                 </button>
+                <IonRippleEffect></IonRippleEffect>
               </li>
             </ul>
             <div className={styles.closeBtn}>
               <IonMenuToggle>
                 <InsetBtn
                   icon={<IonIcon src={Close} />}
-                  width="32px"
-                  height="32px"
+                  width="32rem"
+                  height="32rem"
                   backgroundColor="#B80101"
                 />
               </IonMenuToggle>

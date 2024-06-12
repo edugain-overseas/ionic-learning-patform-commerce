@@ -25,8 +25,8 @@ const PlayPauseBtn: FC<PlayPauseBtnProps> = ({ audioRef }) => {
           className={styles.playPauseIcon}
         />
       }
-      width="32px"
-      height="32px"
+      width="32rem"
+      height="32rem"
       onClick={handleTogglePlay}
     />
   );

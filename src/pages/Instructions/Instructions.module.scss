@@ -1,8 +1,8 @@
 .container {
-  padding: 16px 18px;
+  padding: 16rem 18rem;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 8rem;
 }
 
 .header {
@@ -12,25 +12,25 @@
   .iconWrapper {
     flex-shrink: 0;
     .intructionIcon {
-      font-size: 22px;
+      font-size: 22rem;
     }
   }
 
   .intructionTitleWrapper {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding-left: 20px;
+    gap: 8rem;
+    padding-left: 20rem;
     position: relative;
 
     &::before {
       content: "";
       position: absolute;
-      left: 10px;
+      left: 10rem;
       top: 50%;
       transform: translate(-50%, -50%);
 
-      width: 4px;
+      width: 4rem;
       height: 100%;
 
       border-radius: var(--custom--border-radius-primary);
@@ -40,7 +40,7 @@
     }
 
     .title {
-      font-size: 14px;
+      font-size: 14rem;
       font-weight: 700;
       color: var(--ion-color-dark);
     }
@@ -48,15 +48,15 @@
     .updateInfoWrapper {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 6rem;
 
       .updateInfoIcon {
-        font-size: 12px;
+        font-size: 12rem;
       }
 
       .updateInfoText {
         color: var(--ion-color-medium);
-        font-size: 10px;
+        font-size: 10rem;
         font-weight: 500;
       }
     }
@@ -64,19 +64,19 @@
 }
 
 .instructionContent {
-  padding-top: 22px;
+  padding-top: 22rem;
   position: relative;
   background-image: url("../../assets/images/instruction-content-background.png");
   background-position-x: center;
-  background-position-y: max(22px, 50%);
+  background-position-y: max(22rem, 50%);
   background-repeat: no-repeat;
 
   &::before {
     content: "";
     position: absolute;
-    top: 10px;
+    top: 10rem;
     width: 100%;
-    height: 2px;
+    height: 2rem;
     background-color: rgba(var(--ion-color-dark-rgb), 0.5);
   }
 
@@ -84,15 +84,15 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
+    gap: 8rem;
+    margin-bottom: 10rem;
 
     color: var(--ion-color-medium);
-    font-size: 10px;
+    font-size: 10rem;
     font-weight: 500;
 
     ion-icon {
-      font-size: 12px;
+      font-size: 12rem;
     }
   }
 }
@@ -100,31 +100,31 @@
 .text {
   text-align: justify;
   font-family: Roboto;
-  font-size: 12px;
+  font-size: 12rem;
   font-style: normal;
   font-weight: 400;
-  line-height: 16px;
-  padding-bottom: 40px;
-  margin-bottom: 10px;
-  border-bottom: 2px solid var(--ion-color-light);
+  line-height: 16rem;
+  padding-bottom: 40rem;
+  margin-bottom: 10rem;
+  border-bottom: 2rem solid var(--ion-color-light);
 }
 
 .filesWrapper {
-  padding-inline-start: 12px;
+  padding-inline-start: 12rem;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 8rem;
 
   .filesTitle {
     font-family: Roboto;
-    font-size: 12px;
+    font-size: 12rem;
     font-weight: 600;
   }
 
   .filesList {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 12rem;
 
     .fileItem {
       display: flex;
@@ -132,37 +132,37 @@
     }
 
     .documentIcon {
-      font-size: 16px;
+      font-size: 16rem;
       color: var(--ion-color-dark);
-      margin-right: 8px;
+      margin-right: 8rem;
     }
 
     .filename {
-      font-size: 14px;
+      font-size: 14rem;
       font-weight: 500;
       line-height: 133.3%;
-      letter-spacing: 0.42px;
+      letter-spacing: 0.42rem;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
 
-      margin-right: 16px;
+      margin-right: 16rem;
     }
 
     .filesize {
       color: var(--ion-color-medium);
-      font-size: 14px;
+      font-size: 14rem;
       font-weight: 500;
       line-height: 133.3%;
-      letter-spacing: 0.42px;
-      margin-right: 16px;
+      letter-spacing: 0.42rem;
+      margin-right: 16rem;
     }
 
     .downloadBtn {
       background: none;
 
       ion-icon {
-        font-size: 16px;
+        font-size: 16rem;
         color: var(--ion-color-light);
       }
     }

@@ -4,12 +4,12 @@
 }
 
 .contentWrapper {
-  // padding-bottom: 61px;
+  // padding-bottom: 61rem;
 }
 
 .topContentWrapper {
-  padding-block: 4px 26px;
-  padding-inline: 20px;
+  padding-block: 4rem 26rem;
+  padding-inline: 20rem;
   color: var(--ion-color-primary-contrast);
 
   position: sticky;
@@ -20,34 +20,34 @@
 .topScaler {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding-bottom: 16px;
+  gap: 16rem;
+  padding-bottom: 16rem;
   transform: scale(calc(1 - var(--hide-coefficient)))
-    translateY(calc(-100px * var(--hide-coefficient)));
+    translateY(calc(-100rem * var(--hide-coefficient)));
   opacity: calc(1 - var(--hide-coefficient) * 1.5);
 }
 
 .pageTitle {
   display: flex;
-  gap: 16px;
+  gap: 16rem;
   align-items: center;
   position: relative;
 
   &::after {
     content: "";
     position: absolute;
-    left: 56px;
+    left: 56rem;
     top: 0;
     height: 100%;
-    width: 1px;
-    border-radius: 4px;
+    width: 1rem;
+    border-radius: 4rem;
     background-color: var(--ion-color-primary-contrast);
   }
 
   .categoryImage {
     display: block;
-    width: 52px;
-    height: 52px;
+    width: 52rem;
+    height: 52rem;
     flex-shrink: 0;
     position: relative;
   }
@@ -55,12 +55,12 @@
   .categoryTitle {
     h3 {
       margin: 0;
-      font-size: 20px;
+      font-size: 20rem;
       font-weight: 700;
     }
 
     p {
-      font-size: 10px;
+      font-size: 10rem;
       font-weight: 400;
 
       b {
@@ -73,10 +73,10 @@
 .progressWrapper {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 8rem;
 
   .progressValue {
-    font-size: 10px;
+    font-size: 10rem;
     font-weight: 600;
     flex-shrink: 0;
   }
@@ -87,13 +87,13 @@
 }
 
 .segment {
-  min-height: 36px;
-  padding: 4px;
+  min-height: 36rem;
+  padding: 4rem;
   box-shadow: var(--custom-box-shadow-secondary);
   background-color: var(--ion-color-secondary);
-  gap: 16px;
+  gap: 16rem;
   border-radius: var(--custom--border-radius-primary);
-  transform: translateY(calc(-96px * var(--hide-coefficient)));
+  transform: translateY(calc(-96rem * var(--hide-coefficient)));
 
   .segmentBtn {
     --color-checked: var(--ion-color-primary-contrast);
@@ -102,7 +102,7 @@
     --indicator-color: var(--ion-color-tertiary);
 
     span {
-      font-size: 12px;
+      font-size: 12rem;
       font-weight: 700;
     }
   }
@@ -111,16 +111,16 @@
 .bottomOuter {
   position: absolute;
   z-index: 10;
-  top: 162px;
+  top: 162rem;
   padding-bottom: 0;
   width: 100%;
-  height: calc(100% - 66px);
+  height: calc(100% - 66rem);
 }
 
 .background {
   background: url("../../assets/images/background.png");
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
+  border-top-left-radius: 16rem;
+  border-top-right-radius: 16rem;
   // max-height: 100%;
   overflow-y: hidden;
 
@@ -135,24 +135,24 @@
 .controllerWrapper {
   position: relative;
   z-index: 1;
-  height: 20px;
-  padding-block: 8px;
+  height: 20rem;
+  padding-block: 8rem;
   display: flex;
   justify-content: center;
   align-items: center;
 
   .controller {
-    width: 45px;
+    width: 45rem;
     height: 100%;
-    border-radius: 6px;
+    border-radius: 6rem;
     background-color: var(--ion-color-light);
   }
 }
 
 .bottomInner {
-  height: calc(100% - 20px);
-  padding-inline: 18px;
-  padding-bottom: 18px;
+  height: calc(100% - 20rem);
+  padding-inline: 18rem;
+  padding-bottom: 18rem;
   position: relative;
   z-index: 1;
   overflow-y: auto;
@@ -163,11 +163,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 16rem;
 
   color: var(--ion-color-dark);
   text-transform: capitalize;
-  font-size: 14px;
+  font-size: 14rem;
   font-weight: 700;
 
   span {
@@ -178,6 +178,6 @@
 .coursesList {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 16rem;
 }
 // }

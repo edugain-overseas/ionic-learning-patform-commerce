@@ -1,6 +1,6 @@
 .wrapper {
   display: flex;
-  gap: 1px;
+  gap: 1rem;
   justify-content: center;
   align-items: center;
   color: var(--ion-color-light);
@@ -13,29 +13,29 @@
   }
 
   .userGrade {
-    font-size: 12px;
+    font-size: 12rem;
   }
 
   .divider {
-    font-size: 16px;
+    font-size: 16rem;
     font-weight: 300;
   }
 
   .maxGradeWrapper {
     display: flex;
     flex-direction: column;
-    margin-bottom: 4px;
+    margin-bottom: 4rem;
   }
 
   .maxGradeLabel {
     text-align: right;
-    font-size: 6px;
+    font-size: 6rem;
     font-weight: 500;
-    padding-inline-end: 1px;
+    padding-inline-end: 1rem;
   }
 
   .maxGrade {
     display: inline-block;
-    font-size: 10px;
+    font-size: 10rem;
   }
 }

@@ -74,8 +74,8 @@ const Home: React.FC = () => {
               />
             </div>
             <InsetBtn
-              width="32px"
-              height="32px"
+              width="32rem"
+              height="32rem"
               backgroundColor="#7E8CA8"
               icon={<IonIcon src={search} className={styles.searchbarIcon} />}
             />

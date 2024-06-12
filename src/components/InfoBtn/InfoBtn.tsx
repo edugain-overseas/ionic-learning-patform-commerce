@@ -8,9 +8,9 @@ const InfoBtn: React.FC<{ info?: string; id: string }> = ({ info, id }) => {
   return (
     <>
       <InsetBtn
-        icon={<IonIcon src={infoIcon} style={{ fontSize: "16px" }} />}
-        width="32px"
-        height="32px"
+        icon={<IonIcon src={infoIcon} style={{ fontSize: "16rem" }} />}
+        width="32rem"
+        height="32rem"
         disabled={false}
         onClick={() => {}}
         id={id}

@@ -3,6 +3,7 @@ import { menuNav } from "../../constants/nav";
 import {
   IonIcon,
   IonMenuToggle,
+  IonRippleEffect,
   IonRouterLink,
 } from "@ionic/react";
 import styles from "./Menu.module.scss";
@@ -15,13 +16,14 @@ const MenuNav = () => {
           <IonMenuToggle>
             <IonRouterLink
               routerLink={link.to}
-              className={styles.menuNavLink}
+              className={`${styles.menuNavLink} ion-activatable`}
               routerDirection="root"
             >
               <div className={styles.linkWrapper}>
                 <IonIcon src={link.iconSrc} className={styles.navItemIcon} />
                 <span className={styles.navItemLabel}>{link.label}</span>
               </div>
+              <IonRippleEffect></IonRippleEffect>
             </IonRouterLink>
           </IonMenuToggle>
         </li>

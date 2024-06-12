@@ -126,7 +126,7 @@ const EditProfileData: FC<{
               height={32}
               backgroundColor="transparent"
               borderRadius={5}
-              border="1px solid #7E8CA8"
+              border="1rem solid #7E8CA8"
               label="Change avatar"
               icon={<IonIcon src={EditIcon} className={styles.editIcon} />}
               type="button"
@@ -197,13 +197,13 @@ const EditProfileData: FC<{
                 placeholder="Select your country"
                 wrapperStyles={{
                   width: "100%",
-                  height: "32px",
-                  boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.16) inset",
+                  height: "32rem",
+                  boxShadow: "0 0 4rem 0 rgba(0, 0, 0, 0.16) inset",
                 }}
                 dropDownWrapperStyles={{
                   top: "initial",
-                  bottom: "calc(100% + 2px)",
-                  boxShadow: "0 0 4px 0 rgba(0, 0, 0, 0.16)",
+                  bottom: "calc(100% + 2rem)",
+                  boxShadow: "0 0 4rem 0 rgba(0, 0, 0, 0.16)",
                 }}
                 value={country}
                 onChange={setCountry}
@@ -220,7 +220,7 @@ const EditProfileData: FC<{
                   height={32}
                   backgroundColor="transparent"
                   borderRadius={5}
-                  border="1px solid #7E8CA8"
+                  border="1rem solid #7E8CA8"
                 />
               }
               rightItem={
@@ -237,7 +237,7 @@ const EditProfileData: FC<{
                   height={32}
                   backgroundColor="transparent"
                   borderRadius={5}
-                  border="1px solid #7E8CA8"
+                  border="1rem solid #7E8CA8"
                   type="submit"
                   disabled={isSubmitting}
                 />

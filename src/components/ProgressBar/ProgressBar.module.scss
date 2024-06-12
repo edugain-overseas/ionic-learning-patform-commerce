@@ -1,6 +1,6 @@
 .outerWrapper {
   background: var(--custom-bg-rgba-fourth);
-  box-shadow: var(---custom-box-shadow-secondary-inset);
+  box-shadow: var(--custom-box-shadow-secondary-inset);
 }
 
 .innerWrapper {
@@ -40,9 +40,9 @@
     background: repeating-linear-gradient(
       125deg,
       rgba(0, 0, 0, 0.05),
-      rgba(0, 0, 0, 0.05) 3px,
-      rgba(0, 0, 0, 0) 3px,
-      rgba(0, 0, 0, 0) 9px
+      rgba(0, 0, 0, 0.05) 3rem,
+      rgba(0, 0, 0, 0) 3rem,
+      rgba(0, 0, 0, 0) 9rem
     );
   }
 }

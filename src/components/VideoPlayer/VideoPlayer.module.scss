@@ -1,7 +1,7 @@
 .container {
   --current-progress: 0;
 
-  margin: 0 10px 16px;
+  margin: 0 10rem 16rem;
   position: relative;
   display: flex;
   align-items: center;
@@ -40,7 +40,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 32px;
+  gap: 32rem;
 
   button {
     display: flex;
@@ -52,15 +52,15 @@
   }
 
   .skipBtn {
-    width: 32px;
-    height: 32px;
-    font-size: 16px;
+    width: 32rem;
+    height: 32rem;
+    font-size: 16rem;
   }
 
   .playPauseBtn {
-    width: 48px;
-    height: 48px;
-    font-size: 22px;
+    width: 48rem;
+    height: 48rem;
+    font-size: 22rem;
   }
 }
 
@@ -69,18 +69,18 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 8px;
+  padding: 8rem;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 3rem;
 
   background: linear-gradient(to top, rgba(0, 0, 0, 0.35), transparent);
 
   .timeline {
     width: 100%;
-    height: 4px;
+    height: 4rem;
     background-color: var(--custom-color-decorate-secondary);
-    border-radius: 30px;
+    border-radius: 30rem;
     position: relative;
 
     &::before {
@@ -90,12 +90,12 @@
       right: calc(100% - (var(--current-progress) * 100%));
       height: 100%;
       background-color: var(--ion-color-primary-contrast);
-      border-radius: 30px;
+      border-radius: 30rem;
     }
 
     &::after {
       content: "";
-      height: 10px;
+      height: 10rem;
       aspect-ratio: 1;
       position: absolute;
       top: 50%;
@@ -103,7 +103,7 @@
       transform: translate(50%, -50%);
       border-radius: 50%;
       background-color: var(--ion-color-primary-contrast);
-      border-radius: 30px;
+      border-radius: 30rem;
     }
   }
 
@@ -113,14 +113,14 @@
 
     .duration {
       color: var(--ion-color-primary-contrast);
-      font-size: 8px;
+      font-size: 8rem;
       font-weight: 600;
       flex-grow: 1;
     }
 
     .fullscreen {
       background: none;
-      font-size: 16px;
+      font-size: 16rem;
       color: var(--ion-color-primary-contrast);
       width: 1em;
       height: 1em;

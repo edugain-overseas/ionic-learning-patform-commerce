@@ -1,17 +1,17 @@
 .wrapper {
-  padding-inline: 14px;
+  padding-inline: 14rem;
 }
 
 .header {
-  height: 48px;
-  padding-block: 20px 12px;
+  height: 48rem;
+  padding-block: 20rem 12rem;
   display: flex;
   justify-content: center;
-  border-bottom: 1px solid var(--ion-color-light);
+  border-bottom: 1rem solid var(--ion-color-light);
 
   .title {
     font-family: Roboto;
-    font-size: 14px;
+    font-size: 14rem;
     font-style: normal;
     font-weight: 700;
     line-height: 109.6%;
@@ -20,45 +20,45 @@
 }
 
 .avatarEditorWrapper {
-  padding-block: 16px;
+  padding-block: 16rem;
   display: flex;
   justify-content: center;
 }
 
 .userAvatars {
-  padding: 16px 4px;
+  padding: 16rem 4rem;
   display: flex;
-  gap: 12px;
-  border-bottom: 1px solid var(--ion-color-light);
+  gap: 12rem;
+  border-bottom: 1rem solid var(--ion-color-light);
   & > li {
     flex-basis: 1/6;
   }
 
   .selectedItem {
     border-radius: 50%;
-    border: 2px solid var(--ion-color-light);
+    border: 2rem solid var(--ion-color-light);
   }
 }
 
 .imageSourceList {
-  padding-block: 16px;
+  padding-block: 16rem;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 16rem;
 
   .sourceItem {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 14rem;
 
     ion-icon {
       color: var(--ion-color-light);
-      font-size: 16px;
+      font-size: 16rem;
     }
 
     .sourceSpan {
       font-family: Roboto;
-      font-size: 14px;
+      font-size: 14rem;
       font-style: normal;
       font-weight: 700;
       line-height: 109.6%;
@@ -68,15 +68,15 @@
 }
 
 .footer {
-  padding-block: 16px;
+  padding-block: 16rem;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  gap: 16px;
+  gap: 16rem;
   color: var(--ion-color-light);
 
   .button {
-    font-size: 14px;
+    font-size: 14rem;
     font-style: normal;
     font-weight: 600;
     line-height: normal;

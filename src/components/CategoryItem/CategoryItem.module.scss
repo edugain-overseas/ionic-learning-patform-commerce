@@ -1,50 +1,54 @@
 .categoriesItem {
   position: relative;
   overflow: hidden;
-  padding-right: 50px;
+  padding-right: 50rem;
   background-color: var(--custom-bg-rgba-secondary);
   border-radius: var(--custom--border-radius-primary);
   box-shadow: var(--custom-box-shadow-primary);
 
   &::before {
     content: "";
-    width: 78px;
-    height: 78px;
+    width: 78rem;
+    height: 78rem;
     background-image: url("../../assets/icons/category.svg");
     background-size: cover;
     position: absolute;
-    top: -10px;
-    right: 48px;
+    top: -10rem;
+    right: 48rem;
     opacity: 0.03;
   }
 
+  // .link {
+  //   position: relative;
+  // }
+
   .contentWrapper {
-    padding: 16px 0 16px 10px;
+    padding: 16rem 0 16rem 10rem;
     display: flex;
-    gap: 16px;
+    gap: 16rem;
   }
 
   .itemIcon {
-    width: 52px;
-    height: 52px;
+    width: 52rem;
+    height: 52rem;
     flex-shrink: 0;
     position: relative;
 
     &::after {
       content: "";
       position: absolute;
-      width: 1px;
-      height: calc(100% + 8px);
-      border-radius: 4px;
-      right: -4px;
-      top: -4px;
+      width: 1rem;
+      height: calc(100% + 8rem);
+      border-radius: 4rem;
+      right: -4rem;
+      top: -4rem;
       background-color: var(--ion-color-dark);
     }
   }
 
   h3 {
     margin: 0;
-    font-size: 16px;
+    font-size: 16rem;
     font-weight: 700;
     color: var(--ion-color-dark);
     max-height: calc(2em * 1.2);
@@ -53,11 +57,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
 
-    margin-bottom: 4px;
+    margin-bottom: 4rem;
   }
 
   p {
-    font-size: 8px;
+    font-size: 8rem;
     font-weight: 400;
     color: var(--ion-color-dark);
 
@@ -68,16 +72,16 @@
 
   .infoBtn {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 12rem;
+    right: 12rem;
   }
 }
 
 .infoContent {
   --background: var(--custom-bg-rgba-secondary);
   --color: var(--ion-color-dark);
-  --padding-top: 8px;
-  --padding-bottom: 8px;
-  --padding-start: 8px;
-  --padding-end: 8px;
+  --padding-top: 8rem;
+  --padding-bottom: 8rem;
+  --padding-start: 8rem;
+  --padding-end: 8rem;
 }

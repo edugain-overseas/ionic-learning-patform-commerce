@@ -8,18 +8,18 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import {FC} from "react";
+import { FC } from "react";
 import { useListStyle } from "../../context/ListStyleContext";
 import bellIcon from "../../assets/icons/header/bell.svg";
 import searchIcon from "../../assets/icons/header/search.svg";
 import backIcon from "../../assets/icons/header/back.svg";
 import rowIcon from "../../assets/icons/header/list-style-row.svg";
 import gridIcon from "../../assets/icons/header/list-style-grid.svg";
+import filterIcon from "../../assets/icons/header/filter.svg";
 import SettingsIcon from "../../assets/icons/menu/settings.svg";
 import SaveIcon from "../../assets/icons/save.svg";
 import logoIEU from "../../assets/icons/logoIEU.svg";
 import styles from "./Header.module.scss";
-
 
 interface buttonPropsTypes {
   name: string;
@@ -80,6 +80,16 @@ const renderBtn = (props: buttonPropsTypes) => {
           />
         </IonButton>
       );
+    case "filter":
+      return (
+        <IonButton
+          key={props.name}
+          className={props.className ? props.className : ""}
+          id={props.id}
+        >
+          <IonIcon src={filterIcon} />
+        </IonButton>
+      );
     case "search":
       return (
         <IonButton
@@ -95,7 +105,9 @@ const renderBtn = (props: buttonPropsTypes) => {
       return (
         <IonButton
           key={props.name}
-          className={`${styles.settingsBtn} ${props.className ? props.className : ""}`}
+          className={`${styles.settingsBtn} ${
+            props.className ? props.className : ""
+          }`}
           id={props.id}
         >
           <IonIcon src={SettingsIcon} className={styles.settingsIcon} />

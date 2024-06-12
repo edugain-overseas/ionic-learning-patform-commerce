@@ -1,6 +1,6 @@
 .avatarWrapper {
-  width: 80px;
-  height: 80px;
+  width: 80rem;
+  height: 80rem;
   flex-shrink: 0;
   border-radius: 50%;
   overflow: hidden;
@@ -15,7 +15,7 @@
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid var(--custom-color-decorate);
+    border: 2rem solid var(--custom-color-decorate);
   }
 
   .editBtn {
@@ -28,19 +28,19 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 2px;
+    gap: 2rem;
     opacity: 0;
     transition: opacity var(--transition-time-min) ease;
 
     svg {
-      width: 10px;
-      height: 10px;
+      width: 10rem;
+      height: 10rem;
     }
 
     span {
       color: var(--content-contr-color);
       font-family: Inter, sans-serif;
-      font-size: 10px;
+      font-size: 10rem;
       font-weight: 400;
     }
 

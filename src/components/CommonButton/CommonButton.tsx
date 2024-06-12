@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./CommonButton.module.scss";
+import { IonRippleEffect } from "@ionic/react";
 
 interface CommonButtonTypes {
   id?: string;
@@ -43,13 +44,13 @@ const CommonButton: React.FC<CommonButtonTypes> = ({
   };
   return (
     <button
-      className={`${styles.wrapper} ${className ? className : undefined}`}
+      className={`${styles.wrapper} ${className ? className : undefined} ion-activatable`}
       style={{
-        width: block ? "100%" : width ? `${width}px` : "auto",
-        height: height ? `${height}px` : "auto",
+        width: block ? "100%" : width ? `${width}rem` : "auto",
+        height: height ? `${height}rem` : "auto",
         color: color ? color : "inherit",
         backgroundColor: backgroundColor ? backgroundColor : "inherit",
-        borderRadius: `${borderRadius}px`,
+        borderRadius: `${borderRadius}rem`,
         border: border ? border : "none",
       }}
       onClick={handleClick}
@@ -59,6 +60,7 @@ const CommonButton: React.FC<CommonButtonTypes> = ({
     >
       {label && <span className={styles.label}>{label}</span>}
       {icon && icon}
+      <IonRippleEffect></IonRippleEffect>
     </button>
   );
 };

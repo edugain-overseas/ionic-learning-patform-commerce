@@ -2,14 +2,14 @@
 }
 
 .oprionsWrapper {
-  padding-block: 16px;
+  padding-block: 16rem;
   display: flex;
 
-  border-bottom: 1px solid var(--content-datail-secondary);
+  border-bottom: 1rem solid var(--content-datail-secondary);
 
   & p {
     color: var(--content-datail-secondary);
-    font-size: 14px;
+    font-size: 14rem;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -20,40 +20,40 @@
 .right {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 8rem;
   justify-content: space-between;
 }
 
 .left {
-  padding-right: 24px;
-  border-right: 1px solid var(--content-datail-secondary);
+  padding-right: 24rem;
+  border-right: 1rem solid var(--content-datail-secondary);
 }
 
 .right {
-  padding-left: 24px;
+  padding-left: 24rem;
 }
 
 .selectOptionsWrapper {
   display: flex;
   align-items: center;
-  gap: 24px;
-  padding-block: 16px;
+  gap: 24rem;
+  padding-block: 16rem;
 
   & > ul {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 16rem;
   }
 
   .answerOption {
     display: flex;
     align-items: center;
-    height: 24px;
+    height: 24rem;
 
     span {
       color: var(--content-main);
       font-family: Inter, sans-serif;
-      font-size: 14px;
+      font-size: 14rem;
       font-style: normal;
       font-weight: 500;
       line-height: normal;

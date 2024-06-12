@@ -35,8 +35,8 @@ const Avatar: React.FC<AvatarTypes> = ({
     <div
       className={styles.avatarWrapper}
       style={{
-        width: `${size}px`,
-        height: `${size}px`,
+        width: `${size}rem`,
+        height: `${size}rem`,
         pointerEvents: editable ? "auto" : "none",
       }}
     >

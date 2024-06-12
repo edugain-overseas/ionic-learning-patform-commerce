@@ -116,16 +116,16 @@ const UserAvatarEditor: FC<UserAvatarEditorPropsType> = ({ closeModal }) => {
           <ul className={styles.imageSourceList}>
             <li className={styles.sourceItem} onClick={takePhoto}>
               <InsetBtn
-                width="32px"
-                height="32px"
+                width="32rem"
+                height="32rem"
                 icon={<IonIcon src={cameraIcon} />}
               />
               <span className={styles.sourceSpan}>To make a photo</span>
             </li>
             <li className={styles.sourceItem} onClick={pickPhoto}>
               <InsetBtn
-                width="32px"
-                height="32px"
+                width="32rem"
+                height="32rem"
                 icon={<IonIcon src={galleryIcon} />}
               />
               <span className={styles.sourceSpan}>Choose from gallery</span>
@@ -142,7 +142,7 @@ const UserAvatarEditor: FC<UserAvatarEditorPropsType> = ({ closeModal }) => {
           className={styles.button}
           backgroundColor="transparent"
           borderRadius={5}
-          border="1px solid #7E8CA8"
+          border="1rem solid #7E8CA8"
         />
         <CommonButton
           label="Save"
@@ -157,7 +157,7 @@ const UserAvatarEditor: FC<UserAvatarEditorPropsType> = ({ closeModal }) => {
           height={32}
           backgroundColor="transparent"
           borderRadius={5}
-          border="1px solid #7E8CA8"
+          border="1rem solid #7E8CA8"
           type="submit"
           disabled={isLoading}
           className={styles.button}

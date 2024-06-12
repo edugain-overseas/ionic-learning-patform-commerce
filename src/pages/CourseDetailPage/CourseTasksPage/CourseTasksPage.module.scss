@@ -1,65 +1,65 @@
 .pageContentWrapper {
   --background: transparent;
-  --padding-start: 18px;
-  --padding-end: 18px;
+  --padding-start: 18rem;
+  --padding-end: 18rem;
 }
 
 .courseStats {
-  padding: 12px;
+  padding: 12rem;
 
   border-radius: var(--custom--border-radius-primary);
   background: var(--custom-bg-rgba-secondary);
   box-shadow: var(--custom-box-shadow-primary);
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(16rem);
 
   .type {
     font-family: Roboto;
-    font-size: 14px;
+    font-size: 14rem;
     font-weight: 700;
     text-transform: capitalize;
     color: var(--ion-color-dark);
     display: block;
-    margin-bottom: 3px;
+    margin-bottom: 3rem;
   }
 
   .details {
     .detailsTitle {
       color: var(--ion-color-light);
-      font-size: 10px;
+      font-size: 10rem;
       font-weight: 500;
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 10rem;
     }
 
     .statsList {
       display: flex;
-      gap: 16px;
+      gap: 16rem;
     }
 
     .statsItem {
       display: flex;
-      gap: 8px;
+      gap: 8rem;
       flex: 1;
     }
 
     .statIcon {
-      font-size: 16px;
+      font-size: 16rem;
     }
 
     .statTextWrapper {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 2rem;
     }
 
     .statLabel {
       color: var(--ion-color-light);
-      font-size: 8px;
+      font-size: 8rem;
       font-weight: 500;
     }
 
     .statValue {
-      font-size: 12px;
+      font-size: 12rem;
       font-weight: 500;
       color: var(--ion-color-dark);
     }
@@ -67,24 +67,24 @@
 }
 
 .tasksList {
-  padding-block: 16px 80px;
+  padding-block: 16rem 80rem;
   display: flex;
-  gap: 16px;
+  gap: 16rem;
   flex-wrap: wrap;
 }
 
 .progressModal {
-  --height: 432px;
+  --height: 432rem;
   --box-shadow: var(--custom-box-shadow-primary);
   --background: var(--custom-bg-rgba-secondary);
-  bottom: 60px;
+  bottom: 60rem;
   transition: bottom var(--custom-tr-time-min) ease-in,
     backdrop-filter var(--custom-tr-time-min) ease-in,
     background-color var(--custom-tr-time-min) ease-in;
 
   &.fullHeight {
     bottom: 0;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(5rem);
     background-color: var(--custom-bg-rgba-secondary);
 
     &::part(handle) {
@@ -93,70 +93,70 @@
   }
 
   &::part(content) {
-    padding-top: 28px;
-    backdrop-filter: blur(28px);
+    padding-top: 28rem;
+    backdrop-filter: blur(28rem);
   }
 
   &::part(handle) {
-    height: 8px;
+    height: 8rem;
     background: url("../../../assets/icons/chevron-modal.svg");
     transition: transform var(--custom-tr-time-min) ease-in;
   }
 
   .modalContent {
     --background: transparent;
-    --padding-start: 18px;
-    --padding-end: 18px;
+    --padding-start: 18rem;
+    --padding-end: 18rem;
   }
 
   .modalHeader {
     display: flex;
-    gap: 40px;
+    gap: 40rem;
     align-items: center;
-    padding-bottom: 16px;
-    margin-bottom: 16px;
-    border-bottom: 1px solid var(--ion-color-dark);
+    padding-bottom: 16rem;
+    margin-bottom: 16rem;
+    border-bottom: 1rem solid var(--ion-color-dark);
 
     .progressWrappper {
       .progressTitle {
         font-family: Roboto;
-        font-size: 14px;
-        line-height: 16px;
+        font-size: 14rem;
+        line-height: 16rem;
         font-weight: 700;
         color: var(--ion-color-dark);
         display: inline-block;
-        margin-bottom: 4px;
+        margin-bottom: 4rem;
       }
 
       .progressInner {
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: 4rem;
         color: var(--ion-color-light);
 
         .progressLabel {
-          font-size: 8px;
-          line-height: 12px;
+          font-size: 8rem;
+          line-height: 12rem;
           font-weight: 600;
         }
       }
     }
 
     .examIcon {
-      font-size: 22px;
+      font-size: 22rem;
     }
   }
 
   .progressList {
-    padding-bottom: 16px;
+    padding-bottom: 16rem;
     li {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 10rem;
 
       span {
         color: var(--ion-color-light);
-        font-size: 12px;
+        font-size: 12rem;
         font-weight: 600;
         overflow: hidden;
         white-space: nowrap;
@@ -164,18 +164,18 @@
       }
 
       &:not(:last-child) {
-        margin-bottom: 10px;
+        margin-bottom: 10rem;
       }
     }
   }
 
   .progressIconOuter {
-    width: 22px;
-    height: 22px;
-    padding: 3px;
+    width: 22rem;
+    height: 22rem;
+    padding: 3rem;
     flex-shrink: 0;
 
-    border-radius: 5px;
+    border-radius: 5rem;
     background: var(--custom-bg-rgba-fourth);
     box-shadow: var(--custom-box-shadow-secondary-inset);
     position: relative;
@@ -202,24 +202,24 @@
 
     &:before {
       content: "";
-      width: 8px;
-      height: 8px;
+      width: 8rem;
+      height: 8rem;
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       background-color: transparent;
 
-      border-radius: 1px;
+      border-radius: 1rem;
     }
   }
 
   .progressIconInner {
     width: 100%;
     height: 100%;
-    border-radius: 4px;
+    border-radius: 4rem;
     box-shadow: var(--custom-box-shadow-thirtiary);
 
-    border: 2px solid transparent;
+    border: 2rem solid transparent;
   }
 }

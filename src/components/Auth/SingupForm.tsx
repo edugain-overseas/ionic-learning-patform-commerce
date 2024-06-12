@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { IonIcon } from "@ionic/react";
 import User from "../../assets/icons/tabs/my-profile.svg";
 import Google from "../../assets/icons/auth/google.svg";
@@ -9,6 +9,7 @@ import styles from "./Auth.module.scss";
 import { useUser } from "../../context/UserContext";
 import { useForm } from "react-hook-form";
 import { emailRegex } from "../../constants/regExps";
+import Spinner from "../Spinner/Spinner";
 
 type FormValues = {
   username: string;
@@ -25,6 +26,7 @@ const SingupForm: React.FC<{
   }[];
 }> = ({ modals }) => {
   const user = useUser();
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -43,6 +45,7 @@ const SingupForm: React.FC<{
 
   const onSubmit = async (data: FormValues) => {
     console.log(data);
+    setIsLoading(true);
     try {
       await user?.singup(data);
       user?.setUser((prev) => ({
@@ -74,6 +77,8 @@ const SingupForm: React.FC<{
           message: error.response.data.detail,
         });
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -102,7 +107,7 @@ const SingupForm: React.FC<{
         <InputText
           name="username"
           placeholder="Username"
-          height="32px"
+          height="32rem"
           registerProps={register("username", {
             required: "This field is required",
           })}
@@ -112,19 +117,19 @@ const SingupForm: React.FC<{
         <InputText
           name="firstName"
           placeholder="First Name"
-          height="32px"
+          height="32rem"
           registerProps={register("firstName")}
         />
         <InputText
           name="lastName"
           placeholder="Last Name"
-          height="32px"
+          height="32rem"
           registerProps={register("lastName")}
         />
         <InputText
           name="email"
           placeholder="Email"
-          height="32px"
+          height="32rem"
           registerProps={register("email", {
             required: "This field is required",
             pattern: {
@@ -138,7 +143,7 @@ const SingupForm: React.FC<{
         <InputPassword
           name="password"
           placeholder="Password"
-          height="32px"
+          height="32rem"
           registerProps={register("password", {
             required: "This field is required",
             minLength: {
@@ -153,7 +158,13 @@ const SingupForm: React.FC<{
       <div className={styles.btnsWrapper}>
         <CommonButton
           label="Sing up"
-          icon={<IonIcon src={User} className={styles.formBtnIcon} />}
+          icon={
+            isLoading ? (
+              <Spinner color="#fff" className={styles.formBtnIcon} />
+            ) : (
+              <IonIcon src={User} className={styles.formBtnIcon} />
+            )
+          }
           backgroundColor="#d00000"
           color="#fcfcfc"
           block={true}
@@ -170,7 +181,7 @@ const SingupForm: React.FC<{
           icon={<IonIcon src={Google} className={styles.googleIcon} />}
           backgroundColor="transparent"
           color="#001C54"
-          border="1px solid #7E8CA8"
+          border="1rem solid #7E8CA8"
           block={true}
           height={32}
           borderRadius={5}

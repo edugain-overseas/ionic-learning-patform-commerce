@@ -1,13 +1,13 @@
 .answersWrapper {
-  padding-block: 16px;
+  padding-block: 16rem;
   display: flex;
   justify-content: center;
-  gap: 16px;
+  gap: 16rem;
 
   & .imageCard {
     // flex: 1;
-    width: calc(25% - 16px / 4 * 3);
-    border-radius: 5px;
+    width: calc(25% - 16rem / 4 * 3);
+    border-radius: 5rem;
     overflow: hidden;
     box-shadow: var(--drop-shadow-button-main-hover);
     background-color: var(--bg-rgba-default);
@@ -25,7 +25,7 @@
   }
 
   .input {
-    padding: 10px;
+    padding: 10rem;
   }
 }
 

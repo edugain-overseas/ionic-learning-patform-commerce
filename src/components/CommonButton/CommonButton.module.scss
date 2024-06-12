@@ -2,10 +2,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 8rem;
   font-weight: inherit;
   font-size: inherit;
   box-shadow: var(--custom-box-shadow-primary);
+  position: relative;
 
   span {
     font-weight: inherit;

@@ -35,9 +35,9 @@ setupIonicReact();
 
 const App: React.FC = () => {
   const [splashScreen, setSplashScreen] = useState(true);
+  useDynaminFontSize();
   useStatusBar();
   useKeyboard();
-  useDynaminFontSize();
 
   return (
     <IonApp className="App">

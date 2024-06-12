@@ -1,6 +1,9 @@
 .header {
   box-shadow: none;
   height: calc(56rem + var(--ion-safe-area-top));
+  border-bottom-left-radius: 16rem;
+  border-bottom-right-radius: 16rem;
+  overflow: hidden;
 }
 
 .transparent {
@@ -17,8 +20,8 @@
   --padding-end: 14rem;
   --ion-toolbar-color: var(--ion-color-dark);
 
-  border-bottom-left-radius: 14rem;
-  border-bottom-right-radius: 14rem;
+  border-bottom-left-radius: 16rem;
+  border-bottom-right-radius: 16rem;
   box-shadow: var(--custom-box-shadow-primary);
   backdrop-filter: blur(28rem);
 

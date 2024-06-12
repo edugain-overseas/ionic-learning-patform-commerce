@@ -1,5 +1,5 @@
 import React from "react";
-import { IonRouterLink, IonText } from "@ionic/react";
+import { IonRippleEffect, IonRouterLink, IonText } from "@ionic/react";
 import { CategoryType } from "../../context/CoursesContext";
 import categoryIcon from "../../assets/icons/category.svg";
 import InfoBtn from "../InfoBtn/InfoBtn";
@@ -11,7 +11,10 @@ interface CategoryItemTypes {
 
 const CategoryItem: React.FC<CategoryItemTypes> = ({ category }) => {
   return (
-    <li key={category.id} className={styles.categoriesItem}>
+    <li
+      key={category.id}
+      className={`${styles.categoriesItem} ion-activatable`}
+    >
       <IonRouterLink
         className={styles.link}
         routerLink={`/courses/category/${category.id}`}
@@ -40,6 +43,7 @@ const CategoryItem: React.FC<CategoryItemTypes> = ({ category }) => {
           />
         )}
       </div>
+      <IonRippleEffect></IonRippleEffect>
     </li>
   );
 };

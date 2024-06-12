@@ -2,27 +2,27 @@
   display: flex;
   align-items: center;
 
-  font-size: 14px;
+  font-size: 14rem;
   font-weight: 500;
 
   svg {
-    width: 14px;
-    height: 14px;
+    width: 14rem;
+    height: 14rem;
     flex-shrink: 0;
   }
 
   & > svg {
-    margin-right: 8px;
+    margin-right: 8rem;
   }
 
   .documentName {
     color: var(--content-main);
-    margin-right: 32px;
+    margin-right: 32rem;
   }
 
   .documentSize {
     color: var(--content-datail-secondary);
-    margin-right: 8px;
+    margin-right: 8rem;
     flex-shrink: 0;
   }
 }
