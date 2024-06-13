@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./DoubleScrollLayout.module.scss";
+import { pxToRem, remToPx } from "../../utils/pxToRem";
 
 interface DoubleScrollLayoutTypes {
   children: React.ReactNode;
@@ -24,7 +25,11 @@ const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
   useEffect(() => {
     const scroller = contentRef.current;
     const handleScroll = () => {
-      if (scroller && scroller.scrollTop === scrollTriggerValue) {
+      if (
+        scroller &&
+        Math.round(scroller.scrollTop) ===
+          Math.round(remToPx(scrollTriggerValue))
+      ) {
         setScroll(true);
       } else setScroll(false);
     };

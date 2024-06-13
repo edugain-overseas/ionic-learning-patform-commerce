@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { FC, ReactNode } from "react";
 import {
   IonIcon,
   IonLabel,
@@ -17,13 +17,22 @@ interface TabsTypes {
   children: ReactNode;
 }
 
-const Tabs: React.FC<TabsTypes> = ({ children }) => {
+const Tabs: FC<TabsTypes> = ({ children }) => {
+  const handleTabWillChange = (e: CustomEvent) => {
+    console.log(e);
+  };
+
   return (
     <IonTabs>
       <IonRouterOutlet id="main-content" animated>
         {children}
       </IonRouterOutlet>
-      <IonTabBar slot="bottom" className="custom-tab-bar" id="main-content">
+      <IonTabBar
+        slot="bottom"
+        className="custom-tab-bar"
+        id="main-content"
+        onIonTabsWillChange={handleTabWillChange}
+      >
         <IonTabButton tab="home" href="/home" className="ion-activatable">
           <IonIcon src={HomeIcon} className="custom-tab-icon" />
           <IonLabel>Home</IonLabel>

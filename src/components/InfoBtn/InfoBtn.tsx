@@ -14,6 +14,7 @@ const InfoBtn: React.FC<{ info?: string; id: string }> = ({ info, id }) => {
         disabled={false}
         onClick={() => {}}
         id={id}
+        ripple
       />
       <IonPopover trigger={id}>
         <IonContent className={styles.infoContent} scrollY={false}>

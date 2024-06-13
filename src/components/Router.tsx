@@ -1,7 +1,12 @@
 import React from "react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router";
-import { IonIcon, IonLabel, IonMenuToggle, IonPage } from "@ionic/react";
+import {
+  IonIcon,
+  IonLabel,
+  IonMenuToggle,
+  IonPage,
+} from "@ionic/react";
 import MenuIcon from "../assets/icons/tabs/menu.svg";
 import Tabs from "./Tabs";
 import Menu from "./Menu/Menu";
@@ -14,7 +19,6 @@ import AboutIEU from "../pages/AboutIEU/AboutIEU";
 import Instructions from "../pages/Instructions/Instructions";
 import NotFound from "../pages/NotFound/NotFound";
 import Basket from "../pages/Basket/Basket";
-import { menuEnterPageAnimation } from "../animations/menuAnimations";
 
 const Router: React.FC = () => {
   return (
@@ -26,9 +30,9 @@ const Router: React.FC = () => {
             <Route path="/home" component={Home} exact />
             <Route path="/my-profile" component={UserProfile} exact />
             <Route path="/courses" component={Courses} exact />
+            <Route path="/basket" component={Basket} exact />
             <Route path="/aboutIEU" component={AboutIEU} exact />
             <Route path="/instructions" component={Instructions} exact />
-            <Route path="/basket" component={Basket} exact />
 
             <Route
               path="/courses/category/:categoryId"
@@ -43,9 +47,7 @@ const Router: React.FC = () => {
             <Route exact path="/" render={() => <Redirect to="/home" />} />
             <Route component={NotFound} />
           </Tabs>
-          <IonMenuToggle
-            className="custom-toggle-menu"
-          >
+          <IonMenuToggle className="custom-toggle-menu">
             <IonIcon src={MenuIcon} className="custom-tab-icon" />
             <IonLabel>Menu</IonLabel>
           </IonMenuToggle>

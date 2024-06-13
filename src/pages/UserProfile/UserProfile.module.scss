@@ -10,7 +10,7 @@
     border-radius: var(--custom--border-radius-primary);
     background-color: var(--custom-bg-rgba-secondary);
     box-shadow: var(--custom-box-shadow-primary);
-    backdrop-filter: blur(16rem);
+    // backdrop-filter: blur(16rem);
     margin-bottom: 16rem;
   }
 }
@@ -216,7 +216,7 @@ div.progressData {
     border-radius: var(--custom--border-radius-primary);
     background-color: var(--custom-bg-rgba-secondary);
     box-shadow: var(--custom-box-shadow-primary);
-    backdrop-filter: blur(16rem);
+    // backdrop-filter: blur(16rem);
   }
 
   .progressContent {
@@ -241,7 +241,7 @@ div.progressData {
 .certificatesData {
   display: flex;
   flex-direction: column;
-  gap: 12rem;
+  gap: 4rem;
   margin-bottom: 0;
 
   .certificatesHeader {
@@ -274,13 +274,17 @@ div.progressData {
     padding-inline: 12rem;
     display: flex;
     flex-direction: column;
-    gap: 19rem;
+    // gap: 19rem;
     padding-bottom: 12rem;
 
     .certificateItem {
       padding-inline-start: 20rem;
+      height: 35rem;
+      display: flex;
+      align-items: center;
       position: relative;
       color: var(--ion-color-dark);
+
 
       &:before {
         content: "";
@@ -297,7 +301,7 @@ div.progressData {
         &:after {
           content: "";
           position: absolute;
-          bottom: -10rem;
+          bottom: 0rem;
           left: 0;
           right: 0;
           height: 1rem;

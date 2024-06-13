@@ -1,4 +1,4 @@
-import { IonContent, IonIcon, IonPage } from "@ionic/react";
+import { IonContent, IonIcon, IonPage, IonRippleEffect } from "@ionic/react";
 import React, { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { certificates } from "../../constants";
@@ -269,12 +269,13 @@ const UserProfile: React.FC = () => {
           <ul className={styles.certificatesList}>
             {certificates.map(({ name }, index) => (
               <li
-                className={styles.certificateItem}
+                className={`${styles.certificateItem} ion-activatable`}
                 key={name}
                 id="certificate"
                 onClick={() => handleCertificateClick(index)}
               >
                 <span className={styles.certificateTitle}>{name}</span>
+                <IonRippleEffect></IonRippleEffect>
               </li>
             ))}
           </ul>
