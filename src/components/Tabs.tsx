@@ -1,5 +1,6 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useState } from "react";
 import {
+  Animation,
   IonIcon,
   IonLabel,
   IonRippleEffect,
@@ -7,19 +8,59 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
+  createAnimation,
 } from "@ionic/react";
 import HomeIcon from "../assets/icons/tabs/home.svg";
 import CoursesIcon from "../assets/icons/tabs/courses.svg";
 import MyProfileIcon from "../assets/icons/tabs/my-profile.svg";
 import BasketIcon from "../assets/icons/tabs/basket.svg";
+import { tabsAnimations } from "../animations/tabsAnimations";
 
 interface TabsTypes {
   children: ReactNode;
 }
 
+const TABS = ["home", "courses", "profile", "basket"];
+
+const slideTabFromRight = (baseEl: Element): Animation => {
+  return createAnimation()
+    .addElement(baseEl)
+    .fromTo("transform", "translateX(100%)", "translateX(0)")
+    .easing("ease")
+    .duration(150);
+};
+
+const slideTabFromLeft = (baseEl: Element): Animation => {
+  return createAnimation()
+    .addElement(baseEl)
+    .fromTo("transform", "translateX(-100%)", "translateX(0)")
+    .easing("ease-in")
+    .duration(150);
+};
+
 const Tabs: FC<TabsTypes> = ({ children }) => {
+  const [currentTabIndex, setCurrentTabIndex] = useState(0);
+
   const handleTabWillChange = (e: CustomEvent) => {
-    console.log(e);
+    const targetTab = e.detail.tab;
+    const targetTabIndex = TABS.findIndex((tab) => tab === targetTab);
+
+    const direction = targetTabIndex > currentTabIndex ? "right" : "left";
+    const ionRouterOutlet = document.querySelector("ion-router-outlet");
+
+    if (ionRouterOutlet) {
+      const targetPage = ionRouterOutlet.children[targetTabIndex];
+
+      tabsAnimations[direction](targetPage).play();
+
+      // if (direction === "right") {
+      //   slideTabFromRight(targetPage).play();
+      // } else {
+      //   slideTabFromLeft(targetPage).play();
+      // }
+
+      setCurrentTabIndex(targetTabIndex);
+    }
   };
 
   return (

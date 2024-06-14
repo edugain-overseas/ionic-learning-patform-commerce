@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./DoubleScrollLayout.module.scss";
-import { pxToRem, remToPx } from "../../utils/pxToRem";
+import { remToPx } from "../../utils/pxToRem";
 
 interface DoubleScrollLayoutTypes {
   children: React.ReactNode;

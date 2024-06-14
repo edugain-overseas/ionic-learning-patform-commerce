@@ -41,7 +41,7 @@ const Home: React.FC = () => {
   };
 
   return (
-    <IonPage className={styles.page}>
+    <IonPage className={styles.page} id="home">
       <Header {...headerProps} />
       <IonContent fullscreen className={styles.homeContent} scrollY={false}>
         <div className={styles.contentWrapper}>

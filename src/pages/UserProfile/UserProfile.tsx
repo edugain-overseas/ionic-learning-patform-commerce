@@ -114,7 +114,7 @@ const UserProfile: React.FC = () => {
   };
 
   return (
-    <IonPage>
+    <IonPage id="profile">
       <Header {...headerProps} />
       <IonContent className={styles.pageWrapper}>
         <div className={styles.mainInfoBlock}>

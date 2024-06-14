@@ -75,7 +75,7 @@ const Courses: React.FC = () => {
   };
 
   return (
-    <IonPage>
+    <IonPage id="courses">
       <Header {...headerProps} />
       <IonContent className="custom-content-wrapper">
         <SegmentNavPanel

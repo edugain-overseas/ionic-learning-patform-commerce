@@ -27,7 +27,7 @@ const Router: React.FC = () => {
         <Menu />
         <IonPage id="main-content" className="main">
           <Tabs>
-            <Route path="/home" component={Home} exact />
+            <Route path="/home" component={Home} exact/>
             <Route path="/my-profile" component={UserProfile} exact />
             <Route path="/courses" component={Courses} exact />
             <Route path="/basket" component={Basket} exact />

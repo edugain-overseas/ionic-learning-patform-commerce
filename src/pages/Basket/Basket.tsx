@@ -3,7 +3,7 @@ import React from "react";
 
 const Basket: React.FC = () => {
   return (
-    <IonPage>
+    <IonPage id="basket">
       <div>Basket</div>
     </IonPage>
   );
