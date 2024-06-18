@@ -5,7 +5,7 @@ import { UserProvider } from "./context/UserContext";
 import { ListStyleProvider } from "./context/ListStyleContext";
 import { useStatusBar } from "./hooks/useStatusBar";
 import { useKeyboard } from "./hooks/useKeyboard";
-import { useDynaminFontSize } from "./hooks/useDynamicFontSize";
+import { useDynamicFontSize } from "./hooks/useDynamicFontSize";
 import Router from "./components/Router";
 import SplashScreen from "./pages/SplashScreen/SplashScreen";
 
@@ -30,12 +30,13 @@ import "./App.scss";
 
 /* Theme variables */
 import "./theme/variables.css";
+import { BasketProvider } from "./context/BasketContext";
 
 setupIonicReact();
 
 const App: React.FC = () => {
   const [splashScreen, setSplashScreen] = useState(true);
-  useDynaminFontSize();
+  useDynamicFontSize();
   useStatusBar();
   useKeyboard();
 
@@ -43,13 +44,15 @@ const App: React.FC = () => {
     <IonApp className="App">
       <UserProvider>
         <CoursesProvider>
-          <ListStyleProvider>
-            {splashScreen ? (
-              <SplashScreen onAnimationEnd={() => setSplashScreen(false)} />
-            ) : (
-              <Router />
-            )}
-          </ListStyleProvider>
+          <BasketProvider>
+            <ListStyleProvider>
+              {splashScreen ? (
+                <SplashScreen onAnimationEnd={() => setSplashScreen(false)} />
+              ) : (
+                <Router />
+              )}
+            </ListStyleProvider>
+          </BasketProvider>
         </CoursesProvider>
       </UserProvider>
     </IonApp>

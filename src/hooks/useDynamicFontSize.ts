@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export const useDynaminFontSize = () => {
+export const useDynamicFontSize = () => {
   const adjustFontSize = () => {
     const vw = window.innerWidth;
     let fontSize;

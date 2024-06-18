@@ -1,31 +1,35 @@
 import { Storage } from "@ionic/storage";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
-const store = new Storage();
+const newStorage = new Storage({ name: "applocaldb" });
 
-const useStorage = (key: string, defaultValue: any) => {
-  const [value, setValue] = useState<any>(defaultValue);
+const useStorage = <T>(key: string, defaultValue: T) => {
+  const store = useRef<Storage>();
+  const [value, setValue] = useState<T>(defaultValue);
 
   useEffect(() => {
     const getStoredValue = async () => {
-      await store.create();
-      let currentValue;
-      try {
-        currentValue = await store.get(key);
-      } catch (error) {
-        currentValue = defaultValue;
-      }
-      setValue(currentValue);
+      const value = await store.current?.get(key);
+      return value ? value : defaultValue;
     };
-    getStoredValue();
-  }, [key, defaultValue]);
+
+    const initStore = async () => {
+      const newStore = await newStorage.create();
+      store.current = newStore;
+      const storedValue = await getStoredValue();
+      setValue(storedValue);
+    };
+    initStore();
+  }, []);
 
   useEffect(() => {
     const setStore = async () => {
-      await store.set(key, value);
+      if (store.current) {
+        await store.current.set(key, value);
+      }
     };
     setStore();
-  }, [value, key]);
+  }, [value]);
 
   return [value, setValue] as const;
 };

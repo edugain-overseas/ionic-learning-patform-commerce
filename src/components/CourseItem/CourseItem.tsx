@@ -3,7 +3,8 @@ import { IonIcon, IonRippleEffect, IonRouterLink } from "@ionic/react";
 import { CourseType } from "../../context/CoursesContext";
 import { serverName } from "../../http/server";
 import { useUser } from "../../context/UserContext";
-import basket from "../../assets/icons/tabs/basket.svg";
+import basketIcon from "../../assets/icons/tabs/basket.svg";
+import deleteIcon from "../../assets/icons/delete.svg";
 import CardPrice from "../CardPrice/CardPrice";
 import InsetBtn from "../InsetBtn/InsetBtn";
 import ProgressBar from "../ProgressBar/ProgressBar";
@@ -11,6 +12,7 @@ import styles from "./CourseItem.module.scss";
 import CardGrade from "../CardGrade/CardGrade";
 import InfoBtn from "../InfoBtn/InfoBtn";
 import { useListStyle } from "../../context/ListStyleContext";
+import { useBasket } from "../../context/BasketContext";
 
 interface CourseItemTypes {
   course: CourseType;
@@ -21,7 +23,12 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
     (userCourse) => userCourse.course_id === course.id
   );
 
+  const basket = useBasket();
+
   const listStyle = useListStyle()?.listStyle;
+
+  const isCourseInBasket =
+    basket?.items.findIndex((item) => item.id === course.id) !== -1;
 
   return (
     <li className={styles.itemWrapper}>
@@ -64,9 +71,15 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
               <>
                 <CardPrice oldPrice={course.old_price} price={course.price} />
                 <InsetBtn
-                  icon={<IonIcon className={styles.basketIcon} src={basket} />}
+                  icon={
+                    <IonIcon
+                      className={styles.basketIcon}
+                      src={isCourseInBasket ? deleteIcon : basketIcon}
+                    />
+                  }
                   width="32rem"
                   height="32rem"
+                  onClick={() => basket?.toggleItemToBasket(course.id)}
                 />
               </>
             )}
