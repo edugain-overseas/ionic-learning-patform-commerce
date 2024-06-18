@@ -19,7 +19,9 @@ import filterIcon from "../../assets/icons/header/filter.svg";
 import SettingsIcon from "../../assets/icons/menu/settings.svg";
 import SaveIcon from "../../assets/icons/save.svg";
 import logoIEU from "../../assets/icons/logoIEU.svg";
+import detailsIcon from "../../assets/icons/header/details.svg";
 import styles from "./Header.module.scss";
+import HeaderTitle from "./HeaderTitle";
 
 interface buttonPropsTypes {
   name: string;
@@ -113,6 +115,19 @@ const renderBtn = (props: buttonPropsTypes) => {
           <IonIcon src={SettingsIcon} className={styles.settingsIcon} />
         </IonButton>
       );
+    case "details":
+      return (
+        <IonButton
+          key={props.name}
+          className={`${styles.detailsBtn} ${
+            props.className ? props.className : ""
+          }`}
+          id={props.id}
+          onClick={props.onClick}
+        >
+          <IonIcon src={detailsIcon} className={styles.detailsIcon} />
+        </IonButton>
+      );
     case "logo":
       return (
         <IonImg
@@ -189,9 +204,10 @@ const Header: FC<HeaderTypes> = ({
           {left.map((props) => renderBtn(props))}
         </IonButtons>
         {title && (
-          <IonTitle size="small" className={styles.title}>
-            {title}
-          </IonTitle>
+          // <IonTitle size="small" className={styles.title}>
+          //   {title}
+          // </IonTitle>
+          <HeaderTitle title={title} />
         )}
         <IonButtons slot="end" className={styles.buttonsWrapper}>
           {right.map((name) => renderBtn(name))}

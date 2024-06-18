@@ -87,10 +87,39 @@
 
 .title {
   color: var(--ion-color-dark);
-  font-size: 14rem;
   font-weight: 700;
   text-align: center;
+  white-space: nowrap;
+
+  &.carousel {
+    position: absolute;
+    left: 0;
+    animation: 10s linear infinite alternate slidein;
+  }
 }
 
-.saveIcon {
+.titleWrapper {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14rem;
+  height: 1em;
+}
+
+
+@keyframes slidein {
+  0% {
+    transform: translateX(0);
+  }
+  10% {
+    transform: translateX(0);
+  }
+  90% {
+    transform: translateX(calc(-100% + 90rem));
+  }
+  100% {
+    transform: translateX(calc(-100% + 90rem));
+  }
 }

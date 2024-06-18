@@ -6,6 +6,8 @@ const newStorage = new Storage({ name: "applocaldb" });
 const useStorage = <T>(key: string, defaultValue: T) => {
   const store = useRef<Storage>();
   const [value, setValue] = useState<T>(defaultValue);
+  console.log(value);
+  
 
   useEffect(() => {
     const getStoredValue = async () => {
@@ -14,21 +16,23 @@ const useStorage = <T>(key: string, defaultValue: T) => {
     };
 
     const initStore = async () => {
-      const newStore = await newStorage.create();
-      store.current = newStore;
-      const storedValue = await getStoredValue();
-      setValue(storedValue);
+      try {
+        const newStore = await newStorage.create();
+        store.current = newStore;
+        const storedValue = await getStoredValue();
+        setValue(storedValue);
+      } catch (error) {
+        console.log(error);
+      }
     };
     initStore();
   }, []);
 
   useEffect(() => {
-    const setStore = async () => {
-      if (store.current) {
-        await store.current.set(key, value);
-      }
+    const setValueToStoreStore = async () => {
+      await store.current?.set(key, value);
     };
-    setStore();
+    setValueToStoreStore();
   }, [value]);
 
   return [value, setValue] as const;
