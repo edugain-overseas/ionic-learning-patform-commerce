@@ -203,12 +203,7 @@ const Header: FC<HeaderTypes> = ({
         <IonButtons slot="start" className={styles.buttonsWrapper}>
           {left.map((props) => renderBtn(props))}
         </IonButtons>
-        {title && (
-          // <IonTitle size="small" className={styles.title}>
-          //   {title}
-          // </IonTitle>
-          <HeaderTitle title={title} />
-        )}
+        {title && <HeaderTitle title={title} />}
         <IonButtons slot="end" className={styles.buttonsWrapper}>
           {right.map((name) => renderBtn(name))}
         </IonButtons>

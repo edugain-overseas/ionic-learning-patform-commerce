@@ -29,7 +29,7 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
     });
   };
 
-  const toggleConfirmItem = (id: number) => {
+  const toggleConfirmItem = (id: number) => {    
     setItems((prev) =>
       prev.map((item) =>
         item.id === id ? { ...item, confirmed: !item.confirmed } : item
