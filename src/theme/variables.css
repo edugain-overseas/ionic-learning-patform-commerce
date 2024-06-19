@@ -24,6 +24,7 @@ http://ionicframework.com/docs/theming/ */
   --custom-box-shadow-thirtiary: 0 0 2rem 0 rgba(0, 0, 0, 0.16);
   --custom-box-shadow-secondary-inset: 0 0 4rem 0 rgba(0, 0, 0, 0.16) inset;
   --custom--border-radius-primary: 5rem;
+  --custom--border-radius-secondary: 16rem;
 
   --custom-tr-time-max: 0.3s;
   --custom-tr-time-mid: 0.2s;
