@@ -2,8 +2,8 @@ import { FC } from "react";
 import { IonContent, IonPage } from "@ionic/react";
 import { useBasket } from "../../context/BasketContext";
 import Header from "../../components/Header/Header";
-import styles from "./Basket.module.scss";
 import BasketList from "../../components/BasketList/BasketList";
+import styles from "./Basket.module.scss";
 
 const Basket: FC = () => {
   const basketInterface = useBasket();

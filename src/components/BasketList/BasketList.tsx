@@ -1,13 +1,19 @@
 import { FC } from "react";
 import { useBasket } from "../../context/BasketContext";
-import styles from "./BasketList.module.scss";
-import BasketItem from "./BasketItem";
 import { useCourses } from "../../context/CoursesContext";
+import BasketItem from "./BasketItem";
+import styles from "./BasketList.module.scss";
 
 const BasketList: FC = () => {
   const basketInterface = useBasket();
   const courses = useCourses()?.courses;
   const items = basketInterface?.items;
+  const availableCourses = courses?.filter(
+    (course) => !items?.find((item) => item.id === course.id)
+  );
+
+  console.log(items);
+  
 
   if (items?.length === 0) {
     return null;
@@ -20,6 +26,8 @@ const BasketList: FC = () => {
           key={item.id}
           course={courses?.find(({ id }) => item.id === id)}
           confirmed={item.confirmed}
+          subItemsInfo={item.subItems}
+          availableCourses={availableCourses}
         />
       ))}
     </ul>

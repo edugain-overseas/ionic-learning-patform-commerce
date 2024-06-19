@@ -1,73 +1,47 @@
 import { FC } from "react";
 import { CourseType, useCourses } from "../../context/CoursesContext";
+import { BaseItemType } from "../../context/BasketContext";
+import BasketItemAccordion from "./BasketItemAccordion";
+import BasketCourseCard from "./BasketCourseCard";
 import styles from "./BasketList.module.scss";
-import { useBasket } from "../../context/BasketContext";
-import { serverName } from "../../http/server";
-import { categories } from "../../constants";
-import { priceFormatter } from "../../utils/priceFormatter";
 
 type BasketItemType = {
   course?: CourseType;
   confirmed: boolean;
+  availableCourses?: CourseType[];
+  subItemsInfo: BaseItemType[];
 };
 
-const BasketItem: FC<BasketItemType> = ({ course, confirmed }) => {
-  const basketInterface = useBasket();
-  const categoryTitle = useCourses()?.categories.find(
+const BasketItem: FC<BasketItemType> = ({
+  course,
+  confirmed,
+  availableCourses,
+  subItemsInfo,
+}) => {
+  const category = useCourses()?.categories.find(
     (category) => category.id === course?.category_id
-  )?.title;
+  );
+  const categoryTitle = category?.title;
+  const coursesToPropose = availableCourses?.filter(
+    (availableCourse) => availableCourse.category_id === course?.category_id
+  );
+
+  if (!course) {
+    return null;
+  }
 
   return (
     <li className={styles.basketItem}>
-      {course && (
-        <div className={styles.courseCard}>
-          <label className={styles.radioButton}>
-            <input
-              type="checkbox"
-              checked={confirmed}
-              onChange={() => basketInterface?.toggleConfirmItem(course.id)}
-            />
-          </label>
-          <div
-            className={styles.coursePoster}
-            style={{
-              backgroundImage: `url(${serverName}/${course.image_path})`,
-            }}
-          >
-            <div
-              className={styles.imageWrapper}
-              style={{
-                backgroundImage: `url(${serverName}/${course.image_path})`,
-              }}
-            ></div>
-          </div>
-          <div className={styles.courseInfo}>
-            <div className={styles.titleWrapper}>
-              <h2>{course.title}</h2>
-            </div>
-            <div className={styles.secondaryInfoWrapper}>
-              <span>Category:</span>
-              <span>{categoryTitle}</span>
-            </div>
-            {course.old_price ? (
-              <div className={styles.priceWrapper}>
-                <div className={styles.secondaryInfoWrapper}>
-                  <span>Old price:</span>
-                  <span>{priceFormatter(course.old_price)} USD</span>
-                </div>
-                <div className={styles.secondaryInfoWrapper}>
-                  <span>New price:</span>
-                  <span>{priceFormatter(course.price)} USD</span>
-                </div>
-              </div>
-            ) : (
-              <div className={styles.secondaryInfoWrapper}>
-                <span>Price:</span>
-                <span>{priceFormatter(course.price)} USD</span>
-              </div>
-            )}
-          </div>
-        </div>
+      <BasketCourseCard
+        course={course}
+        confirmed={confirmed}
+        categoryTitle={categoryTitle}
+      />
+      {coursesToPropose && (
+        <BasketItemAccordion
+          courses={coursesToPropose}
+          itemsInfo={subItemsInfo}
+        />
       )}
     </li>
   );

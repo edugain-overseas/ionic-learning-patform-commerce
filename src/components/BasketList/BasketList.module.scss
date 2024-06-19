@@ -3,18 +3,22 @@
   background: var(--custom-bg-rgba-secondary);
   box-shadow: var(--custom-box-shadow-primary);
   backdrop-filter: blur(16px);
+
+  &:not(:last-child) {
+    margin-bottom: 8rem;
+  }
+}
+
+.courseCard {
+  display: flex;
+  padding: 12rem 12rem 12rem 8rem;
+  align-items: center;
   opacity: 0.5;
   transition: opacity var(--custom-tr-time-mid) ease;
 
   &:has(input:checked) {
     opacity: 1;
   }
-}
-
-.courseCard {
-  display: flex;
-  padding: 12rem 22rem 12rem 8rem;
-  align-items: center;
 }
 
 .radioButton {
@@ -49,6 +53,7 @@
 }
 
 .coursePoster {
+  flex-shrink: 0;
   width: 64rem;
   aspect-ratio: 1;
   margin-right: 10rem;
@@ -85,18 +90,24 @@
 }
 
 .courseInfo {
+  flex-grow: 1;
   .titleWrapper {
     font-size: 14rem;
     font-weight: 700;
     height: 2.4em;
     display: flex;
     align-items: center;
+    margin-bottom: 2rem;
 
     h2 {
       font-size: inherit;
       color: var(--ion-color-dark);
       margin: 0;
-      line-clamp: 2;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      max-height: 100%;
+      overflow: hidden;
     }
   }
 }
@@ -104,6 +115,14 @@
 .secondaryInfoWrapper {
   font-size: 10rem;
   font-weight: 600;
+
+  &:not(:last-child) {
+    margin-bottom: 4rem;
+  }
+
+  span {
+    white-space: nowrap;
+  }
 
   span:first-child {
     color: var(--ion-color-medium);
@@ -118,4 +137,35 @@
 .priceWrapper {
   display: flex;
   justify-content: space-between;
+
+  .oldPrice {
+    text-decoration: line-through;
+  }
+}
+
+.basketAccordion {
+  .header {
+    height: 32rem;
+    border-top: 1rem solid rgba($color: #bdc4d2, $alpha: 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      color: var(--ion-color-medium);
+      font-family: Roboto;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+
+  .content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--custom-tr-time-min) ease;
+  }
+
+  .basketAccordionCoursesItem {
+    border-top: 1rem solid rgba($color: #bdc4d2, $alpha: 0.5);
+  }
 }

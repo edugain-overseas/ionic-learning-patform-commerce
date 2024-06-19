@@ -12,16 +12,17 @@ import { instance } from "../../http/instance";
 const CourseDetailPage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const accessToken = useUser()?.user.accessToken;
+  const userId = useUser()?.user.userId;
   const coursesInterface = useCourses();
 
   useEffect(() => {
-    if (courseId && accessToken) {
+    if (courseId && accessToken && userId) {
       if (!instance.defaults.headers["Authorization"]) {
         instance.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
       }
       coursesInterface?.getCourseDetailById(courseId);
     }
-  }, [courseId, accessToken]);
+  }, [courseId, accessToken, userId]);
 
   return (
     <IonPage>

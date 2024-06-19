@@ -438,7 +438,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
             const newToken = await refreshTokens();
             console.log(error.config);
             error.config.headers["Authorization"] = `Bearer ${newToken}`;
-            return instance.request(error.config);
+            return await instance.request(error.config);
           } catch (refreshError) {
             console.error("Error refreshing access token:", refreshError);
             return Promise.reject(refreshError);
