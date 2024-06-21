@@ -25,9 +25,6 @@ const BasketItemAccordion: FC<BasketItemAccordionType> = ({
     }
   };
 
-  if (courses.length === 0) {
-    return null;
-  }
   return (
     <div className={styles.basketAccordion}>
       <div className={styles.content} slot="content" ref={contentRef}>
@@ -37,7 +34,7 @@ const BasketItemAccordion: FC<BasketItemAccordionType> = ({
               <BasketCourseCard
                 course={course}
                 confirmed={
-                  itemsInfo.find((item) => item.id === course.id)?.confirmed ||
+                  itemsInfo?.find((item) => item.id === course.id)?.confirmed ||
                   false
                 }
                 subItem={true}

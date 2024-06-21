@@ -4,6 +4,7 @@ import { BaseItemType } from "../../context/BasketContext";
 import BasketItemAccordion from "./BasketItemAccordion";
 import BasketCourseCard from "./BasketCourseCard";
 import styles from "./BasketList.module.scss";
+import { useUser } from "../../context/UserContext";
 
 type BasketItemType = {
   course?: CourseType;
@@ -21,9 +22,16 @@ const BasketItem: FC<BasketItemType> = ({
   const category = useCourses()?.categories.find(
     (category) => category.id === course?.category_id
   );
+  const userCourses = useUser()?.user.courses;
+
   const categoryTitle = category?.title;
+
   const coursesToPropose = availableCourses?.filter(
-    (availableCourse) => availableCourse.category_id === course?.category_id
+    (availableCourse) =>
+      availableCourse.category_id === course?.category_id &&
+      !userCourses?.find(
+        (userCourse) => userCourse.course_id === availableCourse.id
+      )
   );
 
   if (!course) {
@@ -37,7 +45,7 @@ const BasketItem: FC<BasketItemType> = ({
         confirmed={confirmed}
         categoryTitle={categoryTitle}
       />
-      {coursesToPropose && (
+      {coursesToPropose && coursesToPropose.length !== 0 && (
         <BasketItemAccordion
           courses={coursesToPropose}
           itemsInfo={subItemsInfo}

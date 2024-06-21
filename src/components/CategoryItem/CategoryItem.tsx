@@ -40,6 +40,7 @@ const CategoryItem: React.FC<CategoryItemTypes> = ({ category }) => {
           <InfoBtn
             info={category.description}
             id={`info-${category.id}-trigger`}
+            ripple={false}
           />
         )}
       </div>

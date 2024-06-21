@@ -37,12 +37,12 @@
     position: relative;
 
     border-radius: 50%;
-    box-shadow: var(--box-shadow-button-inset);
+    box-shadow: var(--custom-box-shadow-secondary-inset);
 
     .progress {
       display: flex;
       border-radius: 50%;
-      box-shadow: var(--drop-shadow-button-main);
+      box-shadow: var(--custom-box-shadow-secondary);
     }
 
     .progressInner {
