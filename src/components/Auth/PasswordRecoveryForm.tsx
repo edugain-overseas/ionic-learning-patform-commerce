@@ -4,6 +4,7 @@ import { useUser } from "../../context/UserContext";
 import InputText from "./Inputs/InutText";
 import CommonButton from "../CommonButton/CommonButton";
 import styles from "./Auth.module.scss";
+import { useIonToast } from "@ionic/react";
 
 type FormValues = {
   email: string;
@@ -11,6 +12,7 @@ type FormValues = {
 
 const PasswordRecoveryForm: React.FC = () => {
   const user = useUser();
+  const [present] = useIonToast()
 
   const {
     register,

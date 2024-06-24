@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IonIcon } from "@ionic/react";
+import { IonIcon, useIonToast } from "@ionic/react";
 import { useForm } from "react-hook-form";
 import { useUser } from "../../context/UserContext";
 import SingIn from "../../assets/icons/auth/sing-in.svg";
@@ -23,6 +23,7 @@ const LoginForm: React.FC<{
 }> = ({ modals }) => {
   const user = useUser();
   const [isLoading, setIsLoading] = useState(false);
+  const [present] = useIonToast();
 
   const {
     register,
@@ -40,6 +41,11 @@ const LoginForm: React.FC<{
     setIsLoading(true);
     try {
       await user?.login(data);
+      present({
+        message: `Welcome, ${data.username}!`,
+        duration: 2000,
+        position: "top",
+      });
       modals.find((modal) => modal.name === "sing-in")?.ref?.current?.dismiss();
     } catch (error: any) {
       console.log(error);
@@ -56,6 +62,11 @@ const LoginForm: React.FC<{
         });
       } else if (error.response.status === 409) {
         user?.setUser((prev) => ({ ...prev, username: data.username }));
+        present({
+          message: `Welcome back, ${data.username}. Please activate your email`,
+          duration: 5000,
+          position: "top",
+        });
         handleOpenUserActivation();
       }
     } finally {
@@ -123,7 +134,7 @@ const LoginForm: React.FC<{
           label="Sing in"
           icon={
             isLoading ? (
-              <Spinner color="#fff" className={styles.formBtnIcon}/>
+              <Spinner color="#fff" className={styles.formBtnIcon} />
             ) : (
               <IonIcon src={SingIn} className={styles.formBtnIcon} />
             )

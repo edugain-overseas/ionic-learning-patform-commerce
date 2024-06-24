@@ -4,6 +4,7 @@ import { useUser } from "../../context/UserContext";
 import InputText from "./Inputs/InutText";
 import CommonButton from "../CommonButton/CommonButton";
 import styles from "./Auth.module.scss";
+import { useIonToast } from "@ionic/react";
 
 type FormValues = {
   verificationCode: string;
@@ -16,6 +17,7 @@ const UserActivationForm: React.FC<{
   }[];
 }> = ({ modals }) => {
   const user = useUser();
+  const [present] = useIonToast();
 
   const {
     register,
@@ -35,6 +37,11 @@ const UserActivationForm: React.FC<{
       await user?.verifyEmail({
         username: user.user.username,
         code: data.verificationCode,
+      });
+      present({
+        message: `${user?.user.username}, you are succesfully avtivate you email`,
+        duration: 5000,
+        position: "top",
       });
       modals
         .find((modal) => modal.name === "user-activation")

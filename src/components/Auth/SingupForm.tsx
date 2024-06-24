@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import { IonIcon } from "@ionic/react";
+import { IonIcon, useIonToast } from "@ionic/react";
+import { useUser } from "../../context/UserContext";
+import { useForm } from "react-hook-form";
+import { emailRegex } from "../../constants/regExps";
 import User from "../../assets/icons/tabs/my-profile.svg";
 import Google from "../../assets/icons/auth/google.svg";
 import InputText from "./Inputs/InutText";
 import InputPassword from "./Inputs/InputPassword";
 import CommonButton from "../CommonButton/CommonButton";
-import styles from "./Auth.module.scss";
-import { useUser } from "../../context/UserContext";
-import { useForm } from "react-hook-form";
-import { emailRegex } from "../../constants/regExps";
 import Spinner from "../Spinner/Spinner";
+import styles from "./Auth.module.scss";
 
 type FormValues = {
   username: string;
@@ -27,6 +27,7 @@ const SingupForm: React.FC<{
 }> = ({ modals }) => {
   const user = useUser();
   const [isLoading, setIsLoading] = useState(false);
+  const [present] = useIonToast();
 
   const {
     register,
@@ -44,7 +45,6 @@ const SingupForm: React.FC<{
   });
 
   const onSubmit = async (data: FormValues) => {
-    console.log(data);
     setIsLoading(true);
     try {
       await user?.singup(data);
@@ -53,6 +53,12 @@ const SingupForm: React.FC<{
         username: data.username,
         email: data.email,
       }));
+      present({
+        message: `Hello, ${data.username}, we cteated your account. Please activate your email: ${data.email}`,
+        duration: 5000,
+        position: "top",
+      });
+
       modals.find((modal) => modal.name === "sing-up")?.ref?.current?.dismiss();
       modals
         .find((modal) => modal.name === "user-activation")
