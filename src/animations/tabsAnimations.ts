@@ -5,7 +5,7 @@ const slideTabFromRight = (baseEl: Element): Animation => {
     .addElement(baseEl)
     .fromTo("transform", "translateX(100%)", "translateX(0)")
     .easing("ease")
-    .duration(150);
+    .duration(200);
 };
 
 const slideTabFromLeft = (baseEl: Element): Animation => {
@@ -13,7 +13,7 @@ const slideTabFromLeft = (baseEl: Element): Animation => {
     .addElement(baseEl)
     .fromTo("transform", "translateX(-100%)", "translateX(0)")
     .easing("ease-in")
-    .duration(150);
+    .duration(200);
 };
 
 export const tabsAnimations = {

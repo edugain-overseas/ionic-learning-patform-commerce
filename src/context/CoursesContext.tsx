@@ -282,8 +282,6 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
         console.error("Error fetching courses instructions:", error);
       }
     };
-    console.log(accessToken);
-
     if (accessToken) {
       instance.defaults.headers.Authorization = `Bearer ${accessToken}`;
       getCoursesInstructions();

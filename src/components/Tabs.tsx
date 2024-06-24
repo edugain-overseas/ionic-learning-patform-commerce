@@ -8,11 +8,10 @@ import {
   IonTabButton,
   IonTabs,
 } from "@ionic/react";
+import { tabsAnimations } from "../animations/tabsAnimations";
 import HomeIcon from "../assets/icons/tabs/home.svg";
 import CoursesIcon from "../assets/icons/tabs/courses.svg";
 import MyProfileIcon from "../assets/icons/tabs/my-profile.svg";
-// import BasketIcon from "../assets/icons/tabs/basket.svg";
-import { tabsAnimations } from "../animations/tabsAnimations";
 import BasketIcon from "./BasketIcon/BasketIcon";
 
 interface TabsTypes {
