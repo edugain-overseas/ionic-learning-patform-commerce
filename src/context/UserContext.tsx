@@ -124,8 +124,6 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const refreshTokens = async () => {
-    setIsLoading(true);
-
     try {
       const response = await instance.get("/user/refresh", {
         withCredentials: true,
@@ -137,13 +135,10 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
     } catch (error) {
       setUser(initialState);
       setAccessToken(null);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const login = async (credentials: { username: string; password: string }) => {
-    setIsLoading(true);
     const credentialsFormData = new FormData();
     credentialsFormData.append("username", credentials.username);
     credentialsFormData.append("password", credentials.password);
@@ -169,7 +164,6 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
       setError(error as AxiosError);
       throw error;
     } finally {
-      setIsLoading(false);
       instance.defaults.headers["Content-Type"] = "application/json";
     }
   };
@@ -181,15 +175,12 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
     firstname?: string;
     lastname?: string;
   }) => {
-    setIsLoading(true);
     try {
       const response = await instance.post("/user/create", credentials);
       console.log(response.data);
     } catch (error) {
       setError(error as AxiosError);
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -197,7 +188,6 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
     username: string;
     code: string;
   }) => {
-    setIsLoading(true);
     try {
       const response = await instance.post("/user/activate", credentials, {
         withCredentials: true,
@@ -211,13 +201,10 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
     } catch (error) {
       setError(error as AxiosError);
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const resendActivationCode = async (username: string) => {
-    setIsLoading(true);
     try {
       const response = await instance.get("user/resend-activation-code", {
         params: {
@@ -228,21 +215,16 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
     } catch (error) {
       setError(error as AxiosError);
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const resetPassword = async (email: string) => {
-    setIsLoading(true);
     try {
       const response = await instance.post("/user/reset-pass", { email });
       console.log(response);
     } catch (error) {
       setError(error as AxiosError);
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -251,7 +233,6 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
     new_pass: string;
     email: string;
   }) => {
-    setIsLoading(true);
     try {
       const response = await instance.post("/user/set-new-pass", credentials, {
         withCredentials: true,
@@ -259,14 +240,10 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
       console.log(response.data);
     } catch (error) {
       setError(error as AxiosError);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   const logout = async () => {
-    console.log("logout");
-
     try {
       await instance.get("/user/logout", {
         withCredentials: true,
@@ -426,22 +403,24 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
     instance.interceptors.response.use(
       (response) => response,
       async (error) => {
+        const originalRequest = error.config;
         if (
           error.response &&
           error.response.status === 401 &&
           (error.response.data.detail === "Access token expired" ||
             error.response.data.detail === "Authentication token expired")
         ) {
-          console.log("Access token expired. Attempting to refresh...");
           setAccessToken(null);
-          try {
-            const newToken = await refreshTokens();
-            console.log(error.config);
-            error.config.headers["Authorization"] = `Bearer ${newToken}`;
-            return await instance.request(error.config);
-          } catch (refreshError) {
-            console.error("Error refreshing access token:", refreshError);
-            return Promise.reject(refreshError);
+          if (originalRequest.url.includes("/user/info/me")) {
+            console.log("Access token expired. Attempting to refresh...");
+            try {
+              const newToken = await refreshTokens();
+              error.config.headers["Authorization"] = `Bearer ${newToken}`;
+              return await instance.request(originalRequest);
+            } catch (refreshError) {
+              console.error("Error refreshing access token:", refreshError);
+              return Promise.reject(refreshError);
+            }
           }
         }
         return Promise.reject(error);

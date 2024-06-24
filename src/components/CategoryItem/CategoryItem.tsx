@@ -16,7 +16,7 @@ const CategoryItem: React.FC<CategoryItemTypes> = ({ category }) => {
       className={`${styles.categoriesItem} ion-activatable`}
     >
       <IonRouterLink
-        className={styles.link}
+        className={`${styles.link} ion-activatable`}
         routerLink={`/courses/category/${category.id}`}
       >
         <div className={styles.contentWrapper}>
@@ -34,6 +34,7 @@ const CategoryItem: React.FC<CategoryItemTypes> = ({ category }) => {
             </IonText>
           </div>
         </div>
+        <IonRippleEffect></IonRippleEffect>
       </IonRouterLink>
       <div className={styles.infoBtn}>
         {category.description && (
@@ -44,7 +45,6 @@ const CategoryItem: React.FC<CategoryItemTypes> = ({ category }) => {
           />
         )}
       </div>
-      <IonRippleEffect></IonRippleEffect>
     </li>
   );
 };

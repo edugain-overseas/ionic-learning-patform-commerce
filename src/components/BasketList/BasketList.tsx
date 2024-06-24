@@ -10,10 +10,7 @@ const BasketList: FC = () => {
   const items = basketInterface?.items;
   const availableCourses = courses?.filter(
     (course) => !items?.find((item) => item.id === course.id)
-  );
-
-  console.log(items);
-  
+  );  
 
   if (items?.length === 0) {
     return null;

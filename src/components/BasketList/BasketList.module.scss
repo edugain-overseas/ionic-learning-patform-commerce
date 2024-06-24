@@ -1,12 +1,50 @@
 .basketItem {
-  border-radius: var(--custom--border-radius-primary);
-  background: var(--custom-bg-rgba-secondary);
-  box-shadow: var(--custom-box-shadow-primary);
-  backdrop-filter: blur(16px);
+  position: relative;
+  z-index: 0;
 
   &:not(:last-child) {
     margin-bottom: 8rem;
   }
+}
+
+.card {
+  border-radius: var(--custom--border-radius-primary);
+  background: var(--custom-bg-rgba-secondary);
+  box-shadow: var(--custom-box-shadow-primary);
+  backdrop-filter: blur(16px);
+  opacity: 1;
+  transition: opacity 500ms ease;
+
+  &.deleting {
+    opacity: 1;
+  }
+}
+
+.deleteWrapper {
+  display: none;
+  justify-content: flex-end;
+  align-items: center;
+
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  border-radius: var(--custom--border-radius-primary);
+  background: var(--ion-color-primary);
+  box-shadow: var(--custom-box-shadow-primary);
+
+  ion-icon {
+    font-size: 32rem;
+    color: var(--ion-color-primary-contrast);
+  }
+
+  &.shown {
+    display: flex;
+  }
+}
+
+.gesture-active {
+  background: var(--custom-color-decorate-thirdinary);
 }
 
 .courseCard {

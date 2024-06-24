@@ -1,7 +1,7 @@
 .categoriesItem {
   position: relative;
   overflow: hidden;
-  padding-right: 50rem;
+  // padding-right: 50rem;
   background-color: var(--custom-bg-rgba-secondary);
   border-radius: var(--custom--border-radius-primary);
   box-shadow: var(--custom-box-shadow-primary);
@@ -16,11 +16,15 @@
     top: -10rem;
     right: 48rem;
     opacity: 0.03;
+    pointer-events: none;
   }
 
-  // .link {
-  //   position: relative;
-  // }
+  .link {
+    position: relative;
+    padding-right: 50rem;
+    display: block;
+    color: var(--ion-color-light);
+  }
 
   .contentWrapper {
     padding: 16rem 0 16rem 10rem;

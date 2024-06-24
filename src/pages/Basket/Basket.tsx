@@ -2,8 +2,8 @@ import { FC } from "react";
 import { IonContent, IonPage } from "@ionic/react";
 import Header from "../../components/Header/Header";
 import BasketList from "../../components/BasketList/BasketList";
-import styles from "./Basket.module.scss";
 import BasketCheckoutPanel from "../../components/BasketCheckoutPanel/BasketCheckoutPanel";
+import styles from "./Basket.module.scss";
 
 const Basket: FC = () => {
   const headerProps = {

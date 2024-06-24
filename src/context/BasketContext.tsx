@@ -120,6 +120,7 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
       const subItems = item.subItems.filter(
         (subItem) => subItem.confirmed === true
       );
+      console.log(subItems);
 
       const SubItemsTotalPrice = subItems.reduce((sum, { id }) => {
         const price = courses?.find((course) => course.id === id)?.price;

@@ -65,7 +65,7 @@ const CategoryDetailPage: React.FC = () => {
 
   const handleScrollEnd = async () => {
     const scrollEl = await contentRef.current?.getScrollElement();
-    const currentScroll = scrollEl?.scrollTop;    
+    const currentScroll = scrollEl?.scrollTop;
 
     if (!currentScroll && currentScroll !== 0) {
       return;

@@ -29,13 +29,13 @@ const BasketCheckoutPanel: FC = () => {
           <div className={styles.info}>
             <span>Subtotal:</span>
             <span>
-              {checkout?.subTotal && priceFormatter(checkout?.subTotal)} USD
+              {checkout?.subTotal && priceFormatter(checkout.subTotal)} USD
             </span>
           </div>
           <div className={styles.info}>
             <span>Discount:</span>
             <span>
-              {checkout?.discount && priceFormatter(checkout?.discount)} USD
+              {checkout?.discount && priceFormatter(checkout.discount)} USD
             </span>
           </div>
         </div>
@@ -44,7 +44,7 @@ const BasketCheckoutPanel: FC = () => {
         <div className={styles.info}>
           <span>Total payment:</span>
           <span className={styles.total}>
-            {checkout?.total && priceFormatter(checkout?.total)} USD
+            {priceFormatter(checkout!.total)} USD
           </span>
         </div>
       </div>
