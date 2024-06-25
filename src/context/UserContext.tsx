@@ -160,6 +160,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
         userId: response.data.user_id,
       }));
       setAccessToken(response.data.access_token);
+      await getUser();
     } catch (error) {
       setError(error as AxiosError);
       throw error;
@@ -396,6 +397,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
   useEffect(() => {
     if (accessToken) {
       instance.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
+      // getUser();
     }
   }, [accessToken]);
 

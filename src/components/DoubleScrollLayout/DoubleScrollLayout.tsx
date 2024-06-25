@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./DoubleScrollLayout.module.scss";
 import { remToPx } from "../../utils/pxToRem";
+import { ScrollCustomEvent } from "@ionic/react";
 
 interface DoubleScrollLayoutTypes {
   children: React.ReactNode;
@@ -25,21 +26,25 @@ const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
   useEffect(() => {
     const scroller = contentRef.current;
     const handleScroll = () => {
-      if (
-        scroller &&
-        Math.round(scroller.scrollTop) ===
-          Math.round(remToPx(scrollTriggerValue))
-      ) {
-        setScroll(true);
-      } else setScroll(false);
+      if (scroller) {
+        const { offsetHeight, scrollTop, scrollHeight } = scroller;
+        if (
+          // scroller &&
+          // Math.round(scroller.scrollTop) ===
+          //   Math.round(remToPx(scrollTriggerValue))
+          offsetHeight + scrollTop ===
+          scrollHeight
+        ) {
+          setScroll(true);
+        } else setScroll(false);
+      }
     };
 
-    scroller && scroller.addEventListener("scroll", handleScroll);
+    scroller?.addEventListener("scroll", handleScroll);
 
-    return () => {
-      scroller && scroller.removeEventListener("scroll", handleScroll);
-    };
+    return () => scroller?.removeEventListener("scroll", handleScroll);
   }, [contentRef.current]);
+
   return (
     <div className={styles.pageWrapper} ref={contentRef}>
       <img
