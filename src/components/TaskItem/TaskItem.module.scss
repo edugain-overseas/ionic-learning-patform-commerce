@@ -119,10 +119,12 @@
 
     .completed {
       color: var(--ion-color-success);
+      font-size: inherit;
     }
 
     .active {
       color: var(--ion-color-warning);
+      font-size: inherit;
     }
   }
 }

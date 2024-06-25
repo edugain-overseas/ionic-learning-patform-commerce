@@ -182,7 +182,7 @@ const renderBtn = (props: buttonPropsTypes) => {
 };
 
 const Header: FC<HeaderTypes> = ({
-  title,
+  title = "",
   secondary = false,
   left = [],
   right = [],
@@ -203,7 +203,7 @@ const Header: FC<HeaderTypes> = ({
         <IonButtons slot="start" className={styles.buttonsWrapper}>
           {left.map((props) => renderBtn(props))}
         </IonButtons>
-        {title && <HeaderTitle title={title} />}
+        <HeaderTitle title={title} />
         <IonButtons slot="end" className={styles.buttonsWrapper}>
           {right.map((name) => renderBtn(name))}
         </IonButtons>

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./DoubleScrollLayout.module.scss";
-import { remToPx } from "../../utils/pxToRem";
-import { ScrollCustomEvent } from "@ionic/react";
+// import { remToPx } from "../../utils/pxToRem";
+// import { ScrollCustomEvent } from "@ionic/react";
 
 interface DoubleScrollLayoutTypes {
   children: React.ReactNode;
