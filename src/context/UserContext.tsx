@@ -123,20 +123,20 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
   const [error, setError] = useState<AxiosError | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const refreshTokens = async () => {
-    try {
-      const response = await instance.get("/user/refresh", {
-        withCredentials: true,
-      });
-      const newAccessToken = response.data.access_token;
-      instance.defaults.headers["Authorization"] = `Bearer ${newAccessToken}`;
-      setAccessToken(newAccessToken);
-      return newAccessToken;
-    } catch (error) {
-      setUser(initialState);
-      setAccessToken(null);
-    }
-  };
+  // const refreshTokens = async () => {
+  //   try {
+  //     const response = await instance.get("/user/refresh", {
+  //       withCredentials: true,
+  //     });
+  //     const newAccessToken = response.data.access_token;
+  //     instance.defaults.headers["Authorization"] = `Bearer ${newAccessToken}`;
+  //     setAccessToken(newAccessToken);
+  //     return newAccessToken;
+  //   } catch (error) {
+  //     setUser(initialState);
+  //     setAccessToken(null);
+  //   }
+  // };
 
   const login = async (credentials: { username: string; password: string }) => {
     const credentialsFormData = new FormData();
@@ -395,49 +395,49 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
   };
 
   useEffect(() => {
-    if (accessToken) {
-      instance.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
-      getUser();
-    }
-  }, [accessToken]);
-
-  useEffect(() => {
-    instance.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        const originalRequest = error.config;
-        console.log(originalRequest);
-
-        if (
-          error.response &&
-          error.response.status === 401 &&
-          error.response.data.detail === "Access token expired"
-        ) {
-          if (originalRequest.url.includes("/user/info/me")) {
-            console.log("Access token expired. Attempting to refresh...");
-            try {
-              const newToken = await refreshTokens();
-              originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
-              return await instance.request(originalRequest);
-            } catch (refreshError) {
-              console.error("Error refreshing access token:", refreshError);
-              return Promise.reject(refreshError);
-            }
-          } else {
-            try {
-              await getUser();
-              const token = instance.defaults.headers["Authorization"];
-              originalRequest.headers["Authorization"] = token;
-              return await instance.request(originalRequest);
-            } catch (error) {
-              return Promise.reject(error);
-            }
-          }
-        }
-        return Promise.reject(error);
-      }
-    );
+    // if (accessToken) {
+    //   instance.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
+    getUser();
+    // }
   }, []);
+
+  // useEffect(() => {
+  //   instance.interceptors.response.use(
+  //     (response) => response,
+  //     async (error) => {
+  //       const originalRequest = error.config;
+  //       console.log(originalRequest);
+
+  //       if (
+  //         error.response &&
+  //         error.response.status === 401 &&
+  //         error.response.data.detail === "Access token expired"
+  //       ) {
+  //         // if (originalRequest.url.includes("/user/info/me")) {
+  //         console.log("Access token expired. Attempting to refresh...");
+  //         try {
+  //           const newToken = await refreshTokens();
+  //           originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+  //           return await instance.request(originalRequest);
+  //         } catch (refreshError) {
+  //           console.error("Error refreshing access token:", refreshError);
+  //           return Promise.reject(refreshError);
+  //         }
+  //         // } else {
+  //         //   try {
+  //         //     await getUser();
+  //         //     const token = instance.defaults.headers["Authorization"];
+  //         //     originalRequest.headers["Authorization"] = token;
+  //         //     return await instance.request(originalRequest);
+  //         //   } catch (error) {
+  //         //     return Promise.reject(error);
+  //         //   }
+  //         // }
+  //       }
+  //       return Promise.reject(error);
+  //     }
+  //   );
+  // }, []);
 
   return (
     <UserContext.Provider

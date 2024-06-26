@@ -20,8 +20,6 @@ const BasketCheckoutPanel: FC = () => {
     }
   }, [checkout?.discount]);
 
-  console.log(checkout);
-
   return (
     <div className={styles.checkoutWrapper}>
       <div className={styles.discount} ref={discountRef}>

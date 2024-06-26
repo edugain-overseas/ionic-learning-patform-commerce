@@ -16,7 +16,7 @@ import {
 } from "../../animations/menuAnimations";
 
 const Menu = () => {
-  const isUserLoggedIn = useUser()?.user.accessToken !== null;
+  const isUserLoggedIn = useUser()?.user.accessToken !== null;  
   const menuRef = useRef<HTMLIonMenuElement>(null);
   const logout = useUser()?.logout;
   const [isLoading, setIsLoading] = useState(false);

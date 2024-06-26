@@ -6,7 +6,6 @@ const newStorage = new Storage({ name: "applocaldb" });
 const useStorage = <T>(key: string, defaultValue: T) => {
   const store = useRef<Storage>();
   const [value, setValue] = useState<T>(defaultValue);
-  
 
   useEffect(() => {
     const getStoredValue = async () => {

@@ -31,6 +31,7 @@ import "./App.scss";
 /* Theme variables */
 import "./theme/variables.css";
 import { BasketProvider } from "./context/BasketContext";
+import { useAxios } from "./hooks/useAxios";
 
 setupIonicReact();
 
@@ -39,6 +40,7 @@ const App: React.FC = () => {
   useDynamicFontSize();
   useStatusBar();
   useKeyboard();
+  useAxios();
 
   return (
     <IonApp className="App">

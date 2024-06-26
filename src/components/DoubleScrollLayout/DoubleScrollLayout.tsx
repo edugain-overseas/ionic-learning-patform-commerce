@@ -28,11 +28,12 @@ const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
     const handleScroll = () => {
       if (scroller) {
         const { offsetHeight, scrollTop, scrollHeight } = scroller;
+        console.log(offsetHeight, scrollTop, scrollHeight);
         if (
           // scroller &&
           // Math.round(scroller.scrollTop) ===
           //   Math.round(remToPx(scrollTriggerValue))
-          offsetHeight + scrollTop ===
+          offsetHeight + scrollTop >=
           scrollHeight
         ) {
           setScroll(true);
@@ -43,7 +44,7 @@ const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
     scroller?.addEventListener("scroll", handleScroll);
 
     return () => scroller?.removeEventListener("scroll", handleScroll);
-  }, [contentRef.current]);
+  }, [contentRef]);
 
   return (
     <div className={styles.pageWrapper} ref={contentRef}>

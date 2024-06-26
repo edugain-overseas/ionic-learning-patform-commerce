@@ -13,11 +13,11 @@ import SingupForm from "../../components/Auth/SingupForm";
 import SheetModalAuto from "../../components/SheetModalAuto/SheetModalAuto";
 import PasswordRecoveryForm from "../../components/Auth/PasswordRecoveryForm";
 import UserActivationForm from "../../components/Auth/UserActivationForm";
-import styles from "./Home.module.scss";
 import EqualSpaceContainer from "../../components/EqualSpaceContainer/EqualSpaceContainer";
+import styles from "./Home.module.scss";
 
 const Home: React.FC = () => {
-  const isUserLoggedIn = useUser()?.user.accessToken !== null;
+  const accessToken = useUser()?.user.accessToken;
 
   const [modals, setModals] = useState<
     {
@@ -81,7 +81,7 @@ const Home: React.FC = () => {
             />
           </div>
         </div>
-        {!isUserLoggedIn && (
+        {!accessToken && (
           <>
             <div className={styles.authPanel}>
               <EqualSpaceContainer
