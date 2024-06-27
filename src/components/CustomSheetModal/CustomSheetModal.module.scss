@@ -1,0 +1,82 @@
+.modalWrapper {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 9;
+  pointer-events: none;
+
+  &.fullView {
+    z-index: 9999;
+    pointer-events: all;
+
+    .backdrop {
+      background-color: var(--custom-bg-rgba-secondary);
+      backdrop-filter: blur(5px);
+    }
+
+    .modal {
+      padding-bottom: 0;
+    }
+
+    .content {
+      overflow: auto;
+    }
+  }
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: transparent;
+  backdrop-filter: blur(0px);
+  transition: background-color var(--custom-tr-time-max) ease,
+    backdrop-filter var(--custom-tr-time-max) ease;
+}
+
+.modal {
+  box-sizing: content-box;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  background-color: var(--modal-background-color);
+  backdrop-filter: blur(16px);
+  overflow: hidden;
+  border-radius: 16rem 16rem 0 0;
+
+  padding-bottom: var(--bottom);
+
+  transition: all var(--custom-tr-time-max) ease;
+  pointer-events: all;
+  box-shadow: var(--custom-box-shadow-primary);
+}
+
+.handle {
+  position: relative;
+  top: 0;
+}
+
+.handleButton {
+  padding-inline: 8rem;
+  width: 100%;
+  height: 24rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+
+  span {
+    width: 45px;
+    height: 8px;
+    background: url("../../assets/icons/chevron-modal.svg");
+    background-repeat: no-repeat;
+  }
+}
+
+.content {
+  overflow: hidden;
+  height: calc(100% - 24rem);
+}
+
+ion-menu-toggle.hide {
+  display: none;
+}

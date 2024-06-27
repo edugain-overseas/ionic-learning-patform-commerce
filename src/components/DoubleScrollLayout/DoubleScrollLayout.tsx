@@ -29,13 +29,7 @@ const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
       if (scroller) {
         const { offsetHeight, scrollTop, scrollHeight } = scroller;
         console.log(offsetHeight, scrollTop, scrollHeight);
-        if (
-          // scroller &&
-          // Math.round(scroller.scrollTop) ===
-          //   Math.round(remToPx(scrollTriggerValue))
-          offsetHeight + scrollTop >=
-          scrollHeight
-        ) {
+        if (offsetHeight + scrollTop >= scrollHeight) {
           setScroll(true);
         } else setScroll(false);
       }
