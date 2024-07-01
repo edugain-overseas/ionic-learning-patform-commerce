@@ -39,7 +39,7 @@
   width: 100%;
   bottom: 0;
   background-color: var(--modal-background-color);
-  backdrop-filter: blur(16px);
+  //   backdrop-filter: blur(16px);
   overflow: hidden;
   border-radius: 16rem 16rem 0 0;
 
@@ -75,6 +75,7 @@
 .content {
   overflow: hidden;
   height: calc(100% - 24rem);
+  padding-inline: 18rem;
 }
 
 ion-menu-toggle.hide {

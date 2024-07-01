@@ -53,8 +53,6 @@ const BasketItem: FC<BasketItemType> = ({
   );
 
   useEffect(() => {
-    console.log(gesture.current);
-
     if (animation.current) return;
 
     const MAX_TRANSLATE = -339;

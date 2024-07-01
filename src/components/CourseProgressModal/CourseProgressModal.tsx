@@ -24,7 +24,6 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ modalRef }) => {
   const ref = modalRef === undefined ? modalLocalRef : modalRef;
 
   const modalParent = document.querySelector("ion-tabs");
-  console.dir(modalParent);
 
   const courseUserData = useUser()?.user.courses.find(
     (userCourse) => userCourse.course_id === +courseId

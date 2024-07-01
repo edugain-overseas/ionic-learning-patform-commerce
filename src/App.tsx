@@ -48,11 +48,11 @@ const App: React.FC = () => {
         <CoursesProvider>
           <BasketProvider>
             <ListStyleProvider>
-              {splashScreen ? (
+              {/* {splashScreen ? (
                 <SplashScreen onAnimationEnd={() => setSplashScreen(false)} />
-              ) : (
-                <Router />
-              )}
+              ) : ( */}
+              <Router />
+              {/* )} */}
             </ListStyleProvider>
           </BasketProvider>
         </CoursesProvider>

@@ -36,11 +36,11 @@ const Tabs: FC<TabsTypes> = ({ children }) => {
 
     if (ionRouterOutlet) {
       const targetPage = ionRouterOutlet.children[targetTab] as HTMLElement;
-      const currentPage = ionRouterOutlet.children[currentTab] as HTMLElement;
+      // const currentPage = ionRouterOutlet.children[currentTab] as HTMLElement;
 
-      if (currentPage) {
-        tabsAnimations[`to${direction}`](currentPage).play();
-      }
+      // if (currentPage) {
+      //   tabsAnimations[`to${direction}`](currentPage).play();
+      // }
 
       if (targetPage) {
         tabsAnimations[`from${direction}`](targetPage).play();
