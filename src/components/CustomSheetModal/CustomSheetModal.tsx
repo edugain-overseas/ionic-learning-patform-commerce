@@ -103,6 +103,15 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
         started.current = true;
       }
 
+      //   const dicection =
+      const className =
+        ev.deltaY < 0 ? styles.directionUp : styles.directionDown;
+
+      modalContentRef.current?.classList.add(className);
+
+      //   const hasClassName = Array(modalContentRef.current?.classList)
+      //   console.log(hasClassName);
+
       animation.current!.progressStep(getStep(ev));
     };
 
@@ -135,6 +144,10 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
         animation.current?.progressEnd(1, step);
         toggleFullView(2);
       }
+
+      modalContentRef.current?.classList.remove(styles.directionDown);
+      modalContentRef.current?.classList.remove(styles.directionUp);
+
       gesture.current!.enable(true);
     };
 
@@ -174,6 +187,8 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
     if (currentStepIndex < breakpoints.length - 1) {
       createAnimation()
         .addElement(modalContentRef.current!)
+        .beforeAddClass(styles.directionUp)
+        .afterRemoveClass(styles.directionUp)
         .duration(300)
         .easing("ease-in")
         .fromTo(
@@ -187,6 +202,8 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
     } else {
       createAnimation()
         .addElement(modalContentRef.current!)
+        .beforeAddClass(styles.directionDown)
+        .afterRemoveClass(styles.directionDown)
         .duration(300)
         .easing("ease-out")
         .fromTo(
@@ -234,7 +251,9 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
               onClick={toggleBreakpoint}
               ref={handleRef}
             >
-              <span></span>
+              {/* <span></span> */}
+              <span className={styles.leftBar}></span>
+              <span className={styles.rightBar}></span>
             </button>
           </div>
           <div className={styles.content}>{children}</div>

@@ -48,6 +48,24 @@
   transition: all var(--custom-tr-time-max) ease;
   pointer-events: all;
   box-shadow: var(--custom-box-shadow-primary);
+
+  &.directionUp {
+    .leftBar {
+      rotate: -15deg;
+    }
+    .rightBar {
+      rotate: 15deg;
+    }
+  }
+
+  &.directionDown {
+    .leftBar {
+      rotate: 15deg;
+    }
+    .rightBar {
+      rotate: -15deg;
+    }
+  }
 }
 
 .handle {
@@ -64,11 +82,35 @@
   justify-content: center;
   background: none;
 
-  span {
-    width: 45px;
-    height: 8px;
-    background: url("../../assets/icons/chevron-modal.svg");
-    background-repeat: no-repeat;
+  position: relative;
+
+  //   span {
+  //     width: 45px;
+  //     height: 8px;
+  //     background: url("../../assets/icons/chevron-modal.svg");
+  //     background-repeat: no-repeat;
+  //   }
+
+  .leftBar,
+  .rightBar {
+    width: calc(22.5rem + var(--custom--border-radius-primary) / 2);
+    height: 4rem;
+    border-radius: var(--custom--border-radius-primary);
+    background-color: var(--ion-color-light);
+    position: absolute;
+    transform-origin: center center;
+    transition: all var(--custom-tr-time-max) ease;
+  }
+
+  .leftBar {
+    transform: translate(calc(-50% + var(--custom--border-radius-primary) / 2));
+    border-top-left-radius: var(--custom--border-radius-primary);
+    border-bottom-left-radius: var(--custom--border-radius-primary);
+  }
+  .rightBar {
+    transform: translate(calc(50% - var(--custom--border-radius-primary) / 2));
+    border-top-right-radius: var(--custom--border-radius-primary);
+    border-bottom-right-radius: var(--custom--border-radius-primary);
   }
 }
 
