@@ -1,11 +1,15 @@
 import { FC, useRef } from "react";
 import {
+  CreateAnimation,
   IonContent,
   IonIcon,
+  ScrollBaseDetail,
   ScrollDetail,
+  createAnimation,
 } from "@ionic/react";
 import { useParams } from "react-router";
 import { useCourses } from "../../../context/CoursesContext";
+import { remToPx } from "../../../utils/pxToRem";
 import LectureIcon from "../../../assets/icons/document-2-lines.svg";
 import TestIcon from "../../../assets/icons/task-completed.svg";
 import LanguagesIcon from "../../../assets/icons/languages.svg";
@@ -15,9 +19,16 @@ import InsetBtn from "../../../components/InsetBtn/InsetBtn";
 import TaskItem from "../../../components/TaskItem/TaskItem";
 import CourseProgressModal from "../../../components/CourseProgressModal/CourseProgressModal";
 import styles from "./CourseTasksPage.module.scss";
+import customSheetModalStyles from "../../../components/CustomSheetModal/CustomSheetModal.module.scss";
+
+const modalHeight = 432;
+const firstBreakpoint = 24;
+const secondBreackpoint = 72;
 
 const CourseTasksPage: FC = () => {
-  const modalRef = useRef<HTMLIonModalElement>(null);
+  // const modalRef = useRef<HTMLIonModalElement>(null);
+  const animatingModal = useRef(false);
+
   const { courseId } = useParams<{ courseId: string }>();
 
   const course = useCourses()?.courses.find(
@@ -35,20 +46,65 @@ const CourseTasksPage: FC = () => {
     right: [{ name: "notification" }, { name: "list-style" }],
   };
 
-  const handleScroll = async (e: CustomEvent<ScrollDetail>) => {
-    const modalHeight = 432;
-    const firstBreakpoint = 24 / modalHeight;
-    const secondBreackpoint = 72 / modalHeight;
+  // const handleScroll = async (e: CustomEvent<ScrollDetail>) => {
+  //   const modalHeight = 432;
+  //   const firstBreakpoint = 24 / modalHeight;
+  //   const secondBreackpoint = 72 / modalHeight;
 
-    const currentBreackpoint = await modalRef.current?.getCurrentBreakpoint();
+  //   const currentBreackpoint = await modalRef.current?.getCurrentBreakpoint();
 
-    if (e.detail.deltaY > 0 && currentBreackpoint !== firstBreakpoint) {
-      modalRef.current?.setCurrentBreakpoint(firstBreakpoint);
-    } else if (
-      e.detail.deltaY < 0 &&
-      currentBreackpoint !== secondBreackpoint
-    ) {
-      modalRef.current?.setCurrentBreakpoint(secondBreackpoint);
+  //   if (e.detail.deltaY > 0 && currentBreackpoint !== firstBreakpoint) {
+  //     modalRef.current?.setCurrentBreakpoint(firstBreakpoint);
+  //   } else if (
+  //     e.detail.deltaY < 0 &&
+  //     currentBreackpoint !== secondBreackpoint
+  //   ) {
+  //     modalRef.current?.setCurrentBreakpoint(secondBreackpoint);
+  //   }
+  // };
+
+  const handleScroll = () => {
+    const modalContentRef = document.getElementById(
+      "custom-sheet-modal-content"
+    );
+
+    const secondPoint = Math.round(remToPx(60 + secondBreackpoint));
+
+    if (modalContentRef) {
+      const modalHeight = Math.round(modalContentRef.clientHeight);
+
+      if (modalHeight === secondPoint) {
+        if (animatingModal.current) return;
+        animatingModal.current = true;
+        createAnimation()
+          .addElement(modalContentRef)
+          .beforeAddClass(customSheetModalStyles.directionDown)
+          .afterRemoveClass(customSheetModalStyles.directionDown)
+          .fromTo("height", `${secondBreackpoint}rem`, `${firstBreakpoint}rem`)
+          .easing("ease-out")
+          .duration(300)
+          .play();
+      }
+    }
+  };
+
+  const handleScrollEnd = () => {
+    const modalContentRef = document.getElementById(
+      "custom-sheet-modal-content"
+    );
+
+    if (modalContentRef) {
+      if (animatingModal.current) {
+        createAnimation()
+          .addElement(modalContentRef)
+          .beforeAddClass(customSheetModalStyles.directionUp)
+          .afterRemoveClass(customSheetModalStyles.directionUp)
+          .fromTo("height", `${firstBreakpoint}rem`, `${secondBreackpoint}rem`)
+          .easing("ease-in")
+          .duration(300)
+          .play();
+        animatingModal.current = false;
+      }
     }
   };
 
@@ -104,6 +160,7 @@ const CourseTasksPage: FC = () => {
         className={styles.pageContentWrapper}
         scrollEvents={true}
         onIonScroll={handleScroll}
+        onIonScrollEnd={handleScrollEnd}
       >
         <CourseStats />
         <ul className={styles.tasksList}>
@@ -112,7 +169,9 @@ const CourseTasksPage: FC = () => {
               .sort((a, b) => a.number - b.number)
               .map((task) => <TaskItem task={task} key={task.id} />)}
         </ul>
-        <CourseProgressModal modalRef={modalRef} />
+        <CourseProgressModal
+        // modalRef={modalRef}
+        />
       </IonContent>
     </>
   );

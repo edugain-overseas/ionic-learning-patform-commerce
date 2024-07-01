@@ -11,17 +11,17 @@ import EqualSpaceContainer from "../EqualSpaceContainer/EqualSpaceContainer";
 import CustomSheetModal from "../CustomSheetModal/CustomSheetModal";
 
 interface CourseProgressModalType {
-  modalRef?: RefObject<HTMLIonModalElement> | null;
+  // modalRef?: RefObject<HTMLIonModalElement> | null;
 }
 
 const modalHeight = 432;
 const firstBreakpoint = 24 / modalHeight;
 const secondBreackpoint = 72 / modalHeight;
 
-const CourseProgressModal: FC<CourseProgressModalType> = ({ modalRef }) => {
+const CourseProgressModal: FC<CourseProgressModalType> = () => {
   const { courseId } = useParams<{ courseId: string }>();
-  const modalLocalRef = useRef(null);
-  const ref = modalRef === undefined ? modalLocalRef : modalRef;
+  // const modalLocalRef = useRef(null);
+  // const ref = modalRef === undefined ? modalLocalRef : modalRef;
 
   const modalParent = document.querySelector("ion-tabs");
 
@@ -32,32 +32,32 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ modalRef }) => {
     (course) => course.id === +courseId
   );
 
-  const handleBreackpointChange = (e: CustomEvent) => {
-    if (e.detail.breakpoint === 1) {
-      ref?.current?.classList.add(styles.fullHeight);
-    } else {
-      ref?.current?.classList.remove(styles.fullHeight);
-    }
-  };
+  // const handleBreackpointChange = (e: CustomEvent) => {
+  //   if (e.detail.breakpoint === 1) {
+  //     ref?.current?.classList.add(styles.fullHeight);
+  //   } else {
+  //     ref?.current?.classList.remove(styles.fullHeight);
+  //   }
+  // };
 
-  const toggleBreackpoint = async () => {
-    const currentBreackpoint = await ref?.current?.getCurrentBreakpoint();
-    switch (currentBreackpoint) {
-      case firstBreakpoint:
-        ref?.current?.setCurrentBreakpoint(secondBreackpoint);
-        break;
-      case secondBreackpoint:
-        ref?.current?.classList.add(styles.fullHeight);
-        ref?.current?.setCurrentBreakpoint(1);
-        break;
-      case 1:
-        ref?.current?.classList.remove(styles.fullHeight);
-        ref?.current?.setCurrentBreakpoint(firstBreakpoint);
-        break;
-      default:
-        break;
-    }
-  };
+  // const toggleBreackpoint = async () => {
+  //   const currentBreackpoint = await ref?.current?.getCurrentBreakpoint();
+  //   switch (currentBreackpoint) {
+  //     case firstBreakpoint:
+  //       ref?.current?.setCurrentBreakpoint(secondBreackpoint);
+  //       break;
+  //     case secondBreackpoint:
+  //       ref?.current?.classList.add(styles.fullHeight);
+  //       ref?.current?.setCurrentBreakpoint(1);
+  //       break;
+  //     case 1:
+  //       ref?.current?.classList.remove(styles.fullHeight);
+  //       ref?.current?.setCurrentBreakpoint(firstBreakpoint);
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
 
   return (
     // <IonModal

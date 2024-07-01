@@ -244,6 +244,7 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
             width: width,
           }}
           ref={modalContentRef}
+          id="custom-sheet-modal-content"
         >
           <div className={styles.handle}>
             <button
