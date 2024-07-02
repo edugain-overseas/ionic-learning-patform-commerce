@@ -22,6 +22,7 @@ type CustomSheetModalType = {
   initialBreakpoint?: number;
   allowFullViewOnLastBreakpoint?: boolean;
   modalBackgroundColor?: string;
+  isAnimating?: boolean;
 };
 
 const CustomSheetModal: FC<CustomSheetModalType> = ({
@@ -35,11 +36,13 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
   initialBreakpoint = 1,
   allowFullViewOnLastBreakpoint = false,
   modalBackgroundColor = "rgba(255, 255, 255, 0.9)",
+  isAnimating,
 }) => {
   const minHeight = height * breakpoints[0];
   const maxHeight = height * breakpoints[breakpoints.length - 1];
 
   const modalRef = useRef<HTMLDivElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
   const modalContentRef = useRef<HTMLDivElement>(null);
   const handleRef = useRef<HTMLButtonElement>(null);
   const gesture = useRef<Gesture | null>(null);
@@ -48,6 +51,7 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
 
   const currentHeight = useRef<number>(initialBreakpoint * maxHeight);
 
+  // use effect for setting all css variables, gesture and creating animation
   useEffect(() => {
     const modal = modalRef.current;
 
@@ -103,16 +107,22 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
         started.current = true;
       }
 
-      //   const dicection =
       const className =
         ev.deltaY < 0 ? styles.directionUp : styles.directionDown;
 
       modalContentRef.current?.classList.add(className);
 
-      //   const hasClassName = Array(modalContentRef.current?.classList)
-      //   console.log(hasClassName);
+      const step = getStep(ev);
 
-      animation.current!.progressStep(getStep(ev));
+      if (step > breakpoints[breakpoints.length - 2]) {
+        const backdropOpacity = clamp(0, step, 1) * 0.65;
+        backdropRef.current?.style.setProperty(
+          "background",
+          `rgba(255, 255, 255, ${backdropOpacity})`
+        );
+      }
+
+      animation.current!.progressStep(step);
     };
 
     const handleEnd = (ev: GestureDetail) => {
@@ -145,6 +155,18 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
         toggleFullView(2);
       }
 
+      if (step > points[1]) {
+        backdropRef.current?.style.setProperty(
+          "background",
+          `rgba(255, 255, 255, 0.65)`
+        );
+      } else {
+        backdropRef.current?.style.setProperty(
+          "background",
+          `rgba(255, 255, 255, 0)`
+        );
+      }
+
       modalContentRef.current?.classList.remove(styles.directionDown);
       modalContentRef.current?.classList.remove(styles.directionUp);
 
@@ -158,6 +180,7 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
     };
   }, [modalRef, handleRef]);
 
+  //use effect for handling toggle menu button styles when mount and destroy modal
   useEffect(() => {
     const toogleMenuBtn = document.querySelector(".custom-toggle-menu");
     if (
@@ -170,6 +193,17 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
     return () => toogleMenuBtn?.classList.remove(styles.hide);
   }, []);
 
+  // use effect for handling animation when any outside animation was used
+  useEffect(() => {
+    if (isAnimating) {
+      console.log(isAnimating);
+
+      animation.current?.destroy();
+      started.current = false;
+    }
+  }, [isAnimating]);
+
+  // on handleButton click
   const toggleBreakpoint = () => {
     const currentStep = currentHeight.current / maxHeight;
     const currentStepIndex = breakpoints.findIndex(
@@ -216,9 +250,22 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
       currentHeight.current = height * breakpoints[0];
     }
 
+    if (nextStepIndex === breakpoints.length - 1) {
+      backdropRef.current?.style.setProperty(
+        "background",
+        `rgba(255, 255, 255, 0.65)`
+      );
+    } else {
+      backdropRef.current?.style.setProperty(
+        "background",
+        `rgba(255, 255, 255, 0)`
+      );
+    }
+
     toggleFullView(nextStepIndex);
   };
 
+  // handle modal full view and toggle menu styles
   const toggleFullView = (nextStepIndex: number) => {
     if (
       nextStepIndex === breakpoints.length - 1 &&
@@ -236,29 +283,27 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
 
   return createPortal(
     <div className={styles.modalWrapper} ref={modalRef}>
-      <div className={styles.backdrop}>
-        <div
-          className={styles.modal}
-          style={{
-            height: `${initialBreakpoint * height}rem`,
-            width: width,
-          }}
-          ref={modalContentRef}
-          id="custom-sheet-modal-content"
-        >
-          <div className={styles.handle}>
-            <button
-              className={styles.handleButton}
-              onClick={toggleBreakpoint}
-              ref={handleRef}
-            >
-              {/* <span></span> */}
-              <span className={styles.leftBar}></span>
-              <span className={styles.rightBar}></span>
-            </button>
-          </div>
-          <div className={styles.content}>{children}</div>
+      <div className={styles.backdrop} ref={backdropRef}></div>
+      <div
+        className={styles.modal}
+        style={{
+          height: `${initialBreakpoint * height}rem`,
+          width: width,
+        }}
+        ref={modalContentRef}
+        id="custom-sheet-modal-content"
+      >
+        <div className={styles.handle}>
+          <button
+            className={styles.handleButton}
+            onClick={toggleBreakpoint}
+            ref={handleRef}
+          >
+            <span className={styles.leftBar}></span>
+            <span className={styles.rightBar}></span>
+          </button>
         </div>
+        <div className={styles.content}>{children}</div>
       </div>
     </div>,
     portalTo ? portalTo : document.body

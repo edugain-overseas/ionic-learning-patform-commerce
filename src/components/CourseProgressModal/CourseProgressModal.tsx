@@ -12,13 +12,14 @@ import CustomSheetModal from "../CustomSheetModal/CustomSheetModal";
 
 interface CourseProgressModalType {
   // modalRef?: RefObject<HTMLIonModalElement> | null;
+  isAnimating: boolean;
 }
 
 const modalHeight = 432;
 const firstBreakpoint = 24 / modalHeight;
 const secondBreackpoint = 72 / modalHeight;
 
-const CourseProgressModal: FC<CourseProgressModalType> = () => {
+const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
   const { courseId } = useParams<{ courseId: string }>();
   // const modalLocalRef = useRef(null);
   // const ref = modalRef === undefined ? modalLocalRef : modalRef;
@@ -143,6 +144,7 @@ const CourseProgressModal: FC<CourseProgressModalType> = () => {
       breakpoints={[firstBreakpoint, secondBreackpoint, 1]}
       initialBreakpoint={firstBreakpoint}
       allowFullViewOnLastBreakpoint={true}
+      isAnimating={isAnimating}
     >
       <div className={styles.modalHeader}>
         <EqualSpaceContainer

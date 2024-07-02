@@ -1,4 +1,4 @@
-import { FC, useRef } from "react";
+import { FC, useRef, useState } from "react";
 import {
   CreateAnimation,
   IonContent,
@@ -27,7 +27,8 @@ const secondBreackpoint = 72;
 
 const CourseTasksPage: FC = () => {
   // const modalRef = useRef<HTMLIonModalElement>(null);
-  const animatingModal = useRef(false);
+  // const animatingModal = useRef(false);
+  const [animatingModal, setAnimatingModal] = useState(false);
 
   const { courseId } = useParams<{ courseId: string }>();
 
@@ -74,8 +75,8 @@ const CourseTasksPage: FC = () => {
       const modalHeight = Math.round(modalContentRef.clientHeight);
 
       if (modalHeight === secondPoint) {
-        if (animatingModal.current) return;
-        animatingModal.current = true;
+        if (animatingModal) return;
+        setAnimatingModal(true);
         createAnimation()
           .addElement(modalContentRef)
           .beforeAddClass(customSheetModalStyles.directionDown)
@@ -94,7 +95,7 @@ const CourseTasksPage: FC = () => {
     );
 
     if (modalContentRef) {
-      if (animatingModal.current) {
+      if (animatingModal) {
         createAnimation()
           .addElement(modalContentRef)
           .beforeAddClass(customSheetModalStyles.directionUp)
@@ -103,7 +104,7 @@ const CourseTasksPage: FC = () => {
           .easing("ease-in")
           .duration(300)
           .play();
-        animatingModal.current = false;
+        setAnimatingModal(false);
       }
     }
   };
@@ -170,7 +171,8 @@ const CourseTasksPage: FC = () => {
               .map((task) => <TaskItem task={task} key={task.id} />)}
         </ul>
         <CourseProgressModal
-        // modalRef={modalRef}
+          // modalRef={modalRef}
+          isAnimating={animatingModal}
         />
       </IonContent>
     </>
