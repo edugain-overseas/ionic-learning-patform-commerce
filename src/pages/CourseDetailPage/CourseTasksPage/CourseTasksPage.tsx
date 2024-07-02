@@ -1,10 +1,10 @@
-import { FC, useRef, useState } from "react";
+import { FC, useState } from "react";
 import {
-  CreateAnimation,
+  // CreateAnimation,
   IonContent,
   IonIcon,
-  ScrollBaseDetail,
-  ScrollDetail,
+  // ScrollBaseDetail,
+  // ScrollDetail,
   createAnimation,
 } from "@ionic/react";
 import { useParams } from "react-router";
@@ -21,7 +21,6 @@ import CourseProgressModal from "../../../components/CourseProgressModal/CourseP
 import styles from "./CourseTasksPage.module.scss";
 import customSheetModalStyles from "../../../components/CustomSheetModal/CustomSheetModal.module.scss";
 
-const modalHeight = 432;
 const firstBreakpoint = 24;
 const secondBreackpoint = 72;
 

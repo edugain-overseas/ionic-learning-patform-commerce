@@ -12,7 +12,7 @@ import CustomSheetModal from "../CustomSheetModal/CustomSheetModal";
 
 interface CourseProgressModalType {
   // modalRef?: RefObject<HTMLIonModalElement> | null;
-  isAnimating: boolean;
+  isAnimating?: boolean;
 }
 
 const modalHeight = 432;
