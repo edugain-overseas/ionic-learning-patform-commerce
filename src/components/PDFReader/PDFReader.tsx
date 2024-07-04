@@ -43,11 +43,30 @@ const PDFReader: FC<PDFReaderType> = ({ pdf }) => {
   const [fileObj, setFileObj] = useState({ url: pdf });
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef(null);
   const interval = useRef<number | null>(null);
   const controlPanelRef = useRef<HTMLDivElement>(null);
 
-  const rootFontSize = parseFloat(document.documentElement.style.fontSize);
+  useEffect(() => {
+    const onFullscreenChange = (e: Event) => {
+      console.log(
+        "fullcreenchange",
+        document.fullscreenElement,
+        containerRef.current,
+        document.fullscreenElement === containerRef.current,
+        e
+      );
+
+      if (document.fullscreenElement === containerRef.current) {
+        setFullscreen(true);
+      } else {
+        setFullscreen(false);
+      }
+    };
+    document.addEventListener("fullscreenchange", onFullscreenChange);
+
+    return () =>
+      document.removeEventListener("fullscreenchange", onFullscreenChange);
+  }, []);
 
   const onLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
@@ -105,7 +124,7 @@ const PDFReader: FC<PDFReaderType> = ({ pdf }) => {
     } else {
       document.exitFullscreen();
     }
-    setFullscreen((prev) => !prev);
+    // setFullscreen((prev) => !prev);
   };
 
   return (
