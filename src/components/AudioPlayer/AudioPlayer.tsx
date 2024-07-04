@@ -22,6 +22,8 @@ const AudioPlayer: FC<AudioPlayerProps> = ({ ...props }) => {
 
   const handleTimeUpdate = () => {
     const audioCurrentTime = audioRef.current?.currentTime;
+    console.log(audioCurrentTime);
+    
     const audioDuration = audioRef.current?.duration;
     if (audioCurrentTime) {
       setCurrentTime(audioCurrentTime);

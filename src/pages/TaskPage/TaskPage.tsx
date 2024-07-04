@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { IonContent,  useIonRouter } from "@ionic/react";
+import { IonContent, useIonRouter } from "@ionic/react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
 import Lecture from "../../components/Lecture/Lecture";
@@ -22,9 +22,15 @@ const TaskPage: React.FC = () => {
   );
   const taskData = courseData?.lessons.find((lesson) => lesson.id === +taskId);
 
+  const lessonData = taskData?.lessonData;
+
   useEffect(() => {
-    coursesInterface?.getLessonById(taskId, courseId);
-  }, [taskId]);
+    console.log(lessonData);
+
+    if (!lessonData && taskData) {
+      coursesInterface?.getLessonById(taskId, courseId);
+    }
+  }, [taskId, lessonData, taskData]);
 
   const getNextLessonId = (direction: "back" | "forward") => {
     const availableLessons = courseData?.lessons

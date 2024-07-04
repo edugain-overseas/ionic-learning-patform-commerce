@@ -8,6 +8,8 @@
 
   position: relative;
   overflow: hidden;
+  display: flex;
+  align-items: center;
 }
 
 .controlPanel {
@@ -23,16 +25,11 @@
   align-items: center;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(5rem);
-  opacity: 1;
+  opacity: 0;
+  transition: opacity 300ms ease-out;
 
   &.active {
-    opacity: 0;
-    transition: opacity 300ms ease-out 3s;
-  }
-
-  &.active:hover {
     opacity: 1;
-    transition: opacity 300ms ease-out 0s;
   }
 
   & button {
@@ -86,48 +83,6 @@
       transform: rotateY(180deg);
     }
   }
-}
-
-.prevBtnLarge,
-.nextBtnLarge {
-  position: absolute;
-  z-index: 2;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 80rem;
-  height: 80rem;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 50%;
-  opacity: 1;
-  transition: opacity 300ms ease-out;
-
-  &.active {
-    opacity: 0;
-    transition: opacity 300ms ease-out 1s;
-  }
-
-  &.active:hover {
-    opacity: 1;
-    transition: opacity 300ms ease-out 0s;
-  }
-
-  & svg {
-    height: 16rem;
-
-    & path {
-      fill: #fff;
-    }
-  }
-}
-
-.prevBtnLarge {
-  left: -40rem;
-  padding-left: 40rem;
-}
-
-.nextBtnLarge {
-  right: -40rem;
-  padding-right: 40rem;
 }
 
 .document {

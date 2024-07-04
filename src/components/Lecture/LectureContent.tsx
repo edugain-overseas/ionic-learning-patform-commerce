@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { FC } from "react";
 import { LectureContentType } from "../../context/CoursesContext";
 import { serverName } from "../../http/server";
 import PDFReader from "../PDFReader/PDFReader";
@@ -9,11 +9,9 @@ import ImageGroup from "../ImageGroup/ImageGroup";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
 
-const LectureContent: React.FC<{ lectureContent: LectureContentType[] }> = ({
+const LectureContent: FC<{ lectureContent: LectureContentType[] }> = ({
   lectureContent,
 }) => {
-  const [fullscreen, setFullscreen] = useState(false);
-
   console.log(lectureContent);
 
   const renderLectureContent = () =>
@@ -65,28 +63,8 @@ const LectureContent: React.FC<{ lectureContent: LectureContentType[] }> = ({
                 dangerouslySetInnerHTML={{ __html: title }}
               ></h3>
               <div className={styles.pdfWrapper}>
-                <PDFReader
-                  pdf={`${serverName}/${encodedFilePathPresent}`}
-                  setFullscreen={setFullscreen}
-                  fullscreen={false}
-                />
+                <PDFReader pdf={`${serverName}/${encodedFilePathPresent}`} />
               </div>
-              {/* <Modal
-                width="fit-content"
-                contentWrapperStyles={{
-                  padding: 0,
-                  background: "none",
-                  boxShadow: "none",
-                }}
-                isOpen={fullscreen}
-                closeModal={() => setFullscreen(false)}
-              >
-                <PDFReader
-                  pdf={`${serverName}/${encodedFilePathPresent}`}
-                  setFullscreen={setFullscreen}
-                  fullscreen={fullscreen}
-                />
-              </Modal> */}
               {text && text !== "" && (
                 <div
                   className={styles.sectionContentWrapper}

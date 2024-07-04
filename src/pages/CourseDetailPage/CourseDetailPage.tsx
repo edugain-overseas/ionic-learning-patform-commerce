@@ -7,20 +7,20 @@ import CourseIntroPage from "./CourseIntroPage/CourseIntroPage";
 import CourseTasksPage from "./CourseTasksPage/CourseTasksPage";
 import CourseExamPage from "./CourseExamPage/CourseExamPage";
 import TaskPage from "../TaskPage/TaskPage";
-import { instance } from "../../http/instance";
 
 const CourseDetailPage: React.FC = () => {
-  const { courseId } = useParams<{ courseId: string }>();
+  const { courseId } = useParams<{
+    courseId: string;
+  }>();
   const accessToken = useUser()?.user.accessToken;
   const userId = useUser()?.user.userId;
   const coursesInterface = useCourses();
 
   useEffect(() => {
-    if (courseId && accessToken && userId) {
-      if (!instance.defaults.headers["Authorization"]) {
-        instance.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
+    if (accessToken) {
+      if (courseId) {
+        coursesInterface?.getCourseDetailById(courseId);
       }
-      coursesInterface?.getCourseDetailById(courseId);
     }
   }, [courseId, accessToken, userId]);
 

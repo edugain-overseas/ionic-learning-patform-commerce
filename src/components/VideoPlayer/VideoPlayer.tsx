@@ -27,6 +27,7 @@ const VideoPlayer: FC<{ url: string }> = ({ url }) => {
 
   const handleTimeUpdate = () => {
     const videoCurrentTime = videoRef.current?.currentTime;
+    
     const videoDuration = videoRef.current?.duration;
     if (videoCurrentTime) {
       setCurrentTime(formatDuration(videoCurrentTime));

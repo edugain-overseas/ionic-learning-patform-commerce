@@ -395,11 +395,11 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
   };
 
   useEffect(() => {
-    // if (accessToken) {
-    //   instance.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
-    getUser();
-    // }
-  }, []);
+    if (accessToken && !user.userId) {
+      instance.defaults.headers["Authorization"] = `Bearer ${accessToken}`;
+      getUser();
+    }
+  }, [accessToken, user.userId]);
 
   // useEffect(() => {
   //   instance.interceptors.response.use(
