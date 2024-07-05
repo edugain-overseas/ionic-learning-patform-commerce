@@ -12,7 +12,6 @@ import AudioPlayer from "../AudioPlayer/AudioPlayer";
 const LectureContent: FC<{ lectureContent: LectureContentType[] }> = ({
   lectureContent,
 }) => {
-  console.log(lectureContent);
 
   const renderLectureContent = () =>
     [...lectureContent]?.map((section) => {

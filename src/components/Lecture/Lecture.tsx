@@ -12,8 +12,6 @@ const Lecture: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
     (course) => course.id === taskData.course_id
   );
 
-  console.log(taskData);
-
   const lectureNumber =
     course?.lessons &&
     course?.lessons

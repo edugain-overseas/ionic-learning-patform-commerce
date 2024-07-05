@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
-import ArrowLeftIcon from "../../assets/icons/header/back.svg";
+import ArrowLeftIcon from "../../assets/icons/chevron.svg";
 import PlayIcon from "../../assets/icons/player/play.svg";
 import PauseIcon from "../../assets/icons/player/pause.svg";
 import EnterFullscreenIcon from "../../assets/icons/player/fullscreen.svg";
@@ -47,15 +47,7 @@ const PDFReader: FC<PDFReaderType> = ({ pdf }) => {
   const controlPanelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const onFullscreenChange = (e: Event) => {
-      console.log(
-        "fullcreenchange",
-        document.fullscreenElement,
-        containerRef.current,
-        document.fullscreenElement === containerRef.current,
-        e
-      );
-
+    const onFullscreenChange = () => {
       if (document.fullscreenElement === containerRef.current) {
         setFullscreen(true);
       } else {
@@ -124,7 +116,6 @@ const PDFReader: FC<PDFReaderType> = ({ pdf }) => {
     } else {
       document.exitFullscreen();
     }
-    // setFullscreen((prev) => !prev);
   };
 
   return (
@@ -141,19 +132,19 @@ const PDFReader: FC<PDFReaderType> = ({ pdf }) => {
           }`}
           ref={controlPanelRef}
         >
-          <div className={styles.controlsLeft}>
-            <button className={styles.controlPlayBtn} onClick={handlePlay}>
-              <IonIcon src={playing ? PauseIcon : PlayIcon} />
-            </button>
+          <div className={styles.controlsCenter}>
             <button onClick={handlePrev} className={styles.controlPrevBtn}>
               <IonIcon src={ArrowLeftIcon} />
             </button>
-            <p className={styles.pagesInfo}>{`${pageNumber} / ${numPages}`}</p>
+            <button className={styles.controlPlayBtn} onClick={handlePlay}>
+              <IonIcon src={playing ? PauseIcon : PlayIcon} />
+            </button>
             <button onClick={handleNext} className={styles.controlNextBtn}>
               <IonIcon src={ArrowLeftIcon} />
             </button>
           </div>
-          <div className={styles.controlsRight}>
+          <div className={styles.controlsBottom}>
+            <p className={styles.pagesInfo}>{`${pageNumber} / ${numPages}`}</p>
             <button
               className={styles.controllsFullscreenOn}
               onClick={handleFullscreen}
