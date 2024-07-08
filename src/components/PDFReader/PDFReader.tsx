@@ -175,8 +175,6 @@ const PDFReader: FC<PDFReaderType> = ({ pdf }) => {
                 ? document.body.clientWidth
                 : document.body.clientWidth - 60
             }
-            // height={fullscreen ? fullscreenHeight : null}
-            // width={containerRef.current?.clientWidth}
             loading={null}
             onLoadSuccess={handlePageLoadSuccess}
           />

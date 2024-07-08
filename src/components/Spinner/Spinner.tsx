@@ -1,7 +1,7 @@
 import { IonSpinner } from "@ionic/react";
 import { FC } from "react";
 
-const Spinner: FC<{ color: string; className?: string }> = ({
+const Spinner: FC<{ color?: string; className?: string }> = ({
   color = "dark",
   className,
 }) => {

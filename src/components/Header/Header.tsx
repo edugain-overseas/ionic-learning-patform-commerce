@@ -22,12 +22,14 @@ import logoIEU from "../../assets/icons/logoIEU.svg";
 import detailsIcon from "../../assets/icons/header/details.svg";
 import styles from "./Header.module.scss";
 import HeaderTitle from "./HeaderTitle";
+import Spinner from "../Spinner/Spinner";
 
 interface buttonPropsTypes {
   name: string;
   id?: string;
   onClick?: () => void;
   className?: string;
+  loading?: boolean;
 }
 
 interface HeaderTypes {
@@ -173,7 +175,11 @@ const renderBtn = (props: buttonPropsTypes) => {
           id={props.id}
           onClick={props.onClick}
         >
-          <IonIcon src={backIcon} className={styles.nextIcon} />
+          {props.loading ? (
+            <Spinner />
+          ) : (
+            <IonIcon src={backIcon} className={styles.nextIcon} />
+          )}
         </IonButton>
       );
     default:

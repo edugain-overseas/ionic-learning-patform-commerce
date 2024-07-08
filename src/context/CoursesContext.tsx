@@ -155,6 +155,7 @@ interface CoursesContextType {
     lessonId: string | number,
     courseId: number | string
   ) => Promise<void>;
+  confirmLecture: (lessonId: number) => Promise<void>;
 }
 
 interface CoursesProviderType {
@@ -223,6 +224,33 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
       });
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const confirmLecture = async (lessonId: number) => {
+    try {
+      const response = await instance.post("/lecture/confirm", null, {
+        params: { lesson_id: lessonId },
+      });
+      if (response.status === 200) {
+        setCourses((prev) => {
+          const updatedCourses = prev.map((course) => {
+            if (course.lessons.find((lesson) => lesson.id === lessonId)) {
+              const updatedLessons = course.lessons.map((lesson) => {
+                if (lesson.id === lessonId) {
+                  return { ...lesson, status: "completed" };
+                }
+                return lesson;
+              });
+              return { ...course, lessons: updatedLessons };
+            }
+            return course;
+          });
+          return updatedCourses;
+        });
+      }
+    } catch (error) {
+      throw error;
     }
   };
 
@@ -296,6 +324,7 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
         instructions,
         getCourseDetailById,
         getLessonById,
+        confirmLecture,
       }}
     >
       {children}

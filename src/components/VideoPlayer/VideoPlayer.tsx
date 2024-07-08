@@ -14,33 +14,12 @@ const VideoPlayer: FC<{ url: string }> = ({ url }) => {
   const [showControls, setShowControls] = useState<boolean>(true);
   const [currentTime, setCurrentTime] = useState<number | string>(0);
   const [duration, setDuration] = useState<number>(0);
-  // const [poster, setPoster] = useState<string>("");
-
-  // const captureFirstFrame = (video: HTMLVideoElement) => {
-  //   const canvas = document.createElement("canvas");
-  //   canvas.width = video.videoWidth;
-  //   canvas.height = video.videoHeight;
-  //   const ctx = canvas.getContext("2d");
-  //   if (ctx) {
-  //     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-  //     const dataURL = canvas.toDataURL("image/png");
-  //     setPoster(dataURL);
-  //   }
-  // };
 
   const handleLoadedData = () => {
     if (videoRef.current) {
       setDuration(videoRef.current.duration);
     }
   };
-
-  // const handleCanPlay = () => {
-    
-    
-  //   if (videoRef.current) {
-  //     captureFirstFrame(videoRef.current);
-  //   }
-  // };
 
   const toggleShowControls = () => {
     setShowControls((prev) => !prev);
@@ -77,7 +56,6 @@ const VideoPlayer: FC<{ url: string }> = ({ url }) => {
         onPlay={() => setIsVideoPlaying(true)}
         onPause={() => setIsVideoPlaying(false)}
         onLoadedData={handleLoadedData}
-        // onCanPlay={handleCanPlay}
         onTimeUpdate={handleTimeUpdate}
       ></video>
       <div

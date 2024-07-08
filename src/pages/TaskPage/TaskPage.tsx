@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { IonContent, useIonRouter } from "@ionic/react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
@@ -9,6 +9,8 @@ import CourseProgressModal from "../../components/CourseProgressModal/CourseProg
 import styles from "./TaskPage.module.scss";
 
 const TaskPage: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const router = useIonRouter();
   const { courseId, taskId } = useParams<{
     courseId: string;
@@ -25,12 +27,20 @@ const TaskPage: React.FC = () => {
   const lessonData = taskData?.lessonData;
 
   useEffect(() => {
-    console.log(lessonData);
-
     if (!lessonData && taskData) {
       coursesInterface?.getLessonById(taskId, courseId);
     }
   }, [taskId, lessonData, taskData]);
+
+  const shouldCompleteLecture = async (lessonId: number) => {    
+    setIsLoading(true);
+    try {
+      await coursesInterface?.confirmLecture(lessonId);
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const getNextLessonId = (direction: "back" | "forward") => {
     const availableLessons = courseData?.lessons
@@ -45,7 +55,10 @@ const TaskPage: React.FC = () => {
     return false;
   };
 
-  const handleNavigateLesson = (direction: "back" | "forward") => {
+  const handleNavigateLesson = async (direction: "back" | "forward") => {
+    if (taskData?.type === "lecture" && taskData.status === "active") {
+      await shouldCompleteLecture(taskData.id);
+    }
     const targetLessonId = getNextLessonId(direction);
     if (targetLessonId) {
       router.push(
@@ -70,6 +83,7 @@ const TaskPage: React.FC = () => {
         name: "nextLesson",
         className: `${getNextLessonId("forward") ? "" : styles.disabled}`,
         onClick: () => handleNavigateLesson("forward"),
+        loading: isLoading,
       },
     ],
   };
