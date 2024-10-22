@@ -1,0 +1,13 @@
+.custom-searchbar .searchbar-input {
+    font-size: 16rem;
+    padding-inline: 55rem;
+    line-height: 32rem;
+    color: var(--ion-color-dark);
+}
+
+.custom-searchbar .searchbar-search-icon {
+    width: 32rem;
+    height: 32rem;
+    color: var(--ion-color-light);
+    top: 0;
+}

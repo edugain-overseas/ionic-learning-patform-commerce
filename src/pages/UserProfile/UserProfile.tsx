@@ -51,6 +51,9 @@ const UserProfile: React.FC = () => {
     }
   };
 
+  console.log(userData);
+  
+
   const closeEditAvatarModal = () => {
     if (editUserAvatarRef.current) {
       editUserAvatarRef.current.dismiss();
@@ -148,7 +151,7 @@ const UserProfile: React.FC = () => {
               <IonIcon src={TaskProgressIcon} className={styles.achiveIcon} />
               <span className={styles.achiveValue}>
                 <TextOverrflowEllipsis
-                  text={`${userData?.courses.length} course${
+                  text={`${userData?.courses?.length} course${
                     userData?.courses && userData.courses.length > 1 ? "s" : ""
                   }`}
                 />

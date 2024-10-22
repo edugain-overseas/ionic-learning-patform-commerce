@@ -5,7 +5,6 @@ import {
   IonHeader,
   IonIcon,
   IonImg,
-  IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import { FC } from "react";
@@ -99,7 +98,8 @@ const renderBtn = (props: buttonPropsTypes) => {
         <IonButton
           key={props.name}
           className={props.className ? props.className : ""}
-          onClick={props.onClick}
+          routerLink="/search"
+          routerDirection="forward"
           id={props.id}
         >
           <IonIcon src={searchIcon} className={styles.searchIcon} />

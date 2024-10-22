@@ -52,6 +52,6 @@
 	<string>To add images</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To store images</string>
-
+	
 </dict>
 </plist>

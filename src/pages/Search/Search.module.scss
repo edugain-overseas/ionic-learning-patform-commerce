@@ -1,0 +1,42 @@
+.searchResultSection {
+  margin-block: 24rem;
+  margin-inline: 8rem;
+  padding: 8rem 12rem;
+  box-shadow: var(--custom-box-shadow-primary);
+  background: var(--custom-bg-rgba-secondary);
+  border-radius: 5rem;
+
+  h3 {
+    font-size: 18rem;
+    font-weight: 700;
+    color: var(--ion-color-dark);
+    text-transform: capitalize;
+    margin: 0;
+    margin-bottom: 16rem;
+    text-align: center;
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 16rem;
+  }
+
+  &[id="categories"] ul {
+    gap: 8rem;
+  }
+}
+
+.spinner {
+    position: absolute;
+    top: 8rem;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.noResults {
+  font-size: 16rem;
+  text-align: center;
+  padding: 8rem;
+  color: var(--ion-color-dark);
+}

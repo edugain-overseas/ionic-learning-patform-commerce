@@ -11,6 +11,8 @@ const BasketCheckoutPanel: FC = () => {
 
   const checkout = basketInterface?.checkout();
 
+  const handleCheckoutClick = () => {};
+
   useEffect(() => {
     if (discountRef.current) {
       discountRef.current.style.maxHeight =
@@ -54,6 +56,7 @@ const BasketCheckoutPanel: FC = () => {
         width={312}
         height={32}
         className={styles.checkoutBtn}
+        onClick={handleCheckoutClick}
       />
     </div>
   );

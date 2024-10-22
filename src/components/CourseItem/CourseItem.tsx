@@ -73,7 +73,9 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
                 <InsetBtn
                   icon={
                     <IonIcon
-                      className={styles.basketIcon}
+                      className={
+                        isCourseInBasket ? styles.removeIcon : styles.basketIcon
+                      }
                       src={isCourseInBasket ? deleteIcon : basketIcon}
                     />
                   }

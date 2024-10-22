@@ -1,4 +1,10 @@
-import { IonContent, IonIcon, IonImg, IonPage } from "@ionic/react";
+import {
+  IonContent,
+  IonIcon,
+  IonImg,
+  IonPage,
+  useIonRouter,
+} from "@ionic/react";
 import { useState } from "react";
 import { useUser } from "../../context/UserContext";
 import benefits from "../../assets/images/home-slider-bg.png";
@@ -17,6 +23,8 @@ import EqualSpaceContainer from "../../components/EqualSpaceContainer/EqualSpace
 import styles from "./Home.module.scss";
 
 const Home: React.FC = () => {
+  const router = useIonRouter();
+
   const accessToken = useUser()?.user.accessToken;
 
   const [modals, setModals] = useState<
@@ -38,6 +46,14 @@ const Home: React.FC = () => {
       { name: "search", onClick: () => {} },
     ],
     mode: "transparent",
+  };
+
+  const handleSearch = () => {
+    if (searchValue) {
+      router.push(`/search?q=${searchValue}`, "forward", "push");
+    } else {
+      router.push("/search", "forward", 'push');
+    }
   };
 
   return (
@@ -78,6 +94,7 @@ const Home: React.FC = () => {
               height="32rem"
               backgroundColor="#7E8CA8"
               icon={<IonIcon src={search} className={styles.searchbarIcon} />}
+              onClick={handleSearch}
             />
           </div>
         </div>

@@ -15,7 +15,7 @@ const UserInfo = () => {
           {userData?.username === "" ? "User Name" : userData?.username}
         </span>
         <div className={styles.studyInfo}>
-          <TextOverrflowEllipsis text={`${userData?.courses.length} course`} />
+          <TextOverrflowEllipsis text={`${userData?.courses?.length} course`} />
           <TextOverrflowEllipsis text="0 certificate" />
         </div>
       </div>

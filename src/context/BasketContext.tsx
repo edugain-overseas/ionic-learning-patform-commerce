@@ -106,9 +106,6 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
       if (!isDiscount) {
         return totalDiscount;
       }
-
-      console.log("is discount: ", isDiscount);
-
       return totalDiscount + targetCategoryDiscount;
     }, 0);
 
@@ -120,8 +117,6 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
       const subItems = item.subItems.filter(
         (subItem) => subItem.confirmed === true
       );
-      console.log(subItems);
-
       const SubItemsTotalPrice = subItems.reduce((sum, { id }) => {
         const price = courses?.find((course) => course.id === id)?.price;
         return price ? sum + price : sum;
