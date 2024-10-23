@@ -42,6 +42,7 @@ const Search: FC = () => {
     const value = target.value!.toLowerCase();
     setQuery(value);
   };
+  console.log(query);
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -62,8 +63,9 @@ const Search: FC = () => {
   }, [query]);
 
   useIonViewWillEnter(() => {
+    console.log(q);
     setQuery(q);
-  });
+  }, [q]);
 
   return (
     <IonPage>

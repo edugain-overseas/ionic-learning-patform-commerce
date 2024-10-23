@@ -29,6 +29,9 @@ const BasketItem: FC<BasketItemType> = ({
   availableCourses,
   subItemsInfo,
 }) => {
+  if (!course) {
+    return null;
+  }
   const cardRef = useRef<HTMLDivElement | null>(null);
   const animation = useRef<Animation | null>(null);
   const gesture = useRef<Gesture | null>(null);
@@ -37,7 +40,7 @@ const BasketItem: FC<BasketItemType> = ({
 
   const basketInterface = useBasket();
 
-  const category = useCourses()?.categories.find(
+  const category = useCourses()?.categories?.find(
     (category) => category.id === course?.category_id
   );
   const userCourses = useUser()?.user.courses;
@@ -117,10 +120,6 @@ const BasketItem: FC<BasketItemType> = ({
       return clamp(0, delta / MAX_TRANSLATE, 1);
     };
   }, [cardRef]);
-
-  if (!course) {
-    return null;
-  }
 
   return (
     <li className={styles.basketItem}>

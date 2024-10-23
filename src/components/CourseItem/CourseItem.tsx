@@ -19,7 +19,7 @@ interface CourseItemTypes {
 }
 
 const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
-  const userCourseData = useUser()?.user.courses.find(
+  const userCourseData = useUser()?.user?.courses?.find(
     (userCourse) => userCourse.course_id === course.id
   );
 

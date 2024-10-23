@@ -33,6 +33,7 @@ interface PreviousAvatar {
 export interface UserType {
   accessToken?: string | null | Promise<any>;
   userId: number | null;
+  studentId: number | null;
   userType: string | null;
   name: string;
   surname: string;
@@ -99,6 +100,7 @@ export const useUser = () => useContext(UserContext);
 
 const initialState: UserType = {
   userId: null,
+  studentId: null,
   userType: null,
   name: "",
   surname: "",
@@ -266,6 +268,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
       setUser((prev) => ({
         ...prev,
         userId: data.user_id,
+        studentId: data.student_id,
         userType: data.user_type,
         username: data.username,
         email: data.email,

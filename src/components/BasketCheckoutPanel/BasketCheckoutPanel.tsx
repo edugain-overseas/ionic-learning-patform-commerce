@@ -1,17 +1,18 @@
 import { FC, useEffect, useRef } from "react";
 import { useBasket } from "../../context/BasketContext";
+import { useUser } from "../../context/UserContext";
 import { priceFormatter } from "../../utils/priceFormatter";
-import CommonButton from "../CommonButton/CommonButton";
 import styles from "./BasketCheckoutPanel.module.scss";
+import CheckoutBtn from "./CheckoutBtn";
 
 const BasketCheckoutPanel: FC = () => {
   const basketInterface = useBasket();
+  const studentId = useUser()?.user.studentId;
+  const items = basketInterface?.items.map((item) => item.id);
 
   const discountRef = useRef<HTMLDivElement>(null);
 
   const checkout = basketInterface?.checkout();
-
-  const handleCheckoutClick = () => {};
 
   useEffect(() => {
     if (discountRef.current) {
@@ -48,16 +49,7 @@ const BasketCheckoutPanel: FC = () => {
           </span>
         </div>
       </div>
-      <CommonButton
-        label="Checkout"
-        backgroundColor="#7E8CA8"
-        borderRadius={5}
-        color="#FCFCFC"
-        width={312}
-        height={32}
-        className={styles.checkoutBtn}
-        onClick={handleCheckoutClick}
-      />
+      <CheckoutBtn />
     </div>
   );
 };
