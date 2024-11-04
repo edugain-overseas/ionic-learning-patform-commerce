@@ -29,6 +29,9 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const courses = coursesInterface?.courses;
   const categories = coursesInterface?.categories;
 
+  console.log(items);
+  
+
   const toggleItemToBasket = (id: number) => {
     setItems((prev) => {
       if (prev.find((item) => id === item.id)) {

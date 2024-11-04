@@ -4,8 +4,8 @@ import { usePaymentSheet } from "../../hooks/usePaymentSheet";
 import { useUser } from "../../context/UserContext";
 import { useBasket } from "../../context/BasketContext";
 import CommonButton from "../CommonButton/CommonButton";
-import styles from "./BasketCheckoutPanel.module.scss";
 import Spinner from "../Spinner/Spinner";
+import styles from "./BasketCheckoutPanel.module.scss";
 
 const CheckoutBtn: FC = () => {
   const { stripe } = useCapacitorStripe();
