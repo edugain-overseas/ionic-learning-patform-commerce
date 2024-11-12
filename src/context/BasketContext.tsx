@@ -7,7 +7,8 @@ export interface BaseItemType {
   confirmed: boolean;
 }
 
-interface ItemType extends BaseItemType {
+export interface ItemType extends BaseItemType {
+  categoryId: number;
   subItems: BaseItemType[];
 }
 
@@ -29,15 +30,28 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const courses = coursesInterface?.courses;
   const categories = coursesInterface?.categories;
 
-  console.log(items);
-  
-
   const toggleItemToBasket = (id: number) => {
     setItems((prev) => {
       if (prev.find((item) => id === item.id)) {
         return prev.filter((item) => item.id !== id);
       } else {
-        return [...prev, { id, confirmed: true, subItems: [] }];
+        const categoryId = courses?.find(
+          (course) => course.id === id
+        )?.category_id;
+
+        if (categoryId) {
+          return [
+            ...prev,
+            {
+              id,
+              confirmed: true,
+              categoryId: categoryId,
+              subItems: [],
+            },
+          ];
+        } else {
+          return prev;
+        }
       }
     });
   };
@@ -77,11 +91,16 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
       if (!item.confirmed) {
         return false;
       }
-      if (!item.subItems.every((subitem) => subitem.confirmed)) {
+
+      if (
+        item.subItems.length &&
+        !item.subItems.every((subitem) => subitem.confirmed)
+      ) {
         return false;
       }
       return true;
     });
+
     const discount = confirmedItems.reduce((totalDiscount, item) => {
       const categoryId = courses?.find(
         (course) => course.id === item.id
@@ -148,7 +167,9 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <BasketContext.Provider
       value={{
-        items,
+        items: [
+          ...items.sort((itemA, itemB) => itemA.categoryId - itemB.categoryId),
+        ],
         toggleItemToBasket,
         toggleConfirmItem,
         toggleSubItem,

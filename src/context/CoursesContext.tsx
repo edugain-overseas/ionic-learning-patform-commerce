@@ -103,6 +103,7 @@ export interface LessonType {
 
 export interface CourseType {
   id: number;
+  bought: boolean | null;
   title: string;
   about_text?: string;
   c_access?: string;

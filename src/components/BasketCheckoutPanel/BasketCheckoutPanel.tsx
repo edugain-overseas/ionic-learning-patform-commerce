@@ -6,13 +6,13 @@ import styles from "./BasketCheckoutPanel.module.scss";
 import CheckoutBtn from "./CheckoutBtn";
 
 const BasketCheckoutPanel: FC = () => {
-  const basketInterface = useBasket();
+  const basketService = useBasket();
   const studentId = useUser()?.user.studentId;
-  const items = basketInterface?.items.map((item) => item.id);
+  const items = basketService?.items.map((item) => item.id);
 
   const discountRef = useRef<HTMLDivElement>(null);
 
-  const checkout = basketInterface?.checkout();
+  const checkout = basketService?.checkout();
 
   useEffect(() => {
     if (discountRef.current) {

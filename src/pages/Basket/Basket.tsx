@@ -15,7 +15,7 @@ const Basket: FC = () => {
   return (
     <IonPage id="basket">
       <Header {...headerProps} />
-      <IonContent className={styles.contentWrapper}>
+      <IonContent className={styles.contentWrapper} scrollY>
         <BasketList />
       </IonContent>
       <BasketCheckoutPanel />

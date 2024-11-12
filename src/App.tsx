@@ -42,8 +42,6 @@ const App: React.FC = () => {
   useKeyboard();
   useAxios();
 
-  console.log(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY_DEV);
-
   return (
     <IonApp className="App">
       <UserProvider>

@@ -21,6 +21,7 @@ type BasketItemType = {
   confirmed: boolean;
   availableCourses?: CourseType[];
   subItemsInfo: BaseItemType[];
+  hasAccordion: boolean;
 };
 
 const BasketItem: FC<BasketItemType> = ({
@@ -28,6 +29,7 @@ const BasketItem: FC<BasketItemType> = ({
   confirmed,
   availableCourses,
   subItemsInfo,
+  hasAccordion,
 }) => {
   if (!course) {
     return null;
@@ -129,14 +131,13 @@ const BasketItem: FC<BasketItemType> = ({
           confirmed={confirmed}
           categoryTitle={categoryTitle}
         />
-        {coursesToPropose && coursesToPropose.length !== 0 && (
+        {hasAccordion && coursesToPropose && coursesToPropose.length !== 0 && (
           <BasketItemAccordion
             courses={coursesToPropose}
             itemsInfo={subItemsInfo}
           />
         )}
       </div>
-
       <div className={styles.deleteWrapper}>
         <IonIcon src={deteleIcon} />
       </div>
