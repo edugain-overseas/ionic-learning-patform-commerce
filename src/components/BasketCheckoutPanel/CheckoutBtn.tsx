@@ -12,6 +12,9 @@ const CheckoutBtn: FC = () => {
   const studentId = useUser()?.user.studentId;
   const items = useBasket()?.items.map((item) => item.id);
 
+  console.log(studentId);
+  
+
   const [isLoading, setIsLoading] = useState(false);
 
   if (!studentId || !items) {
