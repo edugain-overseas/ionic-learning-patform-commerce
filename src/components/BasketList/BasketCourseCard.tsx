@@ -28,7 +28,7 @@ const BasketCourseCard: FC<BasketCourseCardType> = ({
           checked={confirmed}
           onChange={() =>
             subItem
-              ? basketInterface?.toggleSubItem(course.id)
+              ? basketInterface?.toggleItemToBasket(course.id)
               : basketInterface?.toggleConfirmItem(course.id)
           }
         />

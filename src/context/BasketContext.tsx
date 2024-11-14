@@ -1,22 +1,19 @@
 import { FC, ReactNode, createContext, useContext } from "react";
 import useStorage from "../hooks/useStorage";
 import { useCourses } from "./CoursesContext";
+import { groupByKey } from "../utils/groupByKey";
+import { useUser } from "./UserContext";
 
-export interface BaseItemType {
+export interface ItemType {
   id: number;
   confirmed: boolean;
-}
-
-export interface ItemType extends BaseItemType {
   categoryId: number;
-  subItems: BaseItemType[];
 }
 
 type BasketContextType = {
   items: ItemType[];
   toggleItemToBasket: (id: number) => void;
   toggleConfirmItem: (id: number) => void;
-  toggleSubItem: (id: number) => void;
   checkout: () => { subTotal: number; discount: number; total: number };
 };
 
@@ -27,6 +24,7 @@ export const useBasket = () => useContext(BasketContext);
 export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [items, setItems] = useStorage<ItemType[]>("basket-items", []);
   const coursesInterface = useCourses();
+  const userInterface = useUser();
   const courses = coursesInterface?.courses;
   const categories = coursesInterface?.categories;
 
@@ -64,95 +62,55 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
     );
   };
 
-  const toggleSubItem = (id: number) => {
-    setItems((prev) =>
-      prev.map((mainItem) => {
-        if (mainItem.subItems.find((subItem) => subItem.id === id)) {
-          return {
-            ...mainItem,
-            subItems: mainItem.subItems.map((subItem) =>
-              subItem.id === id
-                ? { ...subItem, confirmed: !subItem.confirmed }
-                : subItem
-            ),
-          };
-        } else {
-          return {
-            ...mainItem,
-            subItems: [...mainItem.subItems, { id, confirmed: true }],
-          };
-        }
-      })
-    );
-  };
-
   const calcDiscount = () => {
-    const confirmedItems = items.filter((item) => {
-      if (!item.confirmed) {
-        return false;
-      }
+    let discount = 0;
+    const confirmedItems = items.filter((item) => item.confirmed);
 
-      if (
-        item.subItems.length &&
-        !item.subItems.every((subitem) => subitem.confirmed)
-      ) {
-        return false;
-      }
-      return true;
-    });
+    const groupedItemsByCategoryId = groupByKey(confirmedItems, "categoryId");
 
-    const discount = confirmedItems.reduce((totalDiscount, item) => {
-      const categoryId = courses?.find(
-        (course) => course.id === item.id
-      )?.category_id;
+    const userCourses = userInterface!.user.courses.map((course) => ({
+      id: course.course_id,
+    }));
 
-      const targetCategoryDiscount = categories?.find(
+    Array.from(groupedItemsByCategoryId, ([categoryId, items]) => {
+      const categoryDiscount = categories?.find(
         (category) => category.id === categoryId
       )?.discount;
-
-      if (!targetCategoryDiscount) return totalDiscount;
-
-      const targetCourses = courses?.filter(
+      const categoryCourses = courses?.filter(
         (course) => course.category_id === categoryId
       );
-
-      const itemCoursesIds = [
-        item.id,
-        ...item.subItems.map((subItem) => subItem.id),
-      ];
-
-      const isDiscount = targetCourses?.every((course) =>
-        itemCoursesIds.includes(course.id)
+      const isDiscountShouldBeUsed = categoryCourses?.every((course) =>
+        [...items, ...userCourses].find((item) => item?.id === course.id)
       );
 
-      if (!isDiscount) {
-        return totalDiscount;
+      if (isDiscountShouldBeUsed && categoryCourses && categoryDiscount) {
+        const categoryItemsPrice = categoryCourses.reduce(
+          (sumPrice, course) => {
+            if (items.find(({ id }) => id === course.id)) {
+              return sumPrice + course.price;
+            }
+            return sumPrice;
+          },
+          0
+        );
+        const categoryItemsDiscount =
+          (categoryItemsPrice * categoryDiscount) / 100;
+        discount += categoryItemsDiscount;
       }
-      return totalDiscount + targetCategoryDiscount;
-    }, 0);
+    });
 
     return discount;
   };
 
   const calcSubTotal = () => {
     const total = items.reduce((total, item) => {
-      const subItems = item.subItems.filter(
-        (subItem) => subItem.confirmed === true
-      );
-      const SubItemsTotalPrice = subItems.reduce((sum, { id }) => {
-        const price = courses?.find((course) => course.id === id)?.price;
-        return price ? sum + price : sum;
-      }, 0);
+      if (!item.confirmed) {
+        return total;
+      }
 
-      const itemPrice = courses?.find(
-        (course) => course.id === item.id && item.confirmed
-      )?.price;
-
-      const sum = itemPrice
-        ? itemPrice + SubItemsTotalPrice
-        : SubItemsTotalPrice;
-
-      return total + sum;
+      const itemPrice =
+        courses?.find((course) => course.id === item.id)?.price || 0;
+      return total + itemPrice;
     }, 0);
     return total;
   };
@@ -172,7 +130,6 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
         ],
         toggleItemToBasket,
         toggleConfirmItem,
-        toggleSubItem,
         checkout,
       }}
     >

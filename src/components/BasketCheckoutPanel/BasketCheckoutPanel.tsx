@@ -7,8 +7,6 @@ import CheckoutBtn from "./CheckoutBtn";
 
 const BasketCheckoutPanel: FC = () => {
   const basketService = useBasket();
-  const studentId = useUser()?.user.studentId;
-  const items = basketService?.items.map((item) => item.id);
 
   const discountRef = useRef<HTMLDivElement>(null);
 

@@ -49,10 +49,7 @@ const UserProfile: React.FC = () => {
     if (editUserDataModalRef.current) {
       editUserDataModalRef.current.dismiss();
     }
-  };
-
-  console.log(userData);
-  
+  };  
 
   const closeEditAvatarModal = () => {
     if (editUserAvatarRef.current) {

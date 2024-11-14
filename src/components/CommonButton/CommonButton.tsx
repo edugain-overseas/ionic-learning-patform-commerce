@@ -44,7 +44,9 @@ const CommonButton: React.FC<CommonButtonTypes> = ({
   };
   return (
     <button
-      className={`${styles.wrapper} ${className ? className : undefined} ion-activatable`}
+      className={`${styles.wrapper} ${className ? className : undefined} ${
+        disabled ? "" : "ion-activatable"
+      }`}
       style={{
         width: block ? "100%" : width ? `${width}rem` : "auto",
         height: height ? `${height}rem` : "auto",
@@ -60,7 +62,7 @@ const CommonButton: React.FC<CommonButtonTypes> = ({
     >
       {label && <span className={styles.label}>{label}</span>}
       {icon && icon}
-      <IonRippleEffect></IonRippleEffect>
+      {!disabled && <IonRippleEffect></IonRippleEffect>}
     </button>
   );
 };

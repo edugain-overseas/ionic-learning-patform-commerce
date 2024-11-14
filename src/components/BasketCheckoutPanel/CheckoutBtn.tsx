@@ -57,6 +57,7 @@ const CheckoutBtn: FC = () => {
       height={40}
       className={styles.checkoutBtn}
       onClick={handleCheckoutClick}
+      disabled={items.length === 0}
     />
   );
 };

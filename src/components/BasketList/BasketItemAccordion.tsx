@@ -1,18 +1,13 @@
 import { FC, useRef, useState } from "react";
 import { CourseType } from "../../context/CoursesContext";
-import { BaseItemType } from "../../context/BasketContext";
 import BasketCourseCard from "./BasketCourseCard";
 import styles from "./BasketList.module.scss";
 
 type BasketItemAccordionType = {
   courses: CourseType[];
-  itemsInfo: BaseItemType[];
 };
 
-const BasketItemAccordion: FC<BasketItemAccordionType> = ({
-  courses,
-  itemsInfo,
-}) => {
+const BasketItemAccordion: FC<BasketItemAccordionType> = ({ courses }) => {
   const [isOpen, setIsOpen] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -33,11 +28,8 @@ const BasketItemAccordion: FC<BasketItemAccordionType> = ({
             <li className={styles.basketAccordionCoursesItem} key={course.id}>
               <BasketCourseCard
                 course={course}
-                confirmed={
-                  itemsInfo?.find((item) => item.id === course.id)?.confirmed ||
-                  false
-                }
-                subItem={true}
+                confirmed={false}
+                subItem={true}  
               />
             </li>
           ))}

@@ -9,7 +9,7 @@ import {
 } from "@ionic/react";
 import { CourseType, useCourses } from "../../context/CoursesContext";
 import { useUser } from "../../context/UserContext";
-import { BaseItemType, useBasket } from "../../context/BasketContext";
+import { useBasket } from "../../context/BasketContext";
 import { clamp } from "../../utils/clamp";
 import deteleIcon from "../../assets/icons/delete.svg";
 import BasketItemAccordion from "./BasketItemAccordion";
@@ -20,7 +20,6 @@ type BasketItemType = {
   course?: CourseType;
   confirmed: boolean;
   availableCourses?: CourseType[];
-  subItemsInfo: BaseItemType[];
   hasAccordion: boolean;
 };
 
@@ -28,7 +27,6 @@ const BasketItem: FC<BasketItemType> = ({
   course,
   confirmed,
   availableCourses,
-  subItemsInfo,
   hasAccordion,
 }) => {
   if (!course) {
@@ -134,7 +132,6 @@ const BasketItem: FC<BasketItemType> = ({
         {hasAccordion && coursesToPropose && coursesToPropose.length !== 0 && (
           <BasketItemAccordion
             courses={coursesToPropose}
-            itemsInfo={subItemsInfo}
           />
         )}
       </div>
