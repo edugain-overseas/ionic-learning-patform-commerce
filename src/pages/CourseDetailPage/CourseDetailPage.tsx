@@ -7,6 +7,7 @@ import CourseIntroPage from "./CourseIntroPage/CourseIntroPage";
 import CourseTasksPage from "./CourseTasksPage/CourseTasksPage";
 import CourseExamPage from "./CourseExamPage/CourseExamPage";
 import TaskPage from "../TaskPage/TaskPage";
+import CourseBuyStatusPage from "./CourseBuyStatusPage/CourseBuyStatusPage";
 
 const CourseDetailPage: React.FC = () => {
   const { courseId } = useParams<{

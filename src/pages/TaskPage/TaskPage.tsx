@@ -45,7 +45,7 @@ const TaskPage: React.FC = () => {
   const getNextLessonId = (direction: "back" | "forward") => {
     const availableLessons = courseData?.lessons
       .filter((lesson) => lesson.status !== "blocked")
-      .sort((a, b) => a.number - b.number);
+      .sort((a, b) => a.number - b.number);      
     if (availableLessons) {
       const targetLessonIndex =
         availableLessons?.findIndex((lesson) => lesson.id === +taskId) +

@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useRef, useState } from "react";
+import { FC, ReactNode, useEffect, useRef } from "react";
 import styles from "./CustomSheetModal.module.scss";
 import { createPortal } from "react-dom";
 import {
@@ -29,7 +29,6 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
   children,
   portalTo,
   position = ["0", "0", "0", "0"],
-  isOpen = true,
   height,
   width = "100%",
   breakpoints,
@@ -38,7 +37,7 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
   modalBackgroundColor = "rgba(255, 255, 255, 0.9)",
   isAnimating,
 }) => {
-  const minHeight = height * breakpoints[0];
+  
   const maxHeight = height * breakpoints[breakpoints.length - 1];
 
   const modalRef = useRef<HTMLDivElement>(null);

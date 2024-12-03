@@ -1,0 +1,18 @@
+1. include session_id is success_url by useinf stripe automaticly playcegolders replacement
+
+    domain?status=success&session_id={CHECKOUT_SESSION_ID}
+        example: http://localhost:8100/courses/buy?status=success&session_id=cs_test_b1u1INEnysZZboLWJMFblJokuHATVPpJLgVGwYWZMQoGJTE7VjlLfI7CqK
+
+
+2. when user redirected to success_url call end-point to get payment details from metadata
+
+    GET '/stripe/success?session_id={session_id}'
+
+    server side:
+    await stripe.checkout.sessions.retrieve(session_id).metadata.items
+    res.json({items})
+
+3. get success_payment items and build sucess page
+
+
+// Same for payment intent

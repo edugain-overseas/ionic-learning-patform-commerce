@@ -48,4 +48,10 @@
   font-weight: 500;
   line-height: normal;
   margin: 12rem auto;
+
+  transition: opacity var(--custom-tr-time-min) ease;
+
+  &:disabled {
+    opacity: 0.5;
+  }
 }

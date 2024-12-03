@@ -1,0 +1,27 @@
+.content {
+  height: 100%;
+  padding: 20rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  h1 {
+    font-size: 20rem;
+    color: var(--ion-color-light);
+
+    span {
+      display: block;
+      font-size: 32rem;
+      color: var(--ion-color-success);
+      display: flex;
+    }
+  }
+}
+
+.courseLink {
+    color: var(--ion-color-dark);
+    font-size: 24rem;
+    margin-block: 32rem;
+    text-decoration: none;
+}

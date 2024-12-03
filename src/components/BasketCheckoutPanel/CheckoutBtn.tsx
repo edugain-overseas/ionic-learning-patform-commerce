@@ -1,54 +1,19 @@
-import { FC, useState } from "react";
-import { useCapacitorStripe } from "@capacitor-community/stripe/dist/esm/react/provider";
-import { usePaymentSheet } from "../../hooks/usePaymentSheet";
-import { useUser } from "../../context/UserContext";
-import { useBasket } from "../../context/BasketContext";
+import { FC } from "react";
 import CommonButton from "../CommonButton/CommonButton";
 import Spinner from "../Spinner/Spinner";
 import styles from "./BasketCheckoutPanel.module.scss";
 
-const CheckoutBtn: FC = () => {
-  const { stripe } = useCapacitorStripe();
-  const studentId = useUser()?.user.studentId;
-  const items = useBasket()?.items.map((item) => item.id);
+type CheckoutBtnProps = {
+  isLoading?: boolean;
+  disabled?: boolean;
+  handleClick: () => void;
+};
 
-  console.log(studentId);
-  
-
-  const [isLoading, setIsLoading] = useState(false);
-
-  if (!studentId || !items) {
-    return <></>;
-  }
-
-  const { fetchPaymentIntentData } = usePaymentSheet(studentId, items);
-
-  const handleCheckoutClick = async () => {
-    try {
-      setIsLoading(true);
-      const paymentIntentData = await fetchPaymentIntentData();
-
-      await stripe.createPaymentSheet({
-        paymentIntentClientSecret: paymentIntentData.paymentIntent,
-        customerId: paymentIntentData.customer,
-        customerEphemeralKeySecret: paymentIntentData.ephemeralKey,
-        merchantDisplayName: "IEU",
-        enableApplePay: true,
-        enableGooglePay: true,
-        withZipCode: false,
-      });
-
-      const result = await stripe.presentPaymentSheet();
-
-      console.log(result);
-      
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+const CheckoutBtn: FC<CheckoutBtnProps> = ({
+  isLoading = false,
+  disabled = false,
+  handleClick,
+}) => {
   return (
     <CommonButton
       label="Checkout"
@@ -59,8 +24,8 @@ const CheckoutBtn: FC = () => {
       width={312}
       height={40}
       className={styles.checkoutBtn}
-      onClick={handleCheckoutClick}
-      disabled={items.length === 0}
+      onClick={handleClick}
+      disabled={disabled}
     />
   );
 };

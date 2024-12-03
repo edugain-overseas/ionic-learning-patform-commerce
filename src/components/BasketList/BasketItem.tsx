@@ -32,6 +32,7 @@ const BasketItem: FC<BasketItemType> = ({
   if (!course) {
     return null;
   }
+  
   const cardRef = useRef<HTMLDivElement | null>(null);
   const animation = useRef<Animation | null>(null);
   const gesture = useRef<Gesture | null>(null);

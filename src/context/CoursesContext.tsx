@@ -188,7 +188,6 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
         ...prev.filter((course) => course.id !== data.id),
         { ...data },
       ]);
-      console.log(data);
     } catch (error) {
       console.log(error);
       throw error;
@@ -237,9 +236,14 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
         setCourses((prev) => {
           const updatedCourses = prev.map((course) => {
             if (course.lessons.find((lesson) => lesson.id === lessonId)) {
+              let lessonNumber = 0;
               const updatedLessons = course.lessons.map((lesson) => {
                 if (lesson.id === lessonId) {
+                  lessonNumber = lesson.number;
                   return { ...lesson, status: "completed" };
+                }
+                if (lesson.number === lessonNumber + 1) {
+                  return { ...lesson, status: "active" };
                 }
                 return lesson;
               });
@@ -298,7 +302,6 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
   }, []);
 
   useEffect(() => {
-
     const getCoursesInstructions = async () => {
       try {
         const response = await instance.get<InstructionType[]>(
@@ -327,7 +330,7 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
     if (accessToken) {
       instance.defaults.headers.Authorization = `Bearer ${accessToken}`;
       getCoursesInstructions();
-      getAllCourses()
+      getAllCourses();
     }
   }, [accessToken]);
 

@@ -9,8 +9,9 @@ import TestContent from "./TestContent";
 import DoubleScrollLayout from "../DoubleScrollLayout/DoubleScrollLayout";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import styles from "./Test.module.scss";
-import TestStatusBar from "./TestStatusBar";
 import { useUser } from "../../context/UserContext";
+import LessonToolsPanel from "../LessonToolsPanel/LessonToolsPanel";
+import TestTools from "../LessonToolsPanel/TestTools";
 
 const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
   const coursesInterface = useCourses();
@@ -31,10 +32,10 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
   console.log("test data: ", taskData.lessonData);
   console.log("test attempts: ", testAttempts);
 
-  const lectureNumber =
+  const number =
     course?.lessons &&
     course?.lessons
-      .filter((lesson) => lesson.type === "lecture")
+      .filter((lesson) => lesson.type === "test")
       .sort((a, b) => a.number - b.number)
       .findIndex((lesson) => lesson.id === taskData.id) + 1;
 
@@ -61,12 +62,14 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
           />
         </div>
       )}
-      <TestStatusBar testAttempts={testAttempts ? testAttempts : []} />
+      <LessonToolsPanel>
+        <TestTools />
+      </LessonToolsPanel>
       <DoubleScrollLayout
         posterSrc={`${serverName}/${taskData.image_path}`}
         topLabel="Test"
         isBackgroundBlured={false}
-        scrollTriggerValue={98}
+        scrollTriggerValue={84}
       >
         <div>
           <div className={styles.testHeader}>
@@ -75,8 +78,8 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
               <span className={styles.titleValue}>{taskData.title}</span>
             </div>
             <div className={styles.title}>
-              {"Lecture №: "}
-              <span className={styles.titleValue}>{lectureNumber}</span>
+              {"Test №: "}
+              <span className={styles.titleValue}>{number}</span>
             </div>
           </div>
           {taskData?.lessonData && "test_id" in taskData.lessonData && (

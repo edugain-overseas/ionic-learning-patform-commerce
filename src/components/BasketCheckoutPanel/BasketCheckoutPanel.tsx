@@ -1,9 +1,12 @@
 import { FC, useEffect, useRef } from "react";
+import { Capacitor } from "@capacitor/core";
+import { CapacitorStripeProvider } from "@capacitor-community/stripe/dist/esm/react/provider";
 import { useBasket } from "../../context/BasketContext";
-import { useUser } from "../../context/UserContext";
 import { priceFormatter } from "../../utils/priceFormatter";
-import styles from "./BasketCheckoutPanel.module.scss";
 import CheckoutBtn from "./CheckoutBtn";
+import styles from "./BasketCheckoutPanel.module.scss";
+import WebPayment from "./WebPayment";
+import NativePayment from "./NativePayment";
 
 const BasketCheckoutPanel: FC = () => {
   const basketService = useBasket();
@@ -11,6 +14,8 @@ const BasketCheckoutPanel: FC = () => {
   const discountRef = useRef<HTMLDivElement>(null);
 
   const checkout = basketService?.checkout();
+
+  const isNative = Capacitor.isNativePlatform();
 
   useEffect(() => {
     if (discountRef.current) {
@@ -47,7 +52,16 @@ const BasketCheckoutPanel: FC = () => {
           </span>
         </div>
       </div>
-      <CheckoutBtn />
+      {isNative ? (
+        <CapacitorStripeProvider
+          publishableKey={import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY_DEV}
+          fallback={<p>Loading...</p>}
+        >
+          <NativePayment />
+        </CapacitorStripeProvider>
+      ) : (
+        <WebPayment />
+      )}
     </div>
   );
 };

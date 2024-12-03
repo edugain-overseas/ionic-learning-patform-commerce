@@ -23,6 +23,7 @@ const Lecture: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
     <DoubleScrollLayout
       posterSrc={`${serverName}/${taskData.image_path}`}
       topLabel="Lecture"
+      scrollTriggerValue={54}
     >
       <div>
         <div className={styles.lectureHeader}>

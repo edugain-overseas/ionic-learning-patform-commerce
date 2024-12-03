@@ -15,6 +15,7 @@ import Instructions from "../pages/Instructions/Instructions";
 import NotFound from "../pages/NotFound/NotFound";
 import Basket from "../pages/Basket/Basket";
 import Search from "../pages/Search/Search";
+import CourseBuyStatusPage from "../pages/CourseDetailPage/CourseBuyStatusPage/CourseBuyStatusPage";
 
 const Router: React.FC = () => {
   return (
@@ -39,7 +40,7 @@ const Router: React.FC = () => {
               path="/courses/course/:courseId"
               component={CourseDetailPage}
             />
-
+            <Route path="/courses/buy" component={CourseBuyStatusPage} exact />
             <Route exact path="/" render={() => <Redirect to="/home" />} />
             <Route component={NotFound} />
           </Tabs>
