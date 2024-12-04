@@ -1,12 +1,11 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { LessonType, TestDataType } from "../../context/CoursesContext";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 import QuestionTest from "./Questions/QuestionTest/QuestionTest";
 import QuestionMultipleChoice from "./Questions/QuestionMultipleChoice/QuestionMultipleChoice";
 import QuestionPhotoAnswers from "./Questions/QuestionPhotoAnswers/QuestionPhotoAnswers";
 import QuestionPhoto from "./Questions/QuestionPhoto/QuestionPhoto";
 import QuestionMatching from "./Questions/QuestionMatching/QuestionMatching";
-import { getLessonNumberByType } from "../../utils/getLessonNumberByType";
 import styles from "./Test.module.scss";
-import { LessonType, TestDataType } from "../../context/CoursesContext";
 
 export interface TestQuestionType {
   answers: {
@@ -23,13 +22,12 @@ export interface TestQuestionType {
 
 const TestContent: React.FC<{
   test: LessonType;
-  setAnswersProgress: Dispatch<SetStateAction<number>>;
-}> = ({ test, setAnswersProgress }) => {
-  const [studentAnswers, setStudentAnswers] = useState<any[]>([]);
-
-  // const studentAnswersProgress = studentAnswers.filter(
-  //   (answer) => answer.a_id !== 0
-  // );
+  studentAnswers: any[];
+  setStudentAnswers: Dispatch<SetStateAction<any[]>>;
+}> = ({ test, studentAnswers, setStudentAnswers }) => {
+  if (!studentAnswers || !setStudentAnswers) {
+    return <></>;
+  }
 
   const {
     id: testId,
@@ -39,11 +37,9 @@ const TestContent: React.FC<{
     status,
   } = test;
 
-  // const course = useSelector(getAllCourses)?.find(({ id }) => id === courseId);
   const testContent = [...(testData as TestDataType)?.questions].sort(
     (itemA, itemB) => itemA.q_number - itemB.q_number
   );
-  // const courseLessons = course?.lessons;
 
   const setSingleAnswerState = (id: number, value: number) => {
     setStudentAnswers((prev) => {
@@ -129,15 +125,15 @@ const TestContent: React.FC<{
 
         switch (type) {
           case "test":
-            if (
-              studentAnswers.find(({ q_id: questionId }) => questionId === id)
-            ) {
-            } else {
-              setStudentAnswers((prev) => [
-                ...prev,
-                { q_id: id, q_type: type, a_id: 0 },
-              ]);
-            }
+            // if (
+            //   studentAnswers.find(({ q_id: questionId }) => questionId === id)
+            // ) {
+            // } else {
+            //   setStudentAnswers((prev) => [
+            //     ...prev,
+            //     { q_id: id, q_type: type, a_id: 0 },
+            //   ]);
+            // }
             const testState = studentAnswers.find(
               ({ q_id: questionId }) => questionId === id
             )?.a_id;
@@ -168,15 +164,15 @@ const TestContent: React.FC<{
               </div>
             );
           case "multiple_choice":
-            if (
-              studentAnswers.find(({ q_id: questionId }) => questionId === id)
-            ) {
-            } else {
-              setStudentAnswers((prev) => [
-                ...prev,
-                { q_id: id, q_type: type, a_ids: [] },
-              ]);
-            }
+            // if (
+            //   studentAnswers.find(({ q_id: questionId }) => questionId === id)
+            // ) {
+            // } else {
+            //   setStudentAnswers((prev) => [
+            //     ...prev,
+            //     { q_id: id, q_type: type, a_ids: [] },
+            //   ]);
+            // }
             const multipleChoiseState = studentAnswers.find(
               ({ q_id: questionId }) => questionId === id
             )?.a_ids;
@@ -207,15 +203,15 @@ const TestContent: React.FC<{
               </div>
             );
           case "answer_with_photo":
-            if (
-              studentAnswers.find(({ q_id: questionId }) => questionId === id)
-            ) {
-            } else {
-              setStudentAnswers((prev) => [
-                ...prev,
-                { q_id: id, q_type: type, a_id: 0 },
-              ]);
-            }
+            // if (
+            //   studentAnswers.find(({ q_id: questionId }) => questionId === id)
+            // ) {
+            // } else {
+            //   setStudentAnswers((prev) => [
+            //     ...prev,
+            //     { q_id: id, q_type: type, a_id: 0 },
+            //   ]);
+            // }
             const photoAnswersState = studentAnswers.find(
               ({ q_id: questionId }) => questionId === id
             )?.a_id;
@@ -246,15 +242,15 @@ const TestContent: React.FC<{
               </div>
             );
           case "question_with_photo":
-            if (
-              studentAnswers.find(({ q_id: questionId }) => questionId === id)
-            ) {
-            } else {
-              setStudentAnswers((prev) => [
-                ...prev,
-                { q_id: id, q_type: type, a_id: 0 },
-              ]);
-            }
+            // if (
+            //   studentAnswers.find(({ q_id: questionId }) => questionId === id)
+            // ) {
+            // } else {
+            //   setStudentAnswers((prev) => [
+            //     ...prev,
+            //     { q_id: id, q_type: type, a_id: 0 },
+            //   ]);
+            // }
             const photoState = studentAnswers.find(
               ({ q_id: questionId }) => questionId === id
             )?.a_id;
@@ -286,15 +282,15 @@ const TestContent: React.FC<{
               </div>
             );
           case "matching":
-            if (
-              studentAnswers.find(({ q_id: questionId }) => questionId === id)
-            ) {
-            } else {
-              setStudentAnswers((prev) => [
-                ...prev,
-                { q_id: id, q_type: type, matching: [] },
-              ]);
-            }
+            // if (
+            //   studentAnswers.find(({ q_id: questionId }) => questionId === id)
+            // ) {
+            // } else {
+            //   setStudentAnswers((prev) => [
+            //     ...prev,
+            //     { q_id: id, q_type: type, matching: [] },
+            //   ]);
+            // }
             const matchingState = studentAnswers.find(
               ({ q_id }) => q_id === id
             )?.matching;
@@ -330,15 +326,15 @@ const TestContent: React.FC<{
               </div>
             );
           case "boolean":
-            if (
-              studentAnswers.find(({ q_id: questionId }) => questionId === id)
-            ) {
-            } else {
-              setStudentAnswers((prev) => [
-                ...prev,
-                { q_id: id, q_type: type, a_id: 0 },
-              ]);
-            }
+            // if (
+            //   studentAnswers.find(({ q_id: questionId }) => questionId === id)
+            // ) {
+            // } else {
+            //   setStudentAnswers((prev) => [
+            //     ...prev,
+            //     { q_id: id, q_type: type, a_id: 0 },
+            //   ]);
+            // }
             const booleanState = studentAnswers.find(
               ({ q_id: questionId }) => questionId === id
             )?.a_id;
@@ -373,34 +369,27 @@ const TestContent: React.FC<{
         }
       });
 
-  // const handleConfirmTest = () => {
-  //   setConfirmBtnState("pending");
-  //   dispatch(
-  //     confirmTestThunk({ lessonId: testId, studentTest: studentAnswers })
-  //   ).then(() => {
-  //     setConfirmBtnState("fulfilled");
-  //     setStudentAnswers([]);
-  //   });
-  // };
-
   useEffect(() => {
-    console.log("update");
-    setAnswersProgress(
-      studentAnswers.filter((ans) => {
-        if (
-          ans.q_type === "test" ||
-          ans.q_type === "boolean" ||
-          ans.q_type === "answer_with_photo" ||
-          ans.q_type === "question_with_photo"
-        )
-          return ans.a_id !== 0;
-        if (ans.q_type === "multiple_choice") return ans.a_ids.length !== 0;
-        if (ans.q_type === "matching") return ans.matching?.length !== 0;
-        return false;
-      }).length
-    );
-    // eslint-disable-next-line
-  }, [studentAnswers]);
+    if (testData && testContent) {
+      setStudentAnswers((prev) => {
+        const updatedAnswers = [...prev];
+        testContent.forEach((question) => {
+          if (!prev.find(({ q_id }) => q_id === question.q_id)) {
+            updatedAnswers.push({
+              q_id: question.q_id,
+              q_type: question.q_type,
+              ...(question.q_type === "multiple_choice"
+                ? { a_ids: [] }
+                : question.q_type === "matching"
+                ? { matching: [] }
+                : { a_id: 0 }),
+            });
+          }
+        });
+        return updatedAnswers;
+      });
+    }
+  }, [testData, setStudentAnswers]);
 
   return <div className={styles.contentWrapper}>{renderTestContent()}</div>;
 };

@@ -88,10 +88,10 @@ interface UserContextType {
   getLastUserImages: () => Promise<void>;
   updateUserImage: (formData: FormData) => Promise<void>;
   setMainImage: (imageId: number) => Promise<void>;
-  getStudentTestData: (
-    testId: number | string,
-    courseId: number | string
-  ) => Promise<void>;
+  // getStudentTestData: (
+  //   testId: number | string,
+  //   courseId: number | string
+  // ) => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | null>(null);
@@ -363,39 +363,39 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
     }
   };
 
-  const getStudentTestData = async (
-    testId: number | string,
-    courseId: number | string
-  ) => {
-    try {
-      const { data } = await instance.get("/student-test/attempts", {
-        params: {
-          test_id: testId,
-        },
-      });
-      setUser((prev) => {
-        const updatedCourses = prev.courses.map((course) => {
-          if (course.course_id === +courseId) {
-            return {
-              ...course,
-              testAttempts: course.testAttempts
-                ? [
-                    ...course.testAttempts.filter(
-                      (attempt) => attempt.test_id !== +testId
-                    ),
-                    ...data,
-                  ]
-                : data,
-            };
-          }
-          return course;
-        });
-        return { ...prev, courses: updatedCourses };
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const getStudentTestData = async (
+  //   testId: number | string,
+  //   courseId: number | string
+  // ) => {
+  //   try {
+  //     const { data } = await instance.get("/student-test/attempts", {
+  //       params: {
+  //         test_id: testId,
+  //       },
+  //     });
+  //     setUser((prev) => {
+  //       const updatedCourses = prev.courses.map((course) => {
+  //         if (course.course_id === +courseId) {
+  //           return {
+  //             ...course,
+  //             testAttempts: course.testAttempts
+  //               ? [
+  //                   ...course.testAttempts.filter(
+  //                     (attempt) => attempt.test_id !== +testId
+  //                   ),
+  //                   ...data,
+  //                 ]
+  //               : data,
+  //           };
+  //         }
+  //         return course;
+  //       });
+  //       return { ...prev, courses: updatedCourses };
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
     if (accessToken && !user.userId) {
@@ -456,7 +456,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
         logout,
         updateUserInfo,
         updateUsername,
-        getStudentTestData,
+        // getStudentTestData,
         updateUserImage,
         setMainImage,
         getLastUserImages,

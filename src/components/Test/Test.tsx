@@ -9,28 +9,42 @@ import TestContent from "./TestContent";
 import DoubleScrollLayout from "../DoubleScrollLayout/DoubleScrollLayout";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import styles from "./Test.module.scss";
-import { useUser } from "../../context/UserContext";
+// import { useUser } from "../../context/UserContext";
 import LessonToolsPanel from "../LessonToolsPanel/LessonToolsPanel";
 import TestTools from "../LessonToolsPanel/TestTools";
 
 const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
+  // const userInterface = useUser();
   const coursesInterface = useCourses();
-  const userInterface = useUser();
-  const [answersProgress, setAnswersProgress] = useState<number>(0);
+  
+  const [studentAnswers, setStudentAnswers] = useState<any[]>([]);
+
   const course = coursesInterface?.courses.find(
     (course) => course.id === taskData.course_id
   );
+
   const answersProgressValue = Math.round(
-    (answersProgress /
+    (studentAnswers.filter((ans) => {
+      if (
+        ans.q_type === "test" ||
+        ans.q_type === "boolean" ||
+        ans.q_type === "answer_with_photo" ||
+        ans.q_type === "question_with_photo"
+      )
+        return ans.a_id !== 0;
+      if (ans.q_type === "multiple_choice") return ans.a_ids.length !== 0;
+      if (ans.q_type === "matching") return ans.matching?.length !== 0;
+      return false;
+    }).length /
       (taskData.lessonData as TestDataType)?.questions.length) *
       100
   );
-  const testAttempts = userInterface?.user.courses.find(
-    (course) => course.course_id === taskData.course_id
-  )?.testAttempts;
+  // const testAttempts = userInterface?.user.courses.find(
+  //   (course) => course.course_id === taskData.course_id
+  // )?.testAttempts;
 
   console.log("test data: ", taskData.lessonData);
-  console.log("test attempts: ", testAttempts);
+  // console.log("test attempts: ", testAttempts);
 
   const number =
     course?.lessons &&
@@ -39,13 +53,15 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
       .sort((a, b) => a.number - b.number)
       .findIndex((lesson) => lesson.id === taskData.id) + 1;
 
-  useEffect(() => {
-    const testId = (taskData.lessonData as TestDataType)?.test_id;
-    const courseId = taskData.course_id;
-    if (testId && courseId) {
-      userInterface?.getStudentTestData(testId, courseId);
-    }
-  }, [taskData]);
+  // useEffect(() => {
+  //   const testId = (taskData.lessonData as TestDataType)?.test_id;
+  //   const courseId = taskData.course_id;
+  //   if (testId && courseId) {
+  //     userInterface?.getStudentTestData(testId, courseId);
+  //   }
+  // }, [taskData]);
+
+  console.log(studentAnswers);
 
   return (
     <>
@@ -63,7 +79,7 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
         </div>
       )}
       <LessonToolsPanel>
-        <TestTools />
+        <TestTools test={taskData} currentAttempt={studentAnswers} />
       </LessonToolsPanel>
       <DoubleScrollLayout
         posterSrc={`${serverName}/${taskData.image_path}`}
@@ -85,7 +101,8 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
           {taskData?.lessonData && "test_id" in taskData.lessonData && (
             <TestContent
               test={taskData}
-              setAnswersProgress={setAnswersProgress}
+              studentAnswers={studentAnswers}
+              setStudentAnswers={setStudentAnswers}
             />
           )}
         </div>

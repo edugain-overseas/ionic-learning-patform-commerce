@@ -6,7 +6,10 @@ interface InsetBtnTypes {
   icon?: React.ReactNode;
   width?: string | undefined;
   height?: string | undefined;
+  fontSize?: string | undefined;
+  buttonClassName?: string | undefined;
   backgroundColor?: string | undefined;
+  buttonBackgroundColor?: string | undefined;
   onClick?: () => void | undefined;
   disabled?: boolean | undefined;
   id?: string;
@@ -17,6 +20,9 @@ const InsetBtn: React.FC<InsetBtnTypes> = ({
   icon,
   width = "24rem",
   height = "24rem",
+  fontSize,
+  buttonClassName,
+  buttonBackgroundColor,
   backgroundColor,
   onClick = () => {},
   disabled = false,
@@ -30,8 +36,15 @@ const InsetBtn: React.FC<InsetBtnTypes> = ({
   };
   return (
     <button
-      style={{ width, height, fontSize: width }}
-      className={`${styles.insetBtn} ion-activatable`}
+      style={{
+        width,
+        height,
+        fontSize: fontSize ? fontSize : width,
+        backgroundColor: buttonBackgroundColor,
+      }}
+      className={`${styles.insetBtn} ion-activatable ${
+        buttonClassName ? buttonClassName : ""
+      }`}
       onClick={handleClick}
       disabled={disabled}
       id={id ? id : undefined}

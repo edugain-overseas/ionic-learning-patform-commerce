@@ -33,7 +33,7 @@ const LessonToolsPanel: FC<LessonToolsPanelProps> = ({ children }) => {
 
   const onMove = (details: GestureDetail) => {
     const deltaX = details.deltaX;
-    const maxDeltaX = containerRef.current!.clientWidth - remToPx(58);
+    const maxDeltaX = containerRef.current!.clientWidth - remToPx(50);
 
     containerRef.current!.style.removeProperty("transition");
 
@@ -48,19 +48,19 @@ const LessonToolsPanel: FC<LessonToolsPanelProps> = ({ children }) => {
       } else {
         containerRef.current?.style.setProperty(
           "transform",
-          `translateX(calc(-100% + 58rem))`
+          `translateX(calc(-100% + 50rem))`
         );
       }
     } else {
       if (deltaX > 0 && deltaX < maxDeltaX) {
         containerRef.current?.style.setProperty(
           "transform",
-          `translateX(calc(-100% + 58rem + ${deltaX}px))`
+          `translateX(calc(-100% + 50rem + ${deltaX}px))`
         );
       } else if (deltaX <= 0) {
         containerRef.current?.style.setProperty(
           "transform",
-          `translateX(calc(-100% + 58rem))`
+          `translateX(calc(-100% + 50rem))`
         );
       } else {
         containerRef.current?.style.setProperty("transform", `translateX(0)`);
@@ -72,7 +72,7 @@ const LessonToolsPanel: FC<LessonToolsPanelProps> = ({ children }) => {
     const shouldOpenPanel =
       !isPanelOpen &&
       Math.abs(details.deltaX) >
-        containerRef.current!.offsetWidth / 2 - remToPx(58);
+        containerRef.current!.offsetWidth / 2 - remToPx(50);
 
     const shouldClosePanel =
       isPanelOpen &&
@@ -86,7 +86,7 @@ const LessonToolsPanel: FC<LessonToolsPanelProps> = ({ children }) => {
     if (shouldOpenPanel) {
       containerRef.current!.style.setProperty(
         "transform",
-        `translateX(calc(-100% + 58rem))`
+        `translateX(calc(-100% + 50rem))`
       );
       if (!isPanelOpen) {
         setIsPanelOpen(true);
@@ -100,10 +100,12 @@ const LessonToolsPanel: FC<LessonToolsPanelProps> = ({ children }) => {
       // Reset position based on current state
       containerRef.current!.style.setProperty(
         "transform",
-        isPanelOpen ? `translateX(calc(-100% + 58rem))` : `translateX(0)`
+        isPanelOpen ? `translateX(calc(-100% + 50rem))` : `translateX(0)`
       );
     }
   };
+
+
 
   return (
     <div ref={containerRef} className={styles.container}>

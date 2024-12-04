@@ -77,12 +77,12 @@ export interface LectureDataType {
   attributes: LectureContentType[];
 }
 
-export interface TestDataType {
+export type TestDataType = {
   test_id?: number;
   score?: number;
   attempts?: number;
   questions: TestContentType[];
-}
+};
 
 export type LessonDataUnionType = LectureDataType | TestDataType;
 

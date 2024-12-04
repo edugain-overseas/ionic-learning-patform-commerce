@@ -4,7 +4,7 @@
   position: absolute;
   z-index: 1;
   top: 98rem;
-  left: calc(100% - 58rem);
+  left: calc(100% - 50rem);
   overflow: hidden;
 
   border-top-left-radius: 16rem;
@@ -12,5 +12,64 @@
   background: var(--custom-bg-rgba-secondary);
   box-shadow: var(--custom-box-shadow-primary);
   backdrop-filter: blur(16px);
+}
 
+.toolsContainer {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+
+.openModalBtn {
+  padding: 4rem;
+}
+
+.modal {
+  .modalToolbar {
+    padding: 0;
+  }
+}
+
+.modalContent {
+  flex-grow: 1;
+  padding: 20rem;
+
+  .submitBtn {
+    --background: var(--ion-color-success);
+    --background-activated: var(--ion-color-success-shade, #39ba6d);
+    --background-focused: var(--ion-color-success-shade, #39ba6d);
+    --background-hover: var(--ion-color-success-tint, #39ba6d);
+    font-size: 16rem;
+  }
+
+  .accordion {
+    margin-top: 16rem;
+  }
+
+  .accordionItem {
+    border-radius: 5rem;
+    background: var(--custom-bg-rgba-secondary);
+    box-shadow: var(--custom-box-shadow-primary);
+    backdrop-filter: blur(16px);
+    margin-block: 4rem;
+  }
+
+  .attemptsHeader {
+    padding: 8rem 16rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+
+    span {
+      font-size: 16rem;
+      color: var(--ion-color-light);
+    }
+  }
+
+  .attemptsContent {
+    border-top: 1px solid var(--ion-color-light);
+    padding: 8rem 16rem;
+    height: 150rem;
+    font-size: 14rem
+  }
 }
