@@ -10,7 +10,7 @@ interface InsetBtnTypes {
   buttonClassName?: string | undefined;
   backgroundColor?: string | undefined;
   buttonBackgroundColor?: string | undefined;
-  onClick?: () => void | undefined;
+  onClick?: () => void;
   disabled?: boolean | undefined;
   id?: string;
   ripple?: boolean;

@@ -44,7 +44,11 @@ export const useTaskNavigation = () => {
   };
 
   const handleNavigateLesson = async (direction: "back" | "forward") => {
-    if (taskData?.type === "lecture" && taskData.status === "active") {
+    if (
+      taskData?.type === "lecture" &&
+      taskData.status === "active" &&
+      direction === "forward"
+    ) {
       await completeLecture(taskData.id);
     }
     const targetLessonId = getNextLessonId(direction);
@@ -55,12 +59,17 @@ export const useTaskNavigation = () => {
       );
     }
   };
-
-
-  return {
-    canGoBack: getNextLessonId('back'),
-    canGoForward: getNextLessonId('forward'),
+  console.log({
+    canGoBack: getNextLessonId("back"),
+    canGoForward: getNextLessonId("forward"),
     isLoading,
     handleNavigateLesson,
-  }
+  });
+
+  return {
+    canGoBack: getNextLessonId("back") !== undefined,
+    canGoForward: getNextLessonId("forward") !== undefined,
+    isLoading,
+    handleNavigateLesson,
+  };
 };

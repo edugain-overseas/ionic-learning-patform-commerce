@@ -23,9 +23,9 @@ export interface TestQuestionType {
 const TestContent: React.FC<{
   test: LessonType;
   studentAnswers: any[];
-  setStudentAnswers: Dispatch<SetStateAction<any[]>>;
+  setStudentAnswers?: Dispatch<SetStateAction<any[]>>;
 }> = ({ test, studentAnswers, setStudentAnswers }) => {
-  if (!studentAnswers || !setStudentAnswers) {
+  if (!studentAnswers && !setStudentAnswers) {
     return <></>;
   }
 
@@ -42,36 +42,40 @@ const TestContent: React.FC<{
   );
 
   const setSingleAnswerState = (id: number, value: number) => {
-    setStudentAnswers((prev) => {
-      const updatedState = prev.map((question) => {
-        if (question.q_id === id) {
-          question.a_id = value;
-        }
-        return question;
+    if (setStudentAnswers) {
+      setStudentAnswers((prev) => {
+        const updatedState = prev.map((question) => {
+          if (question.q_id === id) {
+            question.a_id = value;
+          }
+          return question;
+        });
+        return updatedState;
       });
-      return updatedState;
-    });
+    }
   };
 
   const setMultipleAnswersState = (id: number, value: number) => {
-    setStudentAnswers((prev) => {
-      const updatedState = prev.map((question) => {
-        if (question.q_id === id) {
-          if (question.a_ids.includes(value)) {
+    if (setStudentAnswers) {
+      setStudentAnswers((prev) => {
+        const updatedState = prev.map((question) => {
+          if (question.q_id === id) {
+            if (question.a_ids.includes(value)) {
+              return {
+                ...question,
+                a_ids: question.a_ids.filter((v: number) => v !== value),
+              };
+            }
             return {
               ...question,
-              a_ids: question.a_ids.filter((v: number) => v !== value),
+              a_ids: [...question.a_ids, value],
             };
           }
-          return {
-            ...question,
-            a_ids: [...question.a_ids, value],
-          };
-        }
-        return question;
+          return question;
+        });
+        return updatedState;
       });
-      return updatedState;
-    });
+    }
   };
 
   const setMatchingState = (
@@ -79,34 +83,36 @@ const TestContent: React.FC<{
     leftOptionId: number,
     value: number
   ) => {
-    setStudentAnswers((prev) => {
-      const updatedState = prev.map((question) => {
-        if (question.q_id === id) {
-          if (
-            question.matching.find(
-              ({ left_id: leftId }: { left_id: number }) =>
-                leftId === leftOptionId
-            )
-          ) {
-            question.matching.map(
-              (i: { left_id: number; right_id: number }) => {
-                if (i.left_id === leftOptionId) {
-                  i.right_id = value;
+    if (setStudentAnswers) {
+      setStudentAnswers((prev) => {
+        const updatedState = prev.map((question) => {
+          if (question.q_id === id) {
+            if (
+              question.matching.find(
+                ({ left_id: leftId }: { left_id: number }) =>
+                  leftId === leftOptionId
+              )
+            ) {
+              question.matching.map(
+                (i: { left_id: number; right_id: number }) => {
+                  if (i.left_id === leftOptionId) {
+                    i.right_id = value;
+                  }
+                  return i;
                 }
-                return i;
-              }
-            );
-          } else {
-            question.matching.push({
-              left_id: leftOptionId,
-              right_id: value,
-            });
+              );
+            } else {
+              question.matching.push({
+                left_id: leftOptionId,
+                right_id: value,
+              });
+            }
           }
-        }
-        return question;
+          return question;
+        });
+        return updatedState;
       });
-      return updatedState;
-    });
+    }
   };
 
   const renderTestContent = () =>
@@ -370,7 +376,7 @@ const TestContent: React.FC<{
       });
 
   useEffect(() => {
-    if (testData && testContent) {
+    if (testData && testContent && setStudentAnswers) {
       setStudentAnswers((prev) => {
         const updatedAnswers = [...prev];
         testContent.forEach((question) => {
@@ -391,7 +397,14 @@ const TestContent: React.FC<{
     }
   }, [testData, setStudentAnswers]);
 
-  return <div className={styles.contentWrapper}>{renderTestContent()}</div>;
+  return (
+    <div
+      className={styles.contentWrapper}
+      style={{ opacity: setStudentAnswers ? "1" : "0.5" }}
+    >
+      {renderTestContent()}
+    </div>
+  );
 };
 
 export default TestContent;

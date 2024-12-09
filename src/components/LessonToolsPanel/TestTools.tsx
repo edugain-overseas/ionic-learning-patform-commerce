@@ -4,18 +4,17 @@ import {
   AccordionGroupCustomEvent,
   IonAccordion,
   IonAccordionGroup,
-  IonButton,
   IonIcon,
-  IonItem,
-  IonLabel,
   IonModal,
+  useIonToast,
 } from "@ionic/react";
 import InsetBtn from "../InsetBtn/InsetBtn";
 import CheckIcon from "../../assets/icons/check-in-circle.svg";
 import Header from "../Header/Header";
-import { LessonType, TestDataType } from "../../context/CoursesContext";
+import { LessonType, TestDataType, useCourses } from "../../context/CoursesContext";
 import { instance } from "../../http/instance";
 import { TestAtteptType } from "../../context/UserContext";
+import TestContent from "../Test/TestContent";
 
 type TestToolsProps = {
   test: LessonType;
@@ -27,6 +26,9 @@ const TestTools: FC<TestToolsProps> = ({ test, currentAttempt }) => {
   const [testAttempts, setTestAttempts] = useState<TestAtteptType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [testAttemptsData, setTestAttemptsData] = useState<any[]>([]);
+  const [present] = useIonToast();
+
+  const coursesInterface = useCourses()
 
   console.log(test);
 
@@ -42,11 +44,57 @@ const TestTools: FC<TestToolsProps> = ({ test, currentAttempt }) => {
       });
       if (response.data) {
         setTestAttempts((prev) => [response.data, ...prev]);
+
+        present({
+          message: response.data.message,
+          duration: 3000,
+          position: "top",
+        });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      if (error.response.status === 409) {
+        present({
+          message: `${error.response.data.detail}!`,
+          duration: 5000,
+          position: "top",
+        });
+      }
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleSubmitAttempClick = async (attemptId: number) => {
+    const attemptData = testAttempts.find(({ id }) => id === attemptId);
+
+    if (attemptData) {
+      const requestData = {
+        attempt_id: attemptData.id,
+        student_id: attemptData.student_id,
+        lesson_id: test.id,
+      };
+
+      try {
+        setIsLoading(true);
+        const response = await instance.post(
+          "student-test/submit",
+          requestData
+        );
+
+        present({
+          message: `${response.data.Message}!`,
+          duration: 5000,
+          position: "top",
+        });
+
+        
+
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -81,7 +129,6 @@ const TestTools: FC<TestToolsProps> = ({ test, currentAttempt }) => {
         const response = await instance.get(
           `/student-test/attempts?test_id=${testData.test_id}`
         );
-        console.log(response.data);
         if (response.data !== null) {
           setTestAttempts(response.data);
         }
@@ -97,7 +144,7 @@ const TestTools: FC<TestToolsProps> = ({ test, currentAttempt }) => {
   }, [testData?.test_id]);
 
   const modalHeaderProps = {
-    title: "Test Title",
+    title: `${test.title} attempts`,
     left: [
       {
         name: "prevLesson",
@@ -116,13 +163,20 @@ const TestTools: FC<TestToolsProps> = ({ test, currentAttempt }) => {
           width="32rem"
           height="32rem"
           fontSize="14rem"
-          buttonClassName={styles.openModalBtn}
+          buttonClassName={styles.submitAttemptBtn}
           backgroundColor="#39BA6D"
           buttonBackgroundColor="rgba(255, 255, 255, 0.65)"
           ripple={true}
-          id="open-test-attempts-modal"
+          onClick={handleSubmitCurrentAttempt}
         />
+        <button
+          id="open-test-attempts-modal"
+          className={styles.openAttemptsModalBtn}
+        >
+          <span>Open Attempts</span>
+        </button>
       </div>
+
       <IonModal
         trigger="open-test-attempts-modal"
         ref={modalRef}
@@ -130,16 +184,10 @@ const TestTools: FC<TestToolsProps> = ({ test, currentAttempt }) => {
       >
         <Header {...modalHeaderProps} />
         <div className={styles.modalContent}>
-          <IonButton
-            expand="block"
-            className={styles.submitBtn}
-            onClick={handleSubmitCurrentAttempt}
-          >
-            Submit current attempt
-          </IonButton>
           <IonAccordionGroup
             className={styles.accordion}
             onIonChange={handleAccordionGroupChange}
+            // expand="inset"
           >
             {testAttempts.map((attempt) => (
               <IonAccordion
@@ -148,14 +196,31 @@ const TestTools: FC<TestToolsProps> = ({ test, currentAttempt }) => {
                 className={styles.accordionItem}
               >
                 <div slot="header" className={styles.attemptsHeader}>
-                  <span className={styles.attemptTitle}>
-                    {`Attempt № ${attempt.attempt_number}`}
-                  </span>
-                  <span className={styles.attemptTitle}>
-                    {`Score: ${attempt.attempt_score}`}
-                  </span>
+                  <div className={styles.attemptData}>
+                    <span className={styles.attemptTitle}>
+                      {`Attempt № ${attempt.attempt_number}`}
+                    </span>
+                    <span className={styles.attemptTitle}>
+                      {`Score: ${attempt.attempt_score}`}
+                    </span>
+                  </div>
                 </div>
                 <div slot="content" className={styles.attemptsContent}>
+                  <TestContent
+                    test={test}
+                    studentAnswers={
+                      testAttemptsData.find(
+                        (attemptData) => attemptData.id === attempt.id
+                      )?.answers
+                    }
+                  />
+                  <button
+                    className={styles.finalSubmitAttempt}
+                    onClick={() => handleSubmitAttempClick(attempt.id)}
+                  >
+                    <IonIcon src={CheckIcon} />
+                    <span>Submit</span>
+                  </button>
                 </div>
               </IonAccordion>
             ))}
