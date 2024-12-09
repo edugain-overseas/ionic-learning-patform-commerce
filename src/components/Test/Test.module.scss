@@ -73,7 +73,6 @@
   border-radius: 14rem;
   background-color: var(--custom-bg-rgba-secondary);
   box-shadow: var(--custom-box-shadow-primary);
-  // backdrop-filter: blur(16rem);
 
   .questionHeader {
     padding-bottom: 12rem;
@@ -107,5 +106,15 @@
   padding: 40rem 90rem;
   border-radius: 5rem;
   background-color: var(--bg-rgba-default);
+  box-shadow: var(--drop-shadow-button-main);
+}
+
+.testFooter {
+  margin: 24rem -18rem -84rem;
+  padding-block: 16rem 40rem;
+  border-top-left-radius: 16rem;
+  border-top-right-radius: 16rem;
+  background: var(--custom-bg-rgba-secondary);
+
   box-shadow: var(--drop-shadow-button-main);
 }

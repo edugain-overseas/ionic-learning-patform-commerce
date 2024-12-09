@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { IonContent, useIonRouter } from "@ionic/react";
+import React, { useEffect } from "react";
+import { IonContent } from "@ionic/react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
+import { useTaskNavigation } from "../../hooks/useTasksNavigation";
 import Lecture from "../../components/Lecture/Lecture";
 import Test from "../../components/Test/Test";
 import Header from "../../components/Header/Header";
@@ -9,9 +10,9 @@ import CourseProgressModal from "../../components/CourseProgressModal/CourseProg
 import styles from "./TaskPage.module.scss";
 
 const TaskPage: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { canGoBack, canGoForward, isLoading, handleNavigateLesson } =
+    useTaskNavigation();
 
-  const router = useIonRouter();
   const { courseId, taskId } = useParams<{
     courseId: string;
     taskId: string;
@@ -32,47 +33,11 @@ const TaskPage: React.FC = () => {
     }
   }, [taskId, lessonData, taskData]);
 
-  const shouldCompleteLecture = async (lessonId: number) => {    
-    setIsLoading(true);
-    try {
-      await coursesInterface?.confirmLecture(lessonId);
-    } catch (error) {
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const getNextLessonId = (direction: "back" | "forward") => {
-    const availableLessons = courseData?.lessons
-      .filter((lesson) => lesson.status !== "blocked")
-      .sort((a, b) => a.number - b.number);      
-    if (availableLessons) {
-      const targetLessonIndex =
-        availableLessons?.findIndex((lesson) => lesson.id === +taskId) +
-        (direction === "back" ? -1 : 1);
-      return availableLessons[targetLessonIndex]?.id;
-    }
-    return false;
-  };
-
-  const handleNavigateLesson = async (direction: "back" | "forward") => {
-    if (taskData?.type === "lecture" && taskData.status === "active") {
-      await shouldCompleteLecture(taskData.id);
-    }
-    const targetLessonId = getNextLessonId(direction);
-    if (targetLessonId) {
-      router.push(
-        `/courses/course/${courseId}/tasks/${targetLessonId}`,
-        `${direction}`
-      );
-    }
-  };
-
   const headerProps = {
     left: [
       {
         name: "prevLesson",
-        className: `${getNextLessonId("back") ? "" : styles.disabled}`,
+        className: `${canGoBack ? "" : styles.disabled}`,
         onClick: () => handleNavigateLesson("back"),
       },
     ],
@@ -81,7 +46,7 @@ const TaskPage: React.FC = () => {
       { name: "notification" },
       {
         name: "nextLesson",
-        className: `${getNextLessonId("forward") ? "" : styles.disabled}`,
+        className: `${canGoForward ? "" : styles.disabled}`,
         onClick: () => handleNavigateLesson("forward"),
         loading: isLoading,
       },

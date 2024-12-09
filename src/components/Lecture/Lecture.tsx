@@ -4,6 +4,8 @@ import DoubleScrollLayout from "../DoubleScrollLayout/DoubleScrollLayout";
 import { serverName } from "../../http/server";
 import styles from "./Lecture.module.scss";
 import LectureContent from "./LectureContent";
+import EqualSpaceContainer from "../EqualSpaceContainer/EqualSpaceContainer";
+import TaskFooterNavBtn from "../TaskFooterNavBtn/TaskFooterNavBtn";
 
 const Lecture: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
   const coursesInterface = useCourses();
@@ -39,6 +41,12 @@ const Lecture: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
         {taskData?.lessonData && "lecture_id" in taskData.lessonData && (
           <LectureContent lectureContent={taskData.lessonData.attributes} />
         )}
+        <div className={styles.lectureFooter}>
+          <EqualSpaceContainer
+            leftItem={<TaskFooterNavBtn direction="return" />}
+            rightItem={<TaskFooterNavBtn direction="next" />}
+          />
+        </div>
       </div>
     </DoubleScrollLayout>
   );

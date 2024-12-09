@@ -9,14 +9,14 @@ import TestContent from "./TestContent";
 import DoubleScrollLayout from "../DoubleScrollLayout/DoubleScrollLayout";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import styles from "./Test.module.scss";
-// import { useUser } from "../../context/UserContext";
 import LessonToolsPanel from "../LessonToolsPanel/LessonToolsPanel";
 import TestTools from "../LessonToolsPanel/TestTools";
+import EqualSpaceContainer from "../EqualSpaceContainer/EqualSpaceContainer";
+import TaskFooterNavBtn from "../TaskFooterNavBtn/TaskFooterNavBtn";
 
 const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
-  // const userInterface = useUser();
   const coursesInterface = useCourses();
-  
+
   const [studentAnswers, setStudentAnswers] = useState<any[]>([]);
 
   const course = coursesInterface?.courses.find(
@@ -39,12 +39,6 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
       (taskData.lessonData as TestDataType)?.questions.length) *
       100
   );
-  // const testAttempts = userInterface?.user.courses.find(
-  //   (course) => course.course_id === taskData.course_id
-  // )?.testAttempts;
-
-  console.log("test data: ", taskData.lessonData);
-  // console.log("test attempts: ", testAttempts);
 
   const number =
     course?.lessons &&
@@ -53,15 +47,6 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
       .sort((a, b) => a.number - b.number)
       .findIndex((lesson) => lesson.id === taskData.id) + 1;
 
-  // useEffect(() => {
-  //   const testId = (taskData.lessonData as TestDataType)?.test_id;
-  //   const courseId = taskData.course_id;
-  //   if (testId && courseId) {
-  //     userInterface?.getStudentTestData(testId, courseId);
-  //   }
-  // }, [taskData]);
-
-  console.log(studentAnswers);
 
   return (
     <>
@@ -105,6 +90,13 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
               setStudentAnswers={setStudentAnswers}
             />
           )}
+          <div className={styles.testFooter}>
+            <EqualSpaceContainer
+              containerClassname={styles.btnContainer}
+              leftItem={<TaskFooterNavBtn direction="return" />}
+              rightItem={<TaskFooterNavBtn direction="next" />}
+            />
+          </div>
         </div>
       </DoubleScrollLayout>
     </>
