@@ -75,10 +75,10 @@ const CategoryDetailPage: React.FC = () => {
       (remToPx(MAX_SCROLL_VALUE) - currentScroll) / remToPx(MAX_SCROLL_VALUE) >
       0.5
     ) {
-      contentRef.current?.scrollToTop(150);
+      contentRef.current?.scrollToTop();
       bottomInnerRef.current?.style.setProperty("overflow", "hidden");
     } else {
-      contentRef.current?.scrollToBottom(150);
+      contentRef.current?.scrollToBottom();
       bottomInnerRef.current?.style.setProperty("overflow", "auto");
     }
   };
@@ -124,6 +124,7 @@ const CategoryDetailPage: React.FC = () => {
         onIonScroll={handleScroll}
         onIonScrollEnd={handleScrollEnd}
         ref={contentRef}
+        style={{ overflow: "hidden" }}
       >
         <div className={styles.topContentWrapper} ref={topContentRef}>
           <div className={styles.topScaler}>

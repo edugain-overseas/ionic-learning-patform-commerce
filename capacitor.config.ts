@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'io.ieucourses.app',
   appName: 'ionic-learning-platform-commercep',
   webDir: 'dist',
   server: {

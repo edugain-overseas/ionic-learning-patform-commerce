@@ -12,8 +12,10 @@
   padding-inline: 20rem;
   color: var(--ion-color-primary-contrast);
 
-  position: sticky;
-  top: 0;
+  // position: sticky;
+  position: fixed;
+  top: 0rem;
+  top: 56rem;
   width: 100%;
 
   // height: calc();
