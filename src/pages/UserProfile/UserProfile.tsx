@@ -129,7 +129,7 @@ const UserProfile: React.FC = () => {
               </span>
               <span className={styles.username}>
                 {userData && (
-                  <TextOverrflowEllipsis text={userData?.username} />
+                  <TextOverrflowEllipsis text={userData.username} />
                 )}
               </span>
             </div>

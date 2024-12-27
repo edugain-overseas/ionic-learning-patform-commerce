@@ -4,7 +4,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16rem;
   position: relative;
   padding-bottom: 32rem;
 
@@ -12,6 +11,7 @@
     width: 100%;
     padding: 8rem;
     margin: 0;
+    margin-bottom: 16rem;
     font-size: 12rem;
     font-weight: 600;
     position: relative;

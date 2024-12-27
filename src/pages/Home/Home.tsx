@@ -21,6 +21,7 @@ import PasswordRecoveryForm from "../../components/Auth/PasswordRecoveryForm";
 import UserActivationForm from "../../components/Auth/UserActivationForm";
 import EqualSpaceContainer from "../../components/EqualSpaceContainer/EqualSpaceContainer";
 import styles from "./Home.module.scss";
+import HomeHero from "../../components/HomeHero/HomeHero";
 
 const Home: React.FC = () => {
   const router = useIonRouter();
@@ -52,7 +53,7 @@ const Home: React.FC = () => {
     if (searchValue) {
       router.push(`/search?q=${searchValue}`, "forward", "push");
     } else {
-      router.push("/search", "forward", 'push');
+      router.push("/search", "forward", "push");
     }
   };
 
@@ -72,7 +73,8 @@ const Home: React.FC = () => {
             </span>
           </div>
           <div className={styles.benefits}>
-            <IonImg src={benefits} />
+            {/* <IonImg src={benefits} /> */}
+            <HomeHero />
           </div>
           <div className={styles.benefitsText}>
             <span>

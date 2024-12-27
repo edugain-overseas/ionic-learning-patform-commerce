@@ -99,7 +99,6 @@
   border-radius: var(--custom--border-radius-primary);
   transform: translateY(calc(-96rem * var(--hide-coefficient)));
 
-
   .segmentBtn {
     --color-checked: var(--ion-color-primary-contrast);
     --color: rgba(var(--ion-color-primary-contrast-rgb), 0.5);
@@ -185,4 +184,3 @@
   flex-direction: column;
   gap: 16rem;
 }
-// }

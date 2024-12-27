@@ -33,3 +33,6 @@ export const useStatusBar = () => {
     }
   }, []);
 };
+
+
+// bottom status bar color #A50000//

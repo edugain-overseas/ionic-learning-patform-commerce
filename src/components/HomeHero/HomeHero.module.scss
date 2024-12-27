@@ -1,0 +1,228 @@
+.outerWrapper {
+  font-size: 16px;
+  width: 268rem;
+  height: 254rem;
+  position: relative;
+  margin: 0 auto;
+
+  --animation-duration: 1.8s;
+  --animation-delay: 0.7s;
+}
+
+// outer
+
+.outerRotationCircle {
+  width: 244rem;
+  height: 244rem;
+  border-radius: 50%;
+  border: 1.5rem solid rgba($color: #7e8ca8, $alpha: 0.1);
+  filter: drop-shadow(0px 0px 2.016px rgba(0, 0, 0, 0.12));
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center center;
+  translate: -50% -50%;
+
+  animation: rotateForwards var(--animation-duration) ease-in-out;
+}
+
+.outerRotationCircle > div,
+.innerRotationCircle > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1;
+
+  //   background-color: rgba(252, 252, 252, 0.65);
+  //   backdrop-filter: blur(16rem);
+  background-color: #f4f4f4;
+  filter: drop-shadow(0 0 6.484rem rgba(0, 0, 0, 0.12));
+  border-radius: 50%;
+
+  position: absolute;
+}
+
+.businessWrapper {
+  top: 26rem;
+  left: 5rem;
+  width: 42rem;
+  font-size: 22rem;
+}
+
+.clockWrapper {
+  top: 1rem;
+  right: 60rem;
+  width: 20rem;
+  font-size: 12rem;
+}
+
+.itWrapper {
+  top: 51rem;
+  right: -17.5rem;
+  width: 47rem;
+  font-size: 31rem;
+}
+
+.lawWrapper {
+  bottom: 26.7rem;
+  right: 5.5rem;
+  width: 39rem;
+  font-size: 22rem;
+}
+
+.gradeWrapper {
+  bottom: -9.5rem;
+  right: 87.7rem;
+  width: 24rem;
+  font-size: 9rem;
+}
+
+.socialWrapper {
+  bottom: 2rem;
+  left: 28.2rem;
+  width: 44rem;
+  font-size: 25rem;
+}
+
+.notificationWrapper {
+  bottom: 72.6rem;
+  left: -7.1rem;
+  width: 25rem;
+  font-size: 12rem;
+}
+
+// inner
+
+.innerWrapper {
+  width: 184.5rem;
+  aspect-ratio: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background-color: rgba(185, 185, 185, 0.1);
+  //   border: 1.5rem solid rgba(252, 252, 252, 0.85);
+  box-shadow: 0 0 10rem 0 rgba(0, 0, 0, 0.1) inset;
+  backdrop-filter: blur(22rem);
+  border-radius: 50%;
+}
+
+.innerRotationCircle {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+
+  transform-origin: center;
+
+  animation: rotateBackwards var(--animation-duration) ease-in-out;
+}
+
+.medWrapper {
+  top: 60.5rem;
+  left: -5rem;
+  width: 17.1rem;
+  font-size: 10rem;
+}
+
+.engineeringWrapper {
+  bottom: 64rem;
+  right: -5.5rem;
+  width: 18.1rem;
+  font-size: 10rem;
+}
+
+.innerCircle {
+  width: 100.8rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: #eaeaea;
+  // background-color: rgba(255, 255, 255, 0.1);
+  // backdrop-filter: blur(22.1rem);
+  filter: drop-shadow(0 0 10rem rgba(0, 0, 0, 0.1));
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.2;
+
+  animation: fadeIn var(--animation-duration) ease-out forwards;
+}
+
+// object
+
+.mediaObjectWrapper {
+  //   width: 148rem;
+  height: 221rem;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  border-radius: 0 0 100rem 100rem;
+  overflow: hidden;
+}
+
+.mediaObject {
+  position: absolute;
+  inset: 0;
+  background-image: url("../../assets//images/HomeHero/happy-student.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.9;
+
+  animation: fadeIn var(--animation-duration) ease-in forwards,
+    slideIn calc(var(--animation-duration) - var(--animation-delay)) ease-in
+      forwards;
+}
+
+.mediaObjectShadow {
+  position: absolute;
+  inset: 0;
+  background-image: url("../../assets//images/HomeHero/happy-student.png");
+  filter: blur(2rem);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
+  opacity: 0.9;
+
+  animation: fadeIn var(--animation-duration) ease-in forwards,
+    slideIn calc(var(--animation-duration) - var(--animation-delay)) ease-in
+      forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(20%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes rotateForwards {
+  from {
+    rotate: 0deg;
+  }
+  to {
+    rotate: 720deg;
+  }
+}
+
+@keyframes rotateBackwards {
+  from {
+    rotate: 0deg;
+  }
+  to {
+    rotate: -720deg;
+  }
+}

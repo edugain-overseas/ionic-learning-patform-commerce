@@ -81,11 +81,12 @@
     .usernameWrapper {
       display: flex;
       flex-direction: column;
-      gap: 4rem;
+      min-height: 40rem;
 
       .usernameLabel {
         font-size: 10rem;
         font-weight: 400;
+        margin-bottom: 4rem;
       }
 
       .username {
@@ -98,7 +99,8 @@
   .achives {
     padding: 0 8rem 16rem;
     display: flex;
-    gap: 8rem;
+    justify-content: space-between;
+    // gap: 8rem;
 
     .achiveItem {
       flex-basis: calc(100% / 3 - (8rem * 2 / 3));
