@@ -38,6 +38,9 @@
 
 .modal {
   overflow: hidden;
+  --ion-safe-area-top: var(var(--ion-safe-area-top))
+  --ion-safe-area-bottom: var(var(--ion-safe-area-bottom))
+  
   .modalToolbar {
     padding: 0;
   }
@@ -45,9 +48,11 @@
 
 .modalContent {
   flex-grow: 1;
-  max-height: calc(100% - 56rem);
+  max-height: calc(100% - 56rem - var(--ion-safe-area-top));
   padding: 20rem;
   overflow: auto;
+  padding-bottom: calc(20rem + var(--padding-bottom));
+
 
   .accordion {
     margin-top: 16rem;

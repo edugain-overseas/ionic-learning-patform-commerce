@@ -6,10 +6,9 @@ import { pxToRem } from "../utils/pxToRem";
 export const useStatusBar = () => {
   // Call this function to set the status bar style and color
   const setStatusBarStyleAndColor = async () => {
-    
     if (Capacitor.isPluginAvailable("StatusBar")) {
       console.log("StatusBar");
-      
+
       await StatusBar.setStyle({ style: Style.Light });
       await StatusBar.setBackgroundColor({ color: "#00000000" }); // Set status bar background color to transparent
     }
@@ -26,13 +25,16 @@ export const useStatusBar = () => {
     setStatusBarOverlay();
     setStatusBarStyleAndColor();
 
+
     if (Capacitor.getPlatform() === "android") {
       document
         .getElementById("root")
-        ?.style.setProperty("--ion-safe-area-top", `${pxToRem(24)}rem`);
+        ?.style.setProperty("--ion-safe-area-top", "24px");
+      document
+        .getElementById("root")
+        ?.style.setProperty("--ion-safe-area-bottom", "32px");
     }
   }, []);
 };
-
 
 // bottom status bar color #A50000//

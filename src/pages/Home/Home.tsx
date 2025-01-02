@@ -1,13 +1,11 @@
 import {
   IonContent,
   IonIcon,
-  IonImg,
   IonPage,
   useIonRouter,
 } from "@ionic/react";
 import { useState } from "react";
 import { useUser } from "../../context/UserContext";
-import benefits from "../../assets/images/home-slider-bg.png";
 import userIcon from "../../assets/icons/tabs/my-profile.svg";
 import singInIcon from "../../assets/icons/auth/sing-in.svg";
 import search from "../../assets/icons/header/search.svg";
@@ -27,6 +25,8 @@ const Home: React.FC = () => {
   const router = useIonRouter();
 
   const accessToken = useUser()?.user.accessToken;
+
+  // alert(`${document.getElementById('root')?.style.getPropertyValue('--keyboard-offset')}`)
 
   const [modals, setModals] = useState<
     {
@@ -73,7 +73,6 @@ const Home: React.FC = () => {
             </span>
           </div>
           <div className={styles.benefits}>
-            {/* <IonImg src={benefits} /> */}
             <HomeHero />
           </div>
           <div className={styles.benefitsText}>

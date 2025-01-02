@@ -6,5 +6,5 @@
 
 // Deployed server adress
 export const serverBaseUrl = "https://vps2.xyz/api/v1";
-export const serverName = "https://vps2.xyz";
+export const serverName = "https://vps2.xyz/api";
 export const webSocketUrl = "wss://vps2.xyz/api/v1/chat";

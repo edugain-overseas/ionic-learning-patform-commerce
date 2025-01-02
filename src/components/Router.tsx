@@ -41,7 +41,7 @@ const Router: React.FC = () => {
               component={CourseDetailPage}
             />
             <Route path="/courses/buy" component={CourseBuyStatusPage} exact />
-            {/* <Route exact path="/" render={() => <Redirect to="/home" />} /> */}
+            <Route exact path="/" render={() => <Redirect to="/home" />} />
             <Route component={NotFound} />
           </Tabs>
           <IonMenuToggle className="custom-toggle-menu">

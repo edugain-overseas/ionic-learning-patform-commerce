@@ -20,6 +20,9 @@
   height: 100%;
   padding-bottom: 100rem;
   overflow-y: auto;
+  transform: translateY(calc(var(--keyboard-height) * -1));
+
+  transition: transform var(--custom-tr-time-min) ease-in-out;
 }
 
 .titleWrapper {
@@ -127,9 +130,9 @@
 .authPanel {
   position: absolute;
   width: 100%;
-  height: 125rem;
+  height: calc(125rem + var(--ion-safe-area-bottom));
   bottom: 0;
-  padding-bottom: 61rem;
+  padding-bottom: calc(61rem + var(--ion-safe-area-bottom));
 
   background-color: var(--custom-bg-rgba-primary);
   box-shadow: var(--custom-box-shadow-primary);

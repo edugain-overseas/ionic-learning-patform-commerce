@@ -5,8 +5,34 @@
   position: relative;
   margin: 0 auto;
 
-  --animation-duration: 1.8s;
-  --animation-delay: 0.7s;
+  --animation-duration: 2s;
+  --animation-delay: 0.8s;
+}
+
+.animated {
+  .outerRotationCircle {
+    animation: rotateForwards var(--animation-duration) ease-out;
+  }
+
+  .innerRotationCircle {
+    animation: rotateBackwards var(--animation-duration) ease-out;
+  }
+
+  .innerCircle {
+    animation: fadeIn var(--animation-duration) ease-out forwards;
+  }
+
+  .mediaObject {
+    animation: fadeIn var(--animation-duration) ease-in forwards,
+      slideIn calc(var(--animation-duration) - var(--animation-delay)) ease-in
+        forwards;
+  }
+
+  .mediaObjectShadow {
+    animation: fadeIn var(--animation-duration) ease-in forwards,
+      slideIn calc(var(--animation-duration) - var(--animation-delay)) ease-in
+        forwards;
+  }
 }
 
 // outer
@@ -22,8 +48,6 @@
   left: 50%;
   transform-origin: center center;
   translate: -50% -50%;
-
-  animation: rotateForwards var(--animation-duration) ease-in-out;
 }
 
 .outerRotationCircle > div,
@@ -114,8 +138,6 @@
   border-radius: 50%;
 
   transform-origin: center;
-
-  animation: rotateBackwards var(--animation-duration) ease-in-out;
 }
 
 .medWrapper {
@@ -146,8 +168,6 @@
   left: 50%;
   transform: translate(-50%, -50%);
   opacity: 0.2;
-
-  animation: fadeIn var(--animation-duration) ease-out forwards;
 }
 
 // object
@@ -172,10 +192,6 @@
   background-position: center;
   background-repeat: no-repeat;
   opacity: 0.9;
-
-  animation: fadeIn var(--animation-duration) ease-in forwards,
-    slideIn calc(var(--animation-duration) - var(--animation-delay)) ease-in
-      forwards;
 }
 
 .mediaObjectShadow {
@@ -188,10 +204,6 @@
   background-repeat: no-repeat;
   z-index: -1;
   opacity: 0.9;
-
-  animation: fadeIn var(--animation-duration) ease-in forwards,
-    slideIn calc(var(--animation-duration) - var(--animation-delay)) ease-in
-      forwards;
 }
 
 @keyframes fadeIn {
@@ -214,7 +226,7 @@
     rotate: 0deg;
   }
   to {
-    rotate: 720deg;
+    rotate: 360deg;
   }
 }
 
@@ -223,6 +235,6 @@
     rotate: 0deg;
   }
   to {
-    rotate: -720deg;
+    rotate: -360deg;
   }
 }

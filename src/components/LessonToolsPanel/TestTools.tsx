@@ -187,7 +187,6 @@ const TestTools: FC<TestToolsProps> = ({ test, currentAttempt }) => {
           <IonAccordionGroup
             className={styles.accordion}
             onIonChange={handleAccordionGroupChange}
-            // expand="inset"
           >
             {testAttempts.map((attempt) => (
               <IonAccordion

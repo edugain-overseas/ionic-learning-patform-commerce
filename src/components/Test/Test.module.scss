@@ -1,6 +1,6 @@
 .answersProgress {
   position: fixed;
-  top: 0;
+  top: var(--ion-safe-area-top);
   left: 0;
   width: 100%;
   z-index: 2;

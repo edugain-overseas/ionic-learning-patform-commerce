@@ -390,6 +390,8 @@ div.swiper {
 }
 
 .editDataModal {
-  bottom: max(60rem, var(--keyboard-offset, 0rem));
-  --height: calc(100% - 16rem);
+  bottom: max(calc(60rem + var(--ion-safe-area-bottom)), var(--keyboard-height, 0rem));
+  --height: calc(100% - 16rem - var(--ion-safe-area-top));
+
+  
 }

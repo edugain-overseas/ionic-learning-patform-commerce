@@ -38,8 +38,7 @@ const App: React.FC = () => {
   useDynamicFontSize();
   useStatusBar();
   useKeyboard();
-  useAxios();
-
+  useAxios();  
 
   return (
     <IonApp className="App">

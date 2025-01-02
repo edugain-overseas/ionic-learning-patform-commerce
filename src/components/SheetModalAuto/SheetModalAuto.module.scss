@@ -6,8 +6,12 @@
   --border-radius: 16rem 16rem 0 0;
 
   top: var(--ion-safe-area-top);
-  bottom: var(--keyboard-offset, 0);
+  bottom: var(--keyboard-height, 0);
   transition: bottom var(--custom-tr-time-min) ease-in-out;
   backdrop-filter: blur(5px);
+
+  &::part(content) {
+    padding-bottom: var(--ion-safe-area-bottom);
+  }
 
 }

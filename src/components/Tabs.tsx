@@ -81,7 +81,6 @@ const Tabs: FC<TabsTypes> = ({ children }) => {
           <IonRippleEffect></IonRippleEffect>
         </IonTabButton>
         <IonTabButton tab="basket" href="/basket" className="ion-activatable">
-          {/* <IonIcon src={BasketIcon} className="custom-tab-icon" /> */}
           <BasketIcon />
           <IonLabel>Basket</IonLabel>
           <IonRippleEffect></IonRippleEffect>
