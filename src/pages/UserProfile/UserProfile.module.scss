@@ -287,7 +287,6 @@ div.progressData {
       position: relative;
       color: var(--ion-color-dark);
 
-
       &:before {
         content: "";
         position: absolute;
@@ -390,8 +389,6 @@ div.swiper {
 }
 
 .editDataModal {
-  bottom: max(calc(60rem + var(--ion-safe-area-bottom)), var(--keyboard-height, 0rem));
+  bottom: max(60rem, var(--keyboard-height, 0rem));
   --height: calc(100% - 16rem - var(--ion-safe-area-top));
-
-  
 }

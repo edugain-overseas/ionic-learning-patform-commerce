@@ -9,6 +9,7 @@ import { UseFormRegisterReturn } from "react-hook-form";
 
 interface InputTextTypes {
   name: string;
+  type?: 'email' | 'text';
   placeholder: string;
   registerProps: UseFormRegisterReturn;
   error?: string;
@@ -21,6 +22,7 @@ interface InputTextTypes {
 
 const InputText: React.FC<InputTextTypes> = ({
   name,
+  type='text',
   placeholder,
   registerProps,
   error,
@@ -45,7 +47,7 @@ const InputText: React.FC<InputTextTypes> = ({
       >
         {placeholder}
       </span>
-      <input type="text" {...registerProps} disabled={disabled} />
+      <input type={type} {...registerProps} disabled={disabled} />
       <p className={styles.errorMessage}>{error}</p>
     </label>
   );

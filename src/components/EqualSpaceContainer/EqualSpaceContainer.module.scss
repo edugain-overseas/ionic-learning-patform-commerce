@@ -3,10 +3,15 @@
   width: 100%;
   display: flex;
   align-items: center;
+  padding-inline: 33rem;
+  gap: 33rem;
 
-  & > div {
-    flex: 1;
+  .start {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
+  }
+  .start {
+    display: flex;
+    justify-content: flex-start;
   }
 }

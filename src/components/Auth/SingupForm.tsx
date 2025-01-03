@@ -53,6 +53,9 @@ const SingupForm: React.FC<{
         username: data.username,
         email: data.email,
       }));
+      alert(
+        `Hello, ${data.username}, we cteated your account. Please activate your email: ${data.email}`
+      );
       present({
         message: `Hello, ${data.username}, we cteated your account. Please activate your email: ${data.email}`,
         duration: 5000,
@@ -64,7 +67,7 @@ const SingupForm: React.FC<{
         .find((modal) => modal.name === "user-activation")
         ?.ref?.current?.present();
     } catch (error: any) {
-      console.log(error);
+      alert(JSON.stringify(error));
 
       if (
         error.response.data.detail ===
@@ -134,6 +137,7 @@ const SingupForm: React.FC<{
         />
         <InputText
           name="email"
+          type="email"
           placeholder="Email"
           height="32rem"
           registerProps={register("email", {

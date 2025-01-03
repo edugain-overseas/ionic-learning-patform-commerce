@@ -27,6 +27,7 @@
     color: var(--ion-color-dark);
     border: none;
     outline: none;
+    background: transparent;
   }
 
   input[name="verificationCode"],
@@ -46,6 +47,8 @@
   &.newPassword {
     width: 100rem;
   }
+
+  white-space: nowrap;
 
   &::after {
     content: "";

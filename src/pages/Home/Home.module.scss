@@ -130,13 +130,16 @@
 .authPanel {
   position: absolute;
   width: 100%;
-  height: calc(125rem + var(--ion-safe-area-bottom));
+  // height: calc(125rem + var(--ion-safe-area-bottom));
+  height: 125rem;
   bottom: 0;
-  padding-bottom: calc(61rem + var(--ion-safe-area-bottom));
+  // padding-bottom: calc(61rem + var(--ion-safe-area-bottom));
+  padding-bottom: 61rem;
 
-  background-color: var(--custom-bg-rgba-primary);
+  background-color: var(--custom-bg-rgba-secondary);
   box-shadow: var(--custom-box-shadow-primary);
   border-radius: 16rem 16rem 0 0;
+  backdrop-filter: blur(28px);
 
   .btnsWrapper {
     font-size: 14rem;

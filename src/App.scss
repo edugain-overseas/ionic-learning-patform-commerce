@@ -29,7 +29,7 @@ body {
   border-top-right-radius: 16rem;
   height: 60rem;
   padding-right: 20%;
-  padding-bottom: var(--ion-safe-area-bottom);
+  // padding-bottom: var(--ion-safe-area-bottom);
 
   ion-tab-button {
     position: relative;
@@ -67,7 +67,8 @@ body {
 
   position: absolute;
   right: 0;
-  bottom: calc(var(--ion-safe-area-bottom) - var(--keyboard-height));
+  // bottom: calc(var(--ion-safe-area-bottom) - var(--keyboard-height));
+  bottom: 0;
   opacity: 0.5;
 
   font-size: 10rem;

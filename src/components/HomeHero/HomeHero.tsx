@@ -3,6 +3,8 @@ import styles from "./HomeHero.module.scss";
 import OuterRotationCircle from "./OuterRotationCircle";
 import InnerRotationCircle from "./InnerRotationCircle";
 import { useIonViewDidLeave } from "@ionic/react";
+import { Capacitor } from "@capacitor/core";
+import { SplashScreen } from "@capacitor/splash-screen";
 
 const HomeHero: FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -13,11 +15,17 @@ const HomeHero: FC = () => {
     }
   });
 
+  useEffect(() => {
+    if (Capacitor.getPlatform() !== "web") {
+      SplashScreen.hide();
+    }
+    if (containerRef.current) {
+      containerRef.current.classList.add(styles.animated);
+    }
+  }, []);
+
   return (
-    <div
-      className={`${styles.outerWrapper} ${styles.animated}`}
-      ref={containerRef}
-    >
+    <div className={styles.outerWrapper} ref={containerRef}>
       <OuterRotationCircle />
       <div className={styles.innerWrapper}>
         <InnerRotationCircle />

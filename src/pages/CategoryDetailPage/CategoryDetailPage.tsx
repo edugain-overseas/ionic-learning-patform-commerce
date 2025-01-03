@@ -5,12 +5,15 @@ import {
   IonSegmentButton,
   ScrollDetail,
   SegmentChangeEventDetail,
+  useIonViewDidLeave,
+  useIonViewWillEnter,
 } from "@ionic/react";
 import React, { useMemo, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
 import { useUser } from "../../context/UserContext";
 import { remToPx } from "../../utils/pxToRem";
+import { changeStausBarTheme } from "../../hooks/useStatusBar";
 import categoryContrastIcon from "../../assets/icons/category-contrast.svg";
 import Header from "../../components/Header/Header";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
@@ -20,6 +23,14 @@ import styles from "./CategoryDetailPage.module.scss";
 const MAX_SCROLL_VALUE = 96;
 
 const CategoryDetailPage: React.FC = () => {
+  useIonViewWillEnter(()=>{
+    changeStausBarTheme('Dark')
+  })
+
+  useIonViewDidLeave(()=>{
+    changeStausBarTheme('Light')
+  })
+
   const { categoryId } = useParams<{ categoryId: string }>();
 
   const category = useCourses()?.categories.find(
@@ -124,10 +135,6 @@ const CategoryDetailPage: React.FC = () => {
         scrollEvents={true}
         onIonScroll={handleScroll}
         onIonScrollEnd={handleScrollEnd}
-        // onIonScrollStart={() => {
-        //   setIsScrolling(true);
-        //   alert('scroll start')
-        // }}
         ref={contentRef}
         style={{ overflow: "hidden" }}
       >

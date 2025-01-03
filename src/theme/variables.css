@@ -11,7 +11,8 @@ http://ionicframework.com/docs/theming/ */
   --custom-color-decorate: #ececec;
   --custom-color-decorate-secondary: #b7b7b7;
   --custom-color-decorate-thirdinary: #fbfbfb;
-  --custom-primary-lg: linear-gradient(#b80101, #920000);
+  /* --custom-primary-lg: linear-gradient(#b80101, #920000); */
+  --custom-primary-lg: #920000;
   --custom-bg-rgba-primary: rgba(255, 255, 255, 0.8);
   --custom-bg-rgba-secondary: rgba(255, 255, 255, 0.65);
   --custom-bg-rgba-thirtiary: rgba(255, 255, 255, 0.45);

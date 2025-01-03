@@ -26,7 +26,6 @@ const Home: React.FC = () => {
 
   const accessToken = useUser()?.user.accessToken;
 
-  // alert(`${document.getElementById('root')?.style.getPropertyValue('--keyboard-offset')}`)
 
   const [modals, setModals] = useState<
     {
@@ -56,6 +55,7 @@ const Home: React.FC = () => {
       router.push("/search", "forward", "push");
     }
   };
+
 
   return (
     <IonPage className={styles.page} id="home">
@@ -105,7 +105,7 @@ const Home: React.FC = () => {
               <EqualSpaceContainer
                 leftItem={
                   <CommonButton
-                    width={104}
+                    width={138}
                     height={32}
                     borderRadius={5}
                     color="#fcfcfc"
@@ -121,7 +121,7 @@ const Home: React.FC = () => {
                 }
                 rightItem={
                   <CommonButton
-                    width={104}
+                    width={138}
                     height={32}
                     borderRadius={5}
                     color="#fcfcfc"

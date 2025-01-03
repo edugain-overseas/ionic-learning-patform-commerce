@@ -1,4 +1,5 @@
 import { IonIcon, IonMenu, IonMenuToggle, IonRippleEffect } from "@ionic/react";
+import { changeStausBarTheme } from "../../hooks/useStatusBar";
 import Close from "../../assets/icons/menu/close.svg";
 import Logout from "../../assets/icons/menu/logout.svg";
 import Settings from "../../assets/icons/menu/settings.svg";
@@ -43,6 +44,9 @@ const Menu = () => {
     const baseEl = document.getElementById("main-content");
     baseEl?.style.setProperty("border-radius", "16rem");
     menuEnterPageAnimation(baseEl!).play();
+
+    // status bar theme toggle
+    changeStausBarTheme('Dark')
   };
 
   const handleMenuDidOpen = () => {
@@ -65,6 +69,9 @@ const Menu = () => {
     const baseEl = document.getElementById("main-content");
     baseEl?.style.setProperty("border-radius", "0");
     menuLeavePageAnimation(baseEl!).play();
+
+    //status bar theme toggle
+    changeStausBarTheme('Light')
   };
 
   return (

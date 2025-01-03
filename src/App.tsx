@@ -1,5 +1,4 @@
 import { IonApp, setupIonicReact } from "@ionic/react";
-import "@capacitor-community/stripe";
 import { CoursesProvider } from "./context/CoursesContext";
 import { UserProvider } from "./context/UserContext";
 import { ListStyleProvider } from "./context/ListStyleContext";
@@ -7,6 +6,8 @@ import { useStatusBar } from "./hooks/useStatusBar";
 import { useKeyboard } from "./hooks/useKeyboard";
 import { useDynamicFontSize } from "./hooks/useDynamicFontSize";
 import Router from "./components/Router";
+
+import "@capacitor-community/stripe";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -38,7 +39,7 @@ const App: React.FC = () => {
   useDynamicFontSize();
   useStatusBar();
   useKeyboard();
-  useAxios();  
+  useAxios();
 
   return (
     <IonApp className="App">
