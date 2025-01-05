@@ -10,6 +10,7 @@ import InputPassword from "./Inputs/InputPassword";
 import CommonButton from "../CommonButton/CommonButton";
 import Spinner from "../Spinner/Spinner";
 import styles from "./Auth.module.scss";
+import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
 
 type FormValues = {
   username: string;
@@ -186,7 +187,10 @@ const SingupForm: React.FC<{
           <span>or continue with</span>
         </div>
         <CommonButton
-          onClick={() => {}}
+          onClick={async () => {
+            const user = await GoogleAuth.signIn();
+            console.log(user);
+          }}
           label="Account Google"
           icon={<IonIcon src={Google} className={styles.googleIcon} />}
           backgroundColor="transparent"
