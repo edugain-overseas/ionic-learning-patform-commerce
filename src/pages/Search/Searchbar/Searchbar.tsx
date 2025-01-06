@@ -19,6 +19,7 @@ const Searchbar: FC<SearchbarProps> = ({ onChange, value }) => {
       spellcheck={true}
       searchIcon={searchIcon}
       value={value}
+      mode="ios"
     />
   );
 };

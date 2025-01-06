@@ -1,13 +1,19 @@
+.custom-searchbar {
+    padding: 8rem;
+}
+
 .custom-searchbar .searchbar-input {
-    font-size: 16rem;
-    padding-inline: 55rem;
-    line-height: 32rem;
-    color: var(--ion-color-dark);
+  font-size: 16rem;
+  padding-inline: 6rem;
+  /* line-height: 32rem; */
+  color: var(--ion-color-dark);
 }
 
 .custom-searchbar .searchbar-search-icon {
-    width: 32rem;
-    height: 32rem;
-    color: var(--ion-color-light);
-    top: 0;
+  width: 32rem;
+  height: 32rem;
+  color: var(--ion-color-light);
+  top: 50%;
+  left: 100%;
+  transform: translate(-100%, -50%);
 }

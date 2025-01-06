@@ -71,7 +71,7 @@ const Search: FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <Searchbar onChange={handleQueryChange} value={q} />
+          <Searchbar onChange={handleQueryChange} value={q}/>
         </IonToolbar>
       </IonHeader>
       <IonContent className="custom-content-wrapper">

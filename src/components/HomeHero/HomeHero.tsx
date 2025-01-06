@@ -25,7 +25,11 @@ const HomeHero: FC = () => {
   }, []);
 
   return (
-    <div className={styles.outerWrapper} ref={containerRef}>
+    <div
+      className={styles.outerWrapper}
+      ref={containerRef}
+      id="home-hero-animated"
+    >
       <OuterRotationCircle />
       <div className={styles.innerWrapper}>
         <InnerRotationCircle />

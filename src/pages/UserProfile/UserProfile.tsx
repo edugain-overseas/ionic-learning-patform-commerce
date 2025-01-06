@@ -49,7 +49,7 @@ const UserProfile: React.FC = () => {
     if (editUserDataModalRef.current) {
       editUserDataModalRef.current.dismiss();
     }
-  };  
+  };
 
   const closeEditAvatarModal = () => {
     if (editUserAvatarRef.current) {
@@ -128,9 +128,7 @@ const UserProfile: React.FC = () => {
                 <TextOverrflowEllipsis text="Username:" />
               </span>
               <span className={styles.username}>
-                {userData && (
-                  <TextOverrflowEllipsis text={userData.username} />
-                )}
+                {userData && <TextOverrflowEllipsis text={userData.username} />}
               </span>
             </div>
           </div>
@@ -187,7 +185,9 @@ const UserProfile: React.FC = () => {
               <ul className={styles.profileDetails}>
                 <li className={styles.profileDataItem}>
                   <span className={styles.label}>Username:</span>
-                  <span className={styles.value}>{userData?.username}</span>
+                  <span className={styles.value}>
+                    {userData?.username === "" ? "None" : userData?.username}
+                  </span>
                 </li>
                 <li className={styles.profileDataItem}>
                   <span className={styles.label}>First Name:</span>
@@ -203,11 +203,15 @@ const UserProfile: React.FC = () => {
                 </li>
                 <li className={styles.profileDataItem}>
                   <span className={styles.label}>Email:</span>
-                  <span className={styles.value}>{userData?.email}</span>
+                  <span className={styles.value}>
+                    {userData?.email === "" ? "None" : userData?.email}
+                  </span>
                 </li>
                 <li className={styles.profileDataItem}>
                   <span className={styles.label}>Password:</span>
-                  <span className={styles.value}>********</span>
+                  <span className={styles.value}>
+                    {userData?.username === "" ? "None" : "********"}
+                  </span>
                 </li>
                 <li className={styles.profileDataItem}>
                   <span className={styles.label}>Phone namber:</span>

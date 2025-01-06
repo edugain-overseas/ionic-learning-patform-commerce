@@ -17,7 +17,7 @@ const MenuNav = () => {
             <IonRouterLink
               routerLink={link.to}
               className={`${styles.menuNavLink} ion-activatable`}
-              routerDirection="root"
+              routerDirection='none'
             >
               <div className={styles.linkWrapper}>
                 <IonIcon src={link.iconSrc} className={styles.navItemIcon} />
