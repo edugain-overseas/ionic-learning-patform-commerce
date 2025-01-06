@@ -5,6 +5,9 @@ import { ListStyleProvider } from "./context/ListStyleContext";
 import { useStatusBar } from "./hooks/useStatusBar";
 import { useKeyboard } from "./hooks/useKeyboard";
 import { useDynamicFontSize } from "./hooks/useDynamicFontSize";
+import { BasketProvider } from "./context/BasketContext";
+import { useAxios } from "./hooks/useAxios";
+import { useGoogleAuthInit } from "./hooks/useGoogleAuthInit";
 import Router from "./components/Router";
 
 /* Core CSS required for Ionic components to work properly */
@@ -28,10 +31,6 @@ import "./App.scss";
 
 /* Theme variables */
 import "./theme/variables.css";
-import { BasketProvider } from "./context/BasketContext";
-import { useAxios } from "./hooks/useAxios";
-import { useEffect } from "react";
-import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
 
 setupIonicReact();
 
@@ -40,10 +39,7 @@ const App: React.FC = () => {
   useStatusBar();
   useKeyboard();
   useAxios();
-
-  useEffect(()=>{
-    GoogleAuth.initialize()
-  },[])
+  useGoogleAuthInit();
 
   return (
     <IonApp className="App">

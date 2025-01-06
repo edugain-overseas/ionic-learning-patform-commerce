@@ -21,6 +21,9 @@ public class MainActivity extends BridgeActivity {
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             );
         }
+
+        // Set up google auth plugin
+        registerPlugin(GoogleAuth.class)
     }
 }
 
