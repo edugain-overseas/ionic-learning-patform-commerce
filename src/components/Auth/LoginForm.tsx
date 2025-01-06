@@ -43,7 +43,7 @@ const LoginForm: React.FC<{
       await user?.login(data);
       present({
         message: `Welcome, ${data.username}!`,
-        duration: 2000,
+        duration: 2500,
         position: "top",
       });
       modals.find((modal) => modal.name === "sing-in")?.ref?.current?.dismiss();

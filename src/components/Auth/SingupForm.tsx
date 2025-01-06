@@ -29,6 +29,10 @@ const SingupForm: React.FC<{
   const [isLoading, setIsLoading] = useState(false);
   const [present] = useIonToast();
 
+  const closeModal = () => {
+    modals.find((modal) => modal.name === "sing-up")?.ref?.current?.dismiss();
+  };
+
   const {
     register,
     handleSubmit,
@@ -53,16 +57,15 @@ const SingupForm: React.FC<{
         username: data.username,
         email: data.email,
       }));
-      alert(
-        `Hello, ${data.username}, we cteated your account. Please activate your email: ${data.email}`
-      );
+
       present({
         message: `Hello, ${data.username}, we cteated your account. Please activate your email: ${data.email}`,
         duration: 5000,
         position: "top",
       });
 
-      modals.find((modal) => modal.name === "sing-up")?.ref?.current?.dismiss();
+      closeModal()
+
       modals
         .find((modal) => modal.name === "user-activation")
         ?.ref?.current?.present();
@@ -185,7 +188,7 @@ const SingupForm: React.FC<{
         <div className={styles.btnsDivider}>
           <span>or continue with</span>
         </div>
-        <GoogleAuthButton />
+        <GoogleAuthButton/>
       </div>
     </form>
   );

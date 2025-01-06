@@ -4,6 +4,7 @@ import styles from "./Avatar.module.scss";
 import AvatarFallback from "./AvatarFallback/AvatarFallback";
 import { IonIcon } from "@ionic/react";
 import { serverName } from "../../http/server";
+import { isValidUrl } from "../../utils/isValidUrl";
 
 interface AvatarTypes {
   size?: number;
@@ -41,7 +42,7 @@ const Avatar: React.FC<AvatarTypes> = ({
       }}
     >
       {src ? (
-        <img src={`${serverName}/${src}`} alt={alt} />
+        <img src={isValidUrl(src) ? src : `${serverName}/${src}`} alt={alt} />
       ) : (
         <AvatarFallback size={size} />
       )}

@@ -75,6 +75,7 @@ interface UserContextType {
     username: string;
     code: string;
   }) => Promise<void>;
+  loginWithGoogle: (googleToket: string) => Promise<{ username: string }>;
   resendActivationCode: (username: string) => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   setNewPassword: (credentials: {
@@ -124,21 +125,6 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
 
   const [error, setError] = useState<AxiosError | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  // const refreshTokens = async () => {
-  //   try {
-  //     const response = await instance.get("/user/refresh", {
-  //       withCredentials: true,
-  //     });
-  //     const newAccessToken = response.data.access_token;
-  //     instance.defaults.headers["Authorization"] = `Bearer ${newAccessToken}`;
-  //     setAccessToken(newAccessToken);
-  //     return newAccessToken;
-  //   } catch (error) {
-  //     setUser(initialState);
-  //     setAccessToken(null);
-  //   }
-  // };
 
   const login = async (credentials: { username: string; password: string }) => {
     const credentialsFormData = new FormData();
@@ -220,6 +206,23 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
       throw error;
     }
   };
+
+  const loginWithGoogle = async (googleToken: string) => {
+    try {
+      const { data } = await instance.post(
+        "/user/login-with-google",
+        {
+          google_token: googleToken,
+        },
+        { withCredentials: true }
+      );
+      setAccessToken(data.access_token);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  };
+  console.log(user);
 
   const resetPassword = async (email: string) => {
     try {
@@ -451,6 +454,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
         singup,
         verifyEmail,
         resendActivationCode,
+        loginWithGoogle,
         resetPassword,
         setNewPassword,
         logout,

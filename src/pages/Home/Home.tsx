@@ -1,10 +1,5 @@
-import {
-  IonContent,
-  IonIcon,
-  IonPage,
-  useIonRouter,
-} from "@ionic/react";
-import { useState } from "react";
+import { IonContent, IonIcon, IonPage, useIonRouter } from "@ionic/react";
+import { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import userIcon from "../../assets/icons/tabs/my-profile.svg";
 import singInIcon from "../../assets/icons/auth/sing-in.svg";
@@ -25,7 +20,6 @@ const Home: React.FC = () => {
   const router = useIonRouter();
 
   const accessToken = useUser()?.user.accessToken;
-
 
   const [modals, setModals] = useState<
     {
@@ -56,6 +50,11 @@ const Home: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (accessToken) {
+      modals.forEach((modal) => modal.ref?.current?.dismiss());
+    }
+  }, [accessToken]);
 
   return (
     <IonPage className={styles.page} id="home">
