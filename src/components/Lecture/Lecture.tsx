@@ -21,7 +21,6 @@ const Lecture: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
       .sort((a, b) => a.number - b.number)
       .findIndex((lesson) => lesson.id === taskData.id) + 1;
 
-  // alert(JSON.stringify(taskData))
 
   return (
     <DoubleScrollLayout

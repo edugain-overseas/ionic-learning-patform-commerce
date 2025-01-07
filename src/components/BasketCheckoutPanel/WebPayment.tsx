@@ -41,7 +41,7 @@ const WebPayment: FC = () => {
       }
     };
     console.log(items, studentId);
-    
+
     if (items?.length && studentId) {
       getPaymentLink();
     }

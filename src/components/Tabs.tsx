@@ -51,7 +51,7 @@ const Tabs: FC<TabsTypes> = ({ children }) => {
 
   return (
     <IonTabs>
-      <IonRouterOutlet id="main-content" animated>
+      <IonRouterOutlet id="main-content">
         {children}
       </IonRouterOutlet>
       <IonTabBar

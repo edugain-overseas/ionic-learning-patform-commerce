@@ -4,13 +4,16 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-
+import com.codetrixstudio.capacitor.GoogleAuth.GoogleAuth;
 import com.getcapacitor.BridgeActivity;
 
 public class MainActivity extends BridgeActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Set up google auth plugin
+         registerPlugin(GoogleAuth.class);
 
         // Set the navigation bar background color
         getWindow().setNavigationBarColor(Color.parseColor("#920000"));
@@ -21,9 +24,6 @@ public class MainActivity extends BridgeActivity {
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             );
         }
-
-        // Set up google auth plugin
-        registerPlugin(GoogleAuth.class)
     }
 }
 

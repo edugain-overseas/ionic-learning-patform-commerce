@@ -1,15 +1,20 @@
-import { FC } from "react";
-import styles from "./CourseBuyStatusPage.module.scss";
+import { FC, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useCourses } from "../../../context/CoursesContext";
 import { IonImg } from "@ionic/react";
 import successImg from "../../../assets/images/symbo-with-hand.png";
-import CourseItem from "../../../components/CourseItem/CourseItem";
+import styles from "./CourseBuyStatusPage.module.scss";
 
 const Success: FC<{ coursesIds: number[] }> = ({ coursesIds }) => {
-  const courses = useCourses()?.courses.filter((course) =>
+  const coursesInterface = useCourses();
+  const courses = coursesInterface?.courses.filter((course) =>
     coursesIds.includes(course.id)
   );
+
+  useEffect(() => {    
+    coursesInterface?.getAllCourses();
+  }, [coursesIds]);
+
 
   return (
     <div className={styles.content}>
@@ -23,7 +28,16 @@ const Success: FC<{ coursesIds: number[] }> = ({ coursesIds }) => {
       {courses && (
         <ul>
           {courses.map((course) => (
-            <CourseItem course={course} key={course.id} />
+            <Link
+              to={`/courses/course/${course.id}`}
+              style={{
+                fontSize: "16rem",
+                textAlign: "center",
+                display: "block",
+              }}
+            >
+              {course.title}
+            </Link>
           ))}
         </ul>
       )}

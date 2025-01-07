@@ -3,6 +3,7 @@ import { useBasket } from "../../context/BasketContext";
 import { priceFormatter } from "../../utils/priceFormatter";
 import WebPayment from "./WebPayment";
 import styles from "./BasketCheckoutPanel.module.scss";
+import StripePaymentButton from "./StripePaymentButton";
 
 const BasketCheckoutPanel: FC = () => {
   const basketService = useBasket();
@@ -46,7 +47,8 @@ const BasketCheckoutPanel: FC = () => {
           </span>
         </div>
       </div>
-      <WebPayment />
+      {/* <WebPayment /> */}
+      <StripePaymentButton />
     </div>
   );
 };

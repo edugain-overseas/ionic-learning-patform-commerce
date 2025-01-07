@@ -1,4 +1,5 @@
 import { IonApp, setupIonicReact } from "@ionic/react";
+import { CapacitorStripeProvider } from "@capacitor-community/stripe/dist/esm/react/provider";
 import { CoursesProvider } from "./context/CoursesContext";
 import { UserProvider } from "./context/UserContext";
 import { ListStyleProvider } from "./context/ListStyleContext";
@@ -42,17 +43,21 @@ const App: React.FC = () => {
   useGoogleAuthInit();
 
   return (
-    <IonApp className="App">
-      <UserProvider>
-        <CoursesProvider>
-          <BasketProvider>
-            <ListStyleProvider>
-              <Router />
-            </ListStyleProvider>
-          </BasketProvider>
-        </CoursesProvider>
-      </UserProvider>
-    </IonApp>
+    <CapacitorStripeProvider
+      publishableKey="pk_test_51MYZV4GntgRu6DcSDjcJ60uSiOtfujweuadV94aF7eOFCxW4JEGZks5Siyh6aSJ6pT2KjZSQ0RN1Ngwopgcw4fLr00E5eJVuD9"
+    >
+      <IonApp className="App">
+        <UserProvider>
+          <CoursesProvider>
+            <BasketProvider>
+              <ListStyleProvider>
+                <Router />
+              </ListStyleProvider>
+            </BasketProvider>
+          </CoursesProvider>
+        </UserProvider>
+      </IonApp>
+    </CapacitorStripeProvider>
   );
 };
 

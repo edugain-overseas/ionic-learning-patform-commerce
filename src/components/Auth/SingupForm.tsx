@@ -70,7 +70,6 @@ const SingupForm: React.FC<{
         .find((modal) => modal.name === "user-activation")
         ?.ref?.current?.present();
     } catch (error: any) {
-      alert(JSON.stringify(error));
 
       if (
         error.response.data.detail ===
