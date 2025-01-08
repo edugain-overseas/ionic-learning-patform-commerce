@@ -8,7 +8,7 @@ import {
   useIonViewDidLeave,
   useIonViewWillEnter,
 } from "@ionic/react";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
 import { useUser } from "../../context/UserContext";
@@ -23,13 +23,27 @@ import styles from "./CategoryDetailPage.module.scss";
 const MAX_SCROLL_VALUE = 96;
 
 const CategoryDetailPage: React.FC = () => {
-  useIonViewWillEnter(()=>{
-    changeStausBarTheme('Dark')
-  })
+  useIonViewWillEnter(() => {
+    changeStausBarTheme("Dark");
+  });
 
-  useIonViewDidLeave(()=>{
-    changeStausBarTheme('Light')
-  })
+  useIonViewDidLeave(() => {
+    changeStausBarTheme("Light");
+  });
+
+  const isUserLoggedIn = useUser()?.user.username;
+
+  const [filter, setFilter] = useState<string>(
+    isUserLoggedIn ? "All courses" : "In process"
+  );
+
+  useEffect(() => {
+    if (isUserLoggedIn) {
+      setFilter("In process");
+    } else {
+      setFilter("All courses");
+    }
+  }, [isUserLoggedIn]);
 
   const { categoryId } = useParams<{ categoryId: string }>();
 
@@ -64,8 +78,6 @@ const CategoryDetailPage: React.FC = () => {
   const contentRef = useRef<HTMLIonContentElement>(null);
   const topContentRef = useRef<HTMLDivElement>(null);
   const bottomInnerRef = useRef<HTMLDivElement>(null);
-
-  const [filter, setFilter] = useState<string>("All courses");
 
   const handleScroll = (e: CustomEvent<ScrollDetail>) => {
     topContentRef.current?.style.setProperty(
@@ -118,7 +130,7 @@ const CategoryDetailPage: React.FC = () => {
   };
 
   const headerProps = {
-    title: "My Courses",
+    title: "Courses",
     secondary: true,
     left: [{ name: "back" }],
     right: [
@@ -170,14 +182,14 @@ const CategoryDetailPage: React.FC = () => {
             mode="ios"
             onIonChange={onSegmentChange}
           >
-            <IonSegmentButton className={styles.segmentBtn} value="All courses">
-              <span>All courses</span>
-            </IonSegmentButton>
             <IonSegmentButton className={styles.segmentBtn} value="In process">
               <span>In process</span>
             </IonSegmentButton>
             <IonSegmentButton className={styles.segmentBtn} value="Available">
               <span>Available</span>
+            </IonSegmentButton>
+            <IonSegmentButton className={styles.segmentBtn} value="All courses">
+              <span>All courses</span>
             </IonSegmentButton>
           </IonSegment>
         </div>
@@ -187,7 +199,7 @@ const CategoryDetailPage: React.FC = () => {
           </div>
           <div className={styles.bottomInner} ref={bottomInnerRef}>
             <div className={styles.innerHeader}>
-              <div>{filter}</div>
+              <div></div>
               <div>
                 <span>Purchased:</span>{" "}
                 {`${

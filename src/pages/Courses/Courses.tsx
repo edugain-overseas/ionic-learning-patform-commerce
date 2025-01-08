@@ -1,5 +1,5 @@
 import { IonContent, IonPage } from "@ionic/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   coursesPrivateNavItems,
   coursesPublicNavItems,
@@ -18,6 +18,8 @@ const Courses: React.FC = () => {
   const categories = coursesInterface?.categories;
   const courses = coursesInterface?.courses;
   const userCourses = userInterface?.user.courses;
+  const [filter, setFilter] = useState<string>(isLoggedIn ? "my" : "available");
+  console.log(filter);
 
   const handleFilterCategory = () => {
     switch (filter) {
@@ -63,10 +65,18 @@ const Courses: React.FC = () => {
     }
   };
 
-  const [filter, setFilter] = useState<string>(isLoggedIn ? "my" : "available");
+  useEffect(() => {
+    console.log("USE EFFECT");
+    
+    if (isLoggedIn) {
+      setFilter("my");
+    } else {
+      setFilter("available");
+    }
+  }, [isLoggedIn]);
 
   const headerProps = {
-    title: "Courses",
+    title: "Categories of Courses",
     left: [{ name: "back" }, { name: "notification", onClick: () => {} }],
     right: [
       { name: "filter", onClick: () => {} },
@@ -78,12 +88,17 @@ const Courses: React.FC = () => {
     <IonPage id="courses">
       <Header {...headerProps} />
       <IonContent className="custom-content-wrapper">
-        <SegmentNavPanel
-          value={filter}
-          setValue={setFilter}
-          items={isLoggedIn ? coursesPrivateNavItems : coursesPublicNavItems}
-        />
-        <ul className={styles.categoriesList}>
+        {isLoggedIn && (
+          <SegmentNavPanel
+            value={filter}
+            setValue={setFilter}
+            items={isLoggedIn ? coursesPrivateNavItems : coursesPublicNavItems}
+          />
+        )}
+        <ul
+          className={styles.categoriesList}
+          style={{ paddingTop: isLoggedIn ? 0 : "16rem" }}
+        >
           {handleFilterCategory()?.map((category) => (
             <CategoryItem category={category} key={category.id} />
           ))}

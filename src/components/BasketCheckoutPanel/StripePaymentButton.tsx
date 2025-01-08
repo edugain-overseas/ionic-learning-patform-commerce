@@ -5,17 +5,35 @@ import { useBasket } from "../../context/BasketContext";
 import { useUser } from "../../context/UserContext";
 import { Stripe } from "@capacitor-community/stripe";
 import { useIonRouter, useIonToast } from "@ionic/react";
+import { useCourses } from "../../context/CoursesContext";
 
 const StripePaymentButton: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [present] = useIonToast();
   const router = useIonRouter();
+  const coursesInterface = useCourses();
 
   const items = useBasket()
     ?.items.filter((item) => item.confirmed)
     .map((item) => item.id);
 
   const studentId = useUser()?.user.studentId;
+
+  const handleSuccessPayment = async () => {
+    await coursesInterface?.getAllCourses();
+
+    present({
+      message: "Payment successful! Your order is being processed.",
+      duration: 2500,
+      position: "top",
+    });
+
+    router.push(
+      `/payment?status=success&items_ids=${JSON.stringify(items)}`,
+      "root",
+      "push"
+    );
+  };
 
   const handlePaymentBtnClick = async () => {
     try {
@@ -42,19 +60,9 @@ const StripePaymentButton: FC = () => {
       const { paymentResult } = await Stripe.presentPaymentSheet();
 
       if (paymentResult === "paymentSheetCompleted") {
-        console.log("Payment successful!");
+        setTimeout(handleSuccessPayment, 5000);
 
         // Notify the user (optional)
-        present({
-          message: "Payment successful! Your order is being processed.",
-          duration: 2500,
-          position: "top",
-        });
-        router.push(
-          `/payment?status=success&items_ids=${JSON.stringify(items)}`,
-          "root",
-          "push"
-        );
       } else {
         console.log("Payment not completed.");
         present({

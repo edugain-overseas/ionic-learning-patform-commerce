@@ -27,6 +27,9 @@ import { useUser } from "../../context/UserContext";
 import { serverName } from "../../http/server";
 import { getCountryByCode } from "../../utils/countries";
 import UserAvatarEditor from "../../components/UserAvatarEditor/UserAvatarEditor";
+import UserMainInfo from "./UserMainInfo";
+import UserProfileInfo from "./UserProfileInfo";
+import UserStatistics from "./UserStatistics";
 
 // import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 
@@ -117,152 +120,9 @@ const UserProfile: React.FC = () => {
     <IonPage id="profile">
       <Header {...headerProps} />
       <IonContent className={styles.pageWrapper}>
-        <div className={styles.mainInfoBlock}>
-          <div className={styles.topWrapper}>
-            <span className={styles.blockLable}>Information</span>
-            <div className={styles.avatarInner}>
-              <Avatar src={userData?.avatarURL} size={94} editable={false} />
-            </div>
-            <div className={styles.usernameWrapper}>
-              <span className={styles.usernameLabel}>
-                <TextOverrflowEllipsis text="Username:" />
-              </span>
-              <span className={styles.username}>
-                {userData && <TextOverrflowEllipsis text={userData.username} />}
-              </span>
-            </div>
-          </div>
-          <ul className={styles.achives}>
-            <li className={styles.achiveItem}>
-              <IonIcon src={ClockIcon} className={styles.achiveIcon} />
-              <span className={styles.achiveValue}>
-                <TextOverrflowEllipsis text="12h 12m" />
-              </span>
-              <span className={styles.achiveLabel}>
-                <TextOverrflowEllipsis text="studying time" />
-              </span>
-            </li>
-            <li className={styles.achiveItem}>
-              <IonIcon src={TaskProgressIcon} className={styles.achiveIcon} />
-              <span className={styles.achiveValue}>
-                <TextOverrflowEllipsis
-                  text={`${userData?.courses?.length} course${
-                    userData?.courses && userData.courses.length > 1 ? "s" : ""
-                  }`}
-                />
-              </span>
-              <span className={styles.achiveLabel}>
-                <TextOverrflowEllipsis text="in progress" />
-              </span>
-            </li>
-            <li className={styles.achiveItem}>
-              <IonIcon src={TaskCompletedIcon} className={styles.achiveIcon} />
-              <span className={styles.achiveValue}>
-                <TextOverrflowEllipsis
-                  text={`${
-                    userData?.courses &&
-                    userData?.courses.filter(
-                      ({ status }) => status === "completed"
-                    ).length
-                  } completed`}
-                />
-              </span>
-              <span className={styles.achiveLabel}>
-                <TextOverrflowEllipsis text="courses" />
-              </span>
-            </li>
-          </ul>
-        </div>
-        <div className={styles.profileData}>
-          <Accordion
-            header={
-              <div className={styles.profileDataHeader}>
-                <span className={styles.mainTitle}>Profile data</span>
-                <span className={styles.secondaryTitle}>Details</span>
-              </div>
-            }
-            content={
-              <ul className={styles.profileDetails}>
-                <li className={styles.profileDataItem}>
-                  <span className={styles.label}>Username:</span>
-                  <span className={styles.value}>
-                    {userData?.username === "" ? "None" : userData?.username}
-                  </span>
-                </li>
-                <li className={styles.profileDataItem}>
-                  <span className={styles.label}>First Name:</span>
-                  <span className={styles.value}>
-                    {userData?.name === "" ? "None" : userData?.name}
-                  </span>
-                </li>
-                <li className={styles.profileDataItem}>
-                  <span className={styles.label}>Last Name:</span>
-                  <span className={styles.value}>
-                    {userData?.surname === "" ? "None" : userData?.surname}
-                  </span>
-                </li>
-                <li className={styles.profileDataItem}>
-                  <span className={styles.label}>Email:</span>
-                  <span className={styles.value}>
-                    {userData?.email === "" ? "None" : userData?.email}
-                  </span>
-                </li>
-                <li className={styles.profileDataItem}>
-                  <span className={styles.label}>Password:</span>
-                  <span className={styles.value}>
-                    {userData?.username === "" ? "None" : "********"}
-                  </span>
-                </li>
-                <li className={styles.profileDataItem}>
-                  <span className={styles.label}>Phone namber:</span>
-                  <span className={styles.value}>
-                    {userData?.phone === "" || !userData?.phone
-                      ? "None"
-                      : userData?.phone}
-                  </span>
-                </li>
-                <li className={styles.profileDataItem}>
-                  <span className={styles.label}>Your country:</span>
-                  <span className={styles.value}>
-                    {userData?.country === "" || !userData?.country
-                      ? "None"
-                      : getCountryByCode(userData.country)}
-                  </span>
-                </li>
-              </ul>
-            }
-          />
-        </div>
-        <div className={styles.progressData}>
-          <div className={styles.gradeWrapper}>
-            <CircleProgressCard
-              cardTitle="Grade Point Average"
-              width={90}
-              strokeWidth={4}
-              strokeColor="#FCC400"
-              progressTitle={
-                <div className={styles.progressContent}>
-                  <span className={styles.label}>Average</span>
-                  <span className={styles.value}>172(B)</span>
-                </div>
-              }
-            />
-          </div>
-          <div className={styles.progressWrapper}>
-            <CircleProgressCard
-              cardTitle="Your progress"
-              width={90}
-              strokeWidth={4}
-              strokeColor="#39ba6d"
-              progressTitle={
-                <div className={styles.progressContent}>
-                  <span className={styles.label}>Completed</span>
-                  <span className={styles.value}>75%</span>
-                </div>
-              }
-            />
-          </div>
-        </div>
+        <UserMainInfo userData={userData} />
+        <UserProfileInfo userData={userData} />
+        <UserStatistics userData={userData} />
         <div className={styles.certificatesData}>
           <div className={styles.certificatesHeader}>
             <span className={styles.certificatesTitle}>

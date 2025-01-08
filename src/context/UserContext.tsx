@@ -44,7 +44,7 @@ export interface UserType {
   avatarURL: string;
   balance: number;
   previousAvatars: PreviousAvatar[];
-  activeTime: null | number;
+  activeTime: number;
   courses: UserCourseType[];
   changedName: boolean;
   changedSurname: boolean;
@@ -112,7 +112,7 @@ const initialState: UserType = {
   avatarURL: "",
   balance: 0,
   previousAvatars: [],
-  activeTime: null,
+  activeTime: 0,
   courses: [],
   changedName: false,
   changedSurname: false,
@@ -222,7 +222,6 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
       throw error;
     }
   };
-  console.log(user);
 
   const resetPassword = async (email: string) => {
     try {

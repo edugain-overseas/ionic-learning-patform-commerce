@@ -51,7 +51,6 @@ const SegmentNavPanel: React.FC<SegmentNavPanelTypes> = ({
                 }
               : undefined
           }
-          
         >
           <IonLabel className={styles.segmentLabel}>{label}</IonLabel>
         </IonSegmentButton>

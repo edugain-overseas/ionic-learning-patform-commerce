@@ -12,7 +12,7 @@ const Success: FC<{ coursesIds: number[] }> = ({ coursesIds }) => {
   );
 
   useEffect(() => {    
-    coursesInterface?.getAllCourses();
+    // coursesInterface?.getAllCourses();
   }, [coursesIds]);
 
 

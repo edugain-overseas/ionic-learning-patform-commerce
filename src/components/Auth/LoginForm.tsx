@@ -50,7 +50,7 @@ const LoginForm: React.FC<{
     } catch (error: any) {
       console.log(error);
 
-      if (error.response?.data?.detail === "Invalid username") {
+      if (error.response?.data?.detail === "Invalid username or email") {
         setError("username", {
           type: "server response",
           message: error.response.data.detail,
@@ -105,7 +105,7 @@ const LoginForm: React.FC<{
       <div className={styles.inputsWrapper}>
         <InputText
           name="username"
-          placeholder="Username"
+          placeholder="Email"
           registerProps={register("username", {
             required: "This field is required",
           })}

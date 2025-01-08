@@ -16,9 +16,14 @@ export const useStatusBar = () => {
     if (Capacitor.isPluginAvailable("StatusBar")) {
       await StatusBar.setOverlaysWebView({ overlay: true });
       if (Capacitor.getPlatform() === "android") {
-        document
-          .getElementById("root")
-          ?.style.setProperty("--ion-safe-area-top", "20px");
+        const root = document.getElementById("root");
+        if (root) {
+          root.style.setProperty("--ion-safe-area-top", "20px"); // Adjust for status bar height
+          // root.style.setProperty(
+          //   "--ion-safe-area-bottom",
+          //   "env(safe-area-inset-bottom)"
+          // ); // Ensure navigation bar is accounted for
+        }
       }
     }
   };

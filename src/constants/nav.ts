@@ -46,22 +46,22 @@ export const instructionsNav = [
 export const coursesPrivateNavItems = [
   {
     value: "my",
-    label: "my courses",
+    label: "purchased",
   },
   {
     value: "available",
-    label: "available courses",
+    label: "available",
   },
   {
     value: "completed",
-    label: "completed courses",
+    label: "completed",
   },
 ];
 
 export const coursesPublicNavItems = [
   {
     value: "available",
-    label: "available courses",
+    label: "available",
   },
 ];
 
