@@ -1,5 +1,5 @@
 .basketList {
-  padding-bottom: 200rem;
+  padding-bottom: 160rem;
 }
 
 .basketList > li {
@@ -35,7 +35,7 @@
 .deleteWrapper {
   display: none;
   justify-content: flex-end;
-  align-items: center;
+  // align-items: center;
 
   position: absolute;
   inset: 0;
@@ -44,6 +44,13 @@
   border-radius: var(--custom--border-radius-primary);
   background: var(--ion-color-primary);
   box-shadow: var(--custom-box-shadow-primary);
+
+  .iconWrapper {
+    min-width: 32rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
   ion-icon {
     font-size: 32rem;

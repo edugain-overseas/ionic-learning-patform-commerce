@@ -32,6 +32,7 @@ import "./App.scss";
 
 /* Theme variables */
 import "./theme/variables.css";
+import { AuthUIProvider } from "./context/AuthUIContext";
 
 setupIonicReact();
 
@@ -43,15 +44,15 @@ const App: React.FC = () => {
   useGoogleAuthInit();
 
   return (
-    <CapacitorStripeProvider
-      publishableKey="pk_test_51MYZV4GntgRu6DcSDjcJ60uSiOtfujweuadV94aF7eOFCxW4JEGZks5Siyh6aSJ6pT2KjZSQ0RN1Ngwopgcw4fLr00E5eJVuD9"
-    >
+    <CapacitorStripeProvider publishableKey="pk_test_51MYZV4GntgRu6DcSDjcJ60uSiOtfujweuadV94aF7eOFCxW4JEGZks5Siyh6aSJ6pT2KjZSQ0RN1Ngwopgcw4fLr00E5eJVuD9">
       <IonApp className="App">
         <UserProvider>
           <CoursesProvider>
             <BasketProvider>
               <ListStyleProvider>
-                <Router />
+                <AuthUIProvider>
+                  <Router />
+                </AuthUIProvider>
               </ListStyleProvider>
             </BasketProvider>
           </CoursesProvider>

@@ -18,14 +18,14 @@ const CheckoutBtn: FC<CheckoutBtnProps> = ({
     <CommonButton
       label="Checkout"
       icon={isLoading && <Spinner color="#fff" />}
-      backgroundColor="#7E8CA8"
+      backgroundColor={disabled ? '#BDC4D2' :"#7E8CA8"}
       borderRadius={5}
       color="#FCFCFC"
-      width={312}
+      block={true}
       height={40}
       className={styles.checkoutBtn}
       onClick={handleClick}
-      disabled={disabled}
+      disabled={isLoading}
     />
   );
 };

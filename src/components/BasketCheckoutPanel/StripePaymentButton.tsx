@@ -6,18 +6,24 @@ import { useUser } from "../../context/UserContext";
 import { Stripe } from "@capacitor-community/stripe";
 import { useIonRouter, useIonToast } from "@ionic/react";
 import { useCourses } from "../../context/CoursesContext";
+import { useAuthUi } from "../../context/AuthUIContext";
 
 const StripePaymentButton: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [present] = useIonToast();
   const router = useIonRouter();
   const coursesInterface = useCourses();
+  const authUiInterface = useAuthUi();
 
   const items = useBasket()
     ?.items.filter((item) => item.confirmed)
     .map((item) => item.id);
 
+  const isButtonActive = items?.length !== 0;
+
   const studentId = useUser()?.user.studentId;
+
+  const accessToken = useUser()?.user.accessToken;
 
   const handleSuccessPayment = async () => {
     await coursesInterface?.getAllCourses();
@@ -35,7 +41,7 @@ const StripePaymentButton: FC = () => {
     );
   };
 
-  const handlePaymentBtnClick = async () => {
+  const handlePaymentBtnClick = async (studentId: number) => {
     try {
       setIsLoading(true);
 
@@ -54,6 +60,9 @@ const StripePaymentButton: FC = () => {
         paymentIntentClientSecret: paymentIntent,
         merchantDisplayName: "IEU courses",
         withZipCode: false,
+        enableGooglePay: true,
+        countryCode: "POL",
+        GooglePayIsTesting: true,
       });
 
       // Present the payment sheet
@@ -68,33 +77,51 @@ const StripePaymentButton: FC = () => {
         present({
           message: "Payment was not completed. Please try again.",
           duration: 2500,
+          position: "top",
         });
       }
     } catch (error) {
-      console.error("Error during payment:", error);
+      console.log("Error during payment:", error);
       present({
         message:
           "An error occurred during the payment process. Please try again.",
         duration: 2500,
+        position: "top",
       });
     } finally {
       setIsLoading(false);
     }
   };
 
-  if (items?.length === 0) {
-    return null;
-  }
+  const handleCheckOutBtnCick = () => {
+    if (!isButtonActive) {
+      present({
+        message: "There are no courses in your basket yet!",
+        duration: 2000,
+        position: "top",
+      });
+      return;
+    }
 
-  if (!studentId) {
+    if (accessToken && studentId) {
+      handlePaymentBtnClick(studentId);
+      return;
+    }
+    authUiInterface?.openAuthUI("sing-up");
+    authUiInterface?.setSuccessAuthCallback((freshStudentId: number) =>
+      handlePaymentBtnClick(freshStudentId)
+    );
+  };
+
+  if (!studentId && accessToken) {
     return null;
   }
 
   return (
     <CheckoutBtn
-      handleClick={handlePaymentBtnClick}
+      handleClick={handleCheckOutBtnCick}
       isLoading={isLoading}
-      disabled={isLoading}
+      disabled={items?.length === 0}
     />
   );
 };

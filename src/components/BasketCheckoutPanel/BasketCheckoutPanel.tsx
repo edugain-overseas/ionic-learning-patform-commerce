@@ -43,7 +43,7 @@ const BasketCheckoutPanel: FC = () => {
         <div className={styles.info}>
           <span>Total payment:</span>
           <span className={styles.total}>
-            {priceFormatter(checkout!.total)} USD
+            {priceFormatter(checkout?.total ? checkout?.total : 0)} USD
           </span>
         </div>
       </div>

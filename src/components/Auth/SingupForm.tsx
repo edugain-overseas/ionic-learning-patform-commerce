@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import { IonIcon, useIonToast } from "@ionic/react";
 import { useUser } from "../../context/UserContext";
 import { useForm } from "react-hook-form";
@@ -19,7 +19,29 @@ type FormValues = {
   password: string;
 };
 
-const SingupForm: React.FC<{
+const FormHeader: FC<{ handleOpenLogin: () => void }> = ({
+  handleOpenLogin,
+}) => {
+  const calledFromBasket = window.location.pathname.includes("basket");
+
+  return (
+    <div className={styles.formHeader}>
+      <span className={styles.title}>
+        {calledFromBasket ? "To continue your purchase," : "Sing up"}
+      </span>
+      <span className={styles.link}>
+        {calledFromBasket
+          ? "Please fill in the required details. If you already have an account, "
+          : "If you already have an account, "}
+        <span className={styles.modalReTrigger} onClick={handleOpenLogin}>
+          sign in here!
+        </span>
+      </span>
+    </div>
+  );
+};
+
+const SingupForm: FC<{
   modals: {
     name: string;
     ref: React.RefObject<HTMLIonModalElement> | null;
@@ -64,13 +86,12 @@ const SingupForm: React.FC<{
         position: "top",
       });
 
-      closeModal()
+      closeModal();
 
       modals
         .find((modal) => modal.name === "user-activation")
         ?.ref?.current?.present();
     } catch (error: any) {
-
       if (
         error.response.data.detail ===
         `User with username ${data.username} does exist`
@@ -105,7 +126,7 @@ const SingupForm: React.FC<{
         onSubmit(data);
       })}
     >
-      <div className={styles.formHeader}>
+      {/* <div className={styles.formHeader}>
         <span className={styles.title}>Sing up</span>
         <span className={styles.link}>
           If you don't have an account yet,{" "}
@@ -113,7 +134,8 @@ const SingupForm: React.FC<{
             sign in here!
           </span>
         </span>
-      </div>
+      </div> */}
+      <FormHeader handleOpenLogin={handleOpenLogin} />
       <div className={styles.inputsWrapper}>
         <InputText
           name="username"
@@ -187,7 +209,7 @@ const SingupForm: React.FC<{
         <div className={styles.btnsDivider}>
           <span>or continue with</span>
         </div>
-        <GoogleAuthButton/>
+        <GoogleAuthButton />
       </div>
     </form>
   );

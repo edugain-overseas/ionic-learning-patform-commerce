@@ -36,13 +36,17 @@ const BasketCourseCard: FC<BasketCourseCardType> = ({
       <div
         className={styles.coursePoster}
         style={{
-          backgroundImage: `url(${serverName}/${course.image_path})`,
+          backgroundImage: `url(${encodeURI(
+            `${serverName}/${course.image_path}`
+          )})`,
         }}
       >
         <div
           className={styles.imageWrapper}
           style={{
-            backgroundImage: `url(${serverName}/${course.image_path})`,
+            backgroundImage: `url(${encodeURI(
+              `${serverName}/${course.image_path}`
+            )})`,
           }}
         ></div>
       </div>

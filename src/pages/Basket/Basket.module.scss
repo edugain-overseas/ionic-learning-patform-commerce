@@ -1,7 +1,30 @@
 .contentWrapper {
-    --background: none;
-    --padding-start: 18rem;
-    --padding-end: 18rem;
-    --padding-top: 20rem;
-    --padding-bottom: 20rem;
+  --background: none;
+  --padding-start: 18rem;
+  --padding-end: 18rem;
+  --padding-top: 20rem;
+  --padding-bottom: 20rem;
+}
+
+.empty {
+  height: 100%;
+  padding-bottom: 100rem;
+  color: var(--ion-color-medium);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16rem;
+
+  ion-icon {
+    font-size: 144rem;
+  }
+
+  .emptyMessage {
+    padding-inline: 94rem;
+    font-size: 14rem;
+    font-weight: 600;
+    text-align: center;
+  }
 }

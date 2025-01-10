@@ -19,8 +19,9 @@ import Header from "../../components/Header/Header";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import CourseItem from "../../components/CourseItem/CourseItem";
 import styles from "./CategoryDetailPage.module.scss";
+import { useFilter } from "../../hooks/useCategoryDetailPageFilter";
 
-const MAX_SCROLL_VALUE = 96;
+const MAX_SCROLL_VALUE = 112;
 
 const CategoryDetailPage: React.FC = () => {
   useIonViewWillEnter(() => {
@@ -30,20 +31,6 @@ const CategoryDetailPage: React.FC = () => {
   useIonViewDidLeave(() => {
     changeStausBarTheme("Light");
   });
-
-  const isUserLoggedIn = useUser()?.user.username;
-
-  const [filter, setFilter] = useState<string>(
-    isUserLoggedIn ? "All courses" : "In process"
-  );
-
-  useEffect(() => {
-    if (isUserLoggedIn) {
-      setFilter("In process");
-    } else {
-      setFilter("All courses");
-    }
-  }, [isUserLoggedIn]);
 
   const { categoryId } = useParams<{ categoryId: string }>();
 
@@ -56,6 +43,8 @@ const CategoryDetailPage: React.FC = () => {
   );
 
   const userCourses = useUser()?.user.courses;
+
+  const { filter, setFilter } = useFilter();
 
   const handleProgress = useMemo(() => {
     let coursesIds: number[] = [];
@@ -134,7 +123,7 @@ const CategoryDetailPage: React.FC = () => {
     secondary: true,
     left: [{ name: "back" }],
     right: [
-      { name: "notification", onClick: () => {} },
+      // { name: "notification", onClick: () => {} },
       { name: "list-style", onClick: () => {} },
     ],
   };
@@ -158,10 +147,13 @@ const CategoryDetailPage: React.FC = () => {
               </div>
               <div className={styles.categoryTitle}>
                 <h3>{category?.title}</h3>
-                <p>
-                  (Complete all {courses?.length} courses to receive a{" "}
-                  <b>MBA Certificate</b>)
-                </p>
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: category?.certificate_info
+                      ? category.certificate_info
+                      : `(Complete all ${courses?.length} courses to receive a <b>Certificate</b>)`,
+                  }}
+                ></p>
               </div>
             </div>
             <div className={styles.progressWrapper}>

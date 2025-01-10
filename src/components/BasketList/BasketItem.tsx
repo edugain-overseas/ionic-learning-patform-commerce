@@ -32,8 +32,9 @@ const BasketItem: FC<BasketItemType> = ({
   if (!course) {
     return null;
   }
-  
+
   const cardRef = useRef<HTMLDivElement | null>(null);
+  const iconWrapperRef = useRef<HTMLDivElement | null>(null);
   const animation = useRef<Animation | null>(null);
   const gesture = useRef<Gesture | null>(null);
   const initialStep = useRef<number>(0);
@@ -83,8 +84,10 @@ const BasketItem: FC<BasketItemType> = ({
         cardRef.current?.classList.add(styles["gesture-active"]);
         started.current = true;
       }
+      const step = getStep(ev);
+      iconWrapperRef.current?.style.setProperty("width", `${step * 100}%`);
 
-      animation.current!.progressStep(getStep(ev));
+      animation.current!.progressStep(step);
     };
 
     const onEnd = (ev: GestureDetail) => {
@@ -131,13 +134,13 @@ const BasketItem: FC<BasketItemType> = ({
           categoryTitle={categoryTitle}
         />
         {hasAccordion && coursesToPropose && coursesToPropose.length !== 0 && (
-          <BasketItemAccordion
-            courses={coursesToPropose}
-          />
+          <BasketItemAccordion courses={coursesToPropose} />
         )}
       </div>
       <div className={styles.deleteWrapper}>
-        <IonIcon src={deteleIcon} />
+        <div className={styles.iconWrapper} ref={iconWrapperRef}>
+          <IonIcon src={deteleIcon} />
+        </div>
       </div>
     </li>
   );

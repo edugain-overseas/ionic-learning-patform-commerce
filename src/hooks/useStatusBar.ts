@@ -18,11 +18,15 @@ export const useStatusBar = () => {
       if (Capacitor.getPlatform() === "android") {
         const root = document.getElementById("root");
         if (root) {
-          root.style.setProperty("--ion-safe-area-top", "20px"); // Adjust for status bar height
-          // root.style.setProperty(
-          //   "--ion-safe-area-bottom",
-          //   "env(safe-area-inset-bottom)"
-          // ); // Ensure navigation bar is accounted for
+          root.style.setProperty(
+            "--ion-safe-area-top",
+            // "env(safe-area-inset-top)"
+            "20px"
+          ); // Adjust for status bar height
+          root.style.setProperty(
+            "--ion-safe-area-bottom",
+            "env(safe-area-inset-bottom)"
+          ); // Ensure navigation bar is accounted for
         }
       }
     }
@@ -36,7 +40,7 @@ export const useStatusBar = () => {
 
 export const changeStausBarTheme = async (theme: keyof typeof Style) => {
   if (Capacitor.isPluginAvailable("StatusBar")) {
-    await StatusBar.setStyle({ style: Style[theme] });
+    // await StatusBar.setStyle({ style: Style[theme] });
   }
 };
 

@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { instance } from "../http/instance";
 import { AxiosError } from "axios";
 import useStorage from "../hooks/useStorage";
+import { AuthUIProvider } from "./AuthUIContext";
 
 interface UserProviderType {
   children: React.ReactNode;
@@ -459,7 +460,6 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
         logout,
         updateUserInfo,
         updateUsername,
-        // getStudentTestData,
         updateUserImage,
         setMainImage,
         getLastUserImages,

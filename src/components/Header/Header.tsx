@@ -78,7 +78,7 @@ const renderBtn = (props: buttonPropsTypes) => {
           onClick={changeListStyle}
         >
           <IonIcon
-            src={listStyle === "card" ? rowIcon : gridIcon}
+            src={listStyle === "card" ? gridIcon : rowIcon}
             className={styles.listStyleIcon}
           />
         </IonButton>

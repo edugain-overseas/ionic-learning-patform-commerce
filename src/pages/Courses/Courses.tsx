@@ -19,7 +19,6 @@ const Courses: React.FC = () => {
   const courses = coursesInterface?.courses;
   const userCourses = userInterface?.user.courses;
   const [filter, setFilter] = useState<string>(isLoggedIn ? "my" : "available");
-  console.log(filter);
 
   const handleFilterCategory = () => {
     switch (filter) {
@@ -65,9 +64,7 @@ const Courses: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("USE EFFECT");
-    
+  useEffect(() => {    
     if (isLoggedIn) {
       setFilter("my");
     } else {

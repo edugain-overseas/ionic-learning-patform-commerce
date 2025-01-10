@@ -43,13 +43,17 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
           <div
             className={styles.courseAvatarWrapper}
             style={{
-              backgroundImage: `url(${serverName}/${course.image_path})`,
+              backgroundImage: `url(${encodeURI(
+                `${serverName}/${course.image_path}`
+              )})`,
             }}
           >
             <div
               className={styles.imageWrapper}
               style={{
-                backgroundImage: `url(${serverName}/${course.image_path})`,
+                backgroundImage: `url(${encodeURI(
+                  `${serverName}/${course.image_path}`
+                )})`,
               }}
             ></div>
           </div>

@@ -129,6 +129,7 @@ export interface CategoryType {
   id: number;
   title: string;
   description?: string;
+  certificate_info?: string;
   image_path: string;
   discount?: number;
 }

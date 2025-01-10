@@ -1,3 +1,4 @@
+import { Stripe } from '@capacitor-community/stripe';
 // import { StatusBar } from "@capacitor/status-bar";
 import { CapacitorConfig } from "@capacitor/cli";
 // import { KeyboardResize, KeyboardStyle } from '@capacitor/keyboard';
@@ -24,7 +25,7 @@ const config: CapacitorConfig = {
       splashFullScreen: true,
       splashImmersive: true,
       layoutName: "launch_screen",
-      useDialog: false,
+      useDialog: true,
     },
     Keyboard: {
       // resize: KeyboardResize.Body,

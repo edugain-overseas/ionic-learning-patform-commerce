@@ -68,7 +68,7 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
     const groupedItemsByCategoryId = groupByKey(confirmedItems, "categoryId");
 
-    const userCourses = userInterface!.user.courses.map((course) => ({
+    const userCourses = userInterface!.user?.courses.map((course) => ({
       id: course.course_id,
     }));
 

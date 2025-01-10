@@ -19,6 +19,7 @@ import CourseNavPanel from "../../../components/CourseNavPanel/CourseNavPanel";
 import styles from "./CourseIntroPage.module.scss";
 import EqualSpaceContainer from "../../../components/EqualSpaceContainer/EqualSpaceContainer";
 import CommonButton from "../../../components/CommonButton/CommonButton";
+import { useBasket } from "../../../context/BasketContext";
 
 const CourseIntroPage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -27,9 +28,11 @@ const CourseIntroPage: React.FC = () => {
   const category = useCourses()?.categories.find(
     ({ id }) => id === course?.category_id
   );
-  const isCoursePurchased = useUser()?.user.courses.find(
+  const isCoursePurchased = useUser()?.user.courses?.find(
     (userCourse) => userCourse.course_id === +courseId
   );
+
+  const basketInterface = useBasket();
 
   return (
     <>
@@ -53,7 +56,12 @@ const CourseIntroPage: React.FC = () => {
             <IonIcon src={file} className={styles.headerIcon} />
           </div>
           <div className={styles.contentBlock}>
-            <p className={styles.infoText}>{course?.intro_text}</p>
+            <p
+              className={styles.infoText}
+              dangerouslySetInnerHTML={{
+                __html: course?.intro_text ? course.intro_text : "",
+              }}
+            ></p>
             <ul className={styles.coursePropsList}>
               <li>
                 <div className={styles.left}>
@@ -112,16 +120,11 @@ const CourseIntroPage: React.FC = () => {
             </ul>
             <div className={styles.courseSkills}>
               <span className={styles.listTitle}>Skills you will learn:</span>
-              <ul>
-                <li>
-                  Understanding essential economic principles and concepts;
-                </li>
-                <li>
-                  Analyzing the production and consumption of goods and
-                  services;
-                </li>
-                <li>Evaluation of international business strategies.</li>
-              </ul>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: course?.skills_text ? course?.skills_text : "",
+                }}
+              ></div>
             </div>
             <p className={styles.primaryInfo}>
               This course is part of the <u>Mini-MBA</u> and{" "}
@@ -132,16 +135,12 @@ const CourseIntroPage: React.FC = () => {
             <div className={`${styles.titleWrapper} ${styles.titleMargin}`}>
               <span className={styles.title}>About this course</span>
             </div>
-            <p className={styles.infoText}>{course?.about_text}</p>
-            <p className={styles.infoText}>
-              Understand important principles like price elasticity and the law
-              of supply and demand. This course also includes the different
-              economic systems around the globe, the essential business cycle
-              phases, the country analysis tool, and international business
-              strategies. You will also receive a short case study of the
-              European Union (EU) and the World Trade Organization (WTO) that
-              summarizes the key takeaways of this course.
-            </p>
+            <p
+              className={styles.infoText}
+              dangerouslySetInnerHTML={{
+                __html: course?.about_text ? course?.about_text : "",
+              }}
+            ></p>
             <ul className={styles.benefitsList}>
               <li>
                 <IonIcon src={schollOnline} className={styles.icon} />
@@ -201,6 +200,11 @@ const CourseIntroPage: React.FC = () => {
                   borderRadius={5}
                   backgroundColor="#B80101"
                   color="#fcfcfc"
+                  onClick={() =>
+                    course
+                      ? basketInterface?.toggleItemToBasket(course?.id)
+                      : null
+                  }
                 />
               }
             ></EqualSpaceContainer>
