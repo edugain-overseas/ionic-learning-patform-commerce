@@ -20,7 +20,7 @@ const Auth: FC<AuthPropsType> = ({ containerClassname = "" }) => {
   return (
     <>
       {!accessToken && (
-        <div className={containerClassname}>
+        <div className={`${styles.authPanel} ${containerClassname}`}>
           <EqualSpaceContainer
             leftItem={
               <CommonButton

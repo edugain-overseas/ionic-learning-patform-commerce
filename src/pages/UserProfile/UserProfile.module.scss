@@ -6,12 +6,28 @@
   --padding-end: 18rem;
   --color: var(--ion-color-dark);
 
-  & > div {
+  .mainInfoBlock,
+  .profileData,
+  .progressData,
+  .certificatesData {
     border-radius: var(--custom--border-radius-primary);
     background-color: var(--custom-bg-rgba-secondary);
     box-shadow: var(--custom-box-shadow-primary);
     // backdrop-filter: blur(16rem);
     margin-bottom: 16rem;
+  }
+
+  .authPanel {
+    position: fixed;
+    bottom: -60rem;
+    left: 0;
+    margin-bottom: 0;
+    transform: translateY(65rem);
+    transition: transform var(--custom-tr-time-max) ease;
+
+    &.shown {
+      transform: translateY(0);
+    }
   }
 }
 
@@ -391,4 +407,31 @@ div.swiper {
 .editDataModal {
   bottom: max(60rem, var(--keyboard-height, 0rem));
   --height: calc(100% - 16rem - var(--ion-safe-area-top));
+}
+
+.fallbackWrapper {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 16rem;
+  padding: 20rem 60rem 66rem;
+  color: var(--ion-color-medium);
+
+  .warningCircleWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 48rem;
+    height: 48rem;
+    border-radius: 50%;
+    border: 2rem solid var(--ion-color-medium);
+    font-size: 32rem;
+  }
+
+  p {
+    font-size: 14rem;
+    font-weight: 600;
+  }
 }

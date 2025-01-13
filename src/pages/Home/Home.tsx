@@ -41,7 +41,7 @@ const Home: React.FC = () => {
           </div>
           <HomeSearch />
         </div>
-        <Auth containerClassname={styles.authPanel} />
+        <Auth />
       </IonContent>
     </IonPage>
   );

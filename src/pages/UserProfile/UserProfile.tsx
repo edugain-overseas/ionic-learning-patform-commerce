@@ -2,18 +2,17 @@ import { IonContent, IonIcon, IonPage, IonRippleEffect } from "@ionic/react";
 import React, { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { certificates } from "../../constants";
-import ClockIcon from "../../assets/icons/clock.svg";
+import { useUser } from "../../context/UserContext";
 import DocumentDownloadIcon from "../../assets/icons/document-download.svg";
-import TaskProgressIcon from "../../assets/icons/task-progress.svg";
-import TaskCompletedIcon from "../../assets/icons/task-completed.svg";
 import Header from "../../components/Header/Header";
-import Avatar from "../../components/Avatar/Avatar";
-import TextOverrflowEllipsis from "../../components/TextOverrflowEllipsis/TextOverrflowEllipsis";
-import Accordion from "../../components/Accordion/Accordion";
-import CircleProgressCard from "../../components/CircleProgressCard/CircleProgressCard";
 import InfoBtn from "../../components/InfoBtn/InfoBtn";
 import SheetModalAuto from "../../components/SheetModalAuto/SheetModalAuto";
 import CommonButton from "../../components/CommonButton/CommonButton";
+import EditProfileData from "../../components/EditProfileData/EditProfileData";
+import UserAvatarEditor from "../../components/UserAvatarEditor/UserAvatarEditor";
+import UserMainInfo from "./UserMainInfo";
+import UserProfileInfo from "./UserProfileInfo";
+import UserStatistics from "./UserStatistics";
 import styles from "./UserProfile.module.scss";
 
 // Import Swiper styles
@@ -22,14 +21,7 @@ import "swiper/css/pagination";
 
 // import required modules
 import { Pagination } from "swiper/modules";
-import EditProfileData from "../../components/EditProfileData/EditProfileData";
-import { useUser } from "../../context/UserContext";
-import { serverName } from "../../http/server";
-import { getCountryByCode } from "../../utils/countries";
-import UserAvatarEditor from "../../components/UserAvatarEditor/UserAvatarEditor";
-import UserMainInfo from "./UserMainInfo";
-import UserProfileInfo from "./UserProfileInfo";
-import UserStatistics from "./UserStatistics";
+import UserCertificates from "./UserCertificates";
 
 // import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 
@@ -38,6 +30,15 @@ const pagination = {
   renderBullet: function (_: any, className: string) {
     return `<span class="${className} ${styles.customBullet}"></span>`;
   },
+};
+
+const headerProps = {
+  left: [{ name: "back" }],
+  title: "My Profile",
+  right: [
+    { name: "notification", onClick: () => {} },
+    { name: "settings", id: "open-edit-profile-modal", onClick: () => {} },
+  ],
 };
 
 const UserProfile: React.FC = () => {
@@ -107,15 +108,6 @@ const UserProfile: React.FC = () => {
     }
   };
 
-  const headerProps = {
-    left: [{ name: "back" }],
-    title: "My Profile",
-    right: [
-      { name: "notification", onClick: () => {} },
-      { name: "settings", id: "open-edit-profile-modal", onClick: () => {} },
-    ],
-  };
-
   return (
     <IonPage id="profile">
       <Header {...headerProps} />
@@ -123,68 +115,7 @@ const UserProfile: React.FC = () => {
         <UserMainInfo userData={userData} />
         <UserProfileInfo userData={userData} />
         <UserStatistics userData={userData} />
-        <div className={styles.certificatesData}>
-          <div className={styles.certificatesHeader}>
-            <span className={styles.certificatesTitle}>
-              Certificates of completed courses
-            </span>
-            <InfoBtn info="Certificates" id="Certificates" />
-          </div>
-          <ul className={styles.certificatesList}>
-            {certificates.map(({ name }, index) => (
-              <li
-                className={`${styles.certificateItem} ion-activatable`}
-                key={name}
-                id="certificate"
-                onClick={() => handleCertificateClick(index)}
-              >
-                <span className={styles.certificateTitle}>{name}</span>
-                <IonRippleEffect></IonRippleEffect>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <SheetModalAuto
-          isOpen={isOpenModalCerficate}
-          onDidDissmiss={() => setIsOpenModalCerficate(false)}
-        >
-          <div className={styles.cetrificateModalWrapper}>
-            <div className={styles.certificatesModalHeader}>
-              <span>{certificates[certificateIndex].name}</span>
-            </div>
-            <Swiper
-              className={styles.swiper}
-              spaceBetween={24}
-              centeredSlides={true}
-              slidesPerView={"auto"}
-              pagination={pagination}
-              modules={[Pagination]}
-            >
-              {certificates[certificateIndex].images.map(({ src }, index) => (
-                <SwiperSlide key={index} className={styles.slide}>
-                  <img src={src} key={index} />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-            <div className={styles.certificateModalDownload}>
-              <CommonButton
-                width={132}
-                height={32}
-                backgroundColor="transparent"
-                borderRadius={5}
-                border="1rem solid #7E8CA8"
-                label="Certificate"
-                icon={
-                  <IonIcon
-                    src={DocumentDownloadIcon}
-                    className={styles.docDownloadIcon}
-                  />
-                }
-                onClick={handleUploadCertificate}
-              />
-            </div>
-          </div>
-        </SheetModalAuto>
+        <UserCertificates />
         <SheetModalAuto
           trigger="open-edit-profile-modal"
           className={styles.editDataModal}
