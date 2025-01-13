@@ -10,7 +10,6 @@ import styles from "./UserProfile.module.scss";
 import { convertMillisecondsToHoursAndMinutes } from "../../utils/millisecondsToSrt";
 
 const UserMainInfo: FC<{ userData?: UserType }> = ({ userData }) => {
-  console.log(userData);
   const { hours, minutes } = userData
     ? convertMillisecondsToHoursAndMinutes(userData?.activeTime)
     : { hours: 0, minutes: 0 };

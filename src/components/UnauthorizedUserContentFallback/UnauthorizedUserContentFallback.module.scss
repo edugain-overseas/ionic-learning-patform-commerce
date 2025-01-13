@@ -1,0 +1,26 @@
+.fallbackWrapper {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 16rem;
+  padding: 20rem 60rem 66rem;
+  color: var(--ion-color-medium);
+
+  & > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 48rem;
+    height: 48rem;
+    border-radius: 50%;
+    border: 2rem solid var(--ion-color-medium);
+    font-size: 32rem;
+  }
+
+  p {
+    font-size: 14rem;
+    font-weight: 600;
+  }
+}

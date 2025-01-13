@@ -184,3 +184,17 @@
   flex-direction: column;
   gap: 16rem;
 }
+
+div.contentFallbackContainer {
+  padding-top: 40rem;
+
+  & > div {
+    width: 96rem;
+    height: 96rem;
+    font-size: 64rem;
+  }
+}
+
+.authContainer {
+  bottom: -60rem;
+}

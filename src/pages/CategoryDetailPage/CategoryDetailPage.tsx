@@ -8,7 +8,7 @@ import {
   useIonViewDidLeave,
   useIonViewWillEnter,
 } from "@ionic/react";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef } from "react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
 import { useUser } from "../../context/UserContext";
@@ -20,8 +20,17 @@ import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import CourseItem from "../../components/CourseItem/CourseItem";
 import styles from "./CategoryDetailPage.module.scss";
 import { useFilter } from "../../hooks/useCategoryDetailPageFilter";
+import UnauthorizedUserContentFallback from "../../components/UnauthorizedUserContentFallback/UnauthorizedUserContentFallback";
+import Auth from "../../components/Auth/Auth";
 
 const MAX_SCROLL_VALUE = 112;
+
+const headerProps = {
+  title: "Courses",
+  secondary: true,
+  left: [{ name: "back" }],
+  right: [{ name: "list-style", onClick: () => {} }],
+};
 
 const CategoryDetailPage: React.FC = () => {
   useIonViewWillEnter(() => {
@@ -45,6 +54,9 @@ const CategoryDetailPage: React.FC = () => {
   const userCourses = useUser()?.user.courses;
 
   const { filter, setFilter } = useFilter();
+
+  const showContentFallback =
+    filter === "In process" && userCourses?.length === 0;
 
   const handleProgress = useMemo(() => {
     let coursesIds: number[] = [];
@@ -90,7 +102,6 @@ const CategoryDetailPage: React.FC = () => {
       contentRef.current?.scrollToTop(300);
       bottomInnerRef.current?.style.setProperty("overflow", "hidden");
     } else {
-      console.dir(contentRef.current);
       contentRef.current?.scrollToBottom(0);
       bottomInnerRef.current?.style.setProperty("overflow", "auto");
     }
@@ -116,16 +127,6 @@ const CategoryDetailPage: React.FC = () => {
       default:
         break;
     }
-  };
-
-  const headerProps = {
-    title: "Courses",
-    secondary: true,
-    left: [{ name: "back" }],
-    right: [
-      // { name: "notification", onClick: () => {} },
-      { name: "list-style", onClick: () => {} },
-    ],
   };
 
   return (
@@ -203,14 +204,21 @@ const CategoryDetailPage: React.FC = () => {
                 } / ${courses?.length}`}
               </div>
             </div>
-            <ul className={styles.coursesList}>
-              {handleFilterCourses()?.map((course) => (
-                <CourseItem course={course} key={course.id} />
-              ))}
-            </ul>
+            {showContentFallback ? (
+              <UnauthorizedUserContentFallback
+                containerClassname={styles.contentFallbackContainer}
+              />
+            ) : (
+              <ul className={styles.coursesList}>
+                {handleFilterCourses()?.map((course) => (
+                  <CourseItem course={course} key={course.id} />
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       </IonContent>
+      {showContentFallback && <Auth containerClassname={styles.authContainer}/>}
     </IonPage>
   );
 };

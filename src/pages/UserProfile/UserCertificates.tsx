@@ -1,11 +1,14 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { IonIcon, IonRippleEffect } from "@ionic/react";
 import { certificates } from "../../constants";
+import { useUser } from "../../context/UserContext";
+import { useObserver } from "../../hooks/useObserver";
 import DocumentDownloadIcon from "../../assets/icons/document-download.svg";
 import InfoBtn from "../../components/InfoBtn/InfoBtn";
 import SheetModalAuto from "../../components/SheetModalAuto/SheetModalAuto";
-import UserCerficatesFallback from "./UserCerficatesFallback";
+import Auth from "../../components/Auth/Auth";
+import UnauthorizedUserContentFallback from "../../components/UnauthorizedUserContentFallback/UnauthorizedUserContentFallback";
 import styles from "./UserProfile.module.scss";
 
 // import required modules
@@ -15,9 +18,6 @@ import CommonButton from "../../components/CommonButton/CommonButton";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
-import { useUser } from "../../context/UserContext";
-import Auth from "../../components/Auth/Auth";
-import { useObserver } from "../../hooks/useObserver";
 
 // import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 
@@ -32,7 +32,6 @@ const UserCertificates: FC = () => {
   const isUserLoggedIn = useUser()?.user.accessToken !== null;
   const [certificateIndex, setCertificateIndex] = useState(0);
   const [isOpenModalCerficate, setIsOpenModalCerficate] = useState(false);
-  //   const headerRef = useRef<HTMLDivElement>(null);
 
   const handleCertificateClick = (index: number) => {
     setCertificateIndex(index);
@@ -89,31 +88,6 @@ const UserCertificates: FC = () => {
     }
   };
 
-  //   useEffect(() => {
-  //     console.log(isUserLoggedIn);
-
-  //     const pageContainer = document.querySelector(`.${styles.pageWrapper}`);
-  //     const options = {
-  //       root: pageContainer,
-  //       rootMargin: "0px",
-  //       threshold: 1.0,
-  //     };
-
-  //     const callback: IntersectionObserverCallback = (entries) => {
-  //       const { isIntersecting } = entries[0];
-  //       console.log(isIntersecting);
-  //     };
-  //     const observer = new IntersectionObserver(callback, options);
-
-  //     if (!isUserLoggedIn) {
-  //       const target = headerRef.current;
-  //       if (target) {
-  //         observer.observe(target);
-  //       }
-  //     }
-  //     return () => observer.disconnect();
-  //   }, [isUserLoggedIn]);
-
   return (
     <>
       <div className={styles.certificatesData}>
@@ -138,7 +112,7 @@ const UserCertificates: FC = () => {
             ))}
           </ul>
         ) : (
-          <UserCerficatesFallback />
+          <UnauthorizedUserContentFallback />
         )}
       </div>
       {isUserLoggedIn ? (
