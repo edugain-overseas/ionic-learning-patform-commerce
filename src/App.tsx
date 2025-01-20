@@ -1,5 +1,4 @@
 import { IonApp, setupIonicReact } from "@ionic/react";
-import { CapacitorStripeProvider } from "@capacitor-community/stripe/dist/esm/react/provider";
 import { CoursesProvider } from "./context/CoursesContext";
 import { UserProvider } from "./context/UserContext";
 import { ListStyleProvider } from "./context/ListStyleContext";
@@ -33,6 +32,8 @@ import "./App.scss";
 /* Theme variables */
 import "./theme/variables.css";
 import { AuthUIProvider } from "./context/AuthUIContext";
+import { useEffect} from "react";
+import { Stripe } from "@capacitor-community/stripe";
 
 setupIonicReact();
 
@@ -43,22 +44,30 @@ const App: React.FC = () => {
   useAxios();
   useGoogleAuthInit();
 
+  useEffect(() => {
+    (async () => {
+      Stripe.initialize({
+        publishableKey:
+          "pk_test_51MYZV4GntgRu6DcSDjcJ60uSiOtfujweuadV94aF7eOFCxW4JEGZks5Siyh6aSJ6pT2KjZSQ0RN1Ngwopgcw4fLr00E5eJVuD9",
+      });
+    })();
+  }, []);
+
+
   return (
-    <CapacitorStripeProvider publishableKey="pk_test_51MYZV4GntgRu6DcSDjcJ60uSiOtfujweuadV94aF7eOFCxW4JEGZks5Siyh6aSJ6pT2KjZSQ0RN1Ngwopgcw4fLr00E5eJVuD9">
-      <IonApp className="App">
-        <UserProvider>
-          <CoursesProvider>
-            <BasketProvider>
-              <ListStyleProvider>
-                <AuthUIProvider>
-                  <Router />
-                </AuthUIProvider>
-              </ListStyleProvider>
-            </BasketProvider>
-          </CoursesProvider>
-        </UserProvider>
-      </IonApp>
-    </CapacitorStripeProvider>
+    <IonApp className="App">
+      <UserProvider>
+        <CoursesProvider>
+          <BasketProvider>
+            <ListStyleProvider>
+              <AuthUIProvider>
+                <Router />
+              </AuthUIProvider>
+            </ListStyleProvider>
+          </BasketProvider>
+        </CoursesProvider>
+      </UserProvider>
+    </IonApp>
   );
 };
 

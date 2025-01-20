@@ -44,9 +44,6 @@ const Menu = () => {
     const baseEl = document.getElementById("main-content");
     baseEl?.style.setProperty("border-radius", "16rem");
     menuEnterPageAnimation(baseEl!).play();
-
-    // status bar theme toggle
-    changeStausBarTheme('Dark')
   };
 
   const handleMenuDidOpen = () => {
@@ -56,6 +53,9 @@ const Menu = () => {
         "scale var(--custom-tr-time-min) ease-in-out 500ms"
       );
     });
+
+    // status bar theme toggle
+    changeStausBarTheme("Dark");
   };
 
   const handleMenuDidClose = () => {
@@ -63,15 +63,15 @@ const Menu = () => {
       modal.style.setProperty("scale", "1");
       modal.style.removeProperty("transition");
     });
+
+    //status bar theme toggle
+    changeStausBarTheme("Light");
   };
 
   const handleMenuWillClose = () => {
     const baseEl = document.getElementById("main-content");
     baseEl?.style.setProperty("border-radius", "0");
     menuLeavePageAnimation(baseEl!).play();
-
-    //status bar theme toggle
-    changeStausBarTheme('Light')
   };
 
   return (

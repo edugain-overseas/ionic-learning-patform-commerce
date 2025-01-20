@@ -1,7 +1,6 @@
 .categoriesItem {
   position: relative;
   overflow: hidden;
-  // padding-right: 50rem;
   background-color: var(--custom-bg-rgba-secondary);
   border-radius: var(--custom--border-radius-primary);
   box-shadow: var(--custom-box-shadow-primary);
@@ -27,9 +26,10 @@
   }
 
   .contentWrapper {
-    padding: 16rem 0 16rem 10rem;
+    padding: 11rem 0 11rem 10rem;
     display: flex;
     gap: 16rem;
+    align-items: center;
   }
 
   .itemIcon {

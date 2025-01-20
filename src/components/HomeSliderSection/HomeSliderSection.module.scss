@@ -1,0 +1,54 @@
+
+
+.header {
+  padding-inline: 18rem 14rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h3 {
+    padding-inline-start: 11rem;
+    font-size: 16rem;
+    font-weight: 700;
+    position: relative;
+    color: var(--ion-color-dark);
+    margin: 0;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 3rem;
+      border-radius: 27rem;
+      background-color: var(--ion-color-primary);
+    }
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    color: var(--ion-color-light);
+    text-decoration: none;
+
+    span {
+      font-size: 14rem;
+      font-weight: 500;
+    }
+
+    ion-icon {
+      font-size: 32rem;
+    }
+  }
+}
+
+.swiper {
+  padding-inline: 18rem;
+}
+
+.slide {
+  width: 304rem;
+}
