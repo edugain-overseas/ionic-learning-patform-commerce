@@ -13,6 +13,9 @@ import HomeSliderSection from "../../components/HomeSliderSection/HomeSliderSect
 import CategoryItem from "../../components/CategoryItem/CategoryItem";
 import CourseItem from "../../components/CourseItem/CourseItem";
 import HomeStats from "../../components/HomeStats/HomeStats";
+import HomeOfferInfo from "../../components/HomeOfferInfo/HomeOfferInfo";
+import { useUser } from "../../context/UserContext";
+import HomeFooter from "../../components/HomeFooter/HomeFooter";
 
 const headerProps = {
   left: [{ name: "logo" }],
@@ -65,11 +68,17 @@ const Courses = () => {
 };
 
 const Home: React.FC = () => {
+  const isAuthShown = !useUser()?.user.accessToken;
+
   return (
     <IonPage className={styles.page} id="home">
       <Header {...headerProps} />
       <IonContent fullscreen className={styles.homeContent} scrollY={false}>
-        <div className={styles.contentWrapper} id="home-content">
+        <div
+          className={styles.contentWrapper}
+          id="home-content"
+          style={{ paddingBottom: isAuthShown ? "64rem" : "0" }}
+        >
           <div className={styles.hero}>
             <div className={styles.titleWrapper}>
               <span className={styles.mainTitle}>Online learning</span>
@@ -95,6 +104,8 @@ const Home: React.FC = () => {
           <Categories />
           <Courses />
           <HomeStats />
+          <HomeOfferInfo />
+          <HomeFooter />
         </div>
         <Auth />
       </IonContent>

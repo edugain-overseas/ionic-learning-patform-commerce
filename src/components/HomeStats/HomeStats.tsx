@@ -67,8 +67,6 @@ const HomeStats = () => {
   const [startCount, setStartCount] = useState(false);
 
   const observerCallback: IntersectionObserverCallback = (entries) => {
-    console.log("visible");
-
     if (entries[0].isIntersecting) {
       setStartCount(true);
     }

@@ -9,11 +9,14 @@ body {
   font-weight: 400;
 }
 
-
 // p,
 // span {
 //   font-size: inherit;
 // }
+
+a {
+  text-decoration: none;
+}
 
 .App {
   background: var(--custom-primary-lg);
@@ -171,5 +174,3 @@ ion-modal::part(handle) {
 // global, elements
 
 //keyboard
-
-
