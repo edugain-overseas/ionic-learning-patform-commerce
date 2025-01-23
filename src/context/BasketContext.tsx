@@ -15,6 +15,7 @@ type BasketContextType = {
   toggleItemToBasket: (id: number) => void;
   toggleConfirmItem: (id: number) => void;
   checkout: () => { subTotal: number; discount: number; total: number };
+  clearBasket: () => void;
 };
 
 const BasketContext = createContext<BasketContextType | undefined>(undefined);
@@ -61,6 +62,8 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
       )
     );
   };
+
+  const clearBasket = () => setItems([]);
 
   const calcDiscount = () => {
     let discount = 0;
@@ -131,6 +134,7 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
         toggleItemToBasket,
         toggleConfirmItem,
         checkout,
+        clearBasket,
       }}
     >
       {children}

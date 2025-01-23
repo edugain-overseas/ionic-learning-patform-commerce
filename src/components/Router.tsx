@@ -47,11 +47,6 @@ const Router: React.FC = () => {
                 path="/courses/course/:courseId"
                 component={CourseDetailPage}
               />
-              <Route
-                path="/courses/buy"
-                component={CourseBuyStatusPage}
-                exact
-              />
               <Route path="/payment" component={CourseBuyStatusPage} exact />
               <Route exact path="/" render={() => <Redirect to="/home" />} />
               <Route component={NotFound} />

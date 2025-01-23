@@ -14,7 +14,7 @@ export const useStatusBar = () => {
   // Call this function to set the status bar to overlay the web view
   const setStatusBarOverlay = async () => {
     if (Capacitor.isPluginAvailable("StatusBar")) {
-      // await StatusBar.setOverlaysWebView({ overlay: true });
+      await StatusBar.setOverlaysWebView({ overlay: true });
       if (Capacitor.getPlatform() === "android") {
         
         const root = document.getElementById("root");

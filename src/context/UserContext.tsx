@@ -85,6 +85,7 @@ interface UserContextType {
     email: string;
   }) => Promise<void>;
   logout: () => Promise<void>;
+  getUser: () => Promise<void>;
   updateUserInfo: (userInfo: UserInfoToUpdateType) => Promise<void>;
   updateUsername: (username: string) => Promise<void>;
   getLastUserImages: () => Promise<void>;
@@ -458,6 +459,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
         resetPassword,
         setNewPassword,
         logout,
+        getUser,
         updateUserInfo,
         updateUsername,
         updateUserImage,

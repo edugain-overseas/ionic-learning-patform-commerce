@@ -16,6 +16,7 @@ const GoogleAuthButton: FC = () => {
     try {
       setIsLoading(true);
       const googleUser = await GoogleAuth.signIn();
+
       const googleToken = googleUser.authentication.idToken;
       const user = await userInterface?.loginWithGoogle(googleToken);
 

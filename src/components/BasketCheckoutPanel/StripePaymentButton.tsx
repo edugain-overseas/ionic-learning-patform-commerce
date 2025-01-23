@@ -21,24 +21,16 @@ const StripePaymentButton: FC = () => {
 
   const isButtonActive = items?.length !== 0;
 
-  const studentId = useUser()?.user.studentId;
+  const userInterface = useUser();
+  const studentId = userInterface?.user.studentId;
 
   const accessToken = useUser()?.user.accessToken;
 
   const handleSuccessPayment = async () => {
     await coursesInterface?.getAllCourses();
+    await userInterface?.getUser();
 
-    present({
-      message: "Payment successful! Your order is being processed.",
-      duration: 2500,
-      position: "top",
-    });
-
-    router.push(
-      `/payment?status=success&items_ids=${JSON.stringify(items)}`,
-      "root",
-      "push"
-    );
+    router.push("/payment?status=success", "root", "push");
   };
 
   const handlePaymentBtnClick = async (studentId: number) => {
@@ -55,23 +47,20 @@ const StripePaymentButton: FC = () => {
 
       const paymentIntent = data.paymentIntent;
 
-      // Create the payment sheet
       await Stripe.createPaymentSheet({
         paymentIntentClientSecret: paymentIntent,
         merchantDisplayName: "IEU courses",
         withZipCode: false,
-        enableGooglePay: true,
-        countryCode: "POL",
-        GooglePayIsTesting: true,
       });
 
       // Present the payment sheet
       const { paymentResult } = await Stripe.presentPaymentSheet();
 
       if (paymentResult === "paymentSheetCompleted") {
-        setTimeout(handleSuccessPayment, 5000);
-
-        // Notify the user (optional)
+        await instance.post(
+          `/stripe/course-subscribe/app?payment_intent=${paymentIntent}`
+        );
+        handleSuccessPayment();
       } else {
         console.log("Payment not completed.");
         present({

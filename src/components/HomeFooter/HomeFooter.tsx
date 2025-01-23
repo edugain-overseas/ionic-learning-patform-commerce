@@ -12,6 +12,7 @@ import TiktokIcon from "../../assets/icons/social/tiktok.svg";
 import styles from "./HomeFooter.module.scss";
 import EqualSpaceContainer from "../EqualSpaceContainer/EqualSpaceContainer";
 import SheetModalAuto from "../SheetModalAuto/SheetModalAuto";
+import ContactForm from "../ContactForm/ContactForm";
 
 const HomeFooter: FC = () => {
   return (
@@ -135,13 +136,7 @@ const HomeFooter: FC = () => {
         />
       </footer>
       <SheetModalAuto trigger="footer-open-contact-form">
-        <form style={{ fontSize: "14rem" }}>
-          <span>Contact Form</span>
-          <input type="text" />
-          <input type="text" />
-          <input type="text" />
-          <button>Sumbit</button>
-        </form>
+        <ContactForm />
       </SheetModalAuto>
     </>
   );

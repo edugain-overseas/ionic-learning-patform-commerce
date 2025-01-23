@@ -1,4 +1,4 @@
-import { Stripe } from '@capacitor-community/stripe';
+import { Stripe } from "@capacitor-community/stripe";
 // import { StatusBar } from "@capacitor/status-bar";
 import { CapacitorConfig } from "@capacitor/cli";
 // import { KeyboardResize, KeyboardStyle } from '@capacitor/keyboard';
@@ -39,6 +39,10 @@ const config: CapacitorConfig = {
       forceCodeForRefreshToken: true,
       androidClientId:
         "492800368725-3p2f2g0k1raf7tk4mq9aov0t9skv9f1h.apps.googleusercontent.com",
+    },
+    Stripe: {
+      publishableKey:
+        "pk_test_51MYZV4GntgRu6DcSDjcJ60uSiOtfujweuadV94aF7eOFCxW4JEGZks5Siyh6aSJ6pT2KjZSQ0RN1Ngwopgcw4fLr00E5eJVuD9",
     },
   },
 };
