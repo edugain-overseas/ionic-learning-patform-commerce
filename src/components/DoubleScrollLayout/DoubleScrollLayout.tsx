@@ -23,10 +23,6 @@ const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
   const contentRef = useRef<HTMLDivElement>(null);
   const [scroll, setScroll] = useState(false);
 
-  const safeArea = document
-    .getElementById("root")
-    ?.style.getPropertyValue("--ion-safe-area-top");
-
   useEffect(() => {
     const scroller = contentRef.current;
     const handleScroll = () => {
@@ -57,7 +53,7 @@ const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
           isBackgroundBlured ? styles.backgroundBlured : ""
         }`}
         style={{
-          height: `calc(100% + ${scrollTriggerValue}rem - ${safeArea})`,
+          height: `calc(100% + ${scrollTriggerValue}rem - var(--ion-safe-area-top))`,
         }}
       >
         <div
