@@ -47,8 +47,6 @@
 
 .modalContent {
   --background: transparent;
-  --padding-start: 18rem;
-  --padding-end: 18rem;
   --overflow: hidden;
 }
 
@@ -92,6 +90,7 @@
 
 .progressList {
   padding-bottom: 16rem;
+  padding-inline: 18rem;
   li {
     display: flex;
     align-items: center;
