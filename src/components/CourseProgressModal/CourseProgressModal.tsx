@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { IonIcon } from "@ionic/react";
+import { FC, useState } from "react";
+import { IonIcon, useIonRouter, useIonToast } from "@ionic/react";
 import { useUser } from "../../context/UserContext";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
@@ -20,6 +20,8 @@ const secondBreackpoint = 72 / modalHeight;
 
 const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
   const { courseId } = useParams<{ courseId: string }>();
+  const [present] = useIonToast();
+  const router = useIonRouter();
 
   const modalParent = document.querySelector("ion-tabs");
 
@@ -30,7 +32,25 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
     (course) => course.id === +courseId
   );
 
-  console.log(courseUserData);
+  const handleLinkTaskLinkClick = (id: number) => {
+    const lesson = course?.lessons.find((lesson) => lesson.id === id);
+    if (!lesson) {
+      return;
+    }
+
+    const isLessonAvailable = lesson?.status !== "blocked";
+
+    if (!isLessonAvailable) {
+      present({
+        message:
+          "This lesson is not availabel. Please complete previous lessons",
+        duration: 2500,
+        position: "top",
+      });
+      return;
+    }
+    router.push(`/courses/course/${courseId}/tasks/${lesson.id}`);
+  };
 
   return (
     <CustomSheetModal
@@ -53,7 +73,7 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
                 </span>
                 <ProgressBar
                   value={courseUserData?.progress}
-                  width={80}
+                  width={54}
                   height={10}
                   showValue={false}
                 />
@@ -66,7 +86,7 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
               label="Exam"
               backgroundColor="#BDC4D2"
               color="#fcfcfc"
-              width={102}
+              block={true}
               height={32}
               borderRadius={5}
             />
@@ -89,7 +109,12 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
               >
                 <div className={styles.progressIconInner}></div>
               </div>
-              <span title={lesson.title}>{lesson.title}</span>
+              <span
+                title={lesson.title}
+                onClick={() => handleLinkTaskLinkClick(lesson.id)}
+              >
+                {lesson.title}
+              </span>
             </li>
           ))}
       </ul>

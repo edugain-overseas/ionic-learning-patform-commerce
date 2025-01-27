@@ -27,8 +27,8 @@ const HomeSearch: FC = () => {
         />
       </div>
       <InsetBtn
-        width="32rem"
-        height="32rem"
+        width="40rem"
+        height="40rem"
         backgroundColor="#7E8CA8"
         icon={<IonIcon src={search} className={styles.searchbarIcon} />}
         onClick={handleSearch}

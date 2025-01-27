@@ -13,8 +13,11 @@ interface TaskItemType {
   task: LessonType;
 }
 
+
+
 const TaskItem: FC<TaskItemType> = ({ task }) => {
   const listStyle = useListStyle()?.listStyle;
+  console.log(task);
 
   const Type = () => (
     <div className={styles.taskProp}>

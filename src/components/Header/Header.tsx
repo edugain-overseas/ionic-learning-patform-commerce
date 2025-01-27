@@ -6,6 +6,7 @@ import {
   IonIcon,
   IonImg,
   IonToolbar,
+  useIonToast,
 } from "@ionic/react";
 import { FC } from "react";
 import { useListStyle } from "../../context/ListStyleContext";
@@ -40,7 +41,7 @@ interface HeaderTypes {
   toolbarClassName?: string;
 }
 
-const renderBtn = (props: buttonPropsTypes) => {
+const renderBtn = (props: buttonPropsTypes, handleNotification: () => void) => {
   switch (props.name) {
     case "back":
       return (
@@ -61,7 +62,7 @@ const renderBtn = (props: buttonPropsTypes) => {
           className={`${styles.notificationBtn} ${
             props.className ? props.className : ""
           }`}
-          onClick={props.onClick}
+          onClick={props.onClick ? props.onClick : handleNotification}
           id={props.id}
         >
           <IonIcon src={bellIcon} className={styles.bellIcon} />
@@ -195,6 +196,16 @@ const Header: FC<HeaderTypes> = ({
   mode,
   toolbarClassName,
 }) => {
+  const [present] = useIonToast();
+
+  const handleNotification = () => {
+    present({
+      message: "You don't have notofocation yet!",
+      duration: 2000,
+      position: 'top'
+    });
+  };
+
   return (
     <IonHeader
       className={`${styles.header} ${
@@ -207,11 +218,11 @@ const Header: FC<HeaderTypes> = ({
         }`}
       >
         <IonButtons slot="start" className={styles.buttonsWrapper}>
-          {left.map((props) => renderBtn(props))}
+          {left.map((props) => renderBtn(props, handleNotification))}
         </IonButtons>
         <HeaderTitle title={title} />
         <IonButtons slot="end" className={styles.buttonsWrapper}>
-          {right.map((name) => renderBtn(name))}
+          {right.map((name) => renderBtn(name, handleNotification))}
         </IonButtons>
       </IonToolbar>
     </IonHeader>

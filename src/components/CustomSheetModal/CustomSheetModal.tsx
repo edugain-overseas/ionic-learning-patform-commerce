@@ -10,6 +10,7 @@ import {
 } from "@ionic/react";
 import { clamp } from "../../utils/clamp";
 import { pxToRem } from "../../utils/pxToRem";
+import { useParams } from "react-router";
 
 type CustomSheetModalType = {
   portalTo?: HTMLElement | HTMLIonTabsElement;
@@ -37,7 +38,7 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
   modalBackgroundColor = "rgba(255, 255, 255, 0.9)",
   isAnimating,
 }) => {
-  
+  const { taskId } = useParams<{ taskId: string }>();
   const maxHeight = height * breakpoints[breakpoints.length - 1];
 
   const modalRef = useRef<HTMLDivElement>(null);
@@ -49,6 +50,40 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
   const started = useRef<boolean>(false);
 
   const currentHeight = useRef<number>(initialBreakpoint * maxHeight);
+
+  useEffect(() => {
+    const closeModal = () => {
+      if (started.current) {
+        animation.current!.destroy();
+        started.current = false;
+      }
+
+      createAnimation()
+        .addElement(modalContentRef.current!)
+        .beforeAddClass(styles.directionUp)
+        .afterRemoveClass(styles.directionUp)
+        .duration(300)
+        .easing("ease-in")
+        .fromTo(
+          "height",
+          `${currentHeight.current}rem`,
+          `${breakpoints[0] * height}rem`
+        )
+        .play();
+
+      modalRef.current?.classList.remove(styles.fullView);
+      
+      document
+        .querySelector(".custom-toggle-menu")
+        ?.classList.remove(styles.hide);
+
+      backdropRef.current?.style.setProperty(
+        "background",
+        `rgba(255, 255, 255, 0)`
+      );
+    };
+    closeModal();
+  }, [taskId]);
 
   // use effect for setting all css variables, gesture and creating animation
   useEffect(() => {

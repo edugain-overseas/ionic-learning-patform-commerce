@@ -6,9 +6,10 @@
   padding-inline: 33rem;
   gap: 33rem;
 
-  .start {
+  .start, .end  {
     display: flex;
     justify-content: flex-end;
+    flex: 1;
   }
   .start {
     display: flex;

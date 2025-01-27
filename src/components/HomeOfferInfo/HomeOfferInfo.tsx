@@ -1,10 +1,64 @@
-import { FC } from "react";
+import { FC, useRef } from "react";
 import { IonIcon } from "@ionic/react";
 import { useObserver } from "../../hooks/useObserver";
 import WebIcon from "../../assets/icons/social/web.svg";
 import AppstoreIcon from "../../assets/icons/social/app-store.svg";
 import Playmarketcon from "../../assets/icons/social/play-market.svg";
 import styles from "./HomeOfferInfo.module.scss";
+
+type PlatformType = "web" | "ios" | "android";
+
+const getIconByType = (type: PlatformType) => {
+  switch (type) {
+    case "web":
+      return WebIcon;
+    case "ios":
+      return AppstoreIcon;
+    case "android":
+      return Playmarketcon;
+    default:
+      return;
+  }
+};
+const getlabelByType = (type: PlatformType) => {
+  switch (type) {
+    case "web":
+      return "Website";
+    case "ios":
+      return "App Store";
+    case "android":
+      return "Google play";
+    default:
+      return;
+  }
+};
+
+const PlartofrmLink: FC<{ type: PlatformType }> = ({ type }) => {
+  const spanRef = useRef<HTMLSpanElement>(null);
+
+  const handleClick = () => {
+    if (spanRef.current) {
+      console.dir(spanRef.current);
+      spanRef.current.style.maxWidth = `calc(${spanRef.current.scrollWidth}px + 8rem)`;
+      spanRef.current.style.paddingLeft = `8rem`;
+    }
+  };
+
+  return (
+    <a
+      href="/"
+      onClick={(e) => {
+        e.preventDefault();
+        handleClick();
+      }}
+    >
+      <IonIcon src={getIconByType(type)} />
+      <span className={styles.label} ref={spanRef}>
+        {getlabelByType(type)}
+      </span>
+    </a>
+  );
+};
 
 const HomeOfferInfo: FC = () => {
   const observerCallback: IntersectionObserverCallback = (entries) => {
@@ -46,33 +100,9 @@ const HomeOfferInfo: FC = () => {
           professional goals.
         </p>
         <div className={styles.links}>
-          <a
-            href="/"
-            onClick={(e) => {
-              e.preventDefault();
-            }}
-          >
-            <IonIcon src={WebIcon} />
-            {/* <span className={styles.label}>Website</span> */}
-          </a>
-          <a
-            href="/"
-            onClick={(e) => {
-              e.preventDefault();
-            }}
-          >
-            <IonIcon src={AppstoreIcon} />
-            {/* <span className={styles.label}>App Store</span> */}
-          </a>
-          <a
-            href="/"
-            onClick={(e) => {
-              e.preventDefault();
-            }}
-          >
-            <IonIcon src={Playmarketcon} />
-            {/* <span className={styles.label}>Google play</span> */}
-          </a>
+          <PlartofrmLink type="web" />
+          <PlartofrmLink type="ios" />
+          <PlartofrmLink type="android" />
         </div>
       </div>
     </div>

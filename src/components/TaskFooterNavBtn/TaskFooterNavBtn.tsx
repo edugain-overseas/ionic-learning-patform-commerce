@@ -7,18 +7,24 @@ import Spinner from "../Spinner/Spinner";
 
 type TaskFooterNavBtnProps = {
   direction: "return" | "next";
+  type?: "lecture" | "test";
 };
 
-const TaskFooterNavBtn: FC<TaskFooterNavBtnProps> = ({ direction }) => {
+const TaskFooterNavBtn: FC<TaskFooterNavBtnProps> = ({
+  direction,
+  type = "test",
+}) => {
   const { canGoBack, canGoForward, isLoading, handleNavigateLesson } =
     useTaskNavigation();
 
   const isDisabled = direction === "next" ? !canGoForward : !canGoBack;
 
+  // console.log(direction, canGoBack, canGoForward);
+
   return (
     <button
       className={`${styles.navButton} ${styles[direction]}`}
-      disabled={isDisabled}
+      disabled={type === "lecture" ? false : isDisabled}
       onClick={() =>
         handleNavigateLesson(direction === "return" ? "back" : "forward")
       }

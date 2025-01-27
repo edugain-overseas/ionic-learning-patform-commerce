@@ -84,3 +84,9 @@
   margin: 24rem -18rem -84rem;
   padding-bottom: 40rem;
 }
+
+.btnsWrapper {
+  & > div {
+    flex-grow: 1;
+  }
+}

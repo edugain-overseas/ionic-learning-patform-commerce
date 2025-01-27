@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import { priceFormatter } from "../../utils/priceFormatter";
 import styles from "./CardPrice.module.scss";
 
@@ -8,6 +8,7 @@ interface CardPriceTypes {
   orientation?: string;
   onClick?: () => void;
   variant?: string;
+  baseFontSize?: number;
 }
 
 const CardPrice: React.FC<CardPriceTypes> = ({
@@ -16,8 +17,9 @@ const CardPrice: React.FC<CardPriceTypes> = ({
   orientation = "vertical",
   onClick = () => {},
   variant = "default",
+  baseFontSize,
 }) => {
-  const handleClick = (e: any) => {
+  const handleClick: MouseEventHandler = (e) => {
     e.preventDefault();
     if (onClick) {
       onClick();
@@ -30,6 +32,10 @@ const CardPrice: React.FC<CardPriceTypes> = ({
         orientation === "horizontal" ? styles.horizontal : ""
       }`}
       onClick={handleClick}
+      style={{
+        fontSize: baseFontSize ? `${baseFontSize}rem` : "20rem",
+        justifyContent: oldPrice ? "flex-start" : "center",
+      }}
     >
       {oldPrice && (
         <div className={styles.oldPriceWrapper}>
@@ -45,8 +51,18 @@ const CardPrice: React.FC<CardPriceTypes> = ({
       >
         <span className={styles.dollarSign}>$</span>
         <div className={styles.info}>
-          <span className={styles.label}>New price</span>
-          <span className={styles.value}>{priceFormatter(price)}</span>
+          <span
+            className={styles.label}
+            style={{ textAlign: oldPrice ? "right" : "left" }}
+          >
+            {oldPrice ? "New price" : "Price"}
+          </span>
+          <span
+            className={styles.value}
+            style={{ textAlign: oldPrice ? "right" : "left" }}
+          >
+            {priceFormatter(price)}
+          </span>
         </div>
       </div>
     </div>

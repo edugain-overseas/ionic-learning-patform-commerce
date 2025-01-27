@@ -1,13 +1,13 @@
 .searchbar {
-  height: 32rem;
+  padding-inline: 33rem;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 8rem;
 
   .inputWrapper {
-    width: 232rem;
-    height: 32rem;
+    flex-grow: 1;
+    height: 40rem;
     padding: 4rem;
     border-radius: var(--custom--border-radius-primary);
     background: var(--custom-bg-rgba-fourth);
@@ -40,7 +40,7 @@
   }
 
   .searchbarIcon {
-    font-size: 14rem;
+    font-size: 20rem;
     color: var(--ion-color-primary-contrast);
   }
 }

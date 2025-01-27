@@ -273,17 +273,6 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
   };
 
   useEffect(() => {
-    // const getAllCourses = async () => {
-    //   try {
-    //     const response = await instance.get<CourseType[]>("/course/all");
-    //     console.log("courses", response.data);
-
-    //     setCourses(response.data);
-    //   } catch (error) {
-    //     console.error("Error fetching courses:", error);
-    //   }
-    // };
-
     const getAllCategories = async () => {
       try {
         const response = await instance.get<CategoryType[]>("/category/all");
@@ -328,17 +317,6 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
         console.error("Error fetching courses instructions:", error);
       }
     };
-
-    // const getAllCourses = async () => {
-    //   try {
-    //     const response = await instance.get<CourseType[]>("/course/all");
-    //     console.log("courses", response.data);
-
-    //     setCourses(response.data);
-    //   } catch (error) {
-    //     console.error("Error fetching courses:", error);
-    //   }
-    // };
 
     if (accessToken) {
       instance.defaults.headers.Authorization = `Bearer ${accessToken}`;

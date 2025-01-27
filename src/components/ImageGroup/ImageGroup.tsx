@@ -13,7 +13,6 @@ type Image = {
 };
 
 const ImageGroup: FC<{ imagesData?: Image[] }> = ({ imagesData }) => {
-  console.log(imagesData);
 
   return (
     <>

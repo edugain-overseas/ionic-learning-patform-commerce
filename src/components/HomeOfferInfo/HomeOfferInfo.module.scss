@@ -90,10 +90,9 @@
     a {
       color: var(--ion-color-dark);
       text-decoration: none;
-      display: flex;
-      align-items: center;
       height: 32rem;
-      width: 32rem;
+      padding-inline: 8rem;
+      // padding-right: 0;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -118,8 +117,14 @@
       }
 
       .label {
+        display: block;
+        padding-left: 0rem;
         font-size: 13.47rem;
         font-weight: 500;
+        max-width: 0;
+        transition: all var(--custom-tr-time-mid) ease;
+        overflow: hidden;
+        white-space: nowrap;
       }
     }
   }

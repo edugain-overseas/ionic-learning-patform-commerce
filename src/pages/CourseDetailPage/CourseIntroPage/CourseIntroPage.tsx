@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import { useCourses } from "../../../context/CoursesContext";
 import { serverName } from "../../../http/server";
 import { useUser } from "../../../context/UserContext";
+import { useBasket } from "../../../context/BasketContext";
 import back from "../../../assets/icons/header/back.svg";
 import file from "../../../assets/icons/file.svg";
 import laptop from "../../../assets/icons/laptop.svg";
@@ -11,15 +12,15 @@ import schollOnline from "../../../assets/icons/introPage/school-online.svg";
 import clockBig from "../../../assets/icons/introPage/clock.svg";
 import certificate from "../../../assets/icons/introPage/certificate.svg";
 import basket from "../../../assets/icons/tabs/basket.svg";
+import remove from "../../../assets/icons/delete.svg";
 import devices from "../../../assets/images/devices.png";
 import CourseItem from "../../../components/CourseItem/CourseItem";
 import CardPrice from "../../../components/CardPrice/CardPrice";
 import DoubleScrollLayout from "../../../components/DoubleScrollLayout/DoubleScrollLayout";
 import CourseNavPanel from "../../../components/CourseNavPanel/CourseNavPanel";
-import styles from "./CourseIntroPage.module.scss";
 import EqualSpaceContainer from "../../../components/EqualSpaceContainer/EqualSpaceContainer";
 import CommonButton from "../../../components/CommonButton/CommonButton";
-import { useBasket } from "../../../context/BasketContext";
+import styles from "./CourseIntroPage.module.scss";
 
 const CourseIntroPage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -33,6 +34,10 @@ const CourseIntroPage: React.FC = () => {
   );
 
   const basketInterface = useBasket();
+
+  const isCourseInBasket = basketInterface?.items.find(
+    (item) => item.id === +courseId
+  );
 
   return (
     <>
@@ -187,15 +192,25 @@ const CourseIntroPage: React.FC = () => {
             <EqualSpaceContainer
               leftItem={
                 <div className={styles.priceWrapper}>
-                  <CardPrice price={course?.price} variant="primary" />
+                  <CardPrice
+                    price={course?.price}
+                    variant="primary"
+                    baseFontSize={30}
+                  />
                 </div>
               }
               rightItem={
                 <CommonButton
                   className={styles.buyCourseBtn}
-                  icon={<IonIcon className={styles.buyIcon} src={basket} />}
-                  label="Buy"
-                  width={104}
+                  icon={
+                    isCourseInBasket ? (
+                      <IonIcon className={styles.remove} src={remove} />
+                    ) : (
+                      <IonIcon className={styles.buyIcon} src={basket} />
+                    )
+                  }
+                  label={isCourseInBasket ? "Remove" : "Buy"}
+                  block={true}
                   height={32}
                   borderRadius={5}
                   backgroundColor="#B80101"

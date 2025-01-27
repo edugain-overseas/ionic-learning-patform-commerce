@@ -21,12 +21,11 @@ const Lecture: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
       .sort((a, b) => a.number - b.number)
       .findIndex((lesson) => lesson.id === taskData.id) + 1;
 
-
   return (
     <DoubleScrollLayout
       posterSrc={`${serverName}/${taskData.image_path}`}
       topLabel="Lecture"
-      scrollTriggerValue={54}
+      scrollTriggerValue={178}
     >
       <div>
         <div className={styles.lectureHeader}>
@@ -44,8 +43,9 @@ const Lecture: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
         )}
         <div className={styles.lectureFooter}>
           <EqualSpaceContainer
-            leftItem={<TaskFooterNavBtn direction="return" />}
-            rightItem={<TaskFooterNavBtn direction="next" />}
+            containerClassname={styles.btnsWrapper}
+            leftItem={<TaskFooterNavBtn direction="return" type="lecture" />}
+            rightItem={<TaskFooterNavBtn direction="next" type="lecture" />}
           />
         </div>
       </div>
