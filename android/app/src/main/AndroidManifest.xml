@@ -17,8 +17,7 @@
             android:launchMode="singleTask"
             android:exported="true"
             android:fitsSystemWindows="true">
-
-            <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true"/>
+            <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
