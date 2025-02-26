@@ -18,7 +18,8 @@ import ExitFullscreenIcon from "../../assets/icons/player/fullscreen-exit.svg";
 import { IonIcon } from "@ionic/react";
 import styles from "./PDFReader.module.scss";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+
 
 const options = {
   cMapUrl: "/cmaps/",

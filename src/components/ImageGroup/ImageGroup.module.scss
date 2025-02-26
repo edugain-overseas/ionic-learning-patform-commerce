@@ -16,10 +16,7 @@
 }
 
 .groupItem {
-  width: 45%;
-  flex-shrink: 0;
-  flex-grow: 1;
-  aspect-ratio: 1.09;
+  width: 100%;
 
   border-radius: 3rem;
   background: var(--custom-bg-rgba-secondary);
@@ -29,8 +26,8 @@
 
 .image {
   width: 100%;
-  height: calc(100% - 24rem);
-  object-fit: cover;
+  aspect-ratio: 16/9;
+  object-fit: contain;
 }
 
 .description {
