@@ -1,0 +1,33 @@
+{
+	"appId": "io.ieucourses.app",
+	"appName": "IEU courses",
+	"webDir": "dist",
+	"server": {
+		"url": "http://192.168.0.151:8100"
+	},
+	"plugins": {
+		"Keyboard": {},
+		"GoogleAuth": {
+			"scopes": [
+				"profile",
+				"email"
+			],
+			"serverClientId": "492800368725-r5392545k9sp6tuh7c1fmmtlmvedng0s.apps.googleusercontent.com",
+			"forceCodeForRefreshToken": true,
+			"androidClientId": "492800368725-3p2f2g0k1raf7tk4mq9aov0t9skv9f1h.apps.googleusercontent.com"
+		},
+		"Stripe": {
+			"publishableKey": "pk_test_51MYZV4GntgRu6DcSDjcJ60uSiOtfujweuadV94aF7eOFCxW4JEGZks5Siyh6aSJ6pT2KjZSQ0RN1Ngwopgcw4fLr00E5eJVuD9"
+		}
+	},
+	"packageClassList": [
+		"StripePlugin",
+		"AppPlugin",
+		"CAPCameraPlugin",
+		"FilesystemPlugin",
+		"HapticsPlugin",
+		"KeyboardPlugin",
+		"StatusBarPlugin",
+		"GoogleAuth"
+	]
+}

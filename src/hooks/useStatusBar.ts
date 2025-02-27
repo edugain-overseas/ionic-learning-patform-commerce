@@ -15,19 +15,33 @@ export const useStatusBar = () => {
   const setStatusBarOverlay = async () => {
     if (Capacitor.isPluginAvailable("StatusBar")) {
       await StatusBar.setOverlaysWebView({ overlay: true });
+
       if (Capacitor.getPlatform() === "android") {
-        
         const root = document.getElementById("root");
         if (root) {
           root.style.setProperty(
             "--ion-safe-area-top",
             // "env(safe-area-inset-top)"
             "20px"
-          ); // Adjust for status bar height
+          );
           root.style.setProperty(
             "--ion-safe-area-bottom",
             "env(safe-area-inset-bottom)"
-          ); // Ensure navigation bar is accounted for
+          );
+        }
+      }
+      if (Capacitor.getPlatform() === "ios") {
+        const root = document.getElementById("root");
+        if (root) {
+          root.style.setProperty(
+            "--ion-safe-area-top",
+            "env(safe-area-inset-top)"
+          );
+
+          root.style.setProperty(
+            "--ion-safe-area-bottom",
+            "env(safe-area-inset-bottom)"
+          );
         }
       }
     }
@@ -44,5 +58,3 @@ export const changeStausBarTheme = async (theme: keyof typeof Style) => {
     await StatusBar.setStyle({ style: Style[theme] });
   }
 };
-
-// bottom status bar color #A50000//

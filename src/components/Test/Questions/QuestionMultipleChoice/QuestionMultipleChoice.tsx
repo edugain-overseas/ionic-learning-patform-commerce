@@ -25,7 +25,7 @@ const QuestionMultipleChoice: React.FC<TestQuestionType> = ({
         key={answerId}
         value={answerId}
         onChange={onCheckboxInputChange}
-        checked={(state as number[]).includes(answerId)}
+        checked={(state as number[])?.includes(answerId)}
         name={answerText}
         labelText={`${getLetterVatiantsByIndex(index)} ${answerText}`}
       />

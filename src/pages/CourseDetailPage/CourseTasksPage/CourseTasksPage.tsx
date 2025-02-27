@@ -140,8 +140,8 @@ const CourseTasksPage: FC = () => {
       <IonContent
         className={styles.pageContentWrapper}
         scrollEvents={true}
-        onIonScroll={handleScroll}
-        onIonScrollEnd={handleScrollEnd}
+        // onIonScroll={handleScroll}
+        // onIonScrollEnd={handleScrollEnd}
       >
         <CourseStats />
         <ul className={styles.tasksList}>

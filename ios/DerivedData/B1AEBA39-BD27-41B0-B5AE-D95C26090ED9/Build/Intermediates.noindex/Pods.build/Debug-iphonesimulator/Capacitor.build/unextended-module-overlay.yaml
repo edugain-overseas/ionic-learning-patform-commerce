@@ -1,0 +1,14 @@
+{
+  'version': 0,
+  'use-external-names': 'false',
+  'case-sensitive': 'false',
+  'roots': [{
+    'type': 'directory',
+    'name': "/Users/polrmn/ionic-learning-patform-commerce/ios/DerivedData/B1AEBA39-BD27-41B0-B5AE-D95C26090ED9/Build/Products/Debug-iphonesimulator/Capacitor/Capacitor.framework/Modules"
+    'contents': [{
+      'type': 'file',
+      'name': "module.modulemap",
+      'external-contents': "/Users/polrmn/ionic-learning-patform-commerce/ios/DerivedData/B1AEBA39-BD27-41B0-B5AE-D95C26090ED9/Build/Intermediates.noindex/Pods.build/Debug-iphonesimulator/Capacitor.build/unextended-module.modulemap",
+    }]
+  }]
+}

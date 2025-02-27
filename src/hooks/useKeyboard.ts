@@ -4,7 +4,7 @@ import { Capacitor } from "@capacitor/core";
 
 export const useKeyboard = () => {
   useEffect(() => {
-    if (Capacitor.getPlatform() !== "web") {
+    if (Capacitor.getPlatform() === "android") {
       Keyboard.addListener("keyboardWillShow", (info) => {
         document
           .getElementById("root")

@@ -1,0 +1,68 @@
+Target dependency graph (18 targets)
+AppAuth-AppAuthCore_Privacy in Pods, no dependencies
+AppAuth in Pods, depends on:
+AppAuth-AppAuthCore_Privacy in Pods (explicit)
+CapacitorCordova in Pods, no dependencies
+Capacitor in Pods, depends on:
+CapacitorCordova in Pods (explicit)
+CapacitorApp in Pods, depends on:
+Capacitor in Pods (explicit)
+CapacitorCamera in Pods, depends on:
+Capacitor in Pods (explicit)
+CapacitorFilesystem in Pods, depends on:
+Capacitor in Pods (explicit)
+CapacitorHaptics in Pods, depends on:
+Capacitor in Pods (explicit)
+CapacitorKeyboard in Pods, depends on:
+Capacitor in Pods (explicit)
+CapacitorSplashScreen in Pods, depends on:
+Capacitor in Pods (explicit)
+CapacitorStatusBar in Pods, depends on:
+Capacitor in Pods (explicit)
+GTMSessionFetcher in Pods, no dependencies
+GTMAppAuth in Pods, depends on:
+AppAuth in Pods (explicit)
+GTMSessionFetcher in Pods (explicit)
+GoogleSignIn-GoogleSignIn in Pods, depends on:
+AppAuth in Pods (implicit dependency via options '-framework AppAuth' in build setting 'OTHER_LDFLAGS')
+GTMAppAuth in Pods (implicit dependency via options '-framework GTMAppAuth' in build setting 'OTHER_LDFLAGS')
+GTMSessionFetcher in Pods (implicit dependency via options '-framework GTMSessionFetcher' in build setting 'OTHER_LDFLAGS')
+GoogleSignIn in Pods, depends on:
+AppAuth in Pods (explicit)
+GTMAppAuth in Pods (explicit)
+GTMSessionFetcher in Pods (explicit)
+GoogleSignIn-GoogleSignIn in Pods (explicit)
+CodetrixStudioCapacitorGoogleAuth in Pods, depends on:
+Capacitor in Pods (explicit)
+GoogleSignIn in Pods (explicit)
+Pods-App in Pods, depends on:
+AppAuth in Pods (explicit)
+Capacitor in Pods (explicit)
+CapacitorApp in Pods (explicit)
+CapacitorCamera in Pods (explicit)
+CapacitorCordova in Pods (explicit)
+CapacitorFilesystem in Pods (explicit)
+CapacitorHaptics in Pods (explicit)
+CapacitorKeyboard in Pods (explicit)
+CapacitorSplashScreen in Pods (explicit)
+CapacitorStatusBar in Pods (explicit)
+CodetrixStudioCapacitorGoogleAuth in Pods (explicit)
+GTMAppAuth in Pods (explicit)
+GTMSessionFetcher in Pods (explicit)
+GoogleSignIn in Pods (explicit)
+App in App, depends on:
+Pods-App in Pods (implicit dependency via file 'Pods_App.framework' in build phase 'Link Binary')
+AppAuth in Pods (implicit dependency via options '-framework AppAuth' in build setting 'OTHER_LDFLAGS')
+Capacitor in Pods (implicit dependency via options '-framework Capacitor' in build setting 'OTHER_LDFLAGS')
+CapacitorApp in Pods (implicit dependency via options '-framework CapacitorApp' in build setting 'OTHER_LDFLAGS')
+CapacitorCamera in Pods (implicit dependency via options '-framework CapacitorCamera' in build setting 'OTHER_LDFLAGS')
+CapacitorFilesystem in Pods (implicit dependency via options '-framework CapacitorFilesystem' in build setting 'OTHER_LDFLAGS')
+CapacitorHaptics in Pods (implicit dependency via options '-framework CapacitorHaptics' in build setting 'OTHER_LDFLAGS')
+CapacitorKeyboard in Pods (implicit dependency via options '-framework CapacitorKeyboard' in build setting 'OTHER_LDFLAGS')
+CapacitorSplashScreen in Pods (implicit dependency via options '-framework CapacitorSplashScreen' in build setting 'OTHER_LDFLAGS')
+CapacitorStatusBar in Pods (implicit dependency via options '-framework CapacitorStatusBar' in build setting 'OTHER_LDFLAGS')
+CodetrixStudioCapacitorGoogleAuth in Pods (implicit dependency via options '-framework CodetrixStudioCapacitorGoogleAuth' in build setting 'OTHER_LDFLAGS')
+CapacitorCordova in Pods (implicit dependency via options '-framework Cordova' in build setting 'OTHER_LDFLAGS')
+GTMAppAuth in Pods (implicit dependency via options '-framework GTMAppAuth' in build setting 'OTHER_LDFLAGS')
+GTMSessionFetcher in Pods (implicit dependency via options '-framework GTMSessionFetcher' in build setting 'OTHER_LDFLAGS')
+GoogleSignIn in Pods (implicit dependency via options '-framework GoogleSignIn' in build setting 'OTHER_LDFLAGS')
