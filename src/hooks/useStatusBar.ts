@@ -35,12 +35,12 @@ export const useStatusBar = () => {
         if (root) {
           root.style.setProperty(
             "--ion-safe-area-top",
-            "env(safe-area-inset-top)"
+            "44px"
           );
 
           root.style.setProperty(
             "--ion-safe-area-bottom",
-            "env(safe-area-inset-bottom)"
+            "16px"
           );
         }
       }
