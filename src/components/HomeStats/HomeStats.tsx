@@ -1,4 +1,4 @@
-import { FC, useCallback, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { platformStats, PlatformStatType } from "../../constants";
 import CoursesIcon from "../../assets/icons/homeStats/courses.svg";
 import StudentsIcon from "../../assets/icons/homeStats/students.svg";
@@ -43,18 +43,19 @@ const Stat: FC<{ stat: PlatformStatType; startCount: boolean }> = ({
     duration: 3,
     startOnMount: false,
     formattingFn: stat.name === "score" ? scoreFormatting : undefined,
-    separator: ' '
+    separator: " ",
   });
 
-  if (startCount) {
-    start();
-  }
+  useEffect(() => {
+    if (startCount) {
+      start();
+    }
+  }, [startCount]);
 
   return (
     <div className={styles.stat}>
       <IonIcon src={renderIcon(stat.name)} />
-      <div className={styles.value} ref={valueRef}>
-      </div>
+      <div className={styles.value} ref={valueRef}></div>
       <div
         className={styles.label}
         dangerouslySetInnerHTML={{ __html: stat.label }}
@@ -68,7 +69,7 @@ const HomeStats = () => {
 
   const observerCallback: IntersectionObserverCallback = (entries) => {
     if (entries[0].isIntersecting) {
-      setStartCount(true);
+      !startCount && setStartCount(true);
     }
   };
 

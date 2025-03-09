@@ -126,15 +126,6 @@ const SingupForm: FC<{
         onSubmit(data);
       })}
     >
-      {/* <div className={styles.formHeader}>
-        <span className={styles.title}>Sing up</span>
-        <span className={styles.link}>
-          If you don't have an account yet,{" "}
-          <span className={styles.modalReTrigger} onClick={handleOpenLogin}>
-            sign in here!
-          </span>
-        </span>
-      </div> */}
       <FormHeader handleOpenLogin={handleOpenLogin} />
       <div className={styles.inputsWrapper}>
         <InputText
@@ -199,7 +190,7 @@ const SingupForm: FC<{
               <IonIcon src={User} className={styles.formBtnIcon} />
             )
           }
-          backgroundColor="#d00000"
+          backgroundColor="#920000"
           color="#fcfcfc"
           block={true}
           height={32}

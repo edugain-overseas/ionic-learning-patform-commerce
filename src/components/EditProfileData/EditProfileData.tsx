@@ -1,5 +1,11 @@
 import { FC, useRef, useState } from "react";
-import { IonContent, IonIcon, IonSpinner, IonToast } from "@ionic/react";
+import {
+  IonContent,
+  IonIcon,
+  IonSpinner,
+  IonToast,
+  useIonToast,
+} from "@ionic/react";
 import { UserInfoToUpdateType, useUser } from "../../context/UserContext";
 import { useForm } from "react-hook-form";
 import { getCountries } from "../../utils/countries";
@@ -39,6 +45,7 @@ const EditProfileData: FC<{
   const userInterface = useUser();
   const userData = userInterface?.user;
   const formRef = useRef<HTMLFormElement>(null);
+  const [present] = useIonToast();
 
   const [country, setCountry] = useState<string>(
     userData?.country ? userData.country : ""
@@ -87,6 +94,12 @@ const EditProfileData: FC<{
       if (Object.keys(dataToUpdate).length !== 0) {
         await userInterface?.updateUserInfo(dataToUpdate);
       }
+      present({
+        message: "Profile was successfully updated.",
+        position: "top",
+        swipeGesture: "vertical",
+        duration: 2000,
+      });
       closeModal && closeModal();
     } catch (error) {
       console.log(error);
@@ -113,7 +126,7 @@ const EditProfileData: FC<{
   return (
     <>
       <Header {...headerProps} />
-      <IonContent className={styles.wrapper} fullscreen={true} scrollY={true}>
+      <IonContent className={styles.wrapper} scrollY={true}>
         <form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
           <div className={styles.avatarWrapper}>
             <Avatar

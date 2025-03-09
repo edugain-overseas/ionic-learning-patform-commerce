@@ -11,6 +11,7 @@ interface SheetModalAutoTypes {
   className?: string;
   setModal?: (modalRef: React.RefObject<HTMLIonModalElement>) => void;
   keyboardClose?: boolean;
+  presentingElement?: HTMLElement | null;
 }
 
 const SheetModalAuto: FC<SheetModalAutoTypes> = ({
@@ -22,8 +23,10 @@ const SheetModalAuto: FC<SheetModalAutoTypes> = ({
   className,
   setModal,
   keyboardClose,
+  presentingElement,
 }) => {
   const modalRef = useRef<HTMLIonModalElement>(null);
+  
 
   useIonViewWillLeave(() => {
     modalRef.current
@@ -45,6 +48,7 @@ const SheetModalAuto: FC<SheetModalAutoTypes> = ({
       initialBreakpoint={1}
       trigger={trigger}
       keyboardClose={keyboardClose}
+      presentingElement={presentingElement!}
     >
       {children}
     </IonModal>

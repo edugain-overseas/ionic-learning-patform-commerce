@@ -30,20 +30,20 @@ export const useStatusBar = () => {
           );
         }
       }
-      if (Capacitor.getPlatform() === "ios") {
-        const root = document.getElementById("root");
-        if (root) {
-          root.style.setProperty(
-            "--ion-safe-area-top",
-            "44px"
-          );
+      // if (Capacitor.getPlatform() === "ios") {
+      //   const root = document.getElementById("root");
+      //   if (root) {
+      //     root.style.setProperty(
+      //       "--ion-safe-area-top",
+      //       "44px"
+      //     );
 
-          root.style.setProperty(
-            "--ion-safe-area-bottom",
-            "16px"
-          );
-        }
-      }
+      //     root.style.setProperty(
+      //       "--ion-safe-area-bottom",
+      //       "16px"
+      //     );
+      //   }
+      // }
     }
   };
 

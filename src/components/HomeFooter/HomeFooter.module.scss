@@ -1,5 +1,5 @@
 .footer {
-  padding: 32rem 18rem;
+  padding: 32rem 18rem calc(32rem + var(--tabbar-offset));
   border: none;
   border-top: 1rem solid transparent;
   background: linear-gradient(
@@ -94,9 +94,12 @@
 }
 
 .hepfulLinks {
-    padding: 0;
-    justify-content: space-evenly;
-    
+  padding: 0;
+  justify-content: space-evenly;
+
+  &.notAuthorized {
+    padding-inline: 15rem;
+  }
 
   a {
     font-size: 12rem;

@@ -1,0 +1,6 @@
+framework module CapacitorCommunityStripe {
+  umbrella header "CapacitorCommunityStripe-umbrella.h"
+
+  export *
+  module * { export * }
+}

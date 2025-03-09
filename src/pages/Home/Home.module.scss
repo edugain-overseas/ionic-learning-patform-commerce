@@ -1,7 +1,6 @@
 .page {
   background: transparent;
   background-position-y: 50rem;
-  
 
   ion-header ion-toolbar {
     backdrop-filter: none;
@@ -19,12 +18,14 @@
   height: 100%;
   overflow-y: auto;
   transform: translateY(calc(var(--keyboard-height) * -1));
-
   transition: transform var(--custom-tr-time-min) ease-in-out;
+
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .hero {
-  background-image: url('../../assets/images/map-bakcground.png');
+  background-image: url("../../assets/images/map-bakcground.png");
   background-repeat: no-repeat;
   background-size: contain;
   margin-bottom: 32rem;

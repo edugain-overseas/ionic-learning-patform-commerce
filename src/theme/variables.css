@@ -5,7 +5,10 @@ http://ionicframework.com/docs/theming/ */
 :root {
   /* --ion-safe-area-top: 0rem;
   --ion-safe-area-bottom: 0rem; */
+  --ion-safe-area-top: env(safe-area-inset-top, 0px);
+  --ion-safe-area-bottom: env(safe-area-inset-bottom, 0px);
   --keyboard-height: 0px;
+  --tabbar-offset: 60rem;
   --ion-background-color: rgba(255, 255, 255, 0.8);
   --ion-background-color-rgb: 0, 0, 0, 0.8;
   --ion-tab-bar-color: #fcfcfc;
@@ -270,7 +273,3 @@ html.plt-android {
   --save-area-bottom: env(safe-area-inset-bottom);
   --save-area-top: env(safe-area-inset-top);
 }
-
-/* .tabs-inner {
-  transform: translateY(calc(var(--keyboard-offset) * -1));
-} */

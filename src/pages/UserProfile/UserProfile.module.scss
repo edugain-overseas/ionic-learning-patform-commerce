@@ -6,6 +6,10 @@
   --padding-end: 18rem;
   --color: var(--ion-color-dark);
 
+  &:has(.authPanel) {
+    --padding-bottom: 83rem;
+  }
+
   .mainInfoBlock,
   .profileData,
   .progressData,
@@ -15,6 +19,10 @@
     box-shadow: var(--custom-box-shadow-primary);
     // backdrop-filter: blur(16rem);
     margin-bottom: 16rem;
+  }
+
+  .certificatesData {
+    margin-bottom: 0;
   }
 
   .authPanel {
@@ -405,6 +413,7 @@ div.swiper {
 }
 
 .editDataModal {
+  --border-radius: 16rem;
+  --background: url("../../assets/images/body-bg.webp"), rgba(255,255,255,0.8);
   bottom: max(60rem, var(--keyboard-height, 0rem));
-  --height: calc(100% - 16rem - var(--ion-safe-area-top));
 }

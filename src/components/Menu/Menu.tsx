@@ -64,13 +64,15 @@ const Menu = () => {
       modal.style.removeProperty("transition");
     });
 
+    const baseEl = document.getElementById("main-content");
+    baseEl?.style.setProperty("border-radius", "0");
+
     //status bar theme toggle
     changeStausBarTheme("Light");
   };
 
   const handleMenuWillClose = () => {
     const baseEl = document.getElementById("main-content");
-    baseEl?.style.setProperty("border-radius", "0");
     menuLeavePageAnimation(baseEl!).play();
   };
 

@@ -10,10 +10,11 @@ const config: CapacitorConfig = {
   server: {
     androidScheme: "https",
   },
+  ios: {
+    scrollEnabled: false,
+  },
   plugins: {
     Keyboard: {
-      // resize: KeyboardResize.Body,
-      // style: KeyboardStyle.Dark,
       // resizeOnFullScreen: true,
     },
     GoogleAuth: {

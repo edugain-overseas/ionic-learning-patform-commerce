@@ -13,8 +13,12 @@ import styles from "./HomeFooter.module.scss";
 import EqualSpaceContainer from "../EqualSpaceContainer/EqualSpaceContainer";
 import SheetModalAuto from "../SheetModalAuto/SheetModalAuto";
 import ContactForm from "../ContactForm/ContactForm";
+import { Link } from "react-router-dom";
+import { useUser } from "../../context/UserContext";
 
 const HomeFooter: FC = () => {
+  const isAuthorized = useUser()?.user.accessToken;
+
   return (
     <>
       <footer className={styles.footer}>
@@ -122,17 +126,15 @@ const HomeFooter: FC = () => {
           </a>
         </div>
         <EqualSpaceContainer
-          containerClassname={styles.hepfulLinks}
+          containerClassname={`${styles.hepfulLinks} ${
+            isAuthorized ? "" : styles.notAuthorized
+          }`}
           leftItem={
             <a href="/" onClick={(e) => e.preventDefault()}>
               Privacy policy
             </a>
           }
-          rightItem={
-            <a href="/" onClick={(e) => e.preventDefault()}>
-              About IEU
-            </a>
-          }
+          rightItem={<Link to="/aboutIEU">About IEU</Link>}
         />
       </footer>
       <SheetModalAuto trigger="footer-open-contact-form">

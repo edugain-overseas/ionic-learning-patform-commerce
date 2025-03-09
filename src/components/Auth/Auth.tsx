@@ -28,7 +28,7 @@ const Auth: FC<AuthPropsType> = ({ containerClassname = "" }) => {
                 height={32}
                 borderRadius={5}
                 color="#fcfcfc"
-                backgroundColor="#d00000"
+                backgroundColor="#920000"
                 label="Sing up"
                 icon={<IonIcon src={userIcon} className={styles.btnIcon} />}
                 onClick={() => authUiInterface?.openAuthUI("sing-up")}

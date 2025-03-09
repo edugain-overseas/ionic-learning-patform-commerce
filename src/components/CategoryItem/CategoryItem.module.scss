@@ -26,6 +26,7 @@
   }
 
   .contentWrapper {
+    height: 84rem;
     padding: 11rem 0 11rem 10rem;
     display: flex;
     gap: 16rem;
@@ -56,7 +57,7 @@
     font-weight: 700;
     color: var(--ion-color-dark);
     max-height: calc(2em * 1.2);
-    height: calc(2em * 1.2);
+    // height: calc(2em * 1.2);
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;

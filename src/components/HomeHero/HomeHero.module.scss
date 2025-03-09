@@ -70,49 +70,75 @@
   top: 29rem;
   left: 6rem;
   width: 42rem;
-  font-size: 22rem;
+  background: url("../../assets/images/HomeHero/icon-business.svg");
+  background-size: 22rem;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .clockWrapper {
   top: 0.5rem;
   right: 68rem;
   width: 20rem;
-  font-size: 12rem;
+  background: url("../../assets/images/HomeHero/icon-clock.svg");
+  background-size: 12rem;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .itWrapper {
   top: 57rem;
   right: -19.7rem;
   width: 47rem;
-  font-size: 31rem;
+
+  background: url("../../assets/images/HomeHero/icon-it.svg");
+  background-size: 31rem;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .lawWrapper {
   bottom: 30rem;
   right: 6.2rem;
   width: 39rem;
-  font-size: 22rem;
+
+  background: url("../../assets/images/HomeHero/icon-law.svg");
+  background-size: 22rem;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .gradeWrapper {
   bottom: -10.7rem;
   right: 98.2rem;
   width: 24rem;
-  font-size: 9rem;
+
+  background: url("../../assets/images/HomeHero/icon-gradeA.svg");
+  background-size: 9rem;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .socialWrapper {
   bottom: 2rem;
   left: 31.6rem;
   width: 44rem;
-  font-size: 25rem;
+
+  background: url("../../assets/images/HomeHero/icon-social.svg");
+  background-size: 25rem;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .notificationWrapper {
   bottom: 81.3rem;
   left: -7.9rem;
   width: 25rem;
-  font-size: 12rem;
+
+  background: url("../../assets/images/HomeHero/icon-notification.svg");
+  background-size: 12rem;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 // inner
@@ -144,14 +170,22 @@
   top: 60.5rem;
   left: -5rem;
   width: 17.1rem;
-  font-size: 10rem;
+
+  background: url("../../assets/images/HomeHero/icon-med.svg");
+  background-size: 10rem;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .engineeringWrapper {
   bottom: 64rem;
   right: -5.5rem;
   width: 18.1rem;
-  font-size: 10rem;
+
+  background: url("../../assets/images/HomeHero/icon-engineering.svg");
+  background-size: 10rem;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .innerCircle {
@@ -159,8 +193,6 @@
   aspect-ratio: 1;
   border-radius: 50%;
   background-color: #eaeaea;
-  // background-color: rgba(255, 255, 255, 0.1);
-  // backdrop-filter: blur(22.1rem);
   filter: drop-shadow(0 0 10rem rgba(0, 0, 0, 0.1));
 
   position: absolute;
@@ -173,8 +205,7 @@
 // object
 
 .mediaObjectWrapper {
-  //   width: 148rem;
-  height: 221rem;
+  height: 248rem;
   position: absolute;
   bottom: 0;
   left: 0;

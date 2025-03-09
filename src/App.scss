@@ -9,11 +9,6 @@ body {
   font-weight: 400;
 }
 
-// p,
-// span {
-//   font-size: inherit;
-// }
-
 a {
   text-decoration: none;
 }
@@ -27,12 +22,17 @@ a {
   --background: var(--custom-primary-lg);
   --ion-tab-bar-color: rgba(252, 252, 252, 0.5);
   --color-selected: var(--ion-color-primary-contrast);
+  --border: none;
 
   border-top-left-radius: 16rem;
   border-top-right-radius: 16rem;
   height: 60rem;
   padding-right: 20%;
-  // padding-bottom: var(--ion-safe-area-bottom);
+  padding-bottom: var(--ion-safe-area-bottom);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
 
   ion-tab-button {
     position: relative;
@@ -137,7 +137,7 @@ a {
   }
 
   .ion-page {
-    border-radius: 16rem 16rem 0 0;
+    border-radius: 16rem;
     overflow: hidden;
   }
 

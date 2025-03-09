@@ -3,6 +3,8 @@
   overflow: auto;
   height: calc(100%);
   padding-top: 178rem;
+  overscroll-behavior: none;
+  // -webkit-overflow-scrolling: touch;
 
   .poster {
     display: block;
@@ -52,10 +54,14 @@
   z-index: 1;
   box-shadow: var(--custom-box-shadow-content);
   border-radius: 16rem 16rem 0 0;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .scroll {
   overflow: scroll;
+  overscroll-behavior: none;
+  // -webkit-overflow-scrolling: touch;
 }
 
 .contenWrapper {

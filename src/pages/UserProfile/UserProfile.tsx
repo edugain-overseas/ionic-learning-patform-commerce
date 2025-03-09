@@ -1,5 +1,11 @@
-import { IonContent, IonIcon, IonPage, IonRippleEffect } from "@ionic/react";
-import React, { useRef, useState } from "react";
+import {
+  IonContent,
+  IonIcon,
+  IonModal,
+  IonPage,
+  IonRippleEffect,
+} from "@ionic/react";
+import React, { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { certificates } from "../../constants";
 import { useUser } from "../../context/UserContext";
@@ -13,24 +19,21 @@ import UserAvatarEditor from "../../components/UserAvatarEditor/UserAvatarEditor
 import UserMainInfo from "./UserMainInfo";
 import UserProfileInfo from "./UserProfileInfo";
 import UserStatistics from "./UserStatistics";
+import UserCertificates from "./UserCertificates";
 import styles from "./UserProfile.module.scss";
 
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
 
-// import required modules
-import { Pagination } from "swiper/modules";
-import UserCertificates from "./UserCertificates";
-
 // import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 
-const pagination = {
-  clickable: true,
-  renderBullet: function (_: any, className: string) {
-    return `<span class="${className} ${styles.customBullet}"></span>`;
-  },
-};
+// const pagination = {
+//   clickable: true,
+//   renderBullet: function (_: any, className: string) {
+//     return `<span class="${className} ${styles.customBullet}"></span>`;
+//   },
+// };
 
 const headerProps = {
   left: [{ name: "back" }],
@@ -42,12 +45,13 @@ const headerProps = {
 };
 
 const UserProfile: React.FC = () => {
-  const userInterface = useUser();
-  const userData = userInterface?.user;
-  const [certificateIndex, setCertificateIndex] = useState(0);
-  const [isOpenModalCerficate, setIsOpenModalCerficate] = useState(false);
+  const pageRef = useRef(null);
   const editUserDataModalRef = useRef<HTMLIonModalElement>(null);
   const editUserAvatarRef = useRef<HTMLIonModalElement>(null);
+  const [presentingElement, setPresentingElement] =
+    useState<HTMLElement | null>(null);
+  const userInterface = useUser();
+  const userData = userInterface?.user;
 
   const closeEditUserDataModal = () => {
     if (editUserDataModalRef.current) {
@@ -73,59 +77,60 @@ const UserProfile: React.FC = () => {
     }
   };
 
-  const handleCertificateClick = (index: number) => {
-    setCertificateIndex(index);
-    setIsOpenModalCerficate(true);
-  };
+  useEffect(() => {
+    setPresentingElement(pageRef.current);
+  }, []);
 
-  const handleUploadCertificate = async () => {
-    const fileUrl = "https://pdfobject.com/pdf/sample.pdf";
+  // const handleUploadCertificate = async () => {
+  //   const fileUrl = "https://pdfobject.com/pdf/sample.pdf";
 
-    try {
-      const response = await fetch(fileUrl);
-      const blob = await response.blob();
+  //   try {
+  //     const response = await fetch(fileUrl);
+  //     const blob = await response.blob();
 
-      const fileName = "certificate.pdf";
+  //     const fileName = "certificate.pdf";
 
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.setAttribute("download", fileName);
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+  //     const url = window.URL.createObjectURL(blob);
+  //     const a = document.createElement("a");
+  //     a.href = url;
+  //     a.setAttribute("download", fileName);
+  //     document.body.appendChild(a);
+  //     a.click();
+  //     a.remove();
 
-      // await Filesystem.writeFile({
-      //   path: fileName,
-      //   data: blob,
-      //   directory: Directory.Documents, // Save in downloads directory
-      //   encoding: Encoding.UTF8,
-      // });
+  //     // await Filesystem.writeFile({
+  //     //   path: fileName,
+  //     //   data: blob,
+  //     //   directory: Directory.Documents, // Save in downloads directory
+  //     //   encoding: Encoding.UTF8,
+  //     // });
 
-      console.log("File downloaded successfully:", fileName);
-    } catch (error) {
-      console.error("Error downloading file:", error);
-    }
-  };
+  //     console.log("File downloaded successfully:", fileName);
+  //   } catch (error) {
+  //     console.error("Error downloading file:", error);
+  //   }
+  // };
 
   return (
-    <IonPage id="profile">
+    <IonPage id="profile" ref={pageRef}>
       <Header {...headerProps} />
       <IonContent className={styles.pageWrapper}>
         <UserMainInfo userData={userData} />
         <UserProfileInfo userData={userData} />
         <UserStatistics userData={userData} />
         <UserCertificates />
-        <SheetModalAuto
-          trigger="open-edit-profile-modal"
+        <IonModal
+          ref={editUserDataModalRef}
           className={styles.editDataModal}
-          refModal={editUserDataModalRef}
+          trigger="open-edit-profile-modal"
+          presentingElement={presentingElement!}
+          mode="ios"
         >
           <EditProfileData
             closeModal={closeEditUserDataModal}
             openAvatarEditorModal={openEditAvatarModal}
           />
-        </SheetModalAuto>
+        </IonModal>
         <SheetModalAuto refModal={editUserAvatarRef} keyboardClose={false}>
           <UserAvatarEditor closeModal={closeEditAvatarModal} />
         </SheetModalAuto>
