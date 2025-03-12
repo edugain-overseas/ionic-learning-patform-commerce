@@ -12,16 +12,16 @@ import React, { useMemo, useRef } from "react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
 import { useUser } from "../../context/UserContext";
+import { useFilter } from "../../hooks/useCategoryDetailPageFilter";
 import { remToPx } from "../../utils/pxToRem";
 import { changeStausBarTheme } from "../../hooks/useStatusBar";
 import categoryContrastIcon from "../../assets/icons/category-contrast.svg";
 import Header from "../../components/Header/Header";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import CourseItem from "../../components/CourseItem/CourseItem";
-import styles from "./CategoryDetailPage.module.scss";
-import { useFilter } from "../../hooks/useCategoryDetailPageFilter";
 import UnauthorizedUserContentFallback from "../../components/UnauthorizedUserContentFallback/UnauthorizedUserContentFallback";
 import Auth from "../../components/Auth/Auth";
+import styles from "./CategoryDetailPage.module.scss";
 
 const MAX_SCROLL_VALUE = 112;
 
@@ -218,7 +218,9 @@ const CategoryDetailPage: React.FC = () => {
           </div>
         </div>
       </IonContent>
-      {showContentFallback && <Auth containerClassname={styles.authContainer}/>}
+      {showContentFallback && (
+        <Auth containerClassname={styles.authContainer} />
+      )}
     </IonPage>
   );
 };

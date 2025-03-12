@@ -3,7 +3,7 @@
   --padding-start: 18rem;
   --padding-end: 18rem;
   --padding-top: 20rem;
-  --padding-bottom: 20rem;
+  --padding-bottom: calc(20rem + var(--tabbar-offset));
 }
 
 .empty {

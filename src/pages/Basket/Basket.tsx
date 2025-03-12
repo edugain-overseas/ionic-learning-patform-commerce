@@ -1,16 +1,24 @@
 import { FC } from "react";
-import { IonContent, IonIcon, IonPage } from "@ionic/react";
+import {
+  IonContent,
+  IonIcon,
+  IonItem,
+  IonList,
+  IonPage,
+  IonPopover,
+} from "@ionic/react";
 import { useBasket } from "../../context/BasketContext";
 import EmptyBasketIcon from "../../assets/icons/empty_basket.svg";
 import Header from "../../components/Header/Header";
 import BasketList from "../../components/BasketList/BasketList";
 import BasketCheckoutPanel from "../../components/BasketCheckoutPanel/BasketCheckoutPanel";
 import styles from "./Basket.module.scss";
+import { Link } from "react-router-dom";
 
 const headerProps = {
   left: [{ name: "back" }],
   title: "Basket",
-  right: [{ name: "details" }],
+  right: [{ name: "details", id: "basket-header-popover-trigger" }],
 };
 
 const EmptyBasketFallback: FC = () => {
@@ -33,6 +41,32 @@ const Basket: FC = () => {
   return (
     <IonPage id="basket">
       <Header {...headerProps} />
+      <IonPopover
+        trigger="basket-header-popover-trigger"
+        side="bottom"
+        alignment="start"
+        arrow={false}
+        dismissOnSelect={true}
+      >
+        <IonList>
+          <IonItem
+            button={true}
+            detail={false}
+            onClick={() => basket?.clearBasket()}
+            style={{ fontSize: "12rem", color: "var(--ion-color-primary)" }}
+          >
+            Clear basket
+          </IonItem>
+          <IonItem button={true} detail={false}>
+            <Link
+              to="/courses"
+              style={{ fontSize: "12rem", color: "var(--ion-color-light)" }}
+            >
+              Back to courses
+            </Link>
+          </IonItem>
+        </IonList>
+      </IonPopover>
       {isEmptyBasket ? (
         <EmptyBasketFallback />
       ) : (

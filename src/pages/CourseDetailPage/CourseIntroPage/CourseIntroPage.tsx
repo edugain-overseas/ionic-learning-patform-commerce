@@ -213,7 +213,7 @@ const CourseIntroPage: React.FC = () => {
                   block={true}
                   height={32}
                   borderRadius={5}
-                  backgroundColor="#B80101"
+                  backgroundColor="#920000"
                   color="#fcfcfc"
                   onClick={() =>
                     course

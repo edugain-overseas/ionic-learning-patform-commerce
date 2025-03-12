@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./DoubleScrollLayout.module.scss";
-// import { remToPx } from "../../utils/pxToRem";
-// import { ScrollCustomEvent } from "@ionic/react";
 
 interface DoubleScrollLayoutTypes {
   children: React.ReactNode;
@@ -18,16 +16,18 @@ const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
   posterSrc,
   posterPosition = "fixed",
   isBackgroundBlured = true,
-  scrollTriggerValue = 132,
+  scrollTriggerValue = 230,
 }) => {
-  const contentRef = useRef<HTMLDivElement>(null);
+  const outerContentRef = useRef<HTMLDivElement>(null);
+  const innerContentRef = useRef<HTMLDivElement>(null);
   const [scroll, setScroll] = useState(false);
 
   useEffect(() => {
-    const scroller = contentRef.current;
-    const handleScroll = () => {
-      if (scroller) {
-        const { offsetHeight, scrollTop, scrollHeight } = scroller;
+    const outerScroller = outerContentRef.current;
+    const innerScroller = innerContentRef.current;
+    const handleOuterScroll = () => {
+      if (outerScroller) {
+        const { offsetHeight, scrollTop, scrollHeight } = outerScroller;
         if (offsetHeight + Math.round(scrollTop) >= scrollHeight) {
           setScroll(true);
         } else {
@@ -36,13 +36,26 @@ const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
       }
     };
 
-    scroller?.addEventListener("scroll", handleScroll);
+    const handleInnerScroll = () => {
+      if (innerScroller) {
+        const { scrollTop } = innerScroller;
+        if (scrollTop === 0) {
+          setScroll(false)
+        }
+      }
+    };
 
-    return () => scroller?.removeEventListener("scroll", handleScroll);
-  }, [contentRef]);
+    outerScroller?.addEventListener("scroll", handleOuterScroll);
+    innerScroller?.addEventListener("scroll", handleInnerScroll);
+
+    return () => {
+      outerScroller?.removeEventListener("scroll", handleOuterScroll);
+      innerScroller?.removeEventListener("scroll", handleInnerScroll);
+    };
+  }, [outerContentRef, innerContentRef]);
 
   return (
-    <div className={styles.pageWrapper} ref={contentRef}>
+    <div className={styles.pageWrapper} ref={outerContentRef}>
       <img
         src={posterSrc}
         className={styles.poster}
@@ -57,6 +70,7 @@ const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
         }}
       >
         <div
+          ref={innerContentRef}
           className={`${styles.contentInner}  ${scroll ? styles.scroll : ""}`}
         >
           <div className={styles.contenWrapper}>{children}</div>

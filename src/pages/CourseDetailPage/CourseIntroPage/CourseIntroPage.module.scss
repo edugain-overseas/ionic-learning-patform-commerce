@@ -330,9 +330,9 @@
 
 .bottomBar {
   position: absolute;
-  height: 102rem;
-  bottom: -38rem;
-  padding-bottom: 38rem;
+  height: 125rem;
+  bottom: 0;
+  padding-bottom: 60rem;
   background-color: var(--custom-bg-rgba-secondary);
   box-shadow: var(--custom-box-shadow-primary);
   backdrop-filter: blur(28rem);

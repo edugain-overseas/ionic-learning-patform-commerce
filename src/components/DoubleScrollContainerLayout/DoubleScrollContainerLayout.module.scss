@@ -1,9 +1,12 @@
 .pageWrapper {
   position: relative;
   overflow: auto;
-  height: calc(100%);
-  padding-top: 286rem;
+  height: calc(100% - 68rem);
+  margin-top: 68rem;
+  padding-top: 230rem;
   overscroll-behavior: none;
+
+  // -webkit-overflow-scrolling: touch;
 
   .poster {
     display: block;
@@ -17,41 +20,51 @@
 }
 
 .contentBackground {
-  padding-top: 12rem;
   position: sticky;
+  top: -230rem;
+  width: 100%;
+  padding-top: 12rem;
   overflow: hidden;
-  // height: calc(100% + 132rem);
+  height: calc(100% + 230rem);
 
-  &:before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    top: 12rem;
-    background: url("../../assets/images/background.png");
-    border-radius: 16rem 16rem 0 0;
-  }
+  background-color: var(--custom-bg-rgba-primary);
+  backdrop-filter: blur(10rem);
+  border-radius: 16rem 16rem 0 0;
+  box-shadow: var(--custom-box-shadow-content);
 
-  &.backgroundBlured {
-    &::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      top: 12rem;
-      background-color: var(--custom-bg-rgba-primary);
-      backdrop-filter: blur(10rem);
-      border-radius: 16rem 16rem 0 0;
-    }
-  }
+
+  // &:before {
+  //   content: "";
+  //   position: absolute;
+  //   inset: 0;
+  //   top: 12rem;
+  //   background: url("../../assets/images/background.png");
+  //   border-radius: 16rem 16rem 0 0;
+  // }
+
+  // &.backgroundBlured {
+  //   &::after {
+  //     content: "";
+  //     position: absolute;
+  //     inset: 0;
+  //     top: 12rem;
+      // background-color: var(--custom-bg-rgba-primary);
+      // backdrop-filter: blur(10rem);
+      // border-radius: 16rem 16rem 0 0;
+      // box-shadow: var(--custom-box-shadow-content);
+  //   }
+  // }
 }
 
 .contentInner {
+  margin-top: calc(-100% - 166rem - 56rem);
   padding-inline: 18rem;
-  padding-bottom: calc(82rem + var(--ion-safe-area-bottom) + var(--tabbar-offset));
+  padding-bottom: 82rem;
   padding-top: 28rem;
+  min-height: 200vh;
   height: 100%;
   position: relative;
   z-index: 1;
-  box-shadow: 0 -6rem 9rem 0 rgba(0, 0, 0, 0.08);
   border-radius: 16rem 16rem 0 0;
   // overscroll-behavior: none;
   -webkit-overflow-scrolling: touch;
@@ -59,7 +72,7 @@
 
 .scroll {
   overflow: scroll;
-  overscroll-behavior: none;
+  // overscroll-behavior: none;
   // -webkit-overflow-scrolling: touch;
 }
 
