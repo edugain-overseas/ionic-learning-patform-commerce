@@ -51,9 +51,7 @@ const Tabs: FC<TabsTypes> = ({ children }) => {
 
   return (
     <IonTabs>
-      <IonRouterOutlet id="main-content">
-        {children}
-      </IonRouterOutlet>
+      <IonRouterOutlet id="main-content">{children}</IonRouterOutlet>
       <IonTabBar
         slot="bottom"
         className="custom-tab-bar"
@@ -64,12 +62,12 @@ const Tabs: FC<TabsTypes> = ({ children }) => {
         <IonTabButton tab="home" href="/home" className="ion-activatable">
           <IonIcon src={HomeIcon} className="custom-tab-icon" />
           <IonLabel>Home</IonLabel>
-          <IonRippleEffect></IonRippleEffect>
+          <IonRippleEffect type="unbounded"></IonRippleEffect>
         </IonTabButton>
         <IonTabButton tab="courses" href="/courses" className="ion-activatable">
           <IonIcon src={CoursesIcon} className="custom-tab-icon" />
           <IonLabel>Courses</IonLabel>
-          <IonRippleEffect></IonRippleEffect>
+          <IonRippleEffect type="unbounded"></IonRippleEffect>
         </IonTabButton>
         <IonTabButton
           tab="profile"
@@ -78,12 +76,12 @@ const Tabs: FC<TabsTypes> = ({ children }) => {
         >
           <IonIcon src={MyProfileIcon} className="custom-tab-icon" />
           <IonLabel>Profile</IonLabel>
-          <IonRippleEffect></IonRippleEffect>
+          <IonRippleEffect type="unbounded"></IonRippleEffect>
         </IonTabButton>
         <IonTabButton tab="basket" href="/basket" className="ion-activatable">
           <BasketIcon />
           <IonLabel>Basket</IonLabel>
-          <IonRippleEffect></IonRippleEffect>
+          <IonRippleEffect type="unbounded"></IonRippleEffect>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>

@@ -22,21 +22,25 @@ const BasketList: FC = () => {
 
   return (
     <ul className={styles.basketList}>
-      {Array.from(groupedItemsByCategoryId, ([categoryId, categoryItems]) => (
-        <li key={categoryId}>
-          <ul>
-            {categoryItems.map((item, index, array) => (
-              <BasketItem
-                key={item.id}
-                course={courses?.find(({ id }) => item.id === id)}
-                confirmed={item.confirmed}
-                availableCourses={availableCourses}
-                hasAccordion={index + 1 === array.length}
-              />
-            ))}
-          </ul>
-        </li>
-      ))}
+      {Array.from(groupedItemsByCategoryId, ([categoryId, categoryItems]) => {
+        console.log(categoryItems);
+
+        return (
+          <li key={categoryId}>
+            <ul>
+              {categoryItems.map((item, index, array) => (
+                <BasketItem
+                  key={item.id}
+                  course={courses?.find(({ id }) => item.id === id)}
+                  confirmed={item.confirmed}
+                  availableCourses={availableCourses}
+                  hasAccordion={index + 1 === array.length}
+                />
+              ))}
+            </ul>
+          </li>
+        );
+      })}
     </ul>
   );
 };

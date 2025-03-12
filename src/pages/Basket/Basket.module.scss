@@ -4,6 +4,10 @@
   --padding-end: 18rem;
   --padding-top: 20rem;
   --padding-bottom: calc(20rem + var(--tabbar-offset));
+
+  // &::part(scroll) {
+  //   overscroll-behavior: none;
+  // }
 }
 
 .empty {

@@ -40,13 +40,13 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
         if (categoryId) {
           return [
-            ...prev,
             {
               id,
               confirmed: true,
               categoryId: categoryId,
               subItems: [],
             },
+            ...prev,
           ];
         } else {
           return prev;

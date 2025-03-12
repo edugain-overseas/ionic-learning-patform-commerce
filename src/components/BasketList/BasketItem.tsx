@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import {
   Animation,
   Gesture,
@@ -12,9 +12,11 @@ import { useUser } from "../../context/UserContext";
 import { useBasket } from "../../context/BasketContext";
 import { clamp } from "../../utils/clamp";
 import deteleIcon from "../../assets/icons/delete.svg";
+import arrowIcon from "../../assets/icons/arrow-right.svg";
 import BasketItemAccordion from "./BasketItemAccordion";
 import BasketCourseCard from "./BasketCourseCard";
 import styles from "./BasketList.module.scss";
+import { transition } from "@ionic/core/dist/types/utils/transition";
 
 type BasketItemType = {
   course?: CourseType;
@@ -22,6 +24,9 @@ type BasketItemType = {
   availableCourses?: CourseType[];
   hasAccordion: boolean;
 };
+
+const MAX_TRANSLATE = -339;
+const TOGGLE_SHOW_DELETE_TRANSLATE = -32;
 
 const BasketItem: FC<BasketItemType> = ({
   course,
@@ -32,13 +37,13 @@ const BasketItem: FC<BasketItemType> = ({
   if (!course) {
     return null;
   }
-
   const cardRef = useRef<HTMLDivElement | null>(null);
   const iconWrapperRef = useRef<HTMLDivElement | null>(null);
   const animation = useRef<Animation | null>(null);
   const gesture = useRef<Gesture | null>(null);
   const initialStep = useRef<number>(0);
   const started = useRef<boolean>(false);
+  const [isDeleteShown, setIsDeleteShown] = useState(false);
 
   const basketInterface = useBasket();
 
@@ -60,16 +65,14 @@ const BasketItem: FC<BasketItemType> = ({
   useEffect(() => {
     if (animation.current) return;
 
-    const MAX_TRANSLATE = -339;
-
     animation.current = createAnimation()
       .addElement(cardRef.current!)
-      .duration(500)
+      .duration(200)
       .fromTo("transform", "translateX(0)", `translateX(${MAX_TRANSLATE}rem)`);
 
     gesture.current = createGesture({
       el: cardRef.current!,
-      threshold: 0,
+      threshold: 10,
       gestureName: "card-drag",
       onMove: (ev) => onMove(ev),
       onEnd: (ev) => onEnd(ev),
@@ -102,6 +105,8 @@ const BasketItem: FC<BasketItemType> = ({
 
       if (shouldComplete) {
         cardRef.current?.classList.add(styles.deleting);
+      } else {
+        setIsDeleteShown(false);
       }
 
       animation
@@ -113,6 +118,9 @@ const BasketItem: FC<BasketItemType> = ({
           if (shouldComplete && course?.id) {
             basketInterface?.toggleItemToBasket(course.id);
           }
+          if (!shouldComplete) {
+            iconWrapperRef.current?.style.setProperty("width", `32rem`);
+          }
         });
 
       initialStep.current = shouldComplete ? MAX_TRANSLATE : 0;
@@ -120,10 +128,49 @@ const BasketItem: FC<BasketItemType> = ({
     };
 
     const getStep = (ev: GestureDetail) => {
+      console.log(initialStep.current);
+
       const delta = initialStep.current + ev.deltaX;
       return clamp(0, delta / MAX_TRANSLATE, 1);
     };
   }, [cardRef]);
+
+  const toggleShowDelete = () => {
+    if (!animation.current) return;
+
+    const shouldOpen = !isDeleteShown;
+    setIsDeleteShown(shouldOpen);
+
+    const step = shouldOpen ? TOGGLE_SHOW_DELETE_TRANSLATE / MAX_TRANSLATE : 0;
+
+    if (step) {
+      cardRef.current?.nextElementSibling?.classList.add(styles.shown);
+      cardRef.current?.classList.add(styles["gesture-active"]);
+    } else {
+      cardRef.current?.nextElementSibling?.classList.remove(styles.shown);
+      cardRef.current?.classList.remove(styles["gesture-active"]);
+    }
+
+    animation.current.progressStart().progressStep(step);
+    initialStep.current = TOGGLE_SHOW_DELETE_TRANSLATE;
+  };
+
+  const handleDeleteBtnClick = () => {
+    if (!animation.current) return;
+    cardRef.current?.classList.add(styles.deleting);
+
+    animation
+      .current!.progressEnd(1, TOGGLE_SHOW_DELETE_TRANSLATE / MAX_TRANSLATE)
+      .onFinish(() => {
+        gesture.current!.enable(true);
+        cardRef.current?.nextElementSibling?.classList.remove(styles.shown);
+        cardRef.current?.classList.remove(styles["gesture-active"]);
+        basketInterface?.toggleItemToBasket(course.id);
+      });
+
+    initialStep.current = MAX_TRANSLATE;
+    started.current = false;
+  };
 
   return (
     <li className={styles.basketItem}>
@@ -136,10 +183,20 @@ const BasketItem: FC<BasketItemType> = ({
         {hasAccordion && coursesToPropose && coursesToPropose.length !== 0 && (
           <BasketItemAccordion courses={coursesToPropose} />
         )}
+        <button className={styles.toggleShowDelete} onClick={toggleShowDelete}>
+          {isDeleteShown ? (
+            <IonIcon src={arrowIcon} className={styles.arrowIcon} />
+          ) : (
+            <IonIcon src={deteleIcon} className={styles.deleteIcon} />
+          )}
+        </button>
       </div>
       <div className={styles.deleteWrapper}>
         <div className={styles.iconWrapper} ref={iconWrapperRef}>
-          <IonIcon src={deteleIcon} />
+          <IonIcon
+            src={deteleIcon}
+            onClick={() => isDeleteShown && handleDeleteBtnClick()}
+          />
         </div>
       </div>
     </li>
