@@ -2,7 +2,7 @@
   position: absolute;
   bottom: 0rem;
   width: 100%;
-  padding: 0 18rem 60rem;
+  padding: 0 18rem var(--tabbar-offset);
 
   border-radius: var(--custom--border-radius-secondary);
   background: var(--custom-bg-rgba-secondary);

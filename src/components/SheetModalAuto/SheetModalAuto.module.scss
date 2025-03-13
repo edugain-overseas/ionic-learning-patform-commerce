@@ -3,10 +3,8 @@
   --ion-backdrop-color: var(--custom-bg-rgba-secondary);
   --box-shadow: var(--custom-box-shadow-content);
   --background: var(--custom-bg-rgba-primary);
-  --border-radius: 16rem;
+  --border-radius: 16rem 16rem 0 0;
   --max-height: calc(100% - var(--ion-safe-area-top));
-
-  // top: var(--ion-safe-area-top);
   top: 0;
   bottom: calc(var(--keyboard-height));
   transition: bottom var(--custom-tr-time-min) ease-in-out;

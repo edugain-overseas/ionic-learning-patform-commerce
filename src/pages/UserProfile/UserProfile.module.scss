@@ -1,13 +1,13 @@
 .pageWrapper {
   --background: transparent;
   --padding-top: 56rem;
-  --padding-bottom: 18rem;
+  --padding-bottom: calc(18rem + var(--ion-safe-area-bottom));
   --padding-start: 18rem;
   --padding-end: 18rem;
   --color: var(--ion-color-dark);
 
   &:has(.authPanel) {
-    --padding-bottom: 83rem;
+    --padding-bottom: calc(143rem + var(--ion-safe-area-bottom));
   }
 
   .mainInfoBlock,
@@ -27,7 +27,7 @@
 
   .authPanel {
     position: fixed;
-    bottom: -60rem;
+    bottom: 0;
     left: 0;
     margin-bottom: 0;
     transform: translateY(65rem);
@@ -416,4 +416,8 @@ div.swiper {
   --border-radius: 16rem;
   --background: url("../../assets/images/body-bg.webp"), rgba(255,255,255,0.8);
   bottom: max(60rem, var(--keyboard-height, 0rem));
+
+  &::part(content) {
+    background-size: 100% 100%;
+  }
 }

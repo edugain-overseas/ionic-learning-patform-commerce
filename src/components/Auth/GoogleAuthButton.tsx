@@ -17,14 +17,21 @@ const GoogleAuthButton: FC = () => {
       setIsLoading(true);
       const googleUser = await GoogleAuth.signIn();
 
-      const googleToken = googleUser.authentication.idToken;
-      const user = await userInterface?.loginWithGoogle(googleToken);
-
-      present({
-        message: `Hello ${user?.username}!`,
-        duration: 2500,
-        position: "top",
-      });
+      const googleToken = googleUser?.authentication?.idToken;
+      if (googleToken) {
+        const user = await userInterface?.loginWithGoogle(googleToken);
+        present({
+          message: `Hello ${user?.username}!`,
+          duration: 2500,
+          position: "top",
+        });
+      } else {
+        present({
+          message: `Google service is unvailable`,
+          duration: 2500,
+          position: "bottom",
+        });
+      }
     } catch (error) {
       console.log(error);
     } finally {

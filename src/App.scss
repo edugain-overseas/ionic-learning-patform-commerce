@@ -34,9 +34,15 @@ a {
   left: 0;
   right: 0;
 
+
+  // ios apperence bug fix
+  will-change: transform, opacity;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+
   ion-tab-button {
     position: relative;
-    background: transparent;
+    background: var(--custom-primary-lg);
   }
 
   .custom-tab-icon {
@@ -70,8 +76,7 @@ a {
 
   position: absolute;
   right: 0;
-  // bottom: calc(var(--ion-safe-area-bottom) - var(--keyboard-height));
-  bottom: 0;
+  bottom: var(--ion-safe-area-bottom);
   opacity: 0.5;
 
   font-size: 10rem;
@@ -105,30 +110,18 @@ a {
     background: var(--custom-bg-rgba-secondary);
 
     box-shadow: var(--custom-box-shadow-primary);
-    // backdrop-filter: blur(16rem);
     opacity: 0;
     z-index: -1;
 
     transition: opacity var(--custom-tr-time-min) ease-in-out;
   }
-
-  // &::after {
-  //   content: "";
-  //   position: absolute;
-  //   top: 0;
-  //   left: 0;
-  //   z-index: -1;
-  //   width: 100%;
-  //   height: 100%;
-  //   // background-color: var(--ion-background-color);
-  //   transition: border-radius var(--custom-tr-time-min) ease-in-out;
-  // }
 }
 
 // Menu
 
 .ion-page.main.menu-content-open {
   overflow: visible;
+
   &:before {
     opacity: 1;
   }
@@ -141,8 +134,24 @@ a {
     overflow: hidden;
   }
 
+  .custom-tab-bar {
+    padding-bottom: 0;
+  }
+
+  .custom-toggle-menu {
+    bottom: 0;
+  }
+
   ion-header ion-toolbar {
     backdrop-filter: none;
+  }
+
+  ion-header {
+    height: 56rem;
+  }
+
+  ion-toolbar {
+    padding-top: 0;
   }
 }
 

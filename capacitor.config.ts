@@ -24,6 +24,8 @@ const config: CapacitorConfig = {
       forceCodeForRefreshToken: true,
       androidClientId:
         "492800368725-3p2f2g0k1raf7tk4mq9aov0t9skv9f1h.apps.googleusercontent.com",
+      iosClientId:
+        "492800368725-utr5ri2q9negtjsrjgpu8kl005833al2.apps.googleusercontent.com",
     },
     Stripe: {
       publishableKey:

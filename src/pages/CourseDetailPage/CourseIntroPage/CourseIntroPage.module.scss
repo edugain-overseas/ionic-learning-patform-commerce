@@ -58,7 +58,7 @@
 
 .contentInner {
   padding-inline: 18rem;
-  padding-bottom: 82rem;
+  padding-bottom: calc(82rem + var(--ion-safe-area-bottom));
   padding-top: 28rem;
   height: 100%;
   position: relative;
@@ -332,7 +332,7 @@
   position: absolute;
   height: 125rem;
   bottom: 0;
-  padding-bottom: 60rem;
+  padding-bottom: var(--tabbar-offset);
   background-color: var(--custom-bg-rgba-secondary);
   box-shadow: var(--custom-box-shadow-primary);
   backdrop-filter: blur(28rem);

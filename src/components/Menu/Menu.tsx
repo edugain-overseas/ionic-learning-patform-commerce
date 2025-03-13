@@ -1,20 +1,20 @@
 import { IonIcon, IonMenu, IonMenuToggle, IonRippleEffect } from "@ionic/react";
+import { useRef, useState } from "react";
 import { changeStausBarTheme } from "../../hooks/useStatusBar";
+import { useUser } from "../../context/UserContext";
+import {
+  menuEnterPageAnimation,
+  menuLeavePageAnimation,
+} from "../../animations/menuAnimations";
 import Close from "../../assets/icons/menu/close.svg";
 import Logout from "../../assets/icons/menu/logout.svg";
 import Settings from "../../assets/icons/menu/settings.svg";
 import MenuBottomTools from "./MenuBottomTools";
 import UserInfo from "../UserInfo/UserInfo";
 import MenuNav from "./MenuNav";
-import styles from "./Menu.module.scss";
 import InsetBtn from "../InsetBtn/InsetBtn";
-import { useUser } from "../../context/UserContext";
-import { useRef, useState } from "react";
 import Spinner from "../Spinner/Spinner";
-import {
-  menuEnterPageAnimation,
-  menuLeavePageAnimation,
-} from "../../animations/menuAnimations";
+import styles from "./Menu.module.scss";
 
 const Menu = () => {
   const isUserLoggedIn = useUser()?.user.accessToken !== null;

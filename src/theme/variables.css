@@ -8,7 +8,7 @@ http://ionicframework.com/docs/theming/ */
   --ion-safe-area-top: env(safe-area-inset-top, 0px);
   --ion-safe-area-bottom: env(safe-area-inset-bottom, 0px);
   --keyboard-height: 0px;
-  --tabbar-offset: 60rem;
+  --tabbar-offset: calc(60rem + var(--ion-safe-area-bottom));
   --ion-background-color: rgba(255, 255, 255, 0.8);
   --ion-background-color-rgb: 0, 0, 0, 0.8;
   --ion-tab-bar-color: #fcfcfc;
