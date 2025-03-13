@@ -34,7 +34,6 @@ a {
   left: 0;
   right: 0;
 
-
   // ios apperence bug fix
   will-change: transform, opacity;
   -webkit-backface-visibility: hidden;
@@ -136,6 +135,7 @@ a {
 
   .custom-tab-bar {
     padding-bottom: 0;
+    transition: padding-bottom var(--custom-tr-time-min) ease;
   }
 
   .custom-toggle-menu {
@@ -148,10 +148,12 @@ a {
 
   ion-header {
     height: 56rem;
+    transition: height var(--custom-tr-time-min) ease;
   }
 
   ion-toolbar {
     padding-top: 0;
+    transition: padding-top var(--custom-tr-time-min) ease;
   }
 }
 

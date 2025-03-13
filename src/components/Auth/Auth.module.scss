@@ -1,7 +1,7 @@
 .authPanel {
   position: absolute;
   width: 100%;
-  height: 125rem;
+  height: calc(65rem + var(--tabbar-offset));
   bottom: 0;
   padding-bottom: var(--tabbar-offset);
 

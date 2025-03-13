@@ -330,7 +330,7 @@
 
 .bottomBar {
   position: absolute;
-  height: 125rem;
+  height: calc(65rem + var(--tabbar-offset));
   bottom: 0;
   padding-bottom: var(--tabbar-offset);
   background-color: var(--custom-bg-rgba-secondary);

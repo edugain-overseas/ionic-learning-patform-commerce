@@ -414,8 +414,9 @@ div.swiper {
 
 .editDataModal {
   --border-radius: 16rem;
-  --background: url("../../assets/images/body-bg.webp"), rgba(255,255,255,0.8);
-  bottom: max(60rem, var(--keyboard-height, 0rem));
+  --background: url("../../assets/images/body-bg.webp"),
+    rgba(255, 255, 255, 0.8);
+  bottom: max(var(--tabbar-offset), var(--keyboard-height, 0rem));
 
   &::part(content) {
     background-size: 100% 100%;
