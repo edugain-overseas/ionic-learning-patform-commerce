@@ -71,7 +71,7 @@ const Home: React.FC = () => {
   const isAuthShown = !useUser()?.user.accessToken;
 
   return (
-    <IonPage className={styles.page} id="home">
+    <IonPage className={`${styles.page} primaryPage`} id="home">
       <Header {...headerProps} />
       <IonContent fullscreen className={styles.homeContent} scrollY={false}>
         <div

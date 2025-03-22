@@ -17,13 +17,13 @@ const MenuNav = () => {
             <IonRouterLink
               routerLink={link.to}
               className={`${styles.menuNavLink} ion-activatable`}
-              routerDirection='none'
+              routerDirection="none"
             >
               <div className={styles.linkWrapper}>
                 <IonIcon src={link.iconSrc} className={styles.navItemIcon} />
                 <span className={styles.navItemLabel}>{link.label}</span>
               </div>
-              <IonRippleEffect></IonRippleEffect>
+              <IonRippleEffect type="unbounded"></IonRippleEffect>
             </IonRouterLink>
           </IonMenuToggle>
         </li>

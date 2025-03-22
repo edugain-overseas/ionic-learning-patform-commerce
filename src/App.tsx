@@ -8,6 +8,8 @@ import { useDynamicFontSize } from "./hooks/useDynamicFontSize";
 import { BasketProvider } from "./context/BasketContext";
 import { useAxios } from "./hooks/useAxios";
 import { useGoogleAuthInit } from "./hooks/useGoogleAuthInit";
+import { AuthUIProvider } from "./context/AuthUIContext";
+import { useSetupStripe } from "./hooks/useSetupStripe";
 import Router from "./components/Router";
 
 /* Core CSS required for Ionic components to work properly */
@@ -31,9 +33,6 @@ import "./App.scss";
 
 /* Theme variables */
 import "./theme/variables.css";
-import { AuthUIProvider } from "./context/AuthUIContext";
-import { useEffect } from "react";
-import { Stripe } from "@capacitor-community/stripe";
 
 setupIonicReact();
 
@@ -43,17 +42,7 @@ const App: React.FC = () => {
   useKeyboard();
   useAxios();
   useGoogleAuthInit();
-
-  useEffect(() => {
-    const setupStripe = async () => {
-      await Stripe.initialize({
-        publishableKey:
-          "pk_test_51MYZV4GntgRu6DcSDjcJ60uSiOtfujweuadV94aF7eOFCxW4JEGZks5Siyh6aSJ6pT2KjZSQ0RN1Ngwopgcw4fLr00E5eJVuD9",
-      });
-    };
-
-    setupStripe();
-  }, []);
+  useSetupStripe();
 
   return (
     <IonApp className="App">

@@ -16,11 +16,12 @@ import remove from "../../../assets/icons/delete.svg";
 import devices from "../../../assets/images/devices.png";
 import CourseItem from "../../../components/CourseItem/CourseItem";
 import CardPrice from "../../../components/CardPrice/CardPrice";
-import DoubleScrollLayout from "../../../components/DoubleScrollLayout/DoubleScrollLayout";
+// import DoubleScrollLayout from "../../../components/DoubleScrollLayout/DoubleScrollLayout";
 import CourseNavPanel from "../../../components/CourseNavPanel/CourseNavPanel";
 import EqualSpaceContainer from "../../../components/EqualSpaceContainer/EqualSpaceContainer";
 import CommonButton from "../../../components/CommonButton/CommonButton";
 import styles from "./CourseIntroPage.module.scss";
+import PrimaryScrollConteinerLayout from "../../../components/PrimaryScrollConteinerLayout/PrimaryScrollConteinerLayout";
 
 const CourseIntroPage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -50,7 +51,11 @@ const CourseIntroPage: React.FC = () => {
         />
       </IonHeader>
       <IonContent scrollY={false}>
-        <DoubleScrollLayout
+        {/* <DoubleScrollLayout
+          posterSrc={`${serverName}/${course?.image_path}`}
+          topLabel={`Category: ${category?.title}`}
+        > */}
+        <PrimaryScrollConteinerLayout
           posterSrc={`${serverName}/${course?.image_path}`}
           topLabel={`Category: ${category?.title}`}
         >
@@ -184,7 +189,8 @@ const CourseIntroPage: React.FC = () => {
                 ))}
             </ul>
           </div>
-        </DoubleScrollLayout>
+          {/* </DoubleScrollLayout> */}
+        </PrimaryScrollConteinerLayout>
         <div className={styles.bottomBar}>
           {isCoursePurchased ? (
             <CourseNavPanel />

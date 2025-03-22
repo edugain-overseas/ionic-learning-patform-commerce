@@ -5,8 +5,9 @@ import {
   IonSegment,
   IonSegmentButton,
   SegmentChangeEventDetail,
+  useIonRouter,
 } from "@ionic/react";
-import { useHistory, useLocation } from "react-router";
+import { useLocation } from "react-router";
 
 interface SegmentNavPanelTypes {
   items: { value: string; label: string }[];
@@ -22,7 +23,8 @@ const SegmentNavPanel: React.FC<SegmentNavPanelTypes> = ({
   routerNav = false,
 }) => {
   const pathmane = useLocation().pathname;
-  const history = useHistory();
+  const router = useIonRouter()
+
   const onChange = (event: CustomEvent<SegmentChangeEventDetail>) => {
     const { value } = event.detail;
     if (value !== undefined) {
@@ -47,7 +49,7 @@ const SegmentNavPanel: React.FC<SegmentNavPanelTypes> = ({
             routerNav
               ? (e) => {
                   e.preventDefault();
-                  history.push(value);
+                  router.push(value, 'root')
                 }
               : undefined
           }

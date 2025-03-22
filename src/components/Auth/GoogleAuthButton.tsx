@@ -42,13 +42,13 @@ const GoogleAuthButton: FC = () => {
   const icon = isLoading ? (
     <Spinner />
   ) : (
-    <IonIcon src={Google} className={styles.googleIcon} />
+    <IonIcon src={Google} className={styles.servicesIcon} />
   );
 
   return (
     <CommonButton
       onClick={handleGoogleSingIn}
-      label="Account Google"
+      label="Using Google"
       icon={icon}
       backgroundColor="transparent"
       color="#001C54"
@@ -56,7 +56,7 @@ const GoogleAuthButton: FC = () => {
       block={true}
       height={32}
       borderRadius={5}
-      className={styles.googleBtn}
+      className={styles.serviceBtn}
     />
   );
 };

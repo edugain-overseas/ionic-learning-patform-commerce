@@ -70,7 +70,7 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
         posterSrc={`${serverName}/${taskData.image_path}`}
         topLabel="Test"
         isBackgroundBlured={false}
-        scrollTriggerValue={84}
+        scrollTriggerValue={122}
       >
         <div>
           <div className={styles.testHeader}>

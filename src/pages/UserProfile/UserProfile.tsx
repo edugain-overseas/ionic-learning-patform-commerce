@@ -81,38 +81,8 @@ const UserProfile: React.FC = () => {
     setPresentingElement(pageRef.current);
   }, []);
 
-  // const handleUploadCertificate = async () => {
-  //   const fileUrl = "https://pdfobject.com/pdf/sample.pdf";
-
-  //   try {
-  //     const response = await fetch(fileUrl);
-  //     const blob = await response.blob();
-
-  //     const fileName = "certificate.pdf";
-
-  //     const url = window.URL.createObjectURL(blob);
-  //     const a = document.createElement("a");
-  //     a.href = url;
-  //     a.setAttribute("download", fileName);
-  //     document.body.appendChild(a);
-  //     a.click();
-  //     a.remove();
-
-  //     // await Filesystem.writeFile({
-  //     //   path: fileName,
-  //     //   data: blob,
-  //     //   directory: Directory.Documents, // Save in downloads directory
-  //     //   encoding: Encoding.UTF8,
-  //     // });
-
-  //     console.log("File downloaded successfully:", fileName);
-  //   } catch (error) {
-  //     console.error("Error downloading file:", error);
-  //   }
-  // };
-
   return (
-    <IonPage id="profile" ref={pageRef}>
+    <IonPage id="profile" ref={pageRef} className="primaryPage">
       <Header {...headerProps} />
       <IonContent className={styles.pageWrapper}>
         <UserMainInfo userData={userData} />

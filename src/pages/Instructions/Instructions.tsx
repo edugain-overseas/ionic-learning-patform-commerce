@@ -25,7 +25,7 @@ const Instructions: React.FC = () => {
   };
 
   return (
-    <IonPage>
+    <IonPage className="primaryPage">
       <Header {...headerProps} />
       <IonContent>
         <SegmentNavPanel

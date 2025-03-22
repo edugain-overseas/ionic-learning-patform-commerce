@@ -64,7 +64,7 @@ const Courses: React.FC = () => {
     }
   };
 
-  useEffect(() => {    
+  useEffect(() => {
     if (isLoggedIn) {
       setFilter("my");
     } else {
@@ -82,7 +82,7 @@ const Courses: React.FC = () => {
   };
 
   return (
-    <IonPage id="courses">
+    <IonPage id="courses" className="primaryPage">
       <Header {...headerProps} />
       <IonContent className="custom-content-wrapper">
         {isLoggedIn && (

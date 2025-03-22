@@ -103,8 +103,8 @@ const Menu = () => {
           <div className={styles.footerTools}>
             <ul className={styles.footerNavItems}>
               {isUserLoggedIn && (
-                <li className="ion-activatable">
-                  <button onClick={handleLogout}>
+                <li>
+                  <button onClick={handleLogout} className="ion-activatable">
                     <div className={styles.iconWrapper}>
                       {isLoading ? (
                         <Spinner color="dark" />
@@ -113,16 +113,16 @@ const Menu = () => {
                       )}
                     </div>
                     <span>Log out</span>
+                    <IonRippleEffect type="unbounded"></IonRippleEffect>
                   </button>
-                  <IonRippleEffect></IonRippleEffect>
                 </li>
               )}
-              <li className="ion-activatable">
-                <button>
+              <li>
+                <button className="ion-activatable">
                   <IonIcon src={Settings} className={styles.footerIcon} />
                   <span>Settings</span>
+                  <IonRippleEffect type="unbounded"></IonRippleEffect>
                 </button>
-                <IonRippleEffect></IonRippleEffect>
               </li>
             </ul>
             <div className={styles.closeBtn}>

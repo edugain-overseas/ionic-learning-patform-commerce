@@ -9,6 +9,8 @@ import CommonButton from "../CommonButton/CommonButton";
 import Spinner from "../Spinner/Spinner";
 import styles from "./Auth.module.scss";
 import GoogleAuthButton from "./GoogleAuthButton";
+import InputsWrapper from "./InputsWrapper";
+import ServicesAuth from "./ServicesAuth";
 
 type FormValues = {
   username: string;
@@ -102,10 +104,10 @@ const LoginForm: React.FC<{
           </span>
         </span>
       </div>
-      <div className={styles.inputsWrapper}>
+      <InputsWrapper>
         <InputText
           name="username"
-          placeholder="Email"
+          placeholder="Username or email"
           registerProps={register("username", {
             required: "This field is required",
           })}
@@ -128,7 +130,7 @@ const LoginForm: React.FC<{
           status={isSubmitted && (errors.password?.message ? "error" : "valid")}
           height="32rem"
         />
-      </div>
+      </InputsWrapper>
       <div className={styles.btnsWrapper}>
         <CommonButton
           label="Sing in"
@@ -172,7 +174,8 @@ const LoginForm: React.FC<{
         <div className={styles.btnsDivider}>
           <span>or continue with</span>
         </div>
-        <GoogleAuthButton />
+        <ServicesAuth />
+        {/* <GoogleAuthButton /> */}
       </div>
     </form>
   );

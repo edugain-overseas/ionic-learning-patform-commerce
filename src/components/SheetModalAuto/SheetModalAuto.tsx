@@ -1,5 +1,5 @@
 import { IonModal, useIonViewWillLeave } from "@ionic/react";
-import { useEffect, useRef, FC } from "react";
+import { useEffect, useRef, FC, useState } from "react";
 import styles from "./SheetModalAuto.module.scss";
 
 interface SheetModalAutoTypes {
@@ -11,7 +11,7 @@ interface SheetModalAutoTypes {
   className?: string;
   setModal?: (modalRef: React.RefObject<HTMLIonModalElement>) => void;
   keyboardClose?: boolean;
-  presentingElement?: HTMLElement | null;
+  isPresentingElement?: boolean;
 }
 
 const SheetModalAuto: FC<SheetModalAutoTypes> = ({
@@ -23,10 +23,11 @@ const SheetModalAuto: FC<SheetModalAutoTypes> = ({
   className,
   setModal,
   keyboardClose,
-  presentingElement,
+  isPresentingElement = true,
 }) => {
   const modalRef = useRef<HTMLIonModalElement>(null);
-  
+  const [presentingElement, setPresentingElement] =
+    useState<HTMLElement | null>(null);
 
   useIonViewWillLeave(() => {
     modalRef.current
@@ -38,6 +39,18 @@ const SheetModalAuto: FC<SheetModalAutoTypes> = ({
     setModal && setModal(modalRef);
   }, []);
 
+  // useEffect(() => {
+  //   const presentingElement = document.querySelector(
+  //     ".tabs-inner div.ion-page:not(.page-hidden)"
+  //   ) as HTMLElement | null;
+
+  //   console.log(presentingElement);
+
+  //   if (presentingElement) {
+  //     setPresentingElement(presentingElement);
+  //   }
+  // }, []);
+
   return (
     <IonModal
       ref={refModal ? refModal : modalRef}
@@ -48,7 +61,9 @@ const SheetModalAuto: FC<SheetModalAutoTypes> = ({
       initialBreakpoint={1}
       trigger={trigger}
       keyboardClose={keyboardClose}
-      presentingElement={presentingElement!}
+      presentingElement={
+        isPresentingElement && presentingElement ? presentingElement : undefined
+      }
     >
       {children}
     </IonModal>

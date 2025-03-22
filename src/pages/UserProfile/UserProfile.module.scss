@@ -1,7 +1,7 @@
 .pageWrapper {
   --background: transparent;
   --padding-top: 56rem;
-  --padding-bottom: calc(18rem + var(--ion-safe-area-bottom));
+  --padding-bottom: calc(18rem + var(--tabbar-offset));
   --padding-start: 18rem;
   --padding-end: 18rem;
   --color: var(--ion-color-dark);
@@ -17,8 +17,14 @@
     border-radius: var(--custom--border-radius-primary);
     background-color: var(--custom-bg-rgba-secondary);
     box-shadow: var(--custom-box-shadow-primary);
-    // backdrop-filter: blur(16rem);
     margin-bottom: 16rem;
+  }
+
+  .progressData {
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
+    
   }
 
   .certificatesData {

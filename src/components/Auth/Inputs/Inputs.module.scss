@@ -37,7 +37,8 @@
 }
 
 .label {
-  min-width: 76rem;
+  // min-width: 76rem;
+  flex-shrink: 0;
   margin-right: 24rem;
   font-size: 12rem;
   color: var(--ion-color-light);
@@ -71,7 +72,7 @@
 
 .errorMessage {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 4rem);
   left: 0;
   width: 100%;
   color: var(--ion-color-primary);

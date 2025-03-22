@@ -8,8 +8,9 @@ import InputText from "./Inputs/InutText";
 import InputPassword from "./Inputs/InputPassword";
 import CommonButton from "../CommonButton/CommonButton";
 import Spinner from "../Spinner/Spinner";
+import InputsWrapper from "./InputsWrapper";
+import ServicesAuth from "./ServicesAuth";
 import styles from "./Auth.module.scss";
-import GoogleAuthButton from "./GoogleAuthButton";
 
 type FormValues = {
   username: string;
@@ -127,7 +128,7 @@ const SingupForm: FC<{
       })}
     >
       <FormHeader handleOpenLogin={handleOpenLogin} />
-      <div className={styles.inputsWrapper}>
+      <InputsWrapper>
         <InputText
           name="username"
           placeholder="Username"
@@ -179,7 +180,7 @@ const SingupForm: FC<{
           error={errors.password?.message}
           status={isSubmitted && (errors.password?.message ? "error" : "valid")}
         />
-      </div>
+      </InputsWrapper>
       <div className={styles.btnsWrapper}>
         <CommonButton
           label="Sing up"
@@ -200,7 +201,7 @@ const SingupForm: FC<{
         <div className={styles.btnsDivider}>
           <span>or continue with</span>
         </div>
-        <GoogleAuthButton />
+        <ServicesAuth />
       </div>
     </form>
   );

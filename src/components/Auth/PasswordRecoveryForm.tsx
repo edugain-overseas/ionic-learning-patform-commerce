@@ -5,6 +5,7 @@ import InputText from "./Inputs/InutText";
 import CommonButton from "../CommonButton/CommonButton";
 import styles from "./Auth.module.scss";
 import { useIonToast } from "@ionic/react";
+import InputsWrapper from "./InputsWrapper";
 
 type FormValues = {
   email: string;
@@ -12,7 +13,7 @@ type FormValues = {
 
 const PasswordRecoveryForm: React.FC = () => {
   const user = useUser();
-  const [present] = useIonToast()
+  const [present] = useIonToast();
 
   const {
     register,
@@ -54,7 +55,7 @@ const PasswordRecoveryForm: React.FC = () => {
           recovery code.
         </span>
       </div>
-      <div className={styles.inputsWrapper}>
+      <InputsWrapper>
         <InputText
           name="email"
           placeholder="Email"
@@ -65,7 +66,7 @@ const PasswordRecoveryForm: React.FC = () => {
           error={errors.email?.message}
           status={isSubmitted && (errors.email?.message ? "error" : "valid")}
         />
-      </div>
+      </InputsWrapper>
       <div className={styles.btnsWrapper}>
         <CommonButton
           label="Continue"

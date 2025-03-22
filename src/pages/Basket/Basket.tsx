@@ -39,7 +39,7 @@ const Basket: FC = () => {
   console.log(isEmptyBasket);
 
   return (
-    <IonPage id="basket">
+    <IonPage id="basket" className="primaryPage">
       <Header {...headerProps} />
       <IonPopover
         trigger="basket-header-popover-trigger"

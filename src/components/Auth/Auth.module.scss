@@ -109,10 +109,6 @@
     width: 16rem;
     height: 16rem;
   }
-
-  .googleBtn {
-    flex-direction: row-reverse;
-  }
 }
 
 .passwordRecoveryBtnWrapper {
@@ -141,5 +137,18 @@
   b {
     font-weight: 600;
     color: var(--ion-color-dark);
+  }
+}
+
+.servicesAuth {
+  display: flex;
+  gap: 33rem;
+
+  .serviceBtn {
+    flex-direction: row-reverse;
+  }
+
+  .servicesIcon {
+    font-size: 22rem;
   }
 }

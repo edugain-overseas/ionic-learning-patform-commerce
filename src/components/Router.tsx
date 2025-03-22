@@ -1,14 +1,7 @@
 import React from "react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router";
-import {
-  IonIcon,
-  IonLabel,
-  IonMenuToggle,
-  IonPage,
-  IonRouterOutlet,
-} from "@ionic/react";
-import MenuIcon from "../assets/icons/tabs/menu.svg";
+import { IonPage, IonRouterOutlet } from "@ionic/react";
 import Tabs from "./Tabs";
 import Menu from "./Menu/Menu";
 import Home from "../pages/Home/Home";
@@ -52,10 +45,6 @@ const Router: React.FC = () => {
               <Route component={NotFound} />
             </Tabs>
           </IonRouterOutlet>
-          <IonMenuToggle className="custom-toggle-menu">
-            <IonIcon src={MenuIcon} className="custom-tab-icon" />
-            <IonLabel>Menu</IonLabel>
-          </IonMenuToggle>
         </IonPage>
       </IonReactRouter>
     </>

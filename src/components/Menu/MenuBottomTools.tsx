@@ -22,7 +22,7 @@ const MenuBottomTools = () => {
               <IonIcon src={SearchIcon} className={styles.navItemIcon} />
               <span className={styles.navItemLabel}>Search</span>
             </div>
-            <IonRippleEffect></IonRippleEffect>
+            <IonRippleEffect type="unbounded"></IonRippleEffect>
           </IonRouterLink>
         </IonMenuToggle>
       </li>
@@ -37,7 +37,7 @@ const MenuBottomTools = () => {
               <IonIcon src={SupportIcon} className={styles.navItemIcon} />
               <span className={styles.navItemLabel}>Support manager</span>
             </div>
-            <IonRippleEffect></IonRippleEffect>
+            <IonRippleEffect type="unbounded"></IonRippleEffect>
           </IonRouterLink>
         </IonMenuToggle>
       </li>

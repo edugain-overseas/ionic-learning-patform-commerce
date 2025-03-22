@@ -10,9 +10,8 @@
     width: 100%;
     height: calc(254rem + 56rem + var(--ion-safe-area-top));
     object-fit: cover;
-    margin-bottom: calc(-10rem);
     position: fixed;
-    top: 0;
+    top: 0rem;
   }
 }
 
@@ -26,6 +25,7 @@
     content: "";
     position: absolute;
     inset: 0;
+    z-index: 0;
     top: 12rem;
     background: url("../../assets/images/background.png");
     border-radius: 16rem 16rem 0 0;
@@ -35,10 +35,10 @@
     &::after {
       content: "";
       position: absolute;
+      z-index: 0;
       inset: 0;
       top: 12rem;
       background-color: var(--custom-bg-rgba-primary);
-      backdrop-filter: blur(10rem);
       border-radius: 16rem 16rem 0 0;
     }
   }
@@ -54,7 +54,7 @@
   box-shadow: 0 -6rem 9rem 0 rgba(0, 0, 0, 0.08);
   border-radius: 16rem 16rem 0 0;
   // overscroll-behavior: none;
-  -webkit-overflow-scrolling: touch;
+  // -webkit-overflow-scrolling: touch;
 }
 
 .scroll {

@@ -48,13 +48,13 @@ const UserCertificates: FC = () => {
     }
   };
 
-  const headerRef = useObserver<HTMLDivElement>(
+  const wrapperRef = useObserver<HTMLDivElement>(
     !isUserLoggedIn,
     observerCallback,
     {
       root: document.querySelector(`.${styles.pageWrapper}`),
       rootMargin: "0px",
-      threshold: 1.0,
+      threshold: 0.5,
     }
   );
 
@@ -90,8 +90,8 @@ const UserCertificates: FC = () => {
 
   return (
     <>
-      <div className={styles.certificatesData}>
-        <div className={styles.certificatesHeader} ref={headerRef}>
+      <div className={styles.certificatesData} ref={wrapperRef}>
+        <div className={styles.certificatesHeader}>
           <span className={styles.certificatesTitle}>
             Certificates of completed courses
           </span>

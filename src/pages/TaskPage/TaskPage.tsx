@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { IonContent } from "@ionic/react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
-// import { useTaskNavigation } from "../../hooks/useTasksNavigation";
 import Lecture from "../../components/Lecture/Lecture";
 import Test from "../../components/Test/Test";
 import Header from "../../components/Header/Header";
@@ -10,9 +9,6 @@ import CourseProgressModal from "../../components/CourseProgressModal/CourseProg
 import styles from "./TaskPage.module.scss";
 
 const TaskPage: React.FC = () => {
-  // const { canGoBack, canGoForward, isLoading, handleNavigateLesson } =
-  //   useTaskNavigation();
-
   const { courseId, taskId } = useParams<{
     courseId: string;
     taskId: string;
@@ -34,34 +30,15 @@ const TaskPage: React.FC = () => {
   }, [taskId, lessonData, taskData]);
 
   const headerProps = {
-    left: [
-      {
-        name: "back",
-        // className: `${canGoBack ? "" : styles.disabled}`,
-        // onClick: () => handleNavigateLesson("back"),
-      },
-      // {
-      //   name: "prevLesson",
-      //   className: `${canGoBack ? "" : styles.disabled}`,
-      //   onClick: () => handleNavigateLesson("back"),
-      // },
-    ],
+    left: [{ name: "back" }],
     title: taskData?.title,
-    right: [
-      { name: "notification" },
-      // {
-      //   name: "nextLesson",
-      //   className: `${canGoForward ? "" : styles.disabled}`,
-      //   onClick: () => handleNavigateLesson("forward"),
-      //   loading: isLoading,
-      // },
-    ],
+    right: [{ name: "notification" }],
   };
 
   return (
     <>
       <Header {...headerProps} />
-      <IonContent fullscreen={true} className={styles.content}>
+      <IonContent fullscreen={true} scrollY={false} className={styles.content}>
         {taskData?.type === "lecture" && <Lecture taskData={taskData} />}
         {taskData?.type === "test" && <Test taskData={taskData} />}
       </IonContent>

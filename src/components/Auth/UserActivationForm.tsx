@@ -5,6 +5,7 @@ import InputText from "./Inputs/InutText";
 import CommonButton from "../CommonButton/CommonButton";
 import styles from "./Auth.module.scss";
 import { useIonToast } from "@ionic/react";
+import InputsWrapper from "./InputsWrapper";
 
 type FormValues = {
   verificationCode: string;
@@ -81,7 +82,7 @@ const UserActivationForm: React.FC<{
           </span>
         </span>
       </div>
-      <div className={styles.inputsWrapper}>
+      <InputsWrapper>
         <InputText
           name="verificationCode"
           placeholder="Verification code"
@@ -95,7 +96,8 @@ const UserActivationForm: React.FC<{
             (errors.verificationCode?.message ? "error" : "valid")
           }
         />
-      </div>
+      </InputsWrapper>
+
       <div className={styles.btnsWrapper}>
         <CommonButton
           label="Continue"

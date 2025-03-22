@@ -72,10 +72,6 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
         .play();
 
       modalRef.current?.classList.remove(styles.fullView);
-      
-      document
-        .querySelector(".custom-toggle-menu")
-        ?.classList.remove(styles.hide);
 
       backdropRef.current?.style.setProperty(
         "background",
@@ -214,19 +210,6 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
     };
   }, [modalRef, handleRef]);
 
-  //use effect for handling toggle menu button styles when mount and destroy modal
-  useEffect(() => {
-    const toogleMenuBtn = document.querySelector(".custom-toggle-menu");
-    if (
-      allowFullViewOnLastBreakpoint &&
-      initialBreakpoint === breakpoints[breakpoints.length - 1]
-    ) {
-      toogleMenuBtn?.classList.add(styles.hide);
-    }
-
-    return () => toogleMenuBtn?.classList.remove(styles.hide);
-  }, []);
-
   // use effect for handling animation when any outside animation was used
   useEffect(() => {
     if (isAnimating) {
@@ -306,12 +289,8 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
       allowFullViewOnLastBreakpoint
     ) {
       modalRef.current?.classList.add(styles.fullView);
-      document.querySelector(".custom-toggle-menu")?.classList.add(styles.hide);
     } else {
       modalRef.current?.classList.remove(styles.fullView);
-      document
-        .querySelector(".custom-toggle-menu")
-        ?.classList.remove(styles.hide);
     }
   };
 

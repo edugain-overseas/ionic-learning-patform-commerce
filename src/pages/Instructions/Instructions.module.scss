@@ -1,5 +1,5 @@
 .container {
-  padding: 16rem 18rem;
+  padding: 16rem 18rem calc(16rem + var(--tabbar-offset));
   display: flex;
   flex-direction: column;
   gap: 8rem;

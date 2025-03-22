@@ -25,9 +25,6 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
 
   const modalParent = document.querySelector("ion-tabs");
 
-  const courseUserData = useUser()?.user.courses.find(
-    (userCourse) => userCourse.course_id === +courseId
-  );
   const course = useCourses()?.courses.find(
     (course) => course.id === +courseId
   );
@@ -52,6 +49,9 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
     router.push(`/courses/course/${courseId}/tasks/${lesson.id}`);
   };
 
+  console.log(course);
+  
+
   return (
     <CustomSheetModal
       height={432}
@@ -69,11 +69,11 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
               <span className={styles.progressTitle}>Content:</span>
               <div className={styles.progressInner}>
                 <span className={styles.progressLabel}>
-                  {`Progress: ${courseUserData?.progress} / 100%`}
+                  {`Progress: ${course?.progress} / 100%`}
                 </span>
                 <ProgressBar
-                  value={courseUserData?.progress}
-                  width={54}
+                  value={course?.progress}
+                  width={42}
                   height={10}
                   showValue={false}
                 />

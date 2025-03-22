@@ -6,10 +6,11 @@ import poster from "../../assets/images/about-ieu.png";
 import textIcon from "../../assets/images/TextIcon.png";
 import DoubleScrollLayout from "../../components/DoubleScrollLayout/DoubleScrollLayout";
 import styles from "./AboutIEU.module.scss";
+import PrimaryScrollConteinerLayout from "../../components/PrimaryScrollConteinerLayout/PrimaryScrollConteinerLayout";
 
 const AboutIEU: React.FC = () => {
   return (
-    <IonPage>
+    <IonPage className="primaryPage">
       <IonHeader className={styles.header} mode="ios">
         <IonBackButton
           defaultHref="/"
@@ -18,7 +19,12 @@ const AboutIEU: React.FC = () => {
           className={styles.bakcBtn}
         />
       </IonHeader>
-      <DoubleScrollLayout topLabel="About University" posterSrc={poster}>
+      {/* <DoubleScrollLayout topLabel="About University" posterSrc={poster}> */}
+      <PrimaryScrollConteinerLayout
+        topLabel="About University"
+        posterSrc={poster}
+        startPosition={190}
+      >
         <div className={`${styles.contentHeader} ${styles.contentBlock}`}>
           <div className={`${styles.titleWrapper} ${styles.titlePrimary}`}>
             <span className={styles.title}>About IEU</span>
@@ -67,7 +73,9 @@ const AboutIEU: React.FC = () => {
             active participant.
           </p>
         </div>
-      </DoubleScrollLayout>
+      </PrimaryScrollConteinerLayout>
+
+      {/* </DoubleScrollLayout> */}
     </IonPage>
   );
 };

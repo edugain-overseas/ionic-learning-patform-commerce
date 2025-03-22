@@ -2,52 +2,54 @@ import { FC, ReactNode, useState } from "react";
 import {
   IonIcon,
   IonLabel,
+  IonMenuToggle,
   IonRippleEffect,
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
   IonTabs,
 } from "@ionic/react";
-import { tabsAnimations } from "../animations/tabsAnimations";
+// import { tabsAnimations } from "../animations/tabsAnimations";
 import HomeIcon from "../assets/icons/tabs/home.svg";
 import CoursesIcon from "../assets/icons/tabs/courses.svg";
 import MyProfileIcon from "../assets/icons/tabs/my-profile.svg";
+import MenuIcon from "../assets/icons/tabs/menu.svg";
 import BasketIcon from "./BasketIcon/BasketIcon";
 
 interface TabsTypes {
   children: ReactNode;
 }
 
-const TABS: string[] = ["home", "courses", "profile", "basket"];
+// const TABS: string[] = ["home", "courses", "profile", "basket"];
 
 const Tabs: FC<TabsTypes> = ({ children }) => {
-  const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
+  // const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
 
-  const handleTabWillChange = (e: CustomEvent) => {
-    const targetTab = e.detail.tab;
+  // const handleTabWillChange = (e: CustomEvent) => {
+  //   const targetTab = e.detail.tab;
 
-    const targetTabIndex = TABS.findIndex((tab) => tab === targetTab);
-    const currentTab = TABS[currentTabIndex] as any;
+  //   const targetTabIndex = TABS.findIndex((tab) => tab === targetTab);
+  //   const currentTab = TABS[currentTabIndex] as any;
 
-    const direction = targetTabIndex > currentTabIndex ? "right" : "left";
-    const ionRouterOutlet = document.querySelector(
-      "ion-router-outlet"
-    ) as HTMLElement;
+  //   const direction = targetTabIndex > currentTabIndex ? "right" : "left";
+  //   const ionRouterOutlet = document.querySelector(
+  //     "ion-router-outlet"
+  //   ) as HTMLElement;
 
-    if (ionRouterOutlet) {
-      const targetPage = ionRouterOutlet.children[targetTab] as HTMLElement;
-      // const currentPage = ionRouterOutlet.children[currentTab] as HTMLElement;
+  //   if (ionRouterOutlet) {
+  //     const targetPage = ionRouterOutlet.children[targetTab] as HTMLElement;
+  //     // const currentPage = ionRouterOutlet.children[currentTab] as HTMLElement;
 
-      // if (currentPage) {
-      //   tabsAnimations[`to${direction}`](currentPage).play();
-      // }
+  //     // if (currentPage) {
+  //     //   tabsAnimations[`to${direction}`](currentPage).play();
+  //     // }
 
-      if (targetPage) {
-        tabsAnimations[`from${direction}`](targetPage).play();
-      }
-    }
-    setCurrentTabIndex(targetTabIndex);
-  };
+  //     if (targetPage) {
+  //       tabsAnimations[`from${direction}`](targetPage).play();
+  //     }
+  //   }
+  //   setCurrentTabIndex(targetTabIndex);
+  // };
 
   return (
     <IonTabs>
@@ -57,7 +59,7 @@ const Tabs: FC<TabsTypes> = ({ children }) => {
         className="custom-tab-bar"
         id="main-content"
         // onIonTabsWillChange={handleTabWillChange}
-        onIonTabsDidChange={handleTabWillChange}
+        // onIonTabsDidChange={handleTabWillChange}
       >
         <IonTabButton tab="home" href="/home" className="ion-activatable">
           <IonIcon src={HomeIcon} className="custom-tab-icon" />
@@ -82,6 +84,16 @@ const Tabs: FC<TabsTypes> = ({ children }) => {
           <BasketIcon />
           <IonLabel>Basket</IonLabel>
           <IonRippleEffect type="unbounded"></IonRippleEffect>
+        </IonTabButton>
+        <IonTabButton className="ion-activatable">
+          <IonMenuToggle
+            className="menu-button-inner"
+            onClick={(e) => e.preventDefault()}
+          >
+            <IonIcon src={MenuIcon} className="custom-tab-icon" />
+            <IonLabel>Menu</IonLabel>
+            <IonRippleEffect type="unbounded"></IonRippleEffect>
+          </IonMenuToggle>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>

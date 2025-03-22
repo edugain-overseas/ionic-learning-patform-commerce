@@ -5,5 +5,6 @@
 }
 
 .content {
-  top: var(--ion-safe-area-top);
+  --padding-top: var(--ion-safe-area-top);
+  position: absolute;
 }

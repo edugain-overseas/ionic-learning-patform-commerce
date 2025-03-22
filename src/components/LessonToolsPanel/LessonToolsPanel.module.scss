@@ -3,7 +3,7 @@
   height: 48rem;
   position: absolute;
   z-index: 1;
-  top: 98rem;
+  top: 98rem + var(--ion-safe-area-top);
   left: calc(100% - 50rem);
   overflow: hidden;
 

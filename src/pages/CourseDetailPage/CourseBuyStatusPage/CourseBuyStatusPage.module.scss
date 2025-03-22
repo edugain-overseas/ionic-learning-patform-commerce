@@ -1,6 +1,7 @@
 .content {
   height: 100%;
-  padding: 20rem 30rem;
+  padding: calc(20rem + var(--ion-safe-area-top))
+    calc(30rem + var(--ion-safe-area-bottom));
   display: flex;
   align-items: center;
   flex-direction: column;

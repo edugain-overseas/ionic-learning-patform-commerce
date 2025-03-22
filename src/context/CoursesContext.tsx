@@ -123,6 +123,7 @@ export interface CourseType {
   quantity_lecture: number;
   quantity_test: number;
   skills_text?: string;
+  progress?: number;
 }
 
 export interface CategoryType {
