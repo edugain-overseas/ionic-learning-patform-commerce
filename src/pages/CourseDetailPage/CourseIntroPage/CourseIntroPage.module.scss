@@ -14,62 +14,67 @@
   }
 }
 
-.pageWrapper {
-  position: relative;
-  overflow: auto;
-  height: calc(100%);
-  padding-top: 190rem;
-
-  .coursePoster {
-    display: block;
-    width: 100%;
-    min-height: 200rem;
-    margin-bottom: -10rem;
-    position: fixed;
-    top: 0;
-  }
+.content {
+  --padding-top: var(--ion-safe-area-top);
+  // --padding-top: 0px;
 }
 
-.contentBackground {
-  padding-top: 12rem;
-  position: sticky;
-  overflow: hidden;
-  height: calc(100% + 132rem);
+// .pageWrapper {
+//   position: relative;
+//   overflow: auto;
+//   height: calc(100%);
+//   padding-top: 190rem;
 
-  &:before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    top: 12rem;
-    background: url("../../../assets/images/background.png");
-    border-radius: 10rem;
-  }
+//   .coursePoster {
+//     display: block;
+//     width: 100%;
+//     min-height: 200rem;
+//     margin-bottom: -10rem;
+//     position: fixed;
+//     top: 0;
+//   }
+// }
 
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    top: 12rem;
-    background-color: var(--custom-bg-rgba-primary);
-    backdrop-filter: blur(10rem);
-    border-radius: 10rem;
-  }
-}
+// .contentBackground {
+//   padding-top: 12rem;
+//   position: sticky;
+//   overflow: hidden;
+//   height: calc(100% + 132rem);
 
-.contentInner {
-  padding-inline: 18rem;
-  padding-bottom: calc(82rem + var(--ion-safe-area-bottom));
-  padding-top: 28rem;
-  height: 100%;
-  position: relative;
-  z-index: 1;
-  box-shadow: var(--custom-box-shadow-content);
-  border-radius: 10rem;
-}
+//   &:before {
+//     content: "";
+//     position: absolute;
+//     inset: 0;
+//     top: 12rem;
+//     background: url("../../../assets/images/background.png");
+//     border-radius: 10rem;
+//   }
 
-.scroll {
-  overflow: scroll;
-}
+//   &::after {
+//     content: "";
+//     position: absolute;
+//     inset: 0;
+//     top: 12rem;
+//     background-color: var(--custom-bg-rgba-primary);
+//     backdrop-filter: blur(10rem);
+//     border-radius: 10rem;
+//   }
+// }
+
+// .contentInner {
+//   padding-inline: 18rem;
+//   padding-bottom: calc(82rem + var(--ion-safe-area-bottom));
+//   padding-top: 28rem;
+//   height: 100%;
+//   position: relative;
+//   z-index: 1;
+//   box-shadow: var(--custom-box-shadow-content);
+//   border-radius: 10rem;
+// }
+
+// .scroll {
+//   overflow: scroll;
+// }
 
 .contentBlock {
   position: relative;

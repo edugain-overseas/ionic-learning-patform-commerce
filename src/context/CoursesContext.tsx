@@ -153,6 +153,7 @@ interface CoursesContextType {
     general: InstructionType[];
     courses: InstructionType[];
   };
+  getAllCategories: () => Promise<void>;
   getAllCourses: () => Promise<void>;
   getCourseDetailById: (courseId: string | number) => Promise<void>;
   getLessonById: (
@@ -183,6 +184,17 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
     general: [],
     courses: [],
   });
+
+  const getAllCategories = async () => {
+    try {
+      const response = await instance.get<CategoryType[]>("/category/all");
+      console.log("categories", response.data);
+
+      setCategories(response.data);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    }
+  };
 
   const getAllCourses = async () => {
     try {
@@ -274,16 +286,16 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
   };
 
   useEffect(() => {
-    const getAllCategories = async () => {
-      try {
-        const response = await instance.get<CategoryType[]>("/category/all");
-        console.log("categories", response.data);
+    // const getAllCategories = async () => {
+    //   try {
+    //     const response = await instance.get<CategoryType[]>("/category/all");
+    //     console.log("categories", response.data);
 
-        setCategories(response.data);
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      }
-    };
+    //     setCategories(response.data);
+    //   } catch (error) {
+    //     console.error("Error fetching courses:", error);
+    //   }
+    // };
 
     const getGeneralInstruction = async () => {
       try {
@@ -332,6 +344,7 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
         courses,
         categories,
         instructions,
+        getAllCategories,
         getAllCourses,
         getCourseDetailById,
         getLessonById,

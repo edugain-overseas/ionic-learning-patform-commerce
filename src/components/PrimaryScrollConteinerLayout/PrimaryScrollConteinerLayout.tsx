@@ -83,7 +83,7 @@ const PrimaryScrollConteinerLayout: FC<DoubleScrollContainerLayoutType> = ({
           height: `calc(100% + ${scrollMarginTrigger}rem)`,
           position: isTrigerReached ? "fixed" : "sticky",
           top: isTrigerReached
-            ? `${endPosition}rem`
+            ? `calc(${endPosition}rem + var(--ion-safe-area-top))`
             : `-${scrollMarginTrigger}rem`,
         }}
       >

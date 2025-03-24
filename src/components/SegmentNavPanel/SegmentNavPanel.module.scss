@@ -32,6 +32,8 @@
   min-height: min-content;
   padding-bottom: 10rem;
   width: fit-content;
+  flex-shrink: 0;
+  // justify-content: center;
 
   &:first-child {
     margin-left: 18rem;

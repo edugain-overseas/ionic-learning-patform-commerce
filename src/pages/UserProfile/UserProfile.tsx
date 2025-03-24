@@ -25,6 +25,7 @@ import styles from "./UserProfile.module.scss";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
+import PageRefresher from "../../components/PageRefresher/PageRefresher";
 
 // import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 
@@ -77,6 +78,8 @@ const UserProfile: React.FC = () => {
     }
   };
 
+  const onRefresh = userInterface?.getUser;
+
   useEffect(() => {
     setPresentingElement(pageRef.current);
   }, []);
@@ -85,6 +88,7 @@ const UserProfile: React.FC = () => {
     <IonPage id="profile" ref={pageRef} className="primaryPage">
       <Header {...headerProps} />
       <IonContent className={styles.pageWrapper}>
+        {onRefresh && <PageRefresher onRefresh={onRefresh} />}
         <UserMainInfo userData={userData} />
         <UserProfileInfo userData={userData} />
         <UserStatistics userData={userData} />

@@ -22,6 +22,7 @@ import CourseItem from "../../components/CourseItem/CourseItem";
 import UnauthorizedUserContentFallback from "../../components/UnauthorizedUserContentFallback/UnauthorizedUserContentFallback";
 import Auth from "../../components/Auth/Auth";
 import styles from "./CategoryDetailPage.module.scss";
+import PageRefresher from "../../components/PageRefresher/PageRefresher";
 
 const MAX_SCROLL_VALUE = 112;
 
@@ -43,11 +44,13 @@ const CategoryDetailPage: React.FC = () => {
 
   const { categoryId } = useParams<{ categoryId: string }>();
 
-  const category = useCourses()?.categories.find(
+  const coursesInterface = useCourses();
+
+  const category = coursesInterface?.categories.find(
     ({ id }) => id === +categoryId
   );
 
-  const courses = useCourses()?.courses.filter(
+  const courses = coursesInterface?.courses.filter(
     (course) => course.category_id === +categoryId
   );
 
@@ -129,6 +132,8 @@ const CategoryDetailPage: React.FC = () => {
     }
   };
 
+  const onRefresh = coursesInterface?.getAllCourses;
+
   return (
     <IonPage className={styles.papeWrapper}>
       <Header {...headerProps} />
@@ -140,6 +145,7 @@ const CategoryDetailPage: React.FC = () => {
         ref={contentRef}
         style={{ overflow: "hidden" }}
       >
+        {onRefresh && <PageRefresher onRefresh={onRefresh} />}
         <div className={styles.topContentWrapper} ref={topContentRef}>
           <div className={styles.topScaler}>
             <div className={styles.pageTitle}>

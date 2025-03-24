@@ -1,4 +1,4 @@
-import { IonContent, IonPage } from "@ionic/react";
+import { IonContent, IonPage, RefresherEventDetail } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import {
   coursesPrivateNavItems,
@@ -10,6 +10,7 @@ import Header from "../../components/Header/Header";
 import CategoryItem from "../../components/CategoryItem/CategoryItem";
 import SegmentNavPanel from "../../components/SegmentNavPanel/SegmentNavPanel";
 import styles from "./Courses.module.scss";
+import PageRefresher from "../../components/PageRefresher/PageRefresher";
 
 const Courses: React.FC = () => {
   const userInterface = useUser();
@@ -81,6 +82,8 @@ const Courses: React.FC = () => {
     ],
   };
 
+  const onRefresh = coursesInterface?.getAllCategories;
+
   return (
     <IonPage id="courses" className="primaryPage">
       <Header {...headerProps} />
@@ -92,6 +95,7 @@ const Courses: React.FC = () => {
             items={isLoggedIn ? coursesPrivateNavItems : coursesPublicNavItems}
           />
         )}
+        {onRefresh && <PageRefresher onRefresh={onRefresh} />}
         <ul
           className={styles.categoriesList}
           style={{ paddingTop: isLoggedIn ? 0 : "16rem" }}

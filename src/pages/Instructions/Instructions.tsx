@@ -10,9 +10,11 @@ import Accordion from "../../components/Accordion/Accordion";
 import { useCourses } from "../../context/CoursesContext";
 import { getFormattedStrFromDate } from "../../utils/formatDate";
 import InstructionContent from "./InstructionContent";
+import PageRefresher from "../../components/PageRefresher/PageRefresher";
 
 const Instructions: React.FC = () => {
-  const instructions = useCourses()?.instructions;
+  const coursesInterface = useCourses();
+  const instructions = coursesInterface?.instructions;
   const [filter, setFilter] = useState<"general" | "courses">("general");
 
   const headerProps = {
@@ -24,10 +26,13 @@ const Instructions: React.FC = () => {
     ],
   };
 
+  const onRefresh = coursesInterface?.getAllCategories;
+
   return (
     <IonPage className="primaryPage">
       <Header {...headerProps} />
       <IonContent>
+        {onRefresh && <PageRefresher onRefresh={onRefresh} />}
         <SegmentNavPanel
           items={instructionsNav}
           value={filter}

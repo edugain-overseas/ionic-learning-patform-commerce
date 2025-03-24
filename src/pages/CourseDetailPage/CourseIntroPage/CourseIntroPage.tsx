@@ -20,8 +20,8 @@ import CardPrice from "../../../components/CardPrice/CardPrice";
 import CourseNavPanel from "../../../components/CourseNavPanel/CourseNavPanel";
 import EqualSpaceContainer from "../../../components/EqualSpaceContainer/EqualSpaceContainer";
 import CommonButton from "../../../components/CommonButton/CommonButton";
-import styles from "./CourseIntroPage.module.scss";
 import PrimaryScrollConteinerLayout from "../../../components/PrimaryScrollConteinerLayout/PrimaryScrollConteinerLayout";
+import styles from "./CourseIntroPage.module.scss";
 
 const CourseIntroPage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -50,7 +50,7 @@ const CourseIntroPage: React.FC = () => {
           className={styles.bakcBtn}
         />
       </IonHeader>
-      <IonContent scrollY={false}>
+      <IonContent scrollY={false} className={styles.content}>
         {/* <DoubleScrollLayout
           posterSrc={`${serverName}/${course?.image_path}`}
           topLabel={`Category: ${category?.title}`}
