@@ -68,13 +68,13 @@ const Search: FC = () => {
   }, [q]);
 
   return (
-    <IonPage>
+    <IonPage className="primaryPage">
       <IonHeader>
         <IonToolbar>
           <Searchbar onChange={handleQueryChange} value={q}/>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="custom-content-wrapper">
+      <IonContent className={`custom-content-wrapper ${styles.searchContent}`}>
         {isLoading ? (
           <Spinner className={styles.spinner} />
         ) : (

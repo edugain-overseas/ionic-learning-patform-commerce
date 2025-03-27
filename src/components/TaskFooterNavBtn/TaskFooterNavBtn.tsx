@@ -19,7 +19,6 @@ const TaskFooterNavBtn: FC<TaskFooterNavBtnProps> = ({
 
   const isDisabled = direction === "next" ? !canGoForward : !canGoBack;
 
-  // console.log(direction, canGoBack, canGoForward);
 
   return (
     <button

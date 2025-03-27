@@ -73,7 +73,7 @@ const PrimaryScrollConteinerLayout: FC<DoubleScrollContainerLayoutType> = ({
         src={posterSrc}
         className={styles.poster}
         style={{
-          height: `calc(${startPosition + 16}rem)`,
+          height: `calc(${startPosition + 16}rem + var(--ion-safe-area-top))`,
         }}
       />
       <div

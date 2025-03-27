@@ -1,7 +1,7 @@
 .content {
   height: 100%;
   padding: calc(20rem + var(--ion-safe-area-top))
-    calc(30rem + var(--ion-safe-area-bottom));
+    calc(30rem + var(--tabbar-offset));
   display: flex;
   align-items: center;
   flex-direction: column;

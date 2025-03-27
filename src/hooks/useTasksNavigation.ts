@@ -20,6 +20,9 @@ export const useTaskNavigation = () => {
   );
   const taskData = courseData?.lessons.find((lesson) => lesson.id === +taskId);
 
+  console.log(taskData);
+  
+
   const completeLecture = async (lessonId: number) => {
     setIsLoading(true);
     try {
