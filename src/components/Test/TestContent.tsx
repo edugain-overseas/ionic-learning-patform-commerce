@@ -37,6 +37,8 @@ const TestContent: React.FC<{
     status,
   } = test;
 
+  console.log(testData);
+
   const testContent = [...(testData as TestDataType)?.questions].sort(
     (itemA, itemB) => itemA.q_number - itemB.q_number
   );

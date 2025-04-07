@@ -31,6 +31,21 @@ interface PreviousAvatar {
   id: number;
 }
 
+type CourseCertificate = {
+  course_certificate_id: number | null;
+  course_certificate_link: string | null;
+  course_id: number;
+  course_name: string;
+};
+
+type CategoryCetficate = {
+  category_certificate_id: number | null;
+  category_certificate_link: number | null;
+  category_id: number;
+  category_name: string;
+  course_certificate_data: CourseCertificate[];
+};
+
 export interface UserType {
   accessToken?: string | null | Promise<any>;
   userId: number | null;
@@ -50,6 +65,7 @@ export interface UserType {
   changedName: boolean;
   changedSurname: boolean;
   chats: [];
+  certificates: CategoryCetficate[];
 }
 
 export type UserInfoToUpdateType = {
@@ -119,6 +135,7 @@ const initialState: UserType = {
   changedName: false,
   changedSurname: false,
   chats: [],
+  certificates: [],
 };
 
 export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
@@ -287,6 +304,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
         changedSurname: data.changed_surname,
         courses: data.courses,
         chats: data.chats,
+        certificates: data.certificates,
       }));
     } catch (error) {
       setError(error as AxiosError);

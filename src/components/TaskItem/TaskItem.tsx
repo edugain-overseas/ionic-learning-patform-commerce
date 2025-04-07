@@ -13,8 +13,6 @@ interface TaskItemType {
   task: LessonType;
 }
 
-
-
 const TaskItem: FC<TaskItemType> = ({ task }) => {
   const listStyle = useListStyle()?.listStyle;
   console.log(task);
@@ -62,13 +60,14 @@ const TaskItem: FC<TaskItemType> = ({ task }) => {
     </div>
   );
 
+  const taskLink =
+    task.type === "exam"
+      ? `/courses/course/${task.course_id}/exam`
+      : `/courses/course/${task.course_id}/tasks/${task.id}`;
+
   return (
     <IonItem
-      routerLink={
-        task.status !== "blocked"
-          ? `/courses/course/${task.course_id}/tasks/${task.id}`
-          : undefined
-      }
+      routerLink={task.status !== "blocked" ? taskLink : undefined}
       routerDirection="forward"
       button
       detail={false}

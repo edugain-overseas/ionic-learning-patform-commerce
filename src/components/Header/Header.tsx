@@ -30,6 +30,7 @@ interface buttonPropsTypes {
   onClick?: () => void;
   className?: string;
   loading?: boolean;
+  defaultHref?: string;
 }
 
 interface HeaderTypes {
@@ -50,7 +51,7 @@ const renderBtn = (props: buttonPropsTypes, handleNotification: () => void) => {
           className={`${styles.backBtn} ${
             props.className ? props.className : ""
           }`}
-          defaultHref="/"
+          defaultHref={props.defaultHref || "/"}
           icon={backIcon}
           text={""}
         ></IonBackButton>
@@ -202,16 +203,12 @@ const Header: FC<HeaderTypes> = ({
     present({
       message: "You don't have notofocation yet!",
       duration: 2000,
-      position: 'top'
+      position: "top",
     });
   };
 
   return (
-    <IonHeader
-      className={`${styles.header} ${
-        mode === "transparent" ? styles.transparent : ""
-      }`}
-    >
+    <IonHeader className={`${styles.header} ${mode ? styles[mode] : ""}`}>
       <IonToolbar
         className={`${secondary ? styles.secondary : ""} ${styles.toolbar} ${
           toolbarClassName ? toolbarClassName : ""

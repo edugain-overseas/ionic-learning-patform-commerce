@@ -84,7 +84,18 @@ export type TestDataType = {
   questions: TestContentType[];
 };
 
-export type LessonDataUnionType = LectureDataType | TestDataType;
+export type ExamDataType = {
+  exam_id?: number;
+  min_score: number;
+  my_score?: number;
+  score: number;
+  timer: number;
+  attempts: number;
+  my_attempt_id?: number;
+  questions: TestContentType[];
+};
+
+export type LessonDataUnionType = LectureDataType | TestDataType | ExamDataType;
 
 export interface LessonType {
   course_id: number;
@@ -225,6 +236,9 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
     courseId: number | string
   ) => {
     try {
+      if (!instance.defaults.headers["Authorization"]) {
+        return;
+      }
       const data = (await instance.get(`/lesson/get/${lessonId}`)).data;
       setCourses((prev: CourseType[]) => {
         const otherCourses = prev.filter((course) => course.id !== +courseId);
@@ -235,7 +249,9 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
               return {
                 ...lesson,
                 lessonData:
-                  data.type === "test" ? data.test_data : data.lecture_info,
+                  data.type === "lecture"
+                    ? data.lecture_info
+                    : data[`${data.type}_data`],
               };
             }
             return lesson;

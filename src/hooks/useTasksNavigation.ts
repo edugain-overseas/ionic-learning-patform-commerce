@@ -20,9 +20,6 @@ export const useTaskNavigation = () => {
   );
   const taskData = courseData?.lessons.find((lesson) => lesson.id === +taskId);
 
-  console.log(taskData);
-  
-
   const completeLecture = async (lessonId: number) => {
     setIsLoading(true);
     try {
@@ -56,10 +53,17 @@ export const useTaskNavigation = () => {
     }
     const targetLessonId = getNextLessonId(direction);
     if (targetLessonId) {
-      router.push(
-        `/courses/course/${courseId}/tasks/${targetLessonId}`,
-        `${direction}`
-      );
+      const targetLessonType = courseData?.lessons.find(
+        (lesson) => lesson.id === +targetLessonId
+      )?.type;
+
+      const taskLink =
+        targetLessonType === "exam"
+          ? `/courses/course/${courseId}/exam`
+          : `/courses/course/${courseId}/tasks/${targetLessonId}`;
+      console.log(taskLink);
+
+      router.push(taskLink, `${direction}`);
     }
   };
 

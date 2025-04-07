@@ -35,7 +35,7 @@
 
 .contentInner {
   padding-inline: 18rem;
-  padding-bottom: calc(65rem + 28rem + var(--tabbar-offset));
+  padding-bottom: var(--content-offset-bottom);
   padding-top: 28rem;
   position: relative;
   z-index: 1;

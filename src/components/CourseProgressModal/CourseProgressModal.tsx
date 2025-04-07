@@ -49,14 +49,14 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
     router.push(`/courses/course/${courseId}/tasks/${lesson.id}`);
   };
 
-  console.log(course);
+  // console.log(course);
   
 
   return (
     <CustomSheetModal
       height={432}
       portalTo={modalParent ? modalParent : undefined}
-      position={["0", "0", "60rem", "0"]}
+      position={["0", "0", "var(--tabbar-offset)", "0"]}
       breakpoints={[firstBreakpoint, secondBreackpoint, 1]}
       initialBreakpoint={firstBreakpoint}
       allowFullViewOnLastBreakpoint={true}

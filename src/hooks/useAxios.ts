@@ -5,7 +5,12 @@ import useStorage from "./useStorage";
 export const useAxios = () => {
   const [accessToken, setAccessToken] = useStorage("accessToken", null);
   const [refreshing, setRefreshing] = useState(false);
-  const [refreshQueue, setRefreshQueue] = useState<Array<{ resolve: (value?: unknown) => void, reject: (reason?: any) => void }>>([]);
+  const [refreshQueue, setRefreshQueue] = useState<
+    Array<{
+      resolve: (value?: unknown) => void;
+      reject: (reason?: any) => void;
+    }>
+  >([]);
 
   const processQueue = (error: any, token: string | null = null) => {
     refreshQueue.forEach(({ resolve, reject }) => {
@@ -23,10 +28,13 @@ export const useAxios = () => {
       const response = await instance.get("/user/refresh", {
         withCredentials: true,
       });
+
       const newAccessToken = response.data.access_token;
-      instance.defaults.headers["Authorization"] = `Bearer ${newAccessToken}`;
       setAccessToken(newAccessToken);
+      instance.defaults.headers["Authorization"] = `Bearer ${newAccessToken}`;
+
       processQueue(null, newAccessToken);
+      
       return newAccessToken;
     } catch (error) {
       processQueue(error, null);
@@ -38,9 +46,14 @@ export const useAxios = () => {
   };
 
   instance.interceptors.response.use(
-    (res) => res,
+    (response) => response,
     async (error) => {
       const originalRequest = error.config;
+
+      if (originalRequest.url === "/user/refresh") {
+        return Promise.reject(error);
+      }
+
       if (error.response && error.response.status === 401) {
         if (!refreshing) {
           setRefreshing(true);
@@ -54,13 +67,15 @@ export const useAxios = () => {
             });
         } else {
           return new Promise((resolve, reject) => {
-            setRefreshQueue(prevQueue => [...prevQueue, { resolve, reject }]);
-          }).then((newToken) => {
-            originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
-            return instance(originalRequest);
-          }).catch((err) => {
-            return Promise.reject(err);
-          });
+            setRefreshQueue((prevQueue) => [...prevQueue, { resolve, reject }]);
+          })
+            .then((newToken) => {
+              originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+              return instance(originalRequest);
+            })
+            .catch((err) => {
+              return Promise.reject(err);
+            });
         }
       }
       return Promise.reject(error);

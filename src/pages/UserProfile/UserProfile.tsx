@@ -27,15 +27,6 @@ import "swiper/css";
 import "swiper/css/pagination";
 import PageRefresher from "../../components/PageRefresher/PageRefresher";
 
-// import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
-
-// const pagination = {
-//   clickable: true,
-//   renderBullet: function (_: any, className: string) {
-//     return `<span class="${className} ${styles.customBullet}"></span>`;
-//   },
-// };
-
 const headerProps = {
   left: [{ name: "back" }],
   title: "My Profile",

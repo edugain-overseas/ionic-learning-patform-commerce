@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useId } from "react";
 import { IonContent, IonIcon, IonPopover, IonText } from "@ionic/react";
 import infoIcon from "../../assets/icons/info.svg";
 import InsetBtn from "../InsetBtn/InsetBtn";
 import styles from "./InfoBtn.module.scss";
 
-const InfoBtn: React.FC<{ info?: string; id: string; ripple?: boolean }> = ({
+const InfoBtn: React.FC<{ info?: string; ripple?: boolean }> = ({
   info,
-  id,
   ripple,
 }) => {
+  const uniqueId = useId();
+
   return (
     <>
       <InsetBtn
@@ -16,11 +17,10 @@ const InfoBtn: React.FC<{ info?: string; id: string; ripple?: boolean }> = ({
         width="32rem"
         height="32rem"
         disabled={false}
-        onClick={() => {}}
-        id={id}
+        id={uniqueId}
         ripple={ripple}
       />
-      <IonPopover trigger={id}>
+      <IonPopover trigger={uniqueId} showBackdrop={false} alignment="end">
         <IonContent className={styles.infoContent} scrollY={false}>
           <IonText>{info}</IonText>
         </IonContent>

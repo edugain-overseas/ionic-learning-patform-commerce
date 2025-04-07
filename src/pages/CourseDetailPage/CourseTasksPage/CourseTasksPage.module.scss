@@ -2,12 +2,11 @@
   --background: transparent;
   --padding-start: 18rem;
   --padding-end: 18rem;
+  --padding-bottom: calc(24rem + var(--tabbar-offset));
 }
 
 .courseStats {
   padding: 12rem;
-
-  // padding-bottom: 1000rem;
 
   border-radius: var(--custom--border-radius-primary);
   background: var(--custom-bg-rgba-secondary);
@@ -69,7 +68,7 @@
 }
 
 .tasksList {
-  padding-block: 16rem 80rem;
+  padding-block: 16rem;
   display: flex;
   gap: 16rem;
   flex-wrap: wrap;

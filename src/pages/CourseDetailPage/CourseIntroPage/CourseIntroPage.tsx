@@ -51,10 +51,6 @@ const CourseIntroPage: React.FC = () => {
         />
       </IonHeader>
       <IonContent scrollY={false} className={styles.content}>
-        {/* <DoubleScrollLayout
-          posterSrc={`${serverName}/${course?.image_path}`}
-          topLabel={`Category: ${category?.title}`}
-        > */}
         <PrimaryScrollConteinerLayout
           posterSrc={`${serverName}/${course?.image_path}`}
           topLabel={`Category: ${category?.title}`}
@@ -189,7 +185,6 @@ const CourseIntroPage: React.FC = () => {
                 ))}
             </ul>
           </div>
-          {/* </DoubleScrollLayout> */}
         </PrimaryScrollConteinerLayout>
         <div className={styles.bottomBar}>
           {isCoursePurchased ? (

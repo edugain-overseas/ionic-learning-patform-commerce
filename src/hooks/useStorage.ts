@@ -27,10 +27,10 @@ const useStorage = <T>(key: string, defaultValue: T) => {
   }, []);
 
   useEffect(() => {
-    const setValueToStoreStore = async () => {
+    const setValueToStore = async () => {
       await store.current?.set(key, value);
     };
-    setValueToStoreStore();
+    setValueToStore();
   }, [value]);
 
   return [value, setValue] as const;

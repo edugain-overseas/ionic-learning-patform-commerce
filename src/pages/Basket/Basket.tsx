@@ -60,7 +60,14 @@ const Basket: FC = () => {
           <IonItem button={true} detail={false}>
             <Link
               to="/courses"
-              style={{ fontSize: "12rem", color: "var(--ion-color-light)" }}
+              style={{
+                fontSize: "12rem",
+                color: "var(--ion-color-light)",
+                width: "100%",
+                height: "100%",
+                display: 'flex',
+                alignItems: 'center'
+              }}
             >
               Back to courses
             </Link>

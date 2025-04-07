@@ -1,14 +1,4 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { base64ToFile } from "../../utils/base64ToFile";
-import styles from "./UserAvatarEditor.module.scss";
-import CommonButton from "../CommonButton/CommonButton";
-import { IonIcon, IonSpinner } from "@ionic/react";
-import SaveIcon from "../../assets/icons/save.svg";
-import { useUser } from "../../context/UserContext";
-import Avatar from "../Avatar/Avatar";
-import cameraIcon from "../../assets/icons/camera.svg";
-import galleryIcon from "../../assets/icons/gallery.svg";
-import InsetBtn from "../InsetBtn/InsetBtn";
 import {
   Camera,
   CameraDirection,
@@ -16,8 +6,18 @@ import {
   CameraSource,
   Photo,
 } from "@capacitor/camera";
+import { useUser } from "../../context/UserContext";
+import { base64ToFile } from "../../utils/base64ToFile";
+import { IonIcon, IonSpinner } from "@ionic/react";
+import CommonButton from "../CommonButton/CommonButton";
+import SaveIcon from "../../assets/icons/save.svg";
+import Avatar from "../Avatar/Avatar";
+import cameraIcon from "../../assets/icons/camera.svg";
+import galleryIcon from "../../assets/icons/gallery.svg";
+import InsetBtn from "../InsetBtn/InsetBtn";
 import AvatarEditorComponent from "./AvatarEditorComponent";
 import AvatarEditor from "react-avatar-editor";
+import styles from "./UserAvatarEditor.module.scss";
 
 interface UserAvatarEditorPropsType {
   closeModal?: () => void;

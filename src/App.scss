@@ -33,6 +33,9 @@ a {
   left: 0;
   right: 0;
 
+  transform: translateY(0);
+  transition: transform var(--custom-tr-time-mid) ease;
+
   // ios apperence bug fix
   will-change: transform, opacity;
   -webkit-backface-visibility: hidden;
@@ -43,6 +46,10 @@ a {
     position: relative;
     background: var(--custom-primary-lg);
     // opacity: 1;
+  }
+
+  &.hidden {
+    transform: translateY(100%);
   }
 
   .custom-tab-icon {

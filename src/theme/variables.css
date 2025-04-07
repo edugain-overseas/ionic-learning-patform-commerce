@@ -3,8 +3,6 @@ http://ionicframework.com/docs/theming/ */
 
 /** Ionic CSS Variables **/
 :root {
-  /* --ion-safe-area-top: 0rem;
-  --ion-safe-area-bottom: 0rem; */
   --ion-safe-area-top: env(safe-area-inset-top, 0px);
   --ion-safe-area-bottom: env(safe-area-inset-bottom, 0px);
   --keyboard-height: 0px;
@@ -16,7 +14,6 @@ http://ionicframework.com/docs/theming/ */
   --custom-color-decorate: #ececec;
   --custom-color-decorate-secondary: #b7b7b7;
   --custom-color-decorate-thirdinary: #fbfbfb;
-  /* --custom-primary-lg: linear-gradient(#b80101, #920000); */
   --custom-primary-lg: #920000;
   --custom-bg-rgba-primary: rgba(255, 255, 255, 0.8);
   --custom-bg-rgba-secondary: rgba(255, 255, 255, 0.65);

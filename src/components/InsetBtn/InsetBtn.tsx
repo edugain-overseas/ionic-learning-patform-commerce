@@ -24,9 +24,9 @@ const InsetBtn: React.FC<InsetBtnTypes> = ({
   buttonClassName,
   buttonBackgroundColor,
   backgroundColor,
+  id,
   onClick = () => {},
   disabled = false,
-  id = undefined,
   ripple = false,
 }) => {
   const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -34,6 +34,7 @@ const InsetBtn: React.FC<InsetBtnTypes> = ({
     e.stopPropagation();
     onClick();
   };
+
   return (
     <button
       style={{
@@ -47,7 +48,7 @@ const InsetBtn: React.FC<InsetBtnTypes> = ({
       }`}
       onClick={handleClick}
       disabled={disabled}
-      id={id ? id : undefined}
+      id={id}
     >
       <div style={backgroundColor ? { backgroundColor: backgroundColor } : {}}>
         {icon}

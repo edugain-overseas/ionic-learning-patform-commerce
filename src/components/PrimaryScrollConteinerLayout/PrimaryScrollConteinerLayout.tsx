@@ -57,6 +57,12 @@ const PrimaryScrollConteinerLayout: FC<DoubleScrollContainerLayoutType> = ({
     }
   });
 
+  useEffect(() => {
+    if (pageWrapperRef.current?.clientHeight) {
+      setPageContentHeight(pxToRem(pageWrapperRef.current?.clientHeight));
+    }
+  }, [pageWrapperRef]);
+
   return (
     <div
       className={styles.pageWrapper}

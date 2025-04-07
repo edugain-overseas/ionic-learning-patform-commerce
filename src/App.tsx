@@ -44,6 +44,7 @@ const App: React.FC = () => {
   useGoogleAuthInit();
   useSetupStripe();
 
+
   return (
     <IonApp className="App">
       <UserProvider>

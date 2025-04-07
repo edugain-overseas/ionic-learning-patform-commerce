@@ -3,10 +3,15 @@ import { UserType } from "../../context/UserContext";
 import styles from "./UserProfile.module.scss";
 import CircleProgressCard from "../../components/CircleProgressCard/CircleProgressCard";
 
-const UserStatistics: FC<{ userData?: UserType }> = ({ userData }) => {
-  const mockedAvarage = 172;
-  const mockedProgress = 75;
+const mockedAvarage = 172;
+const mockedProgress = 75;
 
+const gradeDescription =
+  "This statistic shows the average grade of all the courses you have completed. It is calculated based on your final scores across all completed courses, giving you an overview of your overall learning performance.";
+const progressDescription =
+  "This statistic represents the total progress across all the courses you have purchased. It sums up your progress in each course, giving you an overview of how much you have completed in your learning journey.";
+
+const UserStatistics: FC<{ userData?: UserType }> = ({ userData }) => {
   const isUserStatisticAvailable = userData?.username;
 
   return (
@@ -26,6 +31,7 @@ const UserStatistics: FC<{ userData?: UserType }> = ({ userData }) => {
               </span>
             </div>
           }
+          infoText={gradeDescription}
         />
       </div>
       <div className={styles.progressWrapper}>
@@ -43,6 +49,7 @@ const UserStatistics: FC<{ userData?: UserType }> = ({ userData }) => {
               }%`}</span>
             </div>
           }
+          infoText={progressDescription}
         />
       </div>
     </div>

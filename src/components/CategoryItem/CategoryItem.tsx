@@ -38,11 +38,7 @@ const CategoryItem: React.FC<CategoryItemTypes> = ({ category }) => {
       </IonRouterLink>
       <div className={styles.infoBtn}>
         {category.description && (
-          <InfoBtn
-            info={category.description}
-            id={`info-${category.id}-trigger`}
-            ripple={false}
-          />
+          <InfoBtn info={category.description} ripple={false} />
         )}
       </div>
     </li>
