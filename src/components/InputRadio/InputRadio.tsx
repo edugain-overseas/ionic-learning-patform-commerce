@@ -4,7 +4,7 @@ import styles from "./InputRadio.module.scss";
 interface InputRadioType {
   className?: CSSModuleClasses | string;
   name: string;
-  value: number;
+  value?: number;
   checked: boolean;
   labelText: string;
   onChange: ChangeEventHandler<HTMLInputElement>;

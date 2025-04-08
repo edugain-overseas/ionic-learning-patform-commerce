@@ -73,3 +73,14 @@
     align-self: center;
   }
 }
+
+.timerWrapper {
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  width: 100%;
+  padding-top: calc(var(--ion-safe-area-top) + 56rem);
+  background-color: var(--custom-bg-rgba-secondary);
+  backdrop-filter: blur(5rem);
+  border-radius: 0 0 16rem 16rem;
+}

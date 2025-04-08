@@ -7,7 +7,7 @@ import { ExamDataType, useCourses } from "../../../context/CoursesContext";
 import { instance } from "../../../http/instance";
 import { serverName } from "../../../http/server";
 import { downloadFile } from "../../../utils/downloadFile";
-import { minutesToSeconds } from "../../../utils/formatTime";
+import { minutesToSeconds, secondsToMinutes } from "../../../utils/formatTime";
 import Header from "../../../components/Header/Header";
 import ExamLanding, { ExamLandingBtn } from "./ExamLanding";
 import PrimaryScrollConteinerLayout from "../../../components/PrimaryScrollConteinerLayout/PrimaryScrollConteinerLayout";
@@ -15,6 +15,7 @@ import TestContent from "../../../components/Test/TestContent";
 import styles from "./CourseExamPage.module.scss";
 import useStorage from "../../../hooks/useStorage";
 import Spinner from "../../../components/Spinner/Spinner";
+import TestTimer from "../../../components/TestTimer/TestTimer";
 
 export type ExamResult = "acceptable" | "absolute" | "failed" | "no_result";
 
@@ -58,6 +59,7 @@ const CourseExamPage: FC = () => {
     null
   );
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<number>(0);
   const [present] = useIonToast();
 
   const coursesInterface = useCourses();
@@ -84,6 +86,15 @@ const CourseExamPage: FC = () => {
       (courseCertificate) => courseCertificate.course_id === +courseId
     );
 
+  const getExamAttempts = async () => {
+    const { data: attempts } = await instance.get(
+      `student-exam/attempts?exam_id=${examId}`
+    );
+    if (attempts) {
+      attempts && setAttempts(attempts);
+    }
+  };
+
   useEffect(() => {
     if (exam?.id && !exam.lessonData) {
       coursesInterface?.getLessonById(exam.id, courseId);
@@ -91,17 +102,8 @@ const CourseExamPage: FC = () => {
   }, [exam]);
 
   useEffect(() => {
-    const getExamData = async () => {
-      const { data: attempts } = await instance.get(
-        `student-exam/attempts?exam_id=${examId}`
-      );
-      if (attempts) {
-        attempts && setAttempts(attempts);
-      }
-    };
-
     if (examId && !attempts.length) {
-      getExamData();
+      getExamAttempts();
     }
   }, [examId]);
 
@@ -113,7 +115,7 @@ const CourseExamPage: FC = () => {
         (a, b) => b.attempt_score - a.attempt_score
       )[0];
 
-      if (bestAttempt.attempt_score === examLessonData.score) {
+      if (bestAttempt.attempt_score === examLessonData?.score) {
         return "absolute";
       } else if (bestAttempt.attempt_score > examLessonData?.min_score) {
         return "acceptable";
@@ -122,12 +124,29 @@ const CourseExamPage: FC = () => {
     setExamResult(getExamResult(attempts));
   }, [attempts]);
 
-  if (!exam || !studentId) {
-    return null;
-  }
+  useEffect(() => {
+    setCurrentAttempt((prev) =>
+      prev ? { ...prev, studentAnswers: studentAnswers } : null
+    );
+  }, [studentAnswers]);
 
   const getBestAttempt = () =>
     attempts.sort((a, b) => b.attempt_score - a.attempt_score)[0];
+
+  const setUpTimer = (timer: number, callback: () => void) => {
+    timerRef.current = timer;
+
+    intervalRef.current = setInterval(() => {
+      if (timerRef.current <= 0) {
+        clearInterval(intervalRef.current!);
+        return;
+      }
+
+      timerRef.current -= 1;
+
+      callback?.();
+    }, 1000);
+  };
 
   const startAttempt = async () => {
     const timer = minutesToSeconds(examLessonData.timer);
@@ -140,18 +159,48 @@ const CourseExamPage: FC = () => {
       studentId,
     } as CurrentAttempt);
 
-    intervalRef.current = setInterval(() => {
-      console.log("qeqe");
+    const callback = () =>
+      setCurrentAttempt((prev) =>
+        prev ? { ...prev, timer: timerRef.current } : null
+      );
 
-      if (currentAttempt) {
-        setCurrentAttempt((prev) => ({
-          ...prev!,
-          timer: prev!.timer - 1,
-        }));
-        console.log(currentAttempt);
-      }
-    }, 1000);
+    setUpTimer(timer, callback);
   };
+
+  const stopAttempt = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+      timerRef.current = 0;
+    }
+    setStudentAnswers([]);
+    setCurrentAttempt(null);
+  };
+
+  useEffect(() => {
+    const resumeAttempt = () => {
+      if (!currentAttempt) return;
+
+      const timer = currentAttempt.timer;
+
+      const callback = () =>
+        setCurrentAttempt((prev) =>
+          prev ? { ...prev, timer: timerRef.current } : null
+        );
+
+      setStudentAnswers([...currentAttempt.studentAnswers]);
+
+      setUpTimer(timer, callback);
+    };
+
+    if (currentAttempt?.timer && !timerRef.current) {
+      resumeAttempt();
+    }
+
+    if (currentAttempt?.timer && currentAttempt.timer <= 0) {
+      stopAttempt();
+    }
+  }, [currentAttempt]);
 
   const completeCourse = async () => {
     if (attempts.length) {
@@ -210,9 +259,7 @@ const CourseExamPage: FC = () => {
     downloadCertificate,
   };
   const userHasAttempt =
-    !!examLessonData?.attempts && examLessonData.attempts < attempts.length;
-
-  console.log(currentAttempt);
+    !!examLessonData?.attempts && examLessonData.attempts > attempts.length;
 
   const headerProps = {
     title: exam?.title || "Exam",
@@ -220,16 +267,42 @@ const CourseExamPage: FC = () => {
     mode: currentAttempt ? "absolute" : undefined,
   };
 
-  const stopAttempt = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      setCurrentAttempt(null);
+  const sendAttempt = async () => {
+    console.log(currentAttempt);
+    if (!currentAttempt) return;
+
+    const minutesSpent =
+      examLessonData.timer - secondsToMinutes(currentAttempt.timer);
+
+    const attemptDataTosSend = {
+      lesson_id: currentAttempt.lessonId,
+      spent_minutes: minutesSpent,
+      student_answers: currentAttempt.studentAnswers,
+    };
+
+    try {
+      const response = await instance.post(
+        `/student-exam/send`,
+        attemptDataTosSend
+      );
+      const { message, ...rest } = response.data;
+
+      present({
+        message: message,
+        position: "top",
+        duration: 3000,
+      });
+
+      setAttempts((prev) => [...prev, rest]);
+      stopAttempt();
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const sendAttempt = async () => {
-    console.log(currentAttempt);
-  };
+  if (!exam || !studentId) {
+    return null;
+  }
 
   return (
     <>
@@ -237,6 +310,9 @@ const CourseExamPage: FC = () => {
       <IonContent className={styles.content}>
         {currentAttempt ? (
           <>
+            <div className={styles.timerWrapper}>
+              <TestTimer time={currentAttempt.timer} />
+            </div>
             <PrimaryScrollConteinerLayout
               posterSrc={`${serverName}/${exam.image_path}`}
               endPosition={132}

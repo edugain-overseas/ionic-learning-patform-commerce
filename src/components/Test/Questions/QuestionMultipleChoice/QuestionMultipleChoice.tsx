@@ -10,9 +10,8 @@ const QuestionMultipleChoice: React.FC<TestQuestionType> = ({
   setState,
   id,
 }) => {
-  const onCheckboxInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = +e.target.value;
-    setState(id, value);
+  const onCheckboxInputChange = (answerId: number) => {
+    setState(id, answerId);
   };
 
   const renderAnswers = () => {
@@ -23,8 +22,8 @@ const QuestionMultipleChoice: React.FC<TestQuestionType> = ({
     return answers.map(({ a_id: answerId, a_text: answerText }, index) => (
       <InputRadio
         key={answerId}
-        value={answerId}
-        onChange={onCheckboxInputChange}
+        // value={answerId}
+        onChange={() => onCheckboxInputChange(answerId)}
         checked={(state as number[])?.includes(answerId)}
         name={answerText}
         labelText={`${getLetterVatiantsByIndex(index)} ${answerText}`}

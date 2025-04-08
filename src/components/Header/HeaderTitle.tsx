@@ -1,23 +1,20 @@
-import { FC, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef } from "react";
 import styles from "./Header.module.scss";
 
 const HeaderTitle: FC<{ title: string }> = ({ title }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLSpanElement>(null);
-  const [isRendered, setIsRendered] = useState(false);
-
-  useLayoutEffect(() => {
-    if (wrapperRef.current && titleRef.current) {
-      const wrapperWidth = wrapperRef.current.clientWidth;
-      const titleWidth = titleRef.current.clientWidth;
-      if (titleWidth > wrapperWidth) {
-        titleRef.current.classList.add(styles.carousel);
-      }
-    }
-  }, [isRendered, title]);
 
   useEffect(() => {
-    setIsRendered(true);
+    requestAnimationFrame(() => {
+      if (wrapperRef.current && titleRef.current) {
+        const wrapperWidth = wrapperRef.current.clientWidth;
+        const titleWidth = titleRef.current.clientWidth;
+        if (titleWidth > wrapperWidth) {
+          titleRef.current.classList.add(styles.carousel);
+        }
+      }
+    });
   }, []);
 
   return (
