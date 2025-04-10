@@ -28,7 +28,7 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
   const listStyle = useListStyle()?.listStyle;
 
   const isCourseInBasket =
-    basket?.items.findIndex((item) => item.id === course.id) !== -1;  
+    basket?.items.findIndex((item) => item.id === course.id) !== -1;
 
   return (
     <li className={styles.itemWrapper}>
@@ -65,11 +65,8 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
           <div className={styles.colRight}>
             {userCourseData ? (
               <>
-                <CardGrade />
-                <InfoBtn
-                  info={course.intro_text}
-                  id={`description-course-id-${course.id}`}
-                />
+                <CardGrade grade={course.grade} />
+                <InfoBtn info={course.intro_text} />
               </>
             ) : (
               <>
@@ -95,7 +92,8 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
           Progress:{" "}
           {userCourseData ? (
             <ProgressBar
-              value={userCourseData.progress}
+              // value={userCourseData.progress}
+              value={course.progress}
               width={160}
               height={10}
               showValue={false}

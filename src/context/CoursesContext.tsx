@@ -135,6 +135,7 @@ export interface CourseType {
   quantity_test: number;
   skills_text?: string;
   progress?: number;
+  grade?: number;
 }
 
 export interface CategoryType {

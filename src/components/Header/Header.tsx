@@ -20,11 +20,14 @@ import SettingsIcon from "../../assets/icons/menu/settings.svg";
 import SaveIcon from "../../assets/icons/save.svg";
 import logoIEU from "../../assets/icons/logoIEU.svg";
 import detailsIcon from "../../assets/icons/header/details.svg";
-import styles from "./Header.module.scss";
+import CustomBackButton, {
+  CustomBackButtonProps,
+} from "../CustomBackBtn/CustomBackBtn";
 import HeaderTitle from "./HeaderTitle";
 import Spinner from "../Spinner/Spinner";
+import styles from "./Header.module.scss";
 
-interface buttonPropsTypes {
+interface ButtonPropsTypes extends CustomBackButtonProps {
   name: string;
   id?: string;
   onClick?: () => void;
@@ -36,13 +39,13 @@ interface buttonPropsTypes {
 interface HeaderTypes {
   title?: string;
   secondary?: boolean | undefined;
-  left?: buttonPropsTypes[];
-  right?: buttonPropsTypes[];
+  left?: ButtonPropsTypes[];
+  right?: ButtonPropsTypes[];
   mode?: string;
   toolbarClassName?: string;
 }
 
-const renderBtn = (props: buttonPropsTypes, handleNotification: () => void) => {
+const renderBtn = (props: ButtonPropsTypes, handleNotification: () => void) => {
   switch (props.name) {
     case "back":
       return (
@@ -55,6 +58,17 @@ const renderBtn = (props: buttonPropsTypes, handleNotification: () => void) => {
           icon={backIcon}
           text={""}
         ></IonBackButton>
+      );
+    case "custom-back":
+      return (
+        <CustomBackButton
+          key={props.name}
+          header={props.header}
+          message={props.message}
+          defaultHref={props.defaultHref}
+          confirmCallback={props.confirmCallback}
+          cancelCallback={props.cancelCallback}
+        />
       );
     case "notification":
       return (

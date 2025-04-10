@@ -69,6 +69,12 @@
     text-align: center;
   }
 
+  .errorMessage {
+    font-size: 12rem;
+    text-align: center;
+    color: var(--ion-color-danger);
+  }
+
   ion-spinner {
     align-self: center;
   }

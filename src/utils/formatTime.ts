@@ -3,5 +3,5 @@ export const minutesToSeconds = (minutes: number) => {
 };
 
 export const secondsToMinutes = (seconds: number) => {
-  return Math.round(seconds / 60);
+  return Math.ceil(seconds / 60);
 };

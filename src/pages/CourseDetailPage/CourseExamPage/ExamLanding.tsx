@@ -24,10 +24,19 @@ export const ExamLandingBtn: FC<ExamLandingBtnProps> = ({
   onClick,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const handleClick = async () => {
     setIsLoading(true);
-    await onClick();
+    try {
+      await onClick();
+      setIsError(false);
+    } catch (error) {
+      if (error) {
+        setIsError(true);
+      }
+    } finally {
+    }
     setIsLoading(false);
   };
 
@@ -43,22 +52,29 @@ export const ExamLandingBtn: FC<ExamLandingBtnProps> = ({
     variant === "secondary" ? "1rem solid var(--ion-color-dark)" : "none";
 
   return (
-    <CommonButton
-      label={label}
-      icon={
-        isLoading && (
-          <Spinner color={variant === "primary" ? "#fcfcfc" : undefined} />
-        )
-      }
-      disabled={isLoading}
-      onClick={handleClick}
-      color={textColor}
-      backgroundColor={backgroundColor}
-      border={border}
-      height={32}
-      borderRadius={5}
-      className={styles.landingBtn}
-    />
+    <>
+      <CommonButton
+        label={label}
+        icon={
+          isLoading && (
+            <Spinner color={variant === "primary" ? "#fcfcfc" : undefined} />
+          )
+        }
+        disabled={isLoading && isError}
+        onClick={handleClick}
+        color={textColor}
+        backgroundColor={backgroundColor}
+        border={border}
+        height={32}
+        borderRadius={5}
+        className={styles.landingBtn}
+      />
+      {isError && (
+        <p className={styles.errorMessage}>
+          Something went wrong! Try to reload the page.
+        </p>
+      )}
+    </>
   );
 };
 
@@ -287,18 +303,18 @@ const getTemplateBtns = (
     case "acceptable":
       return (
         <>
-          <ExamLandingBtn
-            label="Re-take exam"
-            variant="secondary"
-            onClick={callbacks.startAttempt}
-          />
           {hasAttempt && (
             <ExamLandingBtn
-              label="Complete your course"
-              variant="primary"
-              onClick={callbacks.completeCourse}
+              label="Re-take exam"
+              variant="secondary"
+              onClick={callbacks.startAttempt}
             />
           )}
+          <ExamLandingBtn
+            label="Complete your course"
+            variant="primary"
+            onClick={callbacks.completeCourse}
+          />
         </>
       );
     case "failed":
