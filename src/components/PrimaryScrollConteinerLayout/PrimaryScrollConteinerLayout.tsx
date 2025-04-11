@@ -1,5 +1,4 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { useIonViewWillEnter } from "@ionic/react";
 import { pxToRem } from "../../utils/pxToRem";
 import styles from "./PrimaryScrollConteinerLayout.module.scss";
 
@@ -51,17 +50,13 @@ const PrimaryScrollConteinerLayout: FC<DoubleScrollContainerLayoutType> = ({
       pageWrapperRef.current?.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useIonViewWillEnter(() => {
-    if (pageWrapperRef.current?.clientHeight) {
-      setPageContentHeight(pxToRem(pageWrapperRef.current?.clientHeight));
-    }
-  });
-
   useEffect(() => {
-    if (pageWrapperRef.current?.clientHeight) {
-      setPageContentHeight(pxToRem(pageWrapperRef.current?.clientHeight));
-    }
-  }, [pageWrapperRef]);
+    requestAnimationFrame(() => {
+      if (pageWrapperRef.current?.clientHeight && !pageContentHeight) {
+        setPageContentHeight(pxToRem(pageWrapperRef.current?.clientHeight));
+      }
+    });
+  }, [pageWrapperRef.current]);
 
   return (
     <div

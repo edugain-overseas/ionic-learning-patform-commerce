@@ -36,7 +36,7 @@ const CommonButton: React.FC<CommonButtonTypes> = ({
   onClick,
 }) => {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault();
+    // e.preventDefault();    
     e.stopPropagation();
     onClick && onClick();
   };

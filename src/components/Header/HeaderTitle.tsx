@@ -15,7 +15,7 @@ const HeaderTitle: FC<{ title: string }> = ({ title }) => {
         }
       }
     });
-  }, []);
+  }, [title]);
 
   return (
     <div className={styles.titleWrapper} ref={wrapperRef}>

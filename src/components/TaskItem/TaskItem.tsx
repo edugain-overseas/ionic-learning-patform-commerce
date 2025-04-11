@@ -15,8 +15,9 @@ interface TaskItemType {
 
 const TaskItem: FC<TaskItemType> = ({ task }) => {
   const listStyle = useListStyle()?.listStyle;
-  console.log(task);
 
+  console.log(task);
+  
   const Type = () => (
     <div className={styles.taskProp}>
       <IonIcon src={TaskTypeIcon} className={styles.taskPropIcon} />

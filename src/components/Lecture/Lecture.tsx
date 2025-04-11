@@ -6,6 +6,8 @@ import styles from "./Lecture.module.scss";
 import LectureContent from "./LectureContent";
 import EqualSpaceContainer from "../EqualSpaceContainer/EqualSpaceContainer";
 import TaskFooterNavBtn from "../TaskFooterNavBtn/TaskFooterNavBtn";
+import PrimaryScrollConteinerLayout from "../PrimaryScrollConteinerLayout/PrimaryScrollConteinerLayout";
+import Spinner from "../Spinner/Spinner";
 
 const Lecture: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
   const coursesInterface = useCourses();
@@ -22,10 +24,10 @@ const Lecture: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
       .findIndex((lesson) => lesson.id === taskData.id) + 1;
 
   return (
-    <DoubleScrollLayout
+    <PrimaryScrollConteinerLayout
       posterSrc={`${serverName}/${taskData.image_path}`}
       topLabel="Lecture"
-      scrollTriggerValue={122}
+      endPosition={208}
     >
       <div>
         <div className={styles.lectureHeader}>
@@ -38,8 +40,12 @@ const Lecture: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
             <span className={styles.titleValue}>{lectureNumber}</span>
           </div>
         </div>
-        {taskData?.lessonData && "lecture_id" in taskData.lessonData && (
+        {taskData?.lessonData && "lecture_id" in taskData.lessonData ? (
           <LectureContent lectureContent={taskData.lessonData.attributes} />
+        ) : (
+          <div className="items-center-wrapper">
+            <Spinner />
+          </div>
         )}
         <div className={styles.lectureFooter}>
           <EqualSpaceContainer
@@ -49,7 +55,7 @@ const Lecture: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
           />
         </div>
       </div>
-    </DoubleScrollLayout>
+    </PrimaryScrollConteinerLayout>
   );
 };
 

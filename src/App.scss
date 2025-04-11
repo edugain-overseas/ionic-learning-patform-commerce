@@ -195,4 +195,10 @@ ion-modal::part(handle) {
   background-repeat: no-repeat;
 }
 
+.items-center-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 //keyboard

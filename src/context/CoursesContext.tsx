@@ -285,11 +285,13 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
                   lessonNumber = lesson.number;
                   return { ...lesson, status: "completed" };
                 }
-                if (lesson.number === lessonNumber + 1) {
+                if (lesson.number !== 0 && lesson.number === lessonNumber + 1) {
                   return { ...lesson, status: "active" };
                 }
                 return lesson;
               });
+              console.log(updatedLessons);
+
               return { ...course, lessons: updatedLessons };
             }
             return course;
@@ -303,17 +305,6 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
   };
 
   useEffect(() => {
-    // const getAllCategories = async () => {
-    //   try {
-    //     const response = await instance.get<CategoryType[]>("/category/all");
-    //     console.log("categories", response.data);
-
-    //     setCategories(response.data);
-    //   } catch (error) {
-    //     console.error("Error fetching courses:", error);
-    //   }
-    // };
-
     const getGeneralInstruction = async () => {
       try {
         const response = await instance.get<InstructionType[]>(

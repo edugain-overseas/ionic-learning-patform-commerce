@@ -13,10 +13,13 @@ import LessonToolsPanel from "../LessonToolsPanel/LessonToolsPanel";
 import TestTools from "../LessonToolsPanel/TestTools";
 import EqualSpaceContainer from "../EqualSpaceContainer/EqualSpaceContainer";
 import TaskFooterNavBtn from "../TaskFooterNavBtn/TaskFooterNavBtn";
+import TestLanding from "./TestLanding";
+import CommonButton from "../CommonButton/CommonButton";
+import PrimaryScrollConteinerLayout from "../PrimaryScrollConteinerLayout/PrimaryScrollConteinerLayout";
 
 const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
   const coursesInterface = useCourses();
-
+  const [isTestOpen, setIsTestOpen] = useState(false);
   const [studentAnswers, setStudentAnswers] = useState<any[]>([]);
 
   const course = coursesInterface?.courses.find(
@@ -47,8 +50,7 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
       .sort((a, b) => a.number - b.number)
       .findIndex((lesson) => lesson.id === taskData.id) + 1;
 
-
-  return (
+  return isTestOpen ? (
     <>
       {!Number.isNaN(answersProgressValue) && (
         <div className={styles.answersProgress}>
@@ -66,39 +68,60 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
       <LessonToolsPanel>
         <TestTools test={taskData} currentAttempt={studentAnswers} />
       </LessonToolsPanel>
-      <DoubleScrollLayout
+      {/* <DoubleScrollLayout
         posterSrc={`${serverName}/${taskData.image_path}`}
         topLabel="Test"
         isBackgroundBlured={false}
         scrollTriggerValue={122}
-      >
-        <div>
-          <div className={styles.testHeader}>
-            <div className={styles.title}>
-              {`${course?.title}: `}
-              <span className={styles.titleValue}>{taskData.title}</span>
+      > */}
+        <PrimaryScrollConteinerLayout
+          posterSrc={`${serverName}/${taskData.image_path}`}
+          topLabel="Test"
+          endPosition={170}
+        >
+          <div>
+            <div className={styles.testHeader}>
+              <div className={styles.title}>
+                {`${course?.title}: `}
+                <span className={styles.titleValue}>{taskData.title}</span>
+              </div>
+              <div className={styles.title}>
+                {"Test №: "}
+                <span className={styles.titleValue}>{number}</span>
+              </div>
             </div>
-            <div className={styles.title}>
-              {"Test №: "}
-              <span className={styles.titleValue}>{number}</span>
+            {taskData?.lessonData && "test_id" in taskData.lessonData && (
+              <TestContent
+                test={taskData}
+                studentAnswers={studentAnswers}
+                setStudentAnswers={setStudentAnswers}
+              />
+            )}
+            <div className={styles.testFooter}>
+              <EqualSpaceContainer
+                containerClassname={styles.btnContainer}
+                leftItem={<TaskFooterNavBtn direction="return" />}
+                rightItem={<TaskFooterNavBtn direction="next" />}
+              />
             </div>
           </div>
-          {taskData?.lessonData && "test_id" in taskData.lessonData && (
-            <TestContent
-              test={taskData}
-              studentAnswers={studentAnswers}
-              setStudentAnswers={setStudentAnswers}
-            />
-          )}
-          <div className={styles.testFooter}>
-            <EqualSpaceContainer
-              containerClassname={styles.btnContainer}
-              leftItem={<TaskFooterNavBtn direction="return" />}
-              rightItem={<TaskFooterNavBtn direction="next" />}
-            />
-          </div>
-        </div>
-      </DoubleScrollLayout>
+        </PrimaryScrollConteinerLayout>
+      {/* </DoubleScrollLayout> */}
+    </>
+  ) : (
+    <>
+      <TestLanding />
+      <CommonButton
+        label="Start"
+        block={true}
+        width={200}
+        height={32}
+        backgroundColor="var(--ion-color-dark)"
+        color="var(--ion-color-primary-contrast)"
+        borderRadius={5}
+        className={styles.landingBtn}
+        onClick={() => setIsTestOpen(true)}
+      />
     </>
   );
 };

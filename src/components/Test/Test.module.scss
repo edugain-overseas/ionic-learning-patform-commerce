@@ -36,7 +36,7 @@
   align-items: center;
 
   border-radius: 10rem 10rem 14rem 14rem;
-  background-color: var(--custom-bg-rgba-secondary);
+  // background-color: var(--custom-bg-rgba-secondary);
   box-shadow: var(--custom-box-shadow-primary);
   // backdrop-filter: blur(16rem);
 
@@ -110,8 +110,8 @@
 }
 
 .testFooter {
-  margin: 24rem -18rem -84rem;
-  padding-block: 16rem 40rem;
+  margin: 24rem -18rem;
+  padding-bottom: 40rem;
   border-top-left-radius: 16rem;
   border-top-right-radius: 16rem;
   background: var(--custom-bg-rgba-secondary);
@@ -123,4 +123,32 @@
   & > div {
     flex-grow: 1;
   }
+}
+
+.landingWrapper {
+  padding-top: 56rem;
+  padding-inline: 16rem;
+
+  h3 {
+    font-size: 24rem;
+    color: var(--ion-color-dark);
+    text-align: center;
+  }
+
+  p {
+    font-size: 14rem;
+    color: var(--ion-color-light);
+    text-align: center;
+
+    b {
+      color: var(--ion-color-dark);
+    }
+  }
+}
+
+.landingBtn {
+  text-align: end;
+  font-size: 14rem;
+  margin: 18rem auto;
+  max-width: calc(100% - 36rem);
 }

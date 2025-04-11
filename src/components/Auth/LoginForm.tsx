@@ -41,6 +41,7 @@ const LoginForm: React.FC<{
 
   const onSubmit = async (data: FormValues) => {
     setIsLoading(true);
+    
     try {
       await user?.login(data);
       present({
@@ -146,7 +147,7 @@ const LoginForm: React.FC<{
           block={true}
           height={32}
           borderRadius={5}
-          type="submit"
+          type='submit'
           disabled={isLoading}
         />
         <div

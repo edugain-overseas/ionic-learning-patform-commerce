@@ -67,12 +67,6 @@ export const useTaskNavigation = () => {
     }
   };
 
-  // console.log({
-  //   canGoBack: getNextLessonId("back"),
-  //   canGoForward: getNextLessonId("forward"),
-  //   isLoading,
-  // });
-
   return {
     canGoBack: getNextLessonId("back") !== undefined,
     canGoForward: getNextLessonId("forward") !== undefined,

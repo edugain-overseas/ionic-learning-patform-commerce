@@ -148,7 +148,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
   const login = async (credentials: { username: string; password: string }) => {
     const credentialsFormData = new FormData();
     credentialsFormData.append("username", credentials.username);
-    credentialsFormData.append("password", credentials.password);
+    credentialsFormData.append("password", credentials.password);    
     try {
       instance.defaults.headers["Content-Type"] =
         "application/x-wwww-form-urlencoded";
