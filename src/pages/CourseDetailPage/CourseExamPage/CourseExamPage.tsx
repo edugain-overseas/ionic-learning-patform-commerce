@@ -343,8 +343,6 @@ const CourseExamPage: FC = () => {
     mode: currentAttempt ? "absolute" : undefined,
   };
 
-  console.log(attempts);
-
   if (!exam || !studentId) {
     return null;
   }

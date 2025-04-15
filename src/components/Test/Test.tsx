@@ -68,45 +68,39 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
       <LessonToolsPanel>
         <TestTools test={taskData} currentAttempt={studentAnswers} />
       </LessonToolsPanel>
-      {/* <DoubleScrollLayout
+
+      <PrimaryScrollConteinerLayout
         posterSrc={`${serverName}/${taskData.image_path}`}
         topLabel="Test"
-        isBackgroundBlured={false}
-        scrollTriggerValue={122}
-      > */}
-        <PrimaryScrollConteinerLayout
-          posterSrc={`${serverName}/${taskData.image_path}`}
-          topLabel="Test"
-          endPosition={170}
-        >
-          <div>
-            <div className={styles.testHeader}>
-              <div className={styles.title}>
-                {`${course?.title}: `}
-                <span className={styles.titleValue}>{taskData.title}</span>
-              </div>
-              <div className={styles.title}>
-                {"Test №: "}
-                <span className={styles.titleValue}>{number}</span>
-              </div>
+        endPosition={170}
+      >
+        <div>
+          <div className={styles.testHeader}>
+            <div className={styles.title}>
+              {`${course?.title}: `}
+              <span className={styles.titleValue}>{taskData.title}</span>
             </div>
-            {taskData?.lessonData && "test_id" in taskData.lessonData && (
-              <TestContent
-                test={taskData}
-                studentAnswers={studentAnswers}
-                setStudentAnswers={setStudentAnswers}
-              />
-            )}
-            <div className={styles.testFooter}>
-              <EqualSpaceContainer
-                containerClassname={styles.btnContainer}
-                leftItem={<TaskFooterNavBtn direction="return" />}
-                rightItem={<TaskFooterNavBtn direction="next" />}
-              />
+            <div className={styles.title}>
+              {"Test №: "}
+              <span className={styles.titleValue}>{number}</span>
             </div>
           </div>
-        </PrimaryScrollConteinerLayout>
-      {/* </DoubleScrollLayout> */}
+          {taskData?.lessonData && "test_id" in taskData.lessonData && (
+            <TestContent
+              test={taskData}
+              studentAnswers={studentAnswers}
+              setStudentAnswers={setStudentAnswers}
+            />
+          )}
+          <div className={styles.testFooter}>
+            <EqualSpaceContainer
+              containerClassname={styles.btnContainer}
+              leftItem={<TaskFooterNavBtn direction="return" />}
+              rightItem={<TaskFooterNavBtn direction="next" />}
+            />
+          </div>
+        </div>
+      </PrimaryScrollConteinerLayout>
     </>
   ) : (
     <>

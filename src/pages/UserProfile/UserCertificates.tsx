@@ -95,7 +95,7 @@ const UserCertificates: FC = () => {
           <span className={styles.certificatesTitle}>
             Certificates of completed courses
           </span>
-          <InfoBtn info="Certificates" id="Certificates" />
+          <InfoBtn info="Certificates" />
         </div>
         {isUserLoggedIn ? (
           <ul className={styles.certificatesList}>
