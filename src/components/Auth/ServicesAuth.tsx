@@ -8,7 +8,7 @@ const ServicesAuth = () => {
   return (
     <div className={styles.servicesAuth}>
       <GoogleAuthButton />
-      {platform === "ios" && <AppleAuthBtn />}
+      {platform !== "android" && <AppleAuthBtn />}
     </div>
   );
 };

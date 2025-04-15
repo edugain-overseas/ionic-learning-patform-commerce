@@ -25,6 +25,7 @@
 		}
 	},
 	"packageClassList": [
+		"SignInWithApple",
 		"StripePlugin",
 		"AppPlugin",
 		"CAPCameraPlugin",

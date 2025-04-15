@@ -4,6 +4,12 @@ import Apple from "../../assets/icons/auth/apple.svg";
 import CommonButton from "../CommonButton/CommonButton";
 import Spinner from "../Spinner/Spinner";
 import styles from "./Auth.module.scss";
+import { Capacitor } from "@capacitor/core";
+import {
+  SignInWithApple,
+  SignInWithAppleOptions,
+  SignInWithAppleResponse,
+} from "@capacitor-community/apple-sign-in";
 
 const AppleAuthBtn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,8 +20,33 @@ const AppleAuthBtn = () => {
     <IonIcon src={Apple} className={styles.servicesIcon} />
   );
 
-  const handleAppleSingIn = () => {
+  const handleAppleSingIn = async () => {
     console.log("Apple sing in");
+    const platform = Capacitor.getPlatform();
+    if (platform === "android") return;
+
+    let options: SignInWithAppleOptions = {
+      clientId: "io.ieucourses.app",
+      redirectURI: "https://vps2.xyz/home",
+      scopes: "email name",
+      state: "12345",
+      nonce: "nonce",
+    };
+
+    setIsLoading(true);
+
+    try {
+      const result: SignInWithAppleResponse = await SignInWithApple.authorize(
+        options
+      );
+      console.log(result.response);
+      alert(JSON.stringify(result.response));
+    } catch (error) {
+      console.log(error);
+      alert(JSON.stringify(error));
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
