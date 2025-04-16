@@ -3,6 +3,7 @@ import { instance } from "../http/instance";
 import { AxiosError } from "axios";
 import useStorage from "../hooks/useStorage";
 import { AuthUIProvider } from "./AuthUIContext";
+import { SignInWithAppleResponse } from "@capacitor-community/apple-sign-in";
 
 interface UserProviderType {
   children: React.ReactNode;
@@ -93,6 +94,9 @@ interface UserContextType {
     code: string;
   }) => Promise<void>;
   loginWithGoogle: (googleToket: string) => Promise<{ username: string }>;
+  loginWithApple: (
+    appleResponse: SignInWithAppleResponse
+  ) => Promise<{ username: string }>;
   resendActivationCode: (username: string) => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   setNewPassword: (credentials: {
@@ -148,7 +152,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
   const login = async (credentials: { username: string; password: string }) => {
     const credentialsFormData = new FormData();
     credentialsFormData.append("username", credentials.username);
-    credentialsFormData.append("password", credentials.password);    
+    credentialsFormData.append("password", credentials.password);
     try {
       instance.defaults.headers["Content-Type"] =
         "application/x-wwww-form-urlencoded";
@@ -232,6 +236,24 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
         "/user/login-with-google",
         {
           google_token: googleToken,
+        },
+        { withCredentials: true }
+      );
+      setAccessToken(data.access_token);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const loginWithApple = async (appleResponse: SignInWithAppleResponse) => {
+    try {
+      const { data } = await instance.post(
+        "/user/login-with-apple",
+        {
+          code: appleResponse.response.authorizationCode,
+          name: appleResponse.response.givenName || null,
+          surname: appleResponse.response.familyName || null,
         },
         { withCredentials: true }
       );
@@ -474,6 +496,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
         verifyEmail,
         resendActivationCode,
         loginWithGoogle,
+        loginWithApple,
         resetPassword,
         setNewPassword,
         logout,

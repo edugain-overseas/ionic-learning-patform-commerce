@@ -1,18 +1,21 @@
 import { useState } from "react";
-import { IonIcon } from "@ionic/react";
-import Apple from "../../assets/icons/auth/apple.svg";
-import CommonButton from "../CommonButton/CommonButton";
-import Spinner from "../Spinner/Spinner";
-import styles from "./Auth.module.scss";
-import { Capacitor } from "@capacitor/core";
 import {
   SignInWithApple,
   SignInWithAppleOptions,
   SignInWithAppleResponse,
 } from "@capacitor-community/apple-sign-in";
+import { IonIcon, useIonToast } from "@ionic/react";
+import { useUser } from "../../context/UserContext";
+import { Capacitor } from "@capacitor/core";
+import Apple from "../../assets/icons/auth/apple.svg";
+import CommonButton from "../CommonButton/CommonButton";
+import Spinner from "../Spinner/Spinner";
+import styles from "./Auth.module.scss";
 
 const AppleAuthBtn = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [present] = useIonToast();
+  const userInterface = useUser();
 
   const icon = isLoading ? (
     <Spinner />
@@ -21,13 +24,13 @@ const AppleAuthBtn = () => {
   );
 
   const handleAppleSingIn = async () => {
-    console.log("Apple sing in");
     const platform = Capacitor.getPlatform();
     if (platform === "android") return;
 
     let options: SignInWithAppleOptions = {
-      clientId: "io.ieucourses.app",
-      redirectURI: "https://vps2.xyz/home",
+      clientId: platform === "ios" ? "io.ieucourses.app" : "com.ieu.ieucourses",
+      redirectURI: "https://vps2.xyz",
+      // redirectURI: "https://7dac-176-38-25-248.ngrok-free.app/",
       scopes: "email name",
       state: "12345",
       nonce: "nonce",
@@ -39,11 +42,21 @@ const AppleAuthBtn = () => {
       const result: SignInWithAppleResponse = await SignInWithApple.authorize(
         options
       );
-      console.log(result.response);
-      alert(JSON.stringify(result.response));
+      const user = await userInterface?.loginWithApple(result);
+
+      present({
+        message: `Hello ${user?.username}!`,
+        duration: 2500,
+        position: "top",
+      });
     } catch (error) {
       console.log(error);
-      alert(JSON.stringify(error));
+
+      present({
+        message: `Apple service is unvailable`,
+        duration: 2500,
+        position: "bottom",
+      });
     } finally {
       setIsLoading(false);
     }
