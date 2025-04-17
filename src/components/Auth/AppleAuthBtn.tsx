@@ -27,8 +27,11 @@ const AppleAuthBtn = () => {
     const platform = Capacitor.getPlatform();
     if (platform === "android") return;
 
+    const clientId =
+      platform === "ios" ? "io.ieucourses.app" : "com.ieu.ieucourses";
+
     let options: SignInWithAppleOptions = {
-      clientId: platform === "ios" ? "io.ieucourses.app" : "com.ieu.ieucourses",
+      clientId,
       redirectURI: "https://vps2.xyz",
       // redirectURI: "https://7dac-176-38-25-248.ngrok-free.app/",
       scopes: "email name",
@@ -42,7 +45,7 @@ const AppleAuthBtn = () => {
       const result: SignInWithAppleResponse = await SignInWithApple.authorize(
         options
       );
-      const user = await userInterface?.loginWithApple(result);
+      const user = await userInterface?.loginWithApple(result, platform);
 
       present({
         message: `Hello ${user?.username}!`,

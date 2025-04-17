@@ -95,7 +95,8 @@ interface UserContextType {
   }) => Promise<void>;
   loginWithGoogle: (googleToket: string) => Promise<{ username: string }>;
   loginWithApple: (
-    appleResponse: SignInWithAppleResponse
+    appleResponse: SignInWithAppleResponse,
+    platform: string
   ) => Promise<{ username: string }>;
   resendActivationCode: (username: string) => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
@@ -246,11 +247,15 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
     }
   };
 
-  const loginWithApple = async (appleResponse: SignInWithAppleResponse) => {
+  const loginWithApple = async (
+    appleResponse: SignInWithAppleResponse,
+    platform: string
+  ) => {
     try {
       const { data } = await instance.post(
         "/user/login-with-apple",
         {
+          platform,
           code: appleResponse.response.authorizationCode,
           name: appleResponse.response.givenName || null,
           surname: appleResponse.response.familyName || null,
