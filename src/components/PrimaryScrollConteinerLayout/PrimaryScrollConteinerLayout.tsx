@@ -36,10 +36,12 @@ const PrimaryScrollConteinerLayout: FC<DoubleScrollContainerLayoutType> = ({
       const scrollValueInRem = pxToRem(pageWrapperRef.current?.scrollTop);
 
       if (scrollValueInRem >= scrollMarginTrigger) {
-        setIsTriggerReached(true);
+        if (!isTrigerReached) {
+          setIsTriggerReached(true);
+        }
       }
 
-      if (scrollValueInRem <= scrollMarginTrigger) {
+      if (scrollValueInRem && scrollValueInRem < scrollMarginTrigger) {
         setIsTriggerReached(false);
       }
     };
@@ -57,6 +59,8 @@ const PrimaryScrollConteinerLayout: FC<DoubleScrollContainerLayoutType> = ({
       }
     });
   }, [pageWrapperRef.current]);
+
+  console.log(isTrigerReached);
 
   return (
     <div

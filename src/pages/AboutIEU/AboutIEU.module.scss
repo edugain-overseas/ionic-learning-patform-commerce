@@ -16,6 +16,7 @@
 
 .content {
   --padding-top: var(--ion-safe-area-top);
+  --content-offset-bottom: calc(var(--tabbar-offset) + 36rem);
 }
 
 .contentHeader {
