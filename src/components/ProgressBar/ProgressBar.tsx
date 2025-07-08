@@ -39,6 +39,8 @@ const ProgressBar: React.FC<ProgressBarTypes> = ({
   disabled = false,
   showValue = true,
 }) => {
+  console.log(value);
+
   return (
     <div
       className={styles.outerWrapper}
@@ -56,7 +58,7 @@ const ProgressBar: React.FC<ProgressBarTypes> = ({
         <div
           className={`${styles.progress} ${disabled ? styles.disabled : ""}`}
           style={{
-            width: value && value <= 100 ? `${value}%` : "100%",
+            width: value !== undefined && value <= 100 ? `${value}%` : "100%",
             borderRadius: `${width * 0.023}rem`,
             backgroundColor: value ? `${handleProgressColor(value)}` : "none",
           }}

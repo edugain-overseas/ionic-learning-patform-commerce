@@ -25,7 +25,6 @@ const QuestionPhoto: React.FC<TestQuestionType> = ({
     }
 
     return answers.map(({ a_id: answerId, a_text: answerText }, index) => {
-      console.log(answerText);
       return (
         <InputRadio
           key={answerId}
@@ -46,7 +45,9 @@ const QuestionPhoto: React.FC<TestQuestionType> = ({
           src={`${serverName}/${imagePath}`}
           // fallback={noImage}
           preview={{
-            imageRender: (originalNode) => <div className={styles.previewImageWrapper}>{originalNode}</div>,
+            imageRender: (originalNode) => (
+              <div className={styles.previewImageWrapper}>{originalNode}</div>
+            ),
           }}
         />
       </div>

@@ -5,6 +5,7 @@ interface InputRadioType {
   className?: CSSModuleClasses | string;
   name: string;
   value?: number;
+  type?: "radio" | "checkbox";
   checked: boolean;
   labelText: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
@@ -13,7 +14,8 @@ interface InputRadioType {
 const InputRadio: React.FC<InputRadioType> = ({
   className,
   name,
-  value,
+  value = "",
+  type = "radio",
   checked,
   labelText,
   onChange,
@@ -26,7 +28,7 @@ const InputRadio: React.FC<InputRadioType> = ({
     >
       <span className={styles.radioBtn}></span>
       <input
-        type="radio"
+        type={type}
         name={name}
         value={value}
         checked={checked}

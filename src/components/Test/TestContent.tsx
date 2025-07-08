@@ -22,24 +22,20 @@ export interface TestQuestionType {
 
 const TestContent: React.FC<{
   test: LessonType;
-  studentAnswers: any[];
+  studentAnswers?: any[];
   setStudentAnswers?: Dispatch<SetStateAction<any[]>>;
 }> = ({ test, studentAnswers, setStudentAnswers }) => {
   if (!studentAnswers && !setStudentAnswers) {
     return <></>;
   }
 
-  const {
-    id: testId,
-    course_id: courseId,
-    type: lessonType,
-    lessonData: testData,
-    status,
-  } = test;
+  const { lessonData: testData } = test;
 
   const testContent = [...(testData as TestDataType)?.questions].sort(
     (itemA, itemB) => itemA.q_number - itemB.q_number
   );
+
+  console.log(studentAnswers);
 
   const setSingleAnswerState = (id: number, value: number) => {
     if (setStudentAnswers) {
@@ -127,20 +123,11 @@ const TestContent: React.FC<{
           q_type: type,
           answers,
           image_path: imagePath,
-        } = question;        
+        } = question;
 
         switch (type) {
           case "test":
-            // if (
-            //   studentAnswers.find(({ q_id: questionId }) => questionId === id)
-            // ) {
-            // } else {
-            //   setStudentAnswers((prev) => [
-            //     ...prev,
-            //     { q_id: id, q_type: type, a_id: 0 },
-            //   ]);
-            // }
-            const testState = studentAnswers.find(
+            const testState = studentAnswers?.find(
               ({ q_id: questionId }) => questionId === id
             )?.a_id;
             return (
@@ -170,16 +157,7 @@ const TestContent: React.FC<{
               </div>
             );
           case "multiple_choice":
-            // if (
-            //   studentAnswers.find(({ q_id: questionId }) => questionId === id)
-            // ) {
-            // } else {
-            //   setStudentAnswers((prev) => [
-            //     ...prev,
-            //     { q_id: id, q_type: type, a_ids: [] },
-            //   ]);
-            // }
-            const multipleChoiseState = studentAnswers.find(
+            const multipleChoiseState = studentAnswers?.find(
               ({ q_id: questionId }) => questionId === id
             )?.a_ids;
             return (
@@ -209,16 +187,7 @@ const TestContent: React.FC<{
               </div>
             );
           case "answer_with_photo":
-            // if (
-            //   studentAnswers.find(({ q_id: questionId }) => questionId === id)
-            // ) {
-            // } else {
-            //   setStudentAnswers((prev) => [
-            //     ...prev,
-            //     { q_id: id, q_type: type, a_id: 0 },
-            //   ]);
-            // }
-            const photoAnswersState = studentAnswers.find(
+            const photoAnswersState = studentAnswers?.find(
               ({ q_id: questionId }) => questionId === id
             )?.a_id;
             return (
@@ -248,16 +217,7 @@ const TestContent: React.FC<{
               </div>
             );
           case "question_with_photo":
-            // if (
-            //   studentAnswers.find(({ q_id: questionId }) => questionId === id)
-            // ) {
-            // } else {
-            //   setStudentAnswers((prev) => [
-            //     ...prev,
-            //     { q_id: id, q_type: type, a_id: 0 },
-            //   ]);
-            // }
-            const photoState = studentAnswers.find(
+            const photoState = studentAnswers?.find(
               ({ q_id: questionId }) => questionId === id
             )?.a_id;
             return (
@@ -288,12 +248,9 @@ const TestContent: React.FC<{
               </div>
             );
           case "matching":
-            const matchingState = studentAnswers.find(
+            const matchingState = studentAnswers?.find(
               ({ q_id }) => q_id === id
             )?.matching;
-
-            console.log(studentAnswers);
-            
 
             return (
               <div key={id} className={styles.questionWrapper}>
@@ -327,16 +284,7 @@ const TestContent: React.FC<{
               </div>
             );
           case "boolean":
-            // if (
-            //   studentAnswers.find(({ q_id: questionId }) => questionId === id)
-            // ) {
-            // } else {
-            //   setStudentAnswers((prev) => [
-            //     ...prev,
-            //     { q_id: id, q_type: type, a_id: 0 },
-            //   ]);
-            // }
-            const booleanState = studentAnswers.find(
+            const booleanState = studentAnswers?.find(
               ({ q_id: questionId }) => questionId === id
             )?.a_id;
             return (
@@ -371,7 +319,14 @@ const TestContent: React.FC<{
       });
 
   useEffect(() => {
-    if (testData && testContent && setStudentAnswers) {
+    if (
+      testData &&
+      testContent &&
+      setStudentAnswers &&
+      studentAnswers?.length === 0
+    ) {
+      console.log('initial test content');
+      
       setStudentAnswers((prev) => {
         const updatedAnswers = [...prev];
         testContent.forEach((question) => {
@@ -397,7 +352,7 @@ const TestContent: React.FC<{
       className={styles.contentWrapper}
       style={{ opacity: setStudentAnswers ? "1" : "0.5" }}
     >
-      {renderTestContent()}
+      {studentAnswers && renderTestContent()}
     </div>
   );
 };

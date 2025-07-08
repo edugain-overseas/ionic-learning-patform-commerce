@@ -26,9 +26,6 @@ const QuestionMatching: React.FC<QuestionMatchingType> = ({
     label: getLetterVatiantsByIndex(index) || "",
     value: `${id}`,
   }));
-
-  console.log(answers);
-
   return (
     <div className={styles.matchWrapper}>
       <div className={styles.oprionsWrapper}>

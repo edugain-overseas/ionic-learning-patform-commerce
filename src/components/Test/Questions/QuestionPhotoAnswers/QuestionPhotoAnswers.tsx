@@ -22,8 +22,6 @@ const QuestionPhotoAnswers: React.FC<TestQuestionType> = ({
     if (!answers) {
       return;
     }
-    console.log(answers);
-
     return answers.map(
       (
         { a_id: answerId, a_text: answerText, image_path: imagePath },

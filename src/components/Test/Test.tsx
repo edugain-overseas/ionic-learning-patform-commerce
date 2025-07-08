@@ -41,10 +41,8 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
   const coursesInterface = useCourses();
   const [isTestOpen, setIsTestOpen] = useState(false);
   const [studentAnswers, setStudentAnswers] = useState<any[]>([]);
-  const [currentAttempt, setCurrentAttempt] = useStorage<CurrentAttempt | null>(
-    `test-${taskData.id}-attempt`,
-    null
-  );
+  const [currentAttempt, setCurrentAttempt, isStoreInit] =
+    useStorage<CurrentAttempt | null>(`test-${taskData.id}-attempt`, null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<number>(0);
   const [present] = useIonToast();
@@ -82,8 +80,6 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
       .sort((a, b) => a.number - b.number)
       .findIndex((lesson) => lesson.id === taskData.id) + 1;
 
-  console.log(taskData);
-
   useEffect(() => {
     const getSubmitedAttempt = async () => {
       try {
@@ -101,12 +97,15 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
     }
   }, [testStatus, testData?.my_attempt_id]);
 
+  const timerCallback = () =>
+    setCurrentAttempt((prev) =>
+      prev ? { ...prev, timer: timerRef.current } : null
+    );
+
   const setUpTimer = (timer: number, callback: () => void) => {
     timerRef.current = timer;
 
     intervalRef.current = setInterval(() => {
-      console.log("tik tok");
-
       if (timerRef.current <= 0) {
         present({
           message: "Time is out. Your attept was sended!",
@@ -132,15 +131,37 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
       lessonId,
     } as CurrentAttempt);
 
-    const callback = () =>
-      setCurrentAttempt((prev) =>
-        prev ? { ...prev, timer: timerRef.current } : null
-      );
-
-    setUpTimer(timer, callback);
+    setUpTimer(timer, timerCallback);
   };
 
-  if (testStatus === undefined) {
+  useEffect(() => {
+    if (currentAttempt && currentAttempt.timer !== 0 && !isTestOpen) {
+      setUpTimer(currentAttempt.timer, timerCallback);
+      setIsTestOpen(true);
+    }
+    if (currentAttempt && currentAttempt.studentAnswers && !isTestOpen) {
+      setStudentAnswers(currentAttempt.studentAnswers);
+    }
+  }, [currentAttempt]);
+
+  useEffect(() => {
+    setCurrentAttempt((prev) => {
+      if (!prev) {
+        return prev;
+      }
+      return { ...prev, studentAnswers: studentAnswers };
+    });
+  }, [studentAnswers]);
+
+  if (testStatus === undefined && isStoreInit === false) {
+    return (
+      <div className={styles.loaderWrapper}>
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (currentAttempt && currentAttempt.timer !== 0 && !isTestOpen) {
     return (
       <div className={styles.loaderWrapper}>
         <Spinner />

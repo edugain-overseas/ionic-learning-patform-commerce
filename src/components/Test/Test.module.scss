@@ -22,6 +22,7 @@
   background: rgba(255, 255, 255, 0.9);
   box-shadow: var(--custom-box-shadow-primary);
   backdrop-filter: blur(28rem);
+  animation: slideDown 0.5s ease-out forwards;
 
   .answersProgressValue {
     color: var(--ion-color-light);
@@ -44,6 +45,8 @@
   backdrop-filter: blur(16rem);
   border-radius: 0 0 16rem 16rem;
   line-height: 1;
+
+  animation: slideDown 0.5s ease-out forwards;
 }
 
 .contentInnerWrapper {
@@ -105,7 +108,6 @@
     border-bottom: 1rem solid var(--ion-color-light);
     display: flex;
     justify-content: space-between;
-
 
     .text {
       color: var(--ion-color-dark);
@@ -180,4 +182,15 @@
   font-size: 14rem;
   margin: 18rem auto;
   max-width: calc(100% - 36rem);
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
