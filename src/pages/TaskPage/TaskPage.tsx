@@ -34,7 +34,7 @@ const TaskPage: React.FC = () => {
 
   useEffect(() => {
     if (!lessonData && taskData) {
-      console.log(lessonData, taskData);
+      // console.log(lessonData, taskData);
 
       coursesInterface?.getLessonById(taskId, courseId);
     }
@@ -49,7 +49,13 @@ const TaskPage: React.FC = () => {
   return (
     <>
       <Header {...headerProps} />
-      <IonContent fullscreen={true} scrollY={false} className={styles.content}>
+      <IonContent
+        fullscreen={true}
+        scrollY={false}
+        className={`${styles.content} ${
+          taskData?.type ? styles[taskData.type] : ""
+        }`}
+      >
         {taskData?.type === "lecture" && <Lecture taskData={taskData} />}
         {taskData?.type === "test" && <Test taskData={taskData} />}
       </IonContent>

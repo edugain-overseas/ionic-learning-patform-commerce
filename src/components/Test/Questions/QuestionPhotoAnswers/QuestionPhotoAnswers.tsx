@@ -1,7 +1,7 @@
 import React from "react";
 import { getLetterVatiantsByIndex } from "../../../../utils/getLetterVatiantsByIndex";
-// import { Image } from "antd";
-// import noImage from "../../../../assets/";
+import { Image } from "antd";
+// import noImage from "../../../../assets/images/";
 import styles from "./QuestionPhotoAnswers.module.scss";
 import { TestQuestionType } from "../../TestContent";
 import { serverName } from "../../../../http/server";
@@ -23,17 +23,17 @@ const QuestionPhotoAnswers: React.FC<TestQuestionType> = ({
       return;
     }
     console.log(answers);
+
     return answers.map(
       (
         { a_id: answerId, a_text: answerText, image_path: imagePath },
         index
       ) => {
-        console.log(imagePath);
         return (
           <div key={answerId} className={styles.imageCard}>
-            {/* <Image
+            <Image
               src={`${serverName}/${imagePath}`}
-              fallback={noImage}
+              // fallback={noImage}
               preview={{
                 imageRender: (originalNode) => (
                   <div className={styles.previewImageWrapper}>
@@ -41,10 +41,7 @@ const QuestionPhotoAnswers: React.FC<TestQuestionType> = ({
                   </div>
                 ),
               }}
-            /> */}
-            <div className={styles.previewImageWrapper}>
-              <img src={`${serverName}/${imagePath}`} alt={answerText} />
-            </div>
+            />
             <InputRadio
               key={answerId}
               className={styles.input}

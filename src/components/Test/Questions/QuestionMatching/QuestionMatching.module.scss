@@ -1,15 +1,10 @@
-.matchWrapper {
-}
-
 .oprionsWrapper {
-  padding-block: 16rem;
-  display: flex;
-
-  border-bottom: 1rem solid var(--content-datail-secondary);
+  padding: 0 10rem 16rem;
+  border-bottom: 1rem solid var(--ion-color-light);
 
   & p {
-    color: var(--content-datail-secondary);
-    font-size: 14rem;
+    color: var(--ion-color-light);
+    font-size: 12rem;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -20,24 +15,21 @@
 .right {
   display: flex;
   flex-direction: column;
-  gap: 8rem;
+  gap: 12rem;
   justify-content: space-between;
 }
 
-.left {
-  padding-right: 24rem;
-  border-right: 1rem solid var(--content-datail-secondary);
-}
-
 .right {
-  padding-left: 24rem;
+  margin-top: 12rem;
 }
 
 .selectOptionsWrapper {
-  display: flex;
-  align-items: center;
-  gap: 24rem;
-  padding-block: 16rem;
+  padding: 12rem 10rem;
+
+  & > p {
+    margin-bottom: 6rem;
+    font-size: 12rem;
+  }
 
   & > ul {
     display: flex;
@@ -46,17 +38,18 @@
   }
 
   .answerOption {
+    flex: 1;
     display: flex;
     align-items: center;
     height: 24rem;
 
-    span {
-      color: var(--content-main);
-      font-family: Inter, sans-serif;
-      font-size: 14rem;
+   & > span {
+      color: var(--ion-color-light);
+      font-size: 12rem;
       font-style: normal;
       font-weight: 500;
       line-height: normal;
+      flex-shrink: 0;
     }
   }
 }

@@ -68,7 +68,7 @@ export interface TestContentType {
     | {
         left?: { value: string; id: number }[];
         right?: { value: string; id: number }[];
-      };
+      }[];
 }
 
 export interface LectureDataType {
@@ -82,6 +82,7 @@ export type TestDataType = {
   score?: number;
   attempts?: number;
   questions: TestContentType[];
+  my_attempt_id?: number;
 };
 
 export type ExamDataType = {

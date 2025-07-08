@@ -1,5 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import {
+  IonBackButton,
+  IonButtons,
   IonContent,
   IonHeader,
   IonPage,
@@ -7,13 +9,15 @@ import {
   useIonRouter,
   useIonViewWillEnter,
 } from "@ionic/react";
-import { useLocation, useParams } from "react-router";
+import { useLocation } from "react-router";
 import { instance } from "../../http/instance";
 import {
   CategoryType,
   CourseType,
   LessonType,
 } from "../../context/CoursesContext";
+import backIcon from "../../assets/icons/header/back.svg";
+
 import Searchbar from "./Searchbar/Searchbar";
 import Spinner from "../../components/Spinner/Spinner";
 import SearchResults from "./SearchResults";
@@ -71,7 +75,15 @@ const Search: FC = () => {
     <IonPage className="primaryPage">
       <IonHeader>
         <IonToolbar>
-          <Searchbar onChange={handleQueryChange} value={q}/>
+          <IonButtons slot="start">
+            <IonBackButton
+              text=""
+              icon={backIcon}
+              className={styles.backBtn}
+              defaultHref="/"
+            />
+          </IonButtons>
+          <Searchbar onChange={handleQueryChange} value={q} />
         </IonToolbar>
       </IonHeader>
       <IonContent className={`custom-content-wrapper ${styles.searchContent}`}>

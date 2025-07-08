@@ -1,7 +1,7 @@
 import React from "react";
-// import { Image } from "antd";
+import { Image } from "antd";
 import { getLetterVatiantsByIndex } from "../../../../utils/getLetterVatiantsByIndex";
-import noImage from "../../../../images/noImage.jpeg";
+// import noImage from "../../../../images/noImage.jpeg";
 import styles from "./QuestionPhoto.module.scss";
 import InputRadio from "../../../InputRadio/InputRadio";
 import { TestQuestionType } from "../../TestContent";
@@ -19,7 +19,6 @@ const QuestionPhoto: React.FC<TestQuestionType> = ({
     setState(id, value);
   };
 
-  console.log(answers);
   const renderAnswers = () => {
     if (!answers) {
       return;
@@ -35,6 +34,7 @@ const QuestionPhoto: React.FC<TestQuestionType> = ({
           checked={state === answerId}
           name={answerText}
           labelText={`${getLetterVatiantsByIndex(index)} ${answerText}`}
+          className={styles.label}
         />
       );
     });
@@ -42,16 +42,13 @@ const QuestionPhoto: React.FC<TestQuestionType> = ({
   return (
     <div className={styles.questionBody}>
       <div className={styles.imageWrapper}>
-        {/* <Image
+        <Image
           src={`${serverName}/${imagePath}`}
-          fallback={noImage}
+          // fallback={noImage}
           preview={{
             imageRender: (originalNode) => <div className={styles.previewImageWrapper}>{originalNode}</div>,
           }}
-        /> */}
-        <div className={styles.previewImageWrapper}>
-          <img src={`${serverName}/${imagePath}`} />
-        </div>
+        />
       </div>
       <form className={styles.answersWrapper}>{renderAnswers()}</form>
     </div>

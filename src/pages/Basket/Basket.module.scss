@@ -4,10 +4,21 @@
   --padding-end: 18rem;
   --padding-top: 20rem;
   --padding-bottom: calc(20rem + var(--tabbar-offset));
+}
 
-  // &::part(scroll) {
-  //   overscroll-behavior: none;
-  // }
+.headerMenuList {
+  ion-item {
+    font-size: 12rem;
+    color: var(--ion-color-primary);
+    --padding-start: 12rem;
+    --padding-end: 12rem;
+    --inner-padding-start: 0;
+    --inner-padding-end: 0;
+
+    &:last-child {
+      --inner-border-width: 0;
+    }
+  }
 }
 
 .empty {

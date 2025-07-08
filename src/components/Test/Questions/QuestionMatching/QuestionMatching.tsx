@@ -27,6 +27,8 @@ const QuestionMatching: React.FC<QuestionMatchingType> = ({
     value: `${id}`,
   }));
 
+  console.log(answers);
+
   return (
     <div className={styles.matchWrapper}>
       <div className={styles.oprionsWrapper}>
@@ -50,10 +52,10 @@ const QuestionMatching: React.FC<QuestionMatchingType> = ({
         </ul>
       </div>
       <div className={styles.selectOptionsWrapper}>
-        <span className={styles.matchPointer}>Answer options:</span>
+        <p className={styles.matchPointer}>Answer options:</p>
         <ul>
           {leftOptions.map(({ id: leftOptionId }, index) => {
-            const currentValue = state.find(
+            const currentValue = state?.find(
               (answer) => answer.left_id === leftOptionId
             )?.right_id;
             return (
@@ -68,8 +70,15 @@ const QuestionMatching: React.FC<QuestionMatchingType> = ({
                   allowClear={false}
                   wrapperStyles={{
                     backgroundColor: "transparent",
-                    width: "48rem",
+                    width: "100%",
+                    paddingInline: "4rem",
+                    gap: "4rem",
+                    fontSize: "12rem",
                   }}
+                  dropDownWrapperStyles={{
+                    boxShadow: 'var(--custom-box-shadow-primary)'
+                  }}
+                  dropDownOpenDirection="up"
                 />
               </li>
             );

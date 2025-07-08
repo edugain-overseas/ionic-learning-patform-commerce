@@ -15,8 +15,16 @@
 }
 
 .content {
-  --padding-top: var(--ion-safe-area-top);
+  // --padding-top: var(--ion-safe-area-top);
   --content-offset-bottom: calc(96rem + var(--tabbar-offset));
+}
+
+.contentInnerWrapper {
+  color: var(--ion-color-dark);
+  display: flex;
+  flex-direction: column;
+  gap: 32rem;
+  padding-inline: 18rem;
 }
 
 .contentBlock {

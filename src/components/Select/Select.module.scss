@@ -12,6 +12,30 @@
 
   position: relative;
 
+  &.open-direction-up {
+    .chevron {
+      transform: rotateZ(180deg);
+    }
+
+    &.open .chevron {
+      transform: rotateZ(0);
+    }
+
+    .dropDownWrapper {
+      top: initial;
+      bottom: calc(100% + 4rem);
+    }
+  }
+  &.open-direction-down {
+    .chevron {
+      transform: rotateZ(0);
+    }
+
+    &.open .chevron {
+      transform: rotateZ(180deg);
+    }
+  }
+
   &.open {
     .dropDownWrapper {
       max-height: 200rem;
@@ -21,12 +45,6 @@
       // transition: opacity var(--transition-time-min) ease-out;
       overflow: auto;
       pointer-events: all;
-    }
-
-    .openBtn {
-      .chevron {
-        transform: rotateZ(0);
-      }
     }
   }
 }
@@ -42,7 +60,7 @@
   text-overflow: ellipsis;
   display: flex;
   align-items: center;
-  font-size: 16rem;
+  font-size: inherit;
 }
 
 .value {
@@ -82,7 +100,6 @@
 .openBtn {
   .chevron {
     font-size: 24rem;
-    transform: rotateZ(180deg);
     transform-origin: center center;
     transition: transform var(--custom-tr-time-min) ease;
   }
@@ -100,7 +117,7 @@
   overflow: hidden;
 
   position: absolute;
-  top: calc(100% + 8rem);
+  top: calc(100% + 4rem);
   left: 0;
   z-index: 10;
 

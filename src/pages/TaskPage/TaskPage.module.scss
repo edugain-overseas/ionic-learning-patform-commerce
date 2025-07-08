@@ -8,4 +8,8 @@
   --padding-top: var(--ion-safe-area-top);
   --padding-bottom: var(--ion-safe-area-bottom);
   position: absolute;
+
+  &.lecture {
+    --content-offset-bottom: calc(24px + var(--tabbar-offset));
+  }
 }

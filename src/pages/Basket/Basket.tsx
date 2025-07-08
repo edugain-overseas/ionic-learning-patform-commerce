@@ -48,12 +48,12 @@ const Basket: FC = () => {
         arrow={false}
         dismissOnSelect={true}
       >
-        <IonList>
+        <IonList className={styles.headerMenuList}>
           <IonItem
             button={true}
             detail={false}
             onClick={() => basket?.clearBasket()}
-            style={{ fontSize: "12rem", color: "var(--ion-color-primary)" }}
+            // style={{ fontSize: "12rem", color: "var(--ion-color-primary)" }}
           >
             Clear basket
           </IonItem>

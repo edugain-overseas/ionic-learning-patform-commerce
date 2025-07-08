@@ -11,7 +11,11 @@ import {
 import InsetBtn from "../InsetBtn/InsetBtn";
 import CheckIcon from "../../assets/icons/check-in-circle.svg";
 import Header from "../Header/Header";
-import { LessonType, TestDataType, useCourses } from "../../context/CoursesContext";
+import {
+  LessonType,
+  TestDataType,
+  useCourses,
+} from "../../context/CoursesContext";
 import { instance } from "../../http/instance";
 import { TestAtteptType } from "../../context/UserContext";
 import TestContent from "../Test/TestContent";
@@ -28,12 +32,7 @@ const TestTools: FC<TestToolsProps> = ({ test, currentAttempt }) => {
   const [testAttemptsData, setTestAttemptsData] = useState<any[]>([]);
   const [present] = useIonToast();
 
-  const coursesInterface = useCourses()
-
-  console.log(test);
-
   const testData = test.lessonData as TestDataType;
-  console.log(testData);
 
   const handleSubmitCurrentAttempt = async () => {
     try {
@@ -87,9 +86,6 @@ const TestTools: FC<TestToolsProps> = ({ test, currentAttempt }) => {
           duration: 5000,
           position: "top",
         });
-
-        
-
       } catch (error) {
         console.log(error);
       } finally {
@@ -168,6 +164,7 @@ const TestTools: FC<TestToolsProps> = ({ test, currentAttempt }) => {
           buttonBackgroundColor="rgba(255, 255, 255, 0.65)"
           ripple={true}
           onClick={handleSubmitCurrentAttempt}
+          disabled={test.status === "completed"}
         />
         <button
           id="open-test-attempts-modal"

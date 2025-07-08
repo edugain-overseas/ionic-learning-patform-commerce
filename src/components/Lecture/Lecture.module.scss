@@ -21,6 +21,10 @@
   }
 }
 
+.contentInnerWrapper {
+  padding-inline: 18rem;
+}
+
 .contentWrapper {
   display: flex;
   flex-direction: column;
@@ -81,8 +85,7 @@
 }
 
 .lectureFooter {
-  margin: 24rem -18rem;
-  padding-bottom: 40rem;
+  margin: 24rem -18rem 0;
 }
 
 .btnsWrapper {

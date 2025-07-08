@@ -1,13 +1,12 @@
 import React from "react";
 import { LessonType, useCourses } from "../../context/CoursesContext";
-import DoubleScrollLayout from "../DoubleScrollLayout/DoubleScrollLayout";
 import { serverName } from "../../http/server";
-import styles from "./Lecture.module.scss";
+import StickyScrollLayout from "../StickyScrollLayout/StickyScrollLayout";
 import LectureContent from "./LectureContent";
 import EqualSpaceContainer from "../EqualSpaceContainer/EqualSpaceContainer";
 import TaskFooterNavBtn from "../TaskFooterNavBtn/TaskFooterNavBtn";
-import PrimaryScrollConteinerLayout from "../PrimaryScrollConteinerLayout/PrimaryScrollConteinerLayout";
 import Spinner from "../Spinner/Spinner";
+import styles from "./Lecture.module.scss";
 
 const Lecture: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
   const coursesInterface = useCourses();
@@ -24,12 +23,12 @@ const Lecture: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
       .findIndex((lesson) => lesson.id === taskData.id) + 1;
 
   return (
-    <PrimaryScrollConteinerLayout
+    <StickyScrollLayout
       posterSrc={`${serverName}/${taskData.image_path}`}
       topLabel="Lecture"
       endPosition={208}
     >
-      <div>
+      <div className={styles.contentInnerWrapper}>
         <div className={styles.lectureHeader}>
           <div className={styles.title}>
             {`${course?.title}: `}
@@ -55,7 +54,7 @@ const Lecture: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
           />
         </div>
       </div>
-    </PrimaryScrollConteinerLayout>
+    </StickyScrollLayout>
   );
 };
 

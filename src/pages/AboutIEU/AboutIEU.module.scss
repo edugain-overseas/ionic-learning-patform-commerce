@@ -15,8 +15,17 @@
 }
 
 .content {
-  --padding-top: var(--ion-safe-area-top);
   --content-offset-bottom: calc(var(--tabbar-offset) + 36rem);
+  --background: transparent;
+}
+
+.contentInner {
+  padding: 28rem 18rem 0;
+
+  color: var(--ion-color-dark);
+  display: flex;
+  flex-direction: column;
+  gap: 32rem;
 }
 
 .contentHeader {

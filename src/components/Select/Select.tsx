@@ -19,6 +19,7 @@ interface SelectType {
   allowClear?: boolean;
   wrapperStyles?: CSSProperties;
   dropDownWrapperStyles?: CSSProperties;
+  dropDownOpenDirection?: "down" | "up";
 }
 
 const Select: React.FC<SelectType> = ({
@@ -30,6 +31,7 @@ const Select: React.FC<SelectType> = ({
   allowClear = true,
   wrapperStyles = {},
   dropDownWrapperStyles = {},
+  dropDownOpenDirection = "down",
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>();
   const [highlightedIndex, setHightlightedIndex] = useState(0);
@@ -121,7 +123,7 @@ const Select: React.FC<SelectType> = ({
       ref={selectRef}
       className={`${styles.wrapper} ${borderless ? styles.borderless : ""} ${
         isOpen ? styles.open : ""
-      }`}
+      } ${styles[`open-direction-${dropDownOpenDirection}`]}`}
       style={wrapperStyles}
       onClick={(e) => handleOpen(e)}
     >
@@ -144,7 +146,7 @@ const Select: React.FC<SelectType> = ({
           onClick={(e) => handleClear(e)}
           type="button"
         >
-          <IonIcon src={CrossIcon} className={styles.clear}/>
+          <IonIcon src={CrossIcon} className={styles.clear} />
         </button>
       ) : (
         <button

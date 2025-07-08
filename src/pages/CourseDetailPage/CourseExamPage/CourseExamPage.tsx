@@ -203,7 +203,7 @@ const CourseExamPage: FC = () => {
         return;
       }
 
-      timerRef.current -= 100;
+      timerRef.current -= 1;
 
       callback?.();
     }, 1000);

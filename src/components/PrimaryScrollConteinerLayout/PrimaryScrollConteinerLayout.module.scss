@@ -2,13 +2,18 @@
   position: relative;
   overflow: auto;
   overscroll-behavior: none;
+
+  z-index: 1;
+
+  // transform: translate3d(0,0,0);
+  // will-change: transform;
 }
 
 .poster {
   display: block;
   width: 100%;
   position: fixed;
-  z-index: 1;
+  // z-index: 1;
   top: 0;
   object-fit: cover;
 }

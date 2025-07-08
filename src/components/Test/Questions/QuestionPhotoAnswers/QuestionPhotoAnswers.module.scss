@@ -1,16 +1,21 @@
 .answersWrapper {
-  padding-block: 16rem;
+  padding: 12rem;
+  padding-top: 0;
+  margin-inline: -12rem;
+
   display: flex;
-  justify-content: center;
+  // justify-content: center;
+  // padding-inline: 4rem;
   gap: 16rem;
+  overflow-x: auto;
 
   & .imageCard {
-    // flex: 1;
-    width: calc(25% - 16rem / 4 * 3);
+    flex-shrink: 0;
+    width: 144rem;
     border-radius: 5rem;
     overflow: hidden;
-    box-shadow: var(--drop-shadow-button-main-hover);
-    background-color: var(--bg-rgba-default);
+    box-shadow: var(--custom-box-shadow-primary);
+    background-color: var(--custom-bg-rgba-secondary);
 
     & > div {
       width: 100%;
@@ -19,6 +24,7 @@
     & img {
       width: auto;
       max-width: 100%;
+      width: 144rem;
       aspect-ratio: 16/9;
       object-fit: cover;
     }
@@ -26,6 +32,7 @@
 
   .input {
     padding: 10rem;
+    width: 100%;
   }
 }
 

@@ -59,10 +59,19 @@
     position: relative;
     z-index: 2;
     overflow: hidden;
-    background-size: calc(100% + 8rem);
-    background-repeat: no-repeat;
-    background-position: center;
+    // background-size: calc(100% + 8rem);
+    // background-repeat: no-repeat;
+    // background-position: center;
     border-radius: var(--custom--border-radius-primary);
+
+    & div {
+      width: calc(100% + 8rem);
+      height: calc(100% + 8rem);
+      margin: -4rem 0 0 -4rem;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
   }
 }
 

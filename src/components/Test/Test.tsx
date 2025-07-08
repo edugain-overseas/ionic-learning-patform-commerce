@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   LessonType,
   TestDataType,
@@ -6,7 +6,6 @@ import {
 } from "../../context/CoursesContext";
 import { serverName } from "../../http/server";
 import TestContent from "./TestContent";
-import DoubleScrollLayout from "../DoubleScrollLayout/DoubleScrollLayout";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import styles from "./Test.module.scss";
 import LessonToolsPanel from "../LessonToolsPanel/LessonToolsPanel";
@@ -15,12 +14,41 @@ import EqualSpaceContainer from "../EqualSpaceContainer/EqualSpaceContainer";
 import TaskFooterNavBtn from "../TaskFooterNavBtn/TaskFooterNavBtn";
 import TestLanding from "./TestLanding";
 import CommonButton from "../CommonButton/CommonButton";
-import PrimaryScrollConteinerLayout from "../PrimaryScrollConteinerLayout/PrimaryScrollConteinerLayout";
+import StickyScrollLayout from "../StickyScrollLayout/StickyScrollLayout";
+import { instance } from "../../http/instance";
+import Spinner from "../Spinner/Spinner";
+import useStorage from "../../hooks/useStorage";
+import { minutesToSeconds } from "../../utils/formatTime";
+import { useIonToast } from "@ionic/react";
+import TestTimer from "../TestTimer/TestTimer";
+
+// type Attempt = {
+//   id: number;
+//   spent_minutes: null | number;
+//   student_id: number;
+//   attempt_number: number;
+//   attempt_score: number;
+//   test_id: number;
+// };
+
+type CurrentAttempt = {
+  studentAnswers: any[];
+  timer: number;
+  lessonId: number;
+};
 
 const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
   const coursesInterface = useCourses();
   const [isTestOpen, setIsTestOpen] = useState(false);
   const [studentAnswers, setStudentAnswers] = useState<any[]>([]);
+  const [currentAttempt, setCurrentAttempt] = useStorage<CurrentAttempt | null>(
+    `test-${taskData.id}-attempt`,
+    null
+  );
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<number>(0);
+  const [present] = useIonToast();
+  // const [submitedAttempt, setSubmitedAttempt] = useState<Attempt | null>();
 
   const course = coursesInterface?.courses.find(
     (course) => course.id === taskData.course_id
@@ -43,6 +71,10 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
       100
   );
 
+  const testStatus = taskData.status;
+
+  const testData = taskData.lessonData as TestDataType;
+
   const number =
     course?.lessons &&
     course?.lessons
@@ -50,8 +82,79 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
       .sort((a, b) => a.number - b.number)
       .findIndex((lesson) => lesson.id === taskData.id) + 1;
 
-  return isTestOpen ? (
+  console.log(taskData);
+
+  useEffect(() => {
+    const getSubmitedAttempt = async () => {
+      try {
+        const response = await instance.get(
+          `/student-test/attempt/${testData.my_attempt_id}`
+        );
+        setStudentAnswers(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (testStatus === "completed" && testData?.my_attempt_id) {
+      getSubmitedAttempt();
+    }
+  }, [testStatus, testData?.my_attempt_id]);
+
+  const setUpTimer = (timer: number, callback: () => void) => {
+    timerRef.current = timer;
+
+    intervalRef.current = setInterval(() => {
+      console.log("tik tok");
+
+      if (timerRef.current <= 0) {
+        present({
+          message: "Time is out. Your attept was sended!",
+          position: "top",
+          duration: 5000,
+        });
+        return;
+      }
+
+      timerRef.current -= 1;
+
+      callback?.();
+    }, 1000);
+  };
+
+  const startAttempt = async () => {
+    const timer = minutesToSeconds(taskData.scheduled_time);
+    const lessonId = taskData.id;
+
+    setCurrentAttempt({
+      studentAnswers: [],
+      timer,
+      lessonId,
+    } as CurrentAttempt);
+
+    const callback = () =>
+      setCurrentAttempt((prev) =>
+        prev ? { ...prev, timer: timerRef.current } : null
+      );
+
+    setUpTimer(timer, callback);
+  };
+
+  if (testStatus === undefined) {
+    return (
+      <div className={styles.loaderWrapper}>
+        <Spinner />
+      </div>
+    );
+  }
+
+  return isTestOpen || testStatus === "completed" ? (
     <>
+      {currentAttempt?.timer && (
+        <div className={styles.timerWrapper}>
+          <TestTimer time={currentAttempt.timer} />
+        </div>
+      )}
       {!Number.isNaN(answersProgressValue) && (
         <div className={styles.answersProgress}>
           <span
@@ -65,33 +168,36 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
           />
         </div>
       )}
-      <LessonToolsPanel>
+      <LessonToolsPanel inset="calc(116rem + var(--ion-safe-area-top)) auto auto calc(100% - 50rem)">
         <TestTools test={taskData} currentAttempt={studentAnswers} />
       </LessonToolsPanel>
-
-      <PrimaryScrollConteinerLayout
+      <StickyScrollLayout
         posterSrc={`${serverName}/${taskData.image_path}`}
         topLabel="Test"
         endPosition={170}
       >
-        <div>
-          <div className={styles.testHeader}>
-            <div className={styles.title}>
-              {`${course?.title}: `}
-              <span className={styles.titleValue}>{taskData.title}</span>
+        <div className={styles.contentInnerWrapper}>
+          <div>
+            <div className={styles.testHeader}>
+              <div className={styles.title}>
+                {`${course?.title}: `}
+                <span className={styles.titleValue}>{taskData.title}</span>
+              </div>
+              <div className={styles.title}>
+                {"Test №: "}
+                <span className={styles.titleValue}>{number}</span>
+              </div>
             </div>
-            <div className={styles.title}>
-              {"Test №: "}
-              <span className={styles.titleValue}>{number}</span>
-            </div>
+            {taskData?.lessonData && "test_id" in taskData.lessonData && (
+              <TestContent
+                test={taskData}
+                studentAnswers={studentAnswers}
+                setStudentAnswers={
+                  testStatus !== "completed" ? setStudentAnswers : undefined
+                }
+              />
+            )}
           </div>
-          {taskData?.lessonData && "test_id" in taskData.lessonData && (
-            <TestContent
-              test={taskData}
-              studentAnswers={studentAnswers}
-              setStudentAnswers={setStudentAnswers}
-            />
-          )}
           <div className={styles.testFooter}>
             <EqualSpaceContainer
               containerClassname={styles.btnContainer}
@@ -100,11 +206,11 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
             />
           </div>
         </div>
-      </PrimaryScrollConteinerLayout>
+      </StickyScrollLayout>
     </>
   ) : (
     <>
-      <TestLanding />
+      <TestLanding timer={taskData.scheduled_time} minScore={testData?.score} />
       <CommonButton
         label="Start"
         block={true}
@@ -114,7 +220,10 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
         color="var(--ion-color-primary-contrast)"
         borderRadius={5}
         className={styles.landingBtn}
-        onClick={() => setIsTestOpen(true)}
+        onClick={() => {
+          startAttempt();
+          setIsTestOpen(true);
+        }}
       />
     </>
   );

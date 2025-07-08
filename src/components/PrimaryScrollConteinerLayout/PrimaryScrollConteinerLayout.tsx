@@ -6,7 +6,6 @@ interface DoubleScrollContainerLayoutType {
   children: React.ReactNode;
   topLabel?: string;
   posterSrc: string;
-  isBackgroundBlured?: boolean;
   startPosition?: number;
   endPosition?: number;
 }
@@ -63,17 +62,7 @@ const PrimaryScrollConteinerLayout: FC<DoubleScrollContainerLayoutType> = ({
   console.log(isTrigerReached);
 
   return (
-    <div
-      className={styles.pageWrapper}
-      ref={pageWrapperRef}
-      style={{
-        marginTop: isTrigerReached
-          ? `calc(${endPosition + labelHeight / 2}rem)`
-          : `calc(${endPosition - labelHeight / 2}rem)`,
-        height: `calc(100% - ${endPosition - labelHeight / 2}rem)`,
-        paddingTop: `${bgTriggerPosition}rem`,
-      }}
-    >
+    <>
       <img
         src={posterSrc}
         className={styles.poster}
@@ -82,29 +71,41 @@ const PrimaryScrollConteinerLayout: FC<DoubleScrollContainerLayoutType> = ({
         }}
       />
       <div
-        className={`${styles.contentBackground}`}
-        ref={backgroundRef}
-        style={{
-          height: `calc(100% + ${scrollMarginTrigger}rem)`,
-          position: isTrigerReached ? "fixed" : "sticky",
-          top: isTrigerReached
-            ? `calc(${endPosition}rem + var(--ion-safe-area-top))`
-            : `-${scrollMarginTrigger}rem`,
-        }}
-      >
-        {topLabel && <div className={styles.topLabel}>{topLabel}</div>}
-      </div>
-      <div
-        className={styles.contentInner}
+        className={styles.pageWrapper}
+        ref={pageWrapperRef}
         style={{
           marginTop: isTrigerReached
-            ? `-${labelHeight}rem`
-            : `calc(-${pageContentHeight - labelHeight / 2}rem)`,
+            ? `calc(${endPosition + labelHeight / 2}rem)`
+            : `calc(${endPosition - labelHeight / 2}rem)`,
+          height: `calc(100% - ${endPosition - labelHeight / 2}rem)`,
+          paddingTop: `${bgTriggerPosition}rem`,
         }}
       >
-        <div className={styles.contenWrapper}>{children}</div>
+        <div
+          className={`${styles.contentBackground}`}
+          ref={backgroundRef}
+          style={{
+            height: `calc(100% + ${scrollMarginTrigger}rem)`,
+            position: isTrigerReached ? "fixed" : "sticky",
+            top: isTrigerReached
+              ? `calc(${endPosition}rem + var(--ion-safe-area-top))`
+              : `-${scrollMarginTrigger}rem`,
+          }}
+        >
+          {topLabel && <div className={styles.topLabel}>{topLabel}</div>}
+        </div>
+        <div
+          className={styles.contentInner}
+          style={{
+            marginTop: isTrigerReached
+              ? `-${labelHeight}rem`
+              : `calc(-${pageContentHeight - labelHeight / 2}rem)`,
+          }}
+        >
+          <div className={styles.contenWrapper}>{children}</div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -37,8 +37,6 @@ const TestContent: React.FC<{
     status,
   } = test;
 
-  console.log(testData);
-
   const testContent = [...(testData as TestDataType)?.questions].sort(
     (itemA, itemB) => itemA.q_number - itemB.q_number
   );
@@ -129,7 +127,7 @@ const TestContent: React.FC<{
           q_type: type,
           answers,
           image_path: imagePath,
-        } = question;
+        } = question;        
 
         switch (type) {
           case "test":
@@ -290,18 +288,13 @@ const TestContent: React.FC<{
               </div>
             );
           case "matching":
-            // if (
-            //   studentAnswers.find(({ q_id: questionId }) => questionId === id)
-            // ) {
-            // } else {
-            //   setStudentAnswers((prev) => [
-            //     ...prev,
-            //     { q_id: id, q_type: type, matching: [] },
-            //   ]);
-            // }
             const matchingState = studentAnswers.find(
               ({ q_id }) => q_id === id
             )?.matching;
+
+            console.log(studentAnswers);
+            
+
             return (
               <div key={id} className={styles.questionWrapper}>
                 <div className={styles.questionHeader}>
@@ -315,13 +308,13 @@ const TestContent: React.FC<{
                 <QuestionMatching
                   answers={{
                     left: (
-                      answers as {
+                      answers[0] as {
                         left: { value: string; id: number }[];
                         right: { value: string; id: number }[];
                       }
                     ).left,
                     right: (
-                      answers as {
+                      answers[0] as {
                         left: { value: string; id: number }[];
                         right: { value: string; id: number }[];
                       }

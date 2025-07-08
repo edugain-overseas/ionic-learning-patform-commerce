@@ -1,21 +1,22 @@
 .questionBody {
-  display: flex;
-  gap: 40rem;
-  padding-block: 16rem;
-
   & .imageWrapper {
-    width: 360rem;
+    width: 100%;
+
+    & > div {
+      display: block;
+      border-radius: 5rem;
+      overflow: hidden;
+    }
 
     & img {
       object-fit: cover;
-      height: 100%;
       aspect-ratio: 16/9;
     }
   }
 }
 
 .answersWrapper {
-  padding-block: 16rem;
+  padding-top: 16rem;
   display: flex;
   flex-direction: column;
   gap: 12rem;

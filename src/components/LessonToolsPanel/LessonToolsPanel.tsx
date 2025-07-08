@@ -5,9 +5,10 @@ import { remToPx } from "../../utils/pxToRem";
 
 type LessonToolsPanelProps = {
   children: ReactNode;
+  inset?: string;
 };
 
-const LessonToolsPanel: FC<LessonToolsPanelProps> = ({ children }) => {
+const LessonToolsPanel: FC<LessonToolsPanelProps> = ({ children, inset }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const gesture = useRef<Gesture | null>(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
@@ -105,10 +106,12 @@ const LessonToolsPanel: FC<LessonToolsPanelProps> = ({ children }) => {
     }
   };
 
-
-
   return (
-    <div ref={containerRef} className={styles.container}>
+    <div
+      ref={containerRef}
+      className={styles.container}
+      style={{ inset: inset }}
+    >
       {children}
     </div>
   );
