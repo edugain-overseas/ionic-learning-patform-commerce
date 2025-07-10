@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEvent, useRef } from "react";
 import { IonIcon, IonRippleEffect, IonRouterLink } from "@ionic/react";
 import { CourseType } from "../../context/CoursesContext";
 import { serverName } from "../../http/server";
@@ -13,12 +13,15 @@ import CardGrade from "../CardGrade/CardGrade";
 import InfoBtn from "../InfoBtn/InfoBtn";
 import { useListStyle } from "../../context/ListStyleContext";
 import { useBasket } from "../../context/BasketContext";
+import { pulseOne } from "../../animations/cardAnimations";
+import { flyToBasket } from "../../utils/flyToTarget";
 
 interface CourseItemTypes {
   course: CourseType;
 }
 
 const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
+  const itemRef = useRef<HTMLLIElement>(null);
   const userCourseData = useUser()?.user?.courses?.find(
     (userCourse) => userCourse.course_id === course.id
   );
@@ -30,8 +33,24 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
   const isCourseInBasket =
     basket?.items.findIndex((item) => item.id === course.id) !== -1;
 
+  const toggleItem = (e: MouseEvent<HTMLButtonElement>) => {
+    const buttonEl = e.currentTarget;
+
+    if (!itemRef.current) return;
+
+    if (isCourseInBasket) {
+      pulseOne(itemRef.current)
+        .onFinish(() => basket?.toggleItemToBasket(course.id))
+        .play();
+    } else {
+      flyToBasket(buttonEl)
+        ?.onFinish(() => basket?.toggleItemToBasket(course.id))
+        .play();
+    }
+  };
+
   return (
-    <li className={styles.itemWrapper}>
+    <li className={styles.itemWrapper} ref={itemRef}>
       <IonRouterLink
         className={`${styles.link} ${
           listStyle === "row" ? styles.row : ""
@@ -83,7 +102,7 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
                   }
                   width="32rem"
                   height="32rem"
-                  onClick={() => basket?.toggleItemToBasket(course.id)}
+                  onClick={toggleItem}
                 />
               </>
             )}
@@ -93,7 +112,6 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
           Progress:{" "}
           {userCourseData ? (
             <ProgressBar
-              // value={userCourseData.progress}
               value={course.progress}
               width={160}
               height={10}

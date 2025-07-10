@@ -145,7 +145,7 @@ const CategoryDetailPage: React.FC = () => {
         ref={contentRef}
         style={{ overflow: "hidden" }}
       >
-        {onRefresh && <PageRefresher onRefresh={onRefresh} />}
+        {onRefresh && <PageRefresher onRefresh={onRefresh} containerClassname={styles.refresher}/>}
         <div className={styles.topContentWrapper} ref={topContentRef}>
           <div className={styles.topScaler}>
             <div className={styles.pageTitle}>

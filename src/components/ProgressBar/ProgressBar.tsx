@@ -39,8 +39,6 @@ const ProgressBar: React.FC<ProgressBarTypes> = ({
   disabled = false,
   showValue = true,
 }) => {
-  console.log(value);
-
   return (
     <div
       className={styles.outerWrapper}

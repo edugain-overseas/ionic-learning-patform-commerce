@@ -179,7 +179,9 @@ const CourseIntroPage: React.FC = () => {
               </span>
               <ul className={styles.coursesList}>
                 {courses
-                  ?.filter(({ id }) => id !== course?.id)
+                  ?.filter(
+                    (course) => course.id !== course?.id && !course.bought
+                  )
                   .map((course) => (
                     <CourseItem course={course} key={course.id} />
                   ))}

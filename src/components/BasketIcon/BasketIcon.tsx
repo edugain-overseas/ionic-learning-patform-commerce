@@ -11,7 +11,8 @@ const BasketIcon: FC = () => {
       {amount !== 0 && <span className={styles.amount}>{amount}</span>}
       <IonIcon
         src={basketIcon}
-        className={`${styles.basketIcon} custom-tab-icon`}
+        className="custom-tab-icon"
+        id="tabbar-basket-icon"
       />
     </div>
   );

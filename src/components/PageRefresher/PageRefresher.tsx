@@ -10,7 +10,8 @@ import "./PageRefresher.scss";
 const PageRefresher: FC<{
   onRefresh: () => Promise<void>;
   refreshingText?: string;
-}> = ({ onRefresh, refreshingText }) => {
+  containerClassname?: string;
+}> = ({ onRefresh, refreshingText, containerClassname='refresher' }) => {
   const handleRefresh = (
     event: IonRefresherCustomEvent<RefresherEventDetail>
   ) => {
@@ -21,13 +22,14 @@ const PageRefresher: FC<{
     <IonRefresher
       slot="fixed"
       onIonRefresh={handleRefresh}
-      closeDuration="250ms"
+      closeDuration="500ms"
+      className={containerClassname}
     >
       <IonRefresherContent
         refreshingSpinner="crescent"
         refreshingText={refreshingText}
         className="page-refresher"
-        pullingText='Pull to refresh'
+        pullingText="Pull to refresh"
         pullingIcon={null}
       ></IonRefresherContent>
     </IonRefresher>

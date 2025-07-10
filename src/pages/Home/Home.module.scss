@@ -86,15 +86,15 @@
   color: var(--ion-color-dark);
 }
 
-.authPanel {
-  position: absolute;
-  width: 100%;
-  height: 125rem;
-  bottom: 0;
-  padding-bottom: 61rem;
+.homeAuth {
+  animation: slideUp 0.5s ease-out forwards;
+}
 
-  background-color: var(--custom-bg-rgba-secondary);
-  box-shadow: var(--custom-box-shadow-primary);
-  border-radius: 16rem 16rem 0 0;
-  backdrop-filter: blur(28px);
+@keyframes slideUp {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }

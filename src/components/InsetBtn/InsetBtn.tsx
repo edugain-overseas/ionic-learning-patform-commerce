@@ -1,4 +1,4 @@
-import React, { MouseEventHandler } from "react";
+import React, { MouseEvent, MouseEventHandler } from "react";
 import styles from "./InsetBtn.module.scss";
 import { IonRippleEffect } from "@ionic/react";
 
@@ -10,7 +10,7 @@ interface InsetBtnTypes {
   buttonClassName?: string | undefined;
   backgroundColor?: string | undefined;
   buttonBackgroundColor?: string | undefined;
-  onClick?: () => void;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean | undefined;
   id?: string;
   ripple?: boolean;
@@ -32,7 +32,7 @@ const InsetBtn: React.FC<InsetBtnTypes> = ({
   const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    onClick();
+    onClick(e);
   };
 
   return (

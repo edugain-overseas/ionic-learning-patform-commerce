@@ -23,7 +23,7 @@ const useStorage = <T>(key: string, defaultValue: T) => {
       } catch (error) {
         console.log(error);
       } finally {
-        setIsStoreInit(false);
+        setIsStoreInit(true);
       }
     };
     initStore();

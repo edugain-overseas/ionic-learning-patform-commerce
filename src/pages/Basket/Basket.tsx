@@ -36,8 +36,6 @@ const Basket: FC = () => {
   const basket = useBasket();
   const isEmptyBasket = !basket || basket.items.length === 0;
 
-  console.log(isEmptyBasket);
-
   return (
     <IonPage id="basket" className="primaryPage">
       <Header {...headerProps} />
@@ -53,7 +51,6 @@ const Basket: FC = () => {
             button={true}
             detail={false}
             onClick={() => basket?.clearBasket()}
-            // style={{ fontSize: "12rem", color: "var(--ion-color-primary)" }}
           >
             Clear basket
           </IonItem>
@@ -65,8 +62,8 @@ const Basket: FC = () => {
                 color: "var(--ion-color-light)",
                 width: "100%",
                 height: "100%",
-                display: 'flex',
-                alignItems: 'center'
+                display: "flex",
+                alignItems: "center",
               }}
             >
               Back to courses

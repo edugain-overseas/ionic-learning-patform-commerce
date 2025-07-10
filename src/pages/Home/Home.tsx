@@ -107,7 +107,7 @@ const Home: React.FC = () => {
           <HomeOfferInfo />
           <HomeFooter />
         </div>
-        <Auth />
+        <Auth containerClassname={styles.homeAuth}/>
       </IonContent>
     </IonPage>
   );

@@ -1,20 +1,19 @@
-.page-refresher {
-  font-size: 16rem;
-  color: var(--ion-color-dark);
+.refresher {
+  --color: var(--ion-color-dark);
+}
 
+.page-refresher {
   .refresher-pulling-text {
     font-size: 14rem;
-    color: var(--ion-color-dark);
+    color: var(--color);
   }
 
   .refresher-refreshing-icon ion-spinner {
-    color: var(--ion-color-dark);
     width: 24rem;
     height: 24rem;
   }
 
   .refresher-refreshing-text {
     font-size: 14rem;
-    color: var(--ion-color-dark);
   }
 }

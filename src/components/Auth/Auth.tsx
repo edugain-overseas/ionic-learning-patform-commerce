@@ -13,13 +13,14 @@ type AuthPropsType = {
 };
 
 const Auth: FC<AuthPropsType> = ({ containerClassname = "" }) => {
-  const accessToken = useUser()?.user.accessToken;
+  const accessToken = useUser()?.user?.accessToken;
+  const isUserReady = useUser()?.user?.isTokenInit;  
 
   const authUiInterface = useAuthUi();
 
   return (
     <>
-      {!accessToken && (
+      {!accessToken && isUserReady && (
         <div className={`${styles.authPanel} ${containerClassname}`}>
           <EqualSpaceContainer
             leftItem={
