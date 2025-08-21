@@ -17,8 +17,8 @@ import {
   useCourses,
 } from "../../context/CoursesContext";
 import { instance } from "../../http/instance";
-import { TestAtteptType } from "../../context/UserContext";
 import TestContent from "../Test/TestContent";
+import { TestAttemptType } from "../../types/user";
 
 type TestToolsProps = {
   test: LessonType;
@@ -27,7 +27,7 @@ type TestToolsProps = {
 
 const TestTools: FC<TestToolsProps> = ({ test, currentAttempt }) => {
   const modalRef = useRef<HTMLIonModalElement>(null);
-  const [testAttempts, setTestAttempts] = useState<TestAtteptType[]>([]);
+  const [testAttempts, setTestAttempts] = useState<TestAttemptType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [testAttemptsData, setTestAttemptsData] = useState<any[]>([]);
   const [present] = useIonToast();

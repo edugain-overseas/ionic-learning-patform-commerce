@@ -18,18 +18,13 @@ export const flyTo = (
 ): Animation =>
   createAnimation()
     .addElement(baseEl)
-    .duration(800)
+    .duration(500)
     .easing("ease-in-out")
     .keyframes([
       { offset: 0, transform: "translate(0, 0) scale(1)", opacity: "1" },
       {
-        offset: 0.2,
-        transform: `translate(${0}px, ${-toY / 10}px) scale(0.8)`,
-        opacity: "1",
-      },
-      {
         offset: 1,
         transform: `translate(${toX}px, ${toY}px) scale(0.3)`,
-        opacity: "0.2",
+        opacity: "0.4",
       },
     ]);

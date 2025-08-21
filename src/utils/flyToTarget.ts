@@ -11,6 +11,8 @@ const flyToTarget = (sourceEl: HTMLElement, targetElement: HTMLElement) => {
   clone.style.top = `${sourceRect.top}px`;
   clone.style.width = `${sourceRect.width}px`;
   clone.style.height = `${sourceRect.height}px`;
+  clone.style.borderRadius = `50%`;
+  clone.style.border = `1rem solid var(--ion-color-light)`;
   clone.style.zIndex = "9999";
   clone.style.pointerEvents = "none";
   document.body.appendChild(clone);

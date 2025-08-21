@@ -1,8 +1,8 @@
-import React, { FC } from "react";
-import { UserType } from "../../context/UserContext";
+import { FC } from "react";
 import styles from "./UserProfile.module.scss";
 import Accordion from "../../components/Accordion/Accordion";
 import { getCountryByCode } from "../../utils/countries";
+import { UserType } from "../../types/user";
 
 const UserProfileInfo: FC<{ userData?: UserType }> = ({ userData }) => {
   return (

@@ -1,7 +1,7 @@
 import { FC } from "react";
-import { UserType } from "../../context/UserContext";
 import styles from "./UserProfile.module.scss";
 import CircleProgressCard from "../../components/CircleProgressCard/CircleProgressCard";
+import { UserType } from "../../types/user";
 
 const mockedAvarage = 172;
 const mockedProgress = 75;

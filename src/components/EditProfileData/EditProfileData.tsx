@@ -6,7 +6,7 @@ import {
   IonToast,
   useIonToast,
 } from "@ionic/react";
-import { UserInfoToUpdateType, useUser } from "../../context/UserContext";
+import { useUser } from "../../context/UserContext";
 import { useForm } from "react-hook-form";
 import { getCountries } from "../../utils/countries";
 import { emailRegex } from "../../constants/regExps";
@@ -20,6 +20,7 @@ import InputWithLabel from "../InputWithLabel/InputWithLabel";
 import Select from "../Select/Select";
 import styles from "./EditProfileData.module.scss";
 import EqualSpaceContainer from "../EqualSpaceContainer/EqualSpaceContainer";
+import { UserInfoToUpdateType } from "../../types/user";
 
 type EditUserDataForm = {
   username?: string;

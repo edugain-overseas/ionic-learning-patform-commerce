@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { UserType } from "../../context/UserContext";
 import ClockIcon from "../../assets/icons/clock.svg";
 import TaskProgressIcon from "../../assets/icons/task-progress.svg";
 import TaskCompletedIcon from "../../assets/icons/task-completed.svg";
@@ -8,6 +7,7 @@ import TextOverrflowEllipsis from "../../components/TextOverrflowEllipsis/TextOv
 import { IonIcon } from "@ionic/react";
 import styles from "./UserProfile.module.scss";
 import { convertMillisecondsToHoursAndMinutes } from "../../utils/millisecondsToSrt";
+import { UserType } from "../../types/user";
 
 const UserMainInfo: FC<{ userData?: UserType }> = ({ userData }) => {
   const { hours, minutes } = userData
