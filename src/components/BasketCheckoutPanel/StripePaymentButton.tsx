@@ -82,7 +82,7 @@ const StripePaymentButton: FC = () => {
     }
   };
 
-  const handleCheckOutBtnCick = () => {
+  const handleCheckOutBtnClick = () => {
     if (!isButtonActive) {
       present({
         message: "There are no courses in your basket yet!",
@@ -106,9 +106,17 @@ const StripePaymentButton: FC = () => {
     return null;
   }
 
+  // const isApple = async () => {
+  //   console.log('click');
+    
+  //   const available = await Stripe.isApplePayAvailable();
+  //   console.log(available);
+  // };
+// 
   return (
     <CheckoutBtn
-      handleClick={handleCheckOutBtnCick}
+      handleClick={handleCheckOutBtnClick}
+      // handleClick={isApple}
       isLoading={isLoading}
       disabled={items?.length === 0}
     />

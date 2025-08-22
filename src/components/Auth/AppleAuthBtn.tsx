@@ -32,7 +32,7 @@ const AppleAuthBtn = () => {
 
     let options: SignInWithAppleOptions = {
       clientId,
-      redirectURI: "https://vps2.xyz",
+      redirectURI: "https://vps2.online",
       // redirectURI: "https://7dac-176-38-25-248.ngrok-free.app/",
       scopes: "email name",
       state: "12345",
