@@ -6,13 +6,13 @@ import styles from "./BasketCheckoutPanel.module.scss";
 type CheckoutBtnProps = {
   isLoading?: boolean;
   disabled?: boolean;
-  handleClick: () => void;
+  handleClick?: () => void;
 };
 
 const CheckoutBtn: FC<CheckoutBtnProps> = ({
   isLoading = false,
   disabled = false,
-  handleClick,
+  handleClick=()=>{},
 }) => {
   return (
     <CommonButton

@@ -8,7 +8,7 @@ import { useIonRouter, useIonToast } from "@ionic/react";
 import { useCourses } from "../../context/CoursesContext";
 import { useAuthUi } from "../../context/AuthUIContext";
 
-const StripePaymentButton: FC = () => {
+const StripeNativePaymentButton: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [present] = useIonToast();
   const router = useIonRouter();
@@ -44,6 +44,9 @@ const StripePaymentButton: FC = () => {
         success_url: "",
         cancel_url: "",
       });
+
+      console.log(data);
+      
 
       const paymentIntent = data.paymentIntent;
 
@@ -106,21 +109,13 @@ const StripePaymentButton: FC = () => {
     return null;
   }
 
-  // const isApple = async () => {
-  //   console.log('click');
-    
-  //   const available = await Stripe.isApplePayAvailable();
-  //   console.log(available);
-  // };
-// 
   return (
     <CheckoutBtn
       handleClick={handleCheckOutBtnClick}
-      // handleClick={isApple}
       isLoading={isLoading}
-      disabled={items?.length === 0}
+      disabled={!isButtonActive}
     />
   );
 };
 
-export default StripePaymentButton;
+export default StripeNativePaymentButton;
