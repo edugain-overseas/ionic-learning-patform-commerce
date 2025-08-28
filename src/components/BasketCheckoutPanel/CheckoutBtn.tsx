@@ -12,17 +12,17 @@ type CheckoutBtnProps = {
 const CheckoutBtn: FC<CheckoutBtnProps> = ({
   isLoading = false,
   disabled = false,
-  handleClick=()=>{},
+  handleClick = () => {},
 }) => {
   return (
     <CommonButton
       label="Checkout"
       icon={isLoading && <Spinner color="#fff" />}
-      backgroundColor={disabled ? '#BDC4D2' :"#7E8CA8"}
+      backgroundColor={disabled ? "#BDC4D2" : "#7E8CA8"}
       borderRadius={5}
       color="#FCFCFC"
       block={true}
-      height={40}
+      height="40px"
       className={styles.checkoutBtn}
       onClick={handleClick}
       disabled={isLoading}

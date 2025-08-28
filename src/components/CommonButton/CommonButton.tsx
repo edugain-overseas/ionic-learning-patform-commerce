@@ -6,7 +6,7 @@ interface CommonButtonTypes {
   id?: string;
   type?: "button" | "submit" | "reset" | undefined;
   width?: number;
-  height?: number;
+  height?: number | string;
   block?: boolean;
   borderRadius?: number;
   border?: string;
@@ -23,7 +23,7 @@ const CommonButton: React.FC<CommonButtonTypes> = ({
   id,
   type = "button",
   width,
-  height,
+  height = 'auto',
   block = false,
   borderRadius = 0,
   border,
@@ -36,7 +36,6 @@ const CommonButton: React.FC<CommonButtonTypes> = ({
   onClick,
 }) => {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    // e.preventDefault();    
     e.stopPropagation();
     onClick && onClick();
   };
@@ -47,7 +46,7 @@ const CommonButton: React.FC<CommonButtonTypes> = ({
       }`}
       style={{
         width: block ? "100%" : width ? `${width}rem` : "auto",
-        height: height ? `${height}rem` : "auto",
+        height: typeof(height) === 'number' ? `${height}rem` :  height,
         color: color ? color : "inherit",
         backgroundColor: backgroundColor ? backgroundColor : "inherit",
         borderRadius: `${borderRadius}rem`,

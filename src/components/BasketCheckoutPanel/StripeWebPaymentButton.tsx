@@ -6,8 +6,12 @@ import { useUser } from "../../context/UserContext";
 import { IonModal, useIonRouter, useIonToast } from "@ionic/react";
 import { useCourses } from "../../context/CoursesContext";
 import { useAuthUi } from "../../context/AuthUIContext";
-import { loadStripe } from "@stripe/stripe-js";
 import {
+  loadStripe,
+  StripeExpressCheckoutElementOptions,
+} from "@stripe/stripe-js";
+import {
+  CheckoutProvider,
   Elements,
   ExpressCheckoutElement,
   PaymentElement,
@@ -17,11 +21,22 @@ import {
 import CommonButton from "../CommonButton/CommonButton";
 import styles from "./BasketCheckoutPanel.module.scss";
 import Spinner from "../Spinner/Spinner";
-import SheetModalAuto from "../SheetModalAuto/SheetModalAuto";
 
 const stripePromise = loadStripe(
   import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY_DEV
 );
+
+const expressCheckoutElementOptions: StripeExpressCheckoutElementOptions = {
+  buttonType: { applePay: "plain", googlePay: "plain" },
+  buttonTheme: {
+    applePay: "black",
+    googlePay: "black",
+  },
+  buttonHeight: 40,
+  layout: {
+    maxRows: 1,
+  },
+};
 
 const CheckoutForm = ({ clientSecret }: { clientSecret: string }) => {
   const stripe = useStripe();
@@ -57,7 +72,7 @@ const CheckoutForm = ({ clientSecret }: { clientSecret: string }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className={styles.checkoutForm}>
       <PaymentElement />
       <CommonButton
         label="Pay"
@@ -78,6 +93,9 @@ const CheckoutForm = ({ clientSecret }: { clientSecret: string }) => {
 const StripeWebPaymentButton: FC = () => {
   const [clientSecret, setClientSecret] = useState("");
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [canMakePayment, setCanMakePayment] = useState(false);
+
+  console.log(canMakePayment);
 
   const userInterface = useUser();
   const studentId = userInterface?.user.studentId;
@@ -96,22 +114,41 @@ const StripeWebPaymentButton: FC = () => {
     router.push("/payment?status=success", "root", "push");
   };
 
-  useEffect(() => {
-    const getClientSecret = async () => {
-      const { data } = await instance.post("/stripe/mobile/cart", {
-        student_id: studentId,
-        payment_items: items,
-        success_url: "",
-        cancel_url: "",
-      });
+  const getClientSecret = async () => {
+    const { data } = await instance.post("/stripe/mobile/cart", {
+      student_id: studentId,
+      payment_items: items,
+      success_url: "",
+      cancel_url: "",
+    });
 
-      const paymentIntent = data.paymentIntent;
-      setClientSecret(paymentIntent);
-    };
+    const paymentIntent = data.paymentIntent;
+    setClientSecret(paymentIntent);
+    return paymentIntent;
+  };
+
+  useEffect(() => {
     if (items?.length !== 0 && studentId) {
       getClientSecret();
     }
   }, [items?.length, studentId]);
+
+  useEffect(() => {
+    const checkPaymentAvailability = async () => {
+      const stripe = await stripePromise;
+      if (!stripe) return false;
+
+      const pr = stripe.paymentRequest({
+        country: "US",
+        currency: "usd",
+        total: { label: "Test", amount: 1 },
+      });
+
+      const result = await pr.canMakePayment();
+      setCanMakePayment(!!result);
+    };
+    checkPaymentAvailability();
+  }, []);
 
   return (
     <>
@@ -121,9 +158,39 @@ const StripeWebPaymentButton: FC = () => {
         breakpoints={[0, 1]}
         initialBreakpoint={1}
       >
-        <Elements stripe={stripePromise} options={{ clientSecret }}>
-          <CheckoutForm clientSecret={clientSecret} />
-        </Elements>
+        {clientSecret && (
+          <Elements stripe={stripePromise} options={{ clientSecret }}>
+            {/* <CheckoutProvider
+              stripe={stripePromise}
+              options={{
+                elementsOptions: {
+                  appearance: {
+                    theme: "stripe",
+                    variables: {
+                      colorPrimary: "#7E8CA8",
+                      colorBackground: "#FCFCFC",
+                      colorText: "#1A1A1A",
+                      colorDanger: "#df1b41",
+                      fontFamily: "Inter, system-ui, sans-serif",
+                      borderRadius: "8px",
+                    },
+                    rules: {
+                      ".Input": {
+                        border: "1px solid #7E8CA8",
+                      },
+                      ".Input:focus": {
+                        border: "1px solid #4E5A73",
+                      },
+                    },
+                  },
+                },
+                fetchClientSecret: getClientSecret,
+              }}
+            > */}
+            <CheckoutForm clientSecret={clientSecret} />
+            {/* </CheckoutProvider> */}
+          </Elements>
+        )}
       </IonModal>
       <div className={styles.paymentButtonsWrapper}>
         <CheckoutBtn
@@ -132,17 +199,10 @@ const StripeWebPaymentButton: FC = () => {
           isLoading={!clientSecret}
         />
 
-        {clientSecret && (
+        {clientSecret && canMakePayment && (
           <Elements stripe={stripePromise} options={{ clientSecret }}>
             <ExpressCheckoutElement
-              options={{
-                buttonType: { applePay: "buy", googlePay: "buy" },
-                buttonTheme: {
-                  applePay: "black",
-                  googlePay: "black",
-                },
-                buttonHeight: 40,
-              }}
+              options={expressCheckoutElementOptions}
               onConfirm={handleSuccessPayment}
             />
           </Elements>
