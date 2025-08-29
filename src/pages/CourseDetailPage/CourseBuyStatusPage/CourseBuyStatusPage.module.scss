@@ -1,6 +1,6 @@
 .content {
   height: 100%;
-  padding: calc(20rem + var(--ion-safe-area-top))
+  padding: calc(20rem + var(--ion-safe-area-top)) 20rem
     calc(30rem + var(--tabbar-offset));
   display: flex;
   align-items: center;

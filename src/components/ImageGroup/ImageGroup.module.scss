@@ -17,11 +17,15 @@
 
 .groupItem {
   width: 100%;
-
+  flex-shrink: 0;
   border-radius: 3rem;
   background: var(--custom-bg-rgba-secondary);
   box-shadow: var(--custom-box-shadow-primary);
   overflow: hidden;
+
+  & > div {
+    min-width: 100%;
+  }
 }
 
 .image {
@@ -32,9 +36,9 @@
 
 .description {
   height: 24rem;
+  line-height: 24rem;
   font-size: 10rem;
   font-weight: 500;
   color: var(--ion-color-dark);
   text-align: center;
-  line-height: 1;
 }

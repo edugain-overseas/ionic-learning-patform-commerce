@@ -25,7 +25,7 @@ const CheckoutBtn: FC<CheckoutBtnProps> = ({
       height="40px"
       className={styles.checkoutBtn}
       onClick={handleClick}
-      disabled={isLoading}
+      disabled={disabled || isLoading}
     />
   );
 };

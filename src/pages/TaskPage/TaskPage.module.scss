@@ -10,6 +10,6 @@
   position: absolute;
 
   &.lecture {
-    --content-offset-bottom: calc(24px + var(--tabbar-offset));
+    --content-offset-bottom: calc(40px + var(--tabbar-offset, 0));
   }
 }

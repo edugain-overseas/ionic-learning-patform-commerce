@@ -38,7 +38,7 @@ const expressCheckoutElementOptions: StripeExpressCheckoutElementOptions = {
   },
 };
 
-const CheckoutForm = ({ clientSecret }: { clientSecret: string }) => {
+const CheckoutForm = ({ onSuccess }: { onSuccess: () => Promise<void> }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [isLoading, setIsLoading] = useState(false);
@@ -67,6 +67,7 @@ const CheckoutForm = ({ clientSecret }: { clientSecret: string }) => {
         duration: 2500,
         position: "top",
       });
+      await onSuccess();
     }
     setIsLoading(false);
   };
@@ -94,42 +95,69 @@ const StripeWebPaymentButton: FC = () => {
   const [clientSecret, setClientSecret] = useState("");
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [canMakePayment, setCanMakePayment] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  console.log(canMakePayment);
-
-  const userInterface = useUser();
-  const studentId = userInterface?.user.studentId;
-  const items = useBasket()
-    ?.items.filter((item) => item.confirmed)
-    .map((item) => item.id);
   const router = useIonRouter();
+  const userInterface = useUser();
+  const basketInterface = useBasket();
+  const studentId = userInterface?.user.studentId;
+  const items = basketInterface?.items
+    .filter((item) => item.confirmed)
+    .map((item) => item.id);
   const coursesInterface = useCourses();
+  const authUiInterface = useAuthUi();
 
   const accessToken = useUser()?.user.accessToken;
 
   const handleSuccessPayment = async () => {
-    await coursesInterface?.getAllCourses();
-    await userInterface?.getUser();
+    setIsLoading(true);
+    try {
+      await instance.post(
+        `/stripe/course-subscribe/app?payment_intent=${clientSecret}`
+      );
+      basketInterface?.clearBasket();
+      await coursesInterface?.getAllCourses();
+      await userInterface?.getUser();
 
-    router.push("/payment?status=success", "root", "push");
+      router.push("/payment?status=success", "root", "push");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const getClientSecret = async () => {
-    const { data } = await instance.post("/stripe/mobile/cart", {
-      student_id: studentId,
-      payment_items: items,
-      success_url: "",
-      cancel_url: "",
-    });
-
-    const paymentIntent = data.paymentIntent;
-    setClientSecret(paymentIntent);
-    return paymentIntent;
+  const handleCheckoutBtnClick = () => {
+    if (accessToken && studentId) {
+      setIsOpenModal(true);
+      return;
+    }
+    authUiInterface?.openAuthUI("sing-up");
+    authUiInterface?.setSuccessAuthCallback(() => setIsOpenModal(true));
   };
 
   useEffect(() => {
+    const getClientSecret = async () => {
+      try {
+        setIsLoading(true);
+        const { data } = await instance.post("/stripe/mobile/cart", {
+          student_id: studentId,
+          payment_items: items,
+          success_url: "",
+          cancel_url: "",
+        });
+
+        const paymentIntent = data.paymentIntent;
+        setClientSecret(paymentIntent);
+        return paymentIntent;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
     if (items?.length !== 0 && studentId) {
       getClientSecret();
+    } else {
+      setClientSecret("");
     }
   }, [items?.length, studentId]);
 
@@ -160,43 +188,15 @@ const StripeWebPaymentButton: FC = () => {
       >
         {clientSecret && (
           <Elements stripe={stripePromise} options={{ clientSecret }}>
-            {/* <CheckoutProvider
-              stripe={stripePromise}
-              options={{
-                elementsOptions: {
-                  appearance: {
-                    theme: "stripe",
-                    variables: {
-                      colorPrimary: "#7E8CA8",
-                      colorBackground: "#FCFCFC",
-                      colorText: "#1A1A1A",
-                      colorDanger: "#df1b41",
-                      fontFamily: "Inter, system-ui, sans-serif",
-                      borderRadius: "8px",
-                    },
-                    rules: {
-                      ".Input": {
-                        border: "1px solid #7E8CA8",
-                      },
-                      ".Input:focus": {
-                        border: "1px solid #4E5A73",
-                      },
-                    },
-                  },
-                },
-                fetchClientSecret: getClientSecret,
-              }}
-            > */}
-            <CheckoutForm clientSecret={clientSecret} />
-            {/* </CheckoutProvider> */}
+            <CheckoutForm onSuccess={handleSuccessPayment} />
           </Elements>
         )}
       </IonModal>
       <div className={styles.paymentButtonsWrapper}>
         <CheckoutBtn
-          handleClick={() => setIsOpenModal(true)}
+          handleClick={handleCheckoutBtnClick}
           disabled={items?.length === 0}
-          isLoading={!clientSecret}
+          isLoading={isLoading}
         />
 
         {clientSecret && canMakePayment && (

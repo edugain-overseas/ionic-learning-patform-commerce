@@ -85,7 +85,7 @@ const StripeNativePaymentButton: FC = () => {
     }
   };
 
-  const handleCheckOutBtnClick = () => {
+  const handleCheckoutBtnClick = () => {
     if (!isButtonActive) {
       present({
         message: "There are no courses in your basket yet!",
@@ -111,7 +111,7 @@ const StripeNativePaymentButton: FC = () => {
 
   return (
     <CheckoutBtn
-      handleClick={handleCheckOutBtnClick}
+      handleClick={handleCheckoutBtnClick}
       isLoading={isLoading}
       disabled={!isButtonActive}
     />
