@@ -1,19 +1,24 @@
 import { FC, useEffect, useState } from "react";
-import CheckoutBtn from "./CheckoutBtn";
+import { Stripe } from "@capacitor-community/stripe";
+import { IonIcon, useIonRouter, useIonToast } from "@ionic/react";
 import { instance } from "../../http/instance";
 import { useBasket } from "../../context/BasketContext";
 import { useUser } from "../../context/UserContext";
-import { Stripe } from "@capacitor-community/stripe";
-import { IonIcon, useIonRouter, useIonToast } from "@ionic/react";
-import { useCourses } from "../../context/CoursesContext";
 import { useAuthUi } from "../../context/AuthUIContext";
-import AppleIcon from "../../assets/icons/social/app-store.svg";
+import { useCourses } from "../../context/CoursesContext";
+import AppleIcon from "../../assets/icons/auth/apple.svg";
+import GoogleIcon from "../../assets/icons/auth/google.svg";
+import CheckoutBtn from "./CheckoutBtn";
 import CommonButton from "../CommonButton/CommonButton";
+import Spinner from "../Spinner/Spinner";
+import styles from "./BasketCheckoutPanel.module.scss";
 
 const StripeNativePaymentButton: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isApplePayLoading, setIsApplePayLoading] = useState(false);
   const [isApplePayAvailable, setIsApplePayAvailable] = useState(false);
+  const [isApplePayLoading, setIsApplePayLoading] = useState(false);
+  const [isGooglePayAvailable, setIsGooglePayAvailable] = useState(false);
+  const [isGooglePayLoading, setIsGooglePayLoading] = useState(false);
   const [present] = useIonToast();
   const router = useIonRouter();
   const coursesInterface = useCourses();
@@ -169,6 +174,60 @@ const StripeNativePaymentButton: FC = () => {
     );
   };
 
+  const handlePayWithGoogle = async (studentId: number) => {
+    setIsGooglePayLoading(true);
+    try {
+      const paymentIntent = await fetchPaymentIntent(studentId);
+
+      const total = basketInterface?.checkout().total;
+      if (!total) return;
+
+      const amount = total * 100;
+
+      await Stripe.createGooglePay({
+        paymentIntentClientSecret: paymentIntent,
+        merchantIdentifier: import.meta.env.VITE_APPLE_MERCHANT_ID, //change to google merchant id???
+        paymentSummaryItems: [
+          {
+            label: "IEU courses",
+            amount,
+          },
+        ],
+        countryCode: "US",
+        currency: "USD",
+      });
+
+      const result = await Stripe.presentGooglePay();
+      if (result.paymentResult === "googlePayCompleted") {
+        handleSuccessPayment();
+      }
+    } catch (err) {
+      console.log("Google Pay error:", err);
+    } finally {
+      setIsGooglePayLoading(false);
+    }
+  };
+
+  const handlePayWithGoogleBtnClick = async () => {
+    if (!isButtonActive) {
+      present({
+        message: "There are no courses in your basket yet!",
+        duration: 2000,
+        position: "top",
+      });
+      return;
+    }
+
+    if (accessToken && studentId) {
+      handlePayWithGoogle(studentId);
+      return;
+    }
+    authUiInterface?.openAuthUI("sing-up");
+    authUiInterface?.setSuccessAuthCallback((freshStudentId: number) =>
+      handlePayWithGoogle(freshStudentId)
+    );
+  };
+
   useEffect(() => {
     const checkApplePay = async () => {
       try {
@@ -178,7 +237,16 @@ const StripeNativePaymentButton: FC = () => {
         console.log(error);
       }
     };
+    const checkGooglePay = async () => {
+      try {
+        await Stripe.isGooglePayAvailable();
+        setIsGooglePayAvailable(true);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     checkApplePay();
+    checkGooglePay();
   }, []);
 
   if (!studentId && accessToken) {
@@ -186,7 +254,7 @@ const StripeNativePaymentButton: FC = () => {
   }
 
   return (
-    <div>
+    <div className={styles.paymentButtonsWrapper}>
       <CheckoutBtn
         handleClick={handleCheckoutBtnClick}
         isLoading={isLoading}
@@ -195,12 +263,37 @@ const StripeNativePaymentButton: FC = () => {
       {isApplePayAvailable && (
         <CommonButton
           label="Pay with"
-          icon={<IonIcon src={AppleIcon} />}
-          width={72}
+          icon={
+            isApplePayLoading ? (
+              <Spinner color="#fff" />
+            ) : (
+              <IonIcon src={AppleIcon} className={styles.serviceIcon} />
+            )
+          }
+          width={162}
           height="40px"
           backgroundColor="#343434"
           color="#fcfcfc"
           onClick={handlePayWithAppleBtnClick}
+          borderRadius={5}
+        />
+      )}
+      {isGooglePayAvailable && (
+        <CommonButton
+          label="Pay with"
+          icon={
+            isApplePayLoading ? (
+              <Spinner color="#fff" />
+            ) : (
+              <IonIcon src={GoogleIcon} className={styles.serviceIcon} />
+            )
+          }
+          width={162}
+          height="40px"
+          backgroundColor="#fcfcfc"
+          color="#343434"
+          onClick={handlePayWithGoogleBtnClick}
+          borderRadius={5}
         />
       )}
     </div>
