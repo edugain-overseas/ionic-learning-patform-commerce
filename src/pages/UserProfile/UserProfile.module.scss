@@ -229,7 +229,7 @@ div.profileData {
       }
 
       .value {
-        font-size: 16rem;
+        font-size: 14rem;
         font-weight: 500;
       }
     }
@@ -422,7 +422,8 @@ div.swiper {
   --border-radius: 16rem;
   --background: url("../../assets/images/body-bg.webp"),
     rgba(255, 255, 255, 0.8);
-  bottom: max(var(--tabbar-offset), var(--keyboard-height, 0rem));
+  // bottom: max(var(--tabbar-offset), var(--keyboard-height, 0rem));
+  bottom: var(--keyboard-height, 0rem);
 
   &::part(content) {
     background-size: 100% 100%;

@@ -13,10 +13,6 @@ a {
   text-decoration: none;
 }
 
-.App {
-  // background: var(--custom-primary-lg);
-}
-
 /* Custom styles for tab bar */
 .custom-tab-bar {
   --background: var(--custom-primary-lg);
@@ -199,6 +195,43 @@ ion-modal::part(handle) {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Toast */
+
+.toast {
+  // top: calc(var(--ion-safe-area-top) + 56rem - 10px);
+  color: var(--ion-color-dark);
+  font-size: 14rem;
+
+  --border-radius: 10rem;
+  --border-width: 1rem;
+  --border-style: solid;
+  --border-color: transparent;
+
+  --padding-inline-start: 24rem;
+
+  &.toast-info,
+  &.toast-guard {
+    --background: #f4fbff;
+    --border-color: #d4e3f5;
+  }
+  &.toast-success {
+    --background: #f2f9f6;
+    --border-color: #cbead9;
+  }
+  &.toast-warning {
+    --background: #fef7ee;
+    --border-color: #f5e7d4;
+  }
+  &.toast-error {
+    --background: #feeeee;
+    --border-color: #f5d4d4;
+  }
+}
+
+.toast::part(container) {
+  padding: 1rem 9rem;
 }
 
 //keyboard

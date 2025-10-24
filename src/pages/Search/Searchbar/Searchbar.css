@@ -1,11 +1,14 @@
-.custom-searchbar {
-    padding: 8rem;
+ion-toolbar .custom-searchbar {
+  padding-block: 8rem;
+}
+
+.searchbar-left-aligned.sc-ion-searchbar-ios-h
+  .searchbar-input.sc-ion-searchbar-ios {
+  padding-inline: 6rem;
 }
 
 .custom-searchbar .searchbar-input {
   font-size: 16rem;
-  padding-inline: 6rem;
-  /* line-height: 32rem; */
   color: var(--ion-color-dark);
 }
 
@@ -15,5 +18,5 @@
   color: var(--ion-color-light);
   top: 50%;
   left: 100%;
-  transform: translate(-100%, -50%);
+  transform: translate(calc(-100% - 6rem), -50%);
 }

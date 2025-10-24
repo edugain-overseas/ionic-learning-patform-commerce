@@ -1,24 +1,20 @@
 import { FC, useEffect, useRef, useState } from "react";
-import styles from "./LessonToolsPanel.module.scss";
 import {
   AccordionGroupCustomEvent,
   IonAccordion,
   IonAccordionGroup,
   IonIcon,
   IonModal,
-  useIonToast,
 } from "@ionic/react";
+import { LessonType, TestDataType } from "../../context/CoursesContext";
+import { instance } from "../../http/instance";
+import { TestAttemptType } from "../../types/user";
+import { useToast } from "../../hooks/useToast";
 import InsetBtn from "../InsetBtn/InsetBtn";
 import CheckIcon from "../../assets/icons/check-in-circle.svg";
 import Header from "../Header/Header";
-import {
-  LessonType,
-  TestDataType,
-  useCourses,
-} from "../../context/CoursesContext";
-import { instance } from "../../http/instance";
 import TestContent from "../Test/TestContent";
-import { TestAttemptType } from "../../types/user";
+import styles from "./LessonToolsPanel.module.scss";
 
 type TestToolsProps = {
   test: LessonType;
@@ -30,7 +26,7 @@ const TestTools: FC<TestToolsProps> = ({ test, currentAttempt }) => {
   const [testAttempts, setTestAttempts] = useState<TestAttemptType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [testAttemptsData, setTestAttemptsData] = useState<any[]>([]);
-  const [present] = useIonToast();
+  const [present] = useToast();
 
   const testData = test.lessonData as TestDataType;
 
@@ -45,18 +41,17 @@ const TestTools: FC<TestToolsProps> = ({ test, currentAttempt }) => {
         setTestAttempts((prev) => [response.data, ...prev]);
 
         present({
+          type: "info",
           message: response.data.message,
-          duration: 3000,
-          position: "top",
         });
       }
     } catch (error: any) {
       console.log(error);
       if (error.response.status === 409) {
         present({
+          type: "error",
           message: `${error.response.data.detail}!`,
           duration: 5000,
-          position: "top",
         });
       }
     } finally {
@@ -82,9 +77,9 @@ const TestTools: FC<TestToolsProps> = ({ test, currentAttempt }) => {
         );
 
         present({
+          type: 'success',
           message: `${response.data.Message}!`,
           duration: 5000,
-          position: "top",
         });
       } catch (error) {
         console.log(error);

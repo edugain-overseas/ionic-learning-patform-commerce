@@ -12,6 +12,14 @@
   --padding-bottom: 6rem;
 }
 
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100%;
+  font-size: 16rem;
+}
+
 .avatarWrapper {
   display: flex;
   flex-direction: column;

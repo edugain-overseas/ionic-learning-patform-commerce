@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import { IonIcon, useIonToast } from "@ionic/react";
+import { IonIcon } from "@ionic/react";
 import { useForm } from "react-hook-form";
 import { useUser } from "../../context/UserContext";
+import { useToast } from "../../hooks/useToast";
 import SingIn from "../../assets/icons/auth/sing-in.svg";
 import InputText from "./Inputs/InutText";
 import InputPassword from "./Inputs/InputPassword";
 import CommonButton from "../CommonButton/CommonButton";
 import Spinner from "../Spinner/Spinner";
-import styles from "./Auth.module.scss";
-import GoogleAuthButton from "./GoogleAuthButton";
 import InputsWrapper from "./InputsWrapper";
 import ServicesAuth from "./ServicesAuth";
+import styles from "./Auth.module.scss";
 
 type FormValues = {
   username: string;
@@ -25,7 +25,7 @@ const LoginForm: React.FC<{
 }> = ({ modals }) => {
   const user = useUser();
   const [isLoading, setIsLoading] = useState(false);
-  const [present] = useIonToast();
+  const [present] = useToast();
 
   const {
     register,
@@ -45,9 +45,8 @@ const LoginForm: React.FC<{
     try {
       await user?.login(data);
       present({
+        type: 'success',
         message: `Welcome, ${data.username}!`,
-        duration: 2500,
-        position: "top",
       });
       modals.find((modal) => modal.name === "sing-in")?.ref?.current?.dismiss();
     } catch (error: any) {
@@ -66,9 +65,9 @@ const LoginForm: React.FC<{
       } else if (error.response.status === 409) {
         user?.setUser((prev) => ({ ...prev, username: data.username }));
         present({
+          type: 'guard',
           message: `Welcome back, ${data.username}. Please activate your email`,
           duration: 5000,
-          position: "top",
         });
         handleOpenUserActivation();
       }

@@ -75,7 +75,7 @@ const Search: FC = () => {
     <IonPage className="primaryPage">
       <IonHeader>
         <IonToolbar>
-          <IonButtons slot="start">
+          <IonButtons slot="start" className={styles.toolbarButtons}>
             <IonBackButton
               text=""
               icon={backIcon}

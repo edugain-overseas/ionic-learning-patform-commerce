@@ -1,16 +1,17 @@
 import { FC, useState } from "react";
 import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
-import { IonIcon, useIonToast } from "@ionic/react";
+import { IonIcon } from "@ionic/react";
+import { useUser } from "../../context/UserContext";
+import { useToast } from "../../hooks/useToast";
 import Google from "../../assets/icons/auth/google.svg";
 import CommonButton from "../CommonButton/CommonButton";
-import styles from "./Auth.module.scss";
-import { useUser } from "../../context/UserContext";
 import Spinner from "../Spinner/Spinner";
+import styles from "./Auth.module.scss";
 
 const GoogleAuthButton: FC = () => {
   const userInterface = useUser();
   const [isLoading, setIsLoading] = useState(false);
-  const [present] = useIonToast();
+  const [present] = useToast();
 
   const handleGoogleSingIn = async () => {
     try {
@@ -21,15 +22,13 @@ const GoogleAuthButton: FC = () => {
       if (googleToken) {
         const user = await userInterface?.loginWithGoogle(googleToken);
         present({
+          type: "success",
           message: `Hello ${user?.username}!`,
-          duration: 2500,
-          position: "top",
         });
       } else {
         present({
+          type: "error",
           message: `Google service is unvailable`,
-          duration: 2500,
-          position: "bottom",
         });
       }
     } catch (error) {

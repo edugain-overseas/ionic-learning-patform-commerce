@@ -38,8 +38,8 @@
   justify-content: center;
   align-items: center;
   gap: 8rem;
-  background-color: var(--ion-color-light);
-  color: var(--ion-color-dark);
+  background-color: var(--ion-color-dark);
+  color: var(--ion-color-primary-contrast);
   border-radius: 5rem;
 
   span {
@@ -50,7 +50,7 @@
 
   ion-icon {
     rotate: 180deg;
-    color: var(--ion-color-dark);
+    color: var(--ion-color-primary-contrast);
     font-size: 18rem;
   }
 }

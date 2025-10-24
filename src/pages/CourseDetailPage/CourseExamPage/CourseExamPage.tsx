@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { IonContent, useIonToast } from "@ionic/react";
+import { IonContent } from "@ionic/react";
 import { useParams } from "react-router";
 import { useUser } from "../../../context/UserContext";
 import { useLessonTabbarLayout } from "../../../hooks/useTabbarLayout";
@@ -8,6 +8,7 @@ import { instance } from "../../../http/instance";
 import { serverName } from "../../../http/server";
 import { downloadFile } from "../../../utils/downloadFile";
 import { minutesToSeconds, secondsToMinutes } from "../../../utils/formatTime";
+import { useToast } from "../../../hooks/useToast";
 import useStorage from "../../../hooks/useStorage";
 import Header from "../../../components/Header/Header";
 import ExamLanding, { ExamLandingBtn } from "./ExamLanding";
@@ -61,7 +62,7 @@ const CourseExamPage: FC = () => {
   );
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<number>(0);
-  const [present] = useIonToast();
+  const [present] = useToast();
 
   const coursesInterface = useCourses();
   const userInterface = useUser();
@@ -176,9 +177,9 @@ const CourseExamPage: FC = () => {
       const { message, ...rest } = response.data;
 
       present({
+        type: "info",
         message: message,
-        position: "top",
-        duration: 3000,
+        duration: 5000,
       });
 
       setAttempts((prev) => [...prev, rest]);
@@ -196,8 +197,8 @@ const CourseExamPage: FC = () => {
 
       if (timerRef.current <= 0) {
         present({
+          type: "info",
           message: "Time is out. Your attept was sended!",
-          position: "top",
           duration: 5000,
         });
         return;
@@ -283,16 +284,14 @@ const CourseExamPage: FC = () => {
         await coursesInterface?.getCourseDetailById(courseId);
 
         present({
+          type: "success",
           message: `Congratulation! Course ${course?.title} was completed!`,
-          position: "top",
-          duration: 3000,
         });
       } catch (error) {
         // negative scenario
         present({
+          type: "error",
           message: "Something went wrong!",
-          position: "top",
-          duration: 2000,
         });
       }
     }
@@ -305,9 +304,9 @@ const CourseExamPage: FC = () => {
       await userInterface?.getUser();
 
       present({
+        type: "warning",
         message:
           "Your cartificate is not yet ready. We are currently generating it. Try again later.",
-        duration: 3000,
       });
       return;
     }

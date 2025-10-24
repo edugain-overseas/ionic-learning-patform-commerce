@@ -4,9 +4,10 @@ import {
   SignInWithAppleOptions,
   SignInWithAppleResponse,
 } from "@capacitor-community/apple-sign-in";
-import { IonIcon, useIonToast } from "@ionic/react";
+import { IonIcon } from "@ionic/react";
 import { useUser } from "../../context/UserContext";
 import { Capacitor } from "@capacitor/core";
+import { useToast } from "../../hooks/useToast";
 import Apple from "../../assets/icons/auth/apple.svg";
 import CommonButton from "../CommonButton/CommonButton";
 import Spinner from "../Spinner/Spinner";
@@ -14,7 +15,7 @@ import styles from "./Auth.module.scss";
 
 const AppleAuthBtn = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [present] = useIonToast();
+  const [present] = useToast();
   const userInterface = useUser();
 
   const icon = isLoading ? (
@@ -48,17 +49,15 @@ const AppleAuthBtn = () => {
       const user = await userInterface?.loginWithApple(result, platform);
 
       present({
+        type: "success",
         message: `Hello ${user?.username}!`,
-        duration: 2500,
-        position: "top",
       });
     } catch (error) {
       console.log(error);
 
       present({
+        type: "error",
         message: `Apple service is unvailable`,
-        duration: 2500,
-        position: "bottom",
       });
     } finally {
       setIsLoading(false);

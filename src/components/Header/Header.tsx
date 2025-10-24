@@ -1,3 +1,4 @@
+import { FC } from "react";
 import {
   IonBackButton,
   IonButton,
@@ -8,7 +9,6 @@ import {
   IonToolbar,
   useIonToast,
 } from "@ionic/react";
-import { FC } from "react";
 import { useListStyle } from "../../context/ListStyleContext";
 import bellIcon from "../../assets/icons/header/bell.svg";
 import searchIcon from "../../assets/icons/header/search.svg";
@@ -26,6 +26,7 @@ import CustomBackButton, {
 import HeaderTitle from "./HeaderTitle";
 import Spinner from "../Spinner/Spinner";
 import styles from "./Header.module.scss";
+import { useToast } from "../../hooks/useToast";
 
 interface ButtonPropsTypes extends CustomBackButtonProps {
   name: string;
@@ -211,13 +212,13 @@ const Header: FC<HeaderTypes> = ({
   mode,
   toolbarClassName,
 }) => {
-  const [present] = useIonToast();
+  const [present] = useToast();
 
   const handleNotification = () => {
     present({
-      message: "You don't have notofocation yet!",
-      duration: 2000,
-      position: "top",
+      type: 'warning',
+      message: "You don't have notification yet",
+      duration: 3000,
     });
   };
 

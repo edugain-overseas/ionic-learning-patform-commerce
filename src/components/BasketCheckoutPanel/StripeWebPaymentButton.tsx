@@ -3,7 +3,7 @@ import CheckoutBtn from "./CheckoutBtn";
 import { instance } from "../../http/instance";
 import { useBasket } from "../../context/BasketContext";
 import { useUser } from "../../context/UserContext";
-import { IonModal, useIonRouter, useIonToast } from "@ionic/react";
+import { IonModal, useIonRouter } from "@ionic/react";
 import { useCourses } from "../../context/CoursesContext";
 import { useAuthUi } from "../../context/AuthUIContext";
 import {
@@ -11,16 +11,16 @@ import {
   StripeExpressCheckoutElementOptions,
 } from "@stripe/stripe-js";
 import {
-  CheckoutProvider,
   Elements,
   ExpressCheckoutElement,
   PaymentElement,
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
+import { useToast } from "../../hooks/useToast";
 import CommonButton from "../CommonButton/CommonButton";
-import styles from "./BasketCheckoutPanel.module.scss";
 import Spinner from "../Spinner/Spinner";
+import styles from "./BasketCheckoutPanel.module.scss";
 
 const stripePromise = loadStripe(
   import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY_DEV
@@ -42,7 +42,7 @@ const CheckoutForm = ({ onSuccess }: { onSuccess: () => Promise<void> }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [isLoading, setIsLoading] = useState(false);
-  const [present] = useIonToast();
+  const [present] = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,15 +57,13 @@ const CheckoutForm = ({ onSuccess }: { onSuccess: () => Promise<void> }) => {
 
     if (error) {
       present({
-        message: "❌ " + error.message,
-        duration: 2500,
-        position: "top",
+        type: "error",
+        message: error.message,
       });
     } else if (paymentIntent?.status === "succeeded") {
       present({
-        message: "✅ " + "Payment successful!",
-        duration: 2500,
-        position: "top",
+        type: "success",
+        message: "Payment successful!",
       });
       await onSuccess();
     }

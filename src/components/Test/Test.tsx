@@ -5,9 +5,12 @@ import {
   useCourses,
 } from "../../context/CoursesContext";
 import { serverName } from "../../http/server";
+import { instance } from "../../http/instance";
+import { minutesToSeconds } from "../../utils/formatTime";
+import { useToast } from "../../hooks/useToast";
+import useStorage from "../../hooks/useStorage";
 import TestContent from "./TestContent";
 import ProgressBar from "../ProgressBar/ProgressBar";
-import styles from "./Test.module.scss";
 import LessonToolsPanel from "../LessonToolsPanel/LessonToolsPanel";
 import TestTools from "../LessonToolsPanel/TestTools";
 import EqualSpaceContainer from "../EqualSpaceContainer/EqualSpaceContainer";
@@ -15,21 +18,10 @@ import TaskFooterNavBtn from "../TaskFooterNavBtn/TaskFooterNavBtn";
 import TestLanding from "./TestLanding";
 import CommonButton from "../CommonButton/CommonButton";
 import StickyScrollLayout from "../StickyScrollLayout/StickyScrollLayout";
-import { instance } from "../../http/instance";
 import Spinner from "../Spinner/Spinner";
-import useStorage from "../../hooks/useStorage";
-import { minutesToSeconds } from "../../utils/formatTime";
-import { useIonToast } from "@ionic/react";
 import TestTimer from "../TestTimer/TestTimer";
+import styles from "./Test.module.scss";
 
-// type Attempt = {
-//   id: number;
-//   spent_minutes: null | number;
-//   student_id: number;
-//   attempt_number: number;
-//   attempt_score: number;
-//   test_id: number;
-// };
 
 type CurrentAttempt = {
   studentAnswers: any[];
@@ -45,8 +37,7 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
     useStorage<CurrentAttempt | null>(`test-${taskData.id}-attempt`, null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<number>(0);
-  const [present] = useIonToast();
-  // const [submitedAttempt, setSubmitedAttempt] = useState<Attempt | null>();
+  const [present] = useToast();
 
   const course = coursesInterface?.courses.find(
     (course) => course.id === taskData.course_id
@@ -108,8 +99,8 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
     intervalRef.current = setInterval(() => {
       if (timerRef.current <= 0) {
         present({
+          type: 'info',
           message: "Time is out. Your attept was sended!",
-          position: "top",
           duration: 5000,
         });
         return;

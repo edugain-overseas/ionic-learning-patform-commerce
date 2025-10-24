@@ -8,8 +8,10 @@ import {
 } from "@ionic/react";
 import { useUser } from "../../context/UserContext";
 import { useForm } from "react-hook-form";
+import { UserInfoToUpdateType } from "../../types/user";
 import { getCountries } from "../../utils/countries";
 import { emailRegex } from "../../constants/regExps";
+import { useToast } from "../../hooks/useToast";
 import EditIcon from "../../assets/icons/edit-bottom-line.svg";
 import ReLoadIcon from "../../assets/icons/re-load.svg";
 import SaveIcon from "../../assets/icons/save.svg";
@@ -18,9 +20,8 @@ import Avatar from "../Avatar/Avatar";
 import CommonButton from "../CommonButton/CommonButton";
 import InputWithLabel from "../InputWithLabel/InputWithLabel";
 import Select from "../Select/Select";
-import styles from "./EditProfileData.module.scss";
 import EqualSpaceContainer from "../EqualSpaceContainer/EqualSpaceContainer";
-import { UserInfoToUpdateType } from "../../types/user";
+import styles from "./EditProfileData.module.scss";
 
 type EditUserDataForm = {
   username?: string;
@@ -46,26 +47,29 @@ const EditProfileData: FC<{
   const userInterface = useUser();
   const userData = userInterface?.user;
   const formRef = useRef<HTMLFormElement>(null);
-  const [present] = useIonToast();
+  const [present] = useToast();
 
   const [country, setCountry] = useState<string>(
     userData?.country ? userData.country : ""
   );
+
+  const defaultValues = {
+    username: userData?.username,
+    firstname: userData?.name,
+    lastname: userData?.surname,
+    email: userData?.email,
+    password: "",
+    phone: userData?.phone,
+  };
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting, isDirty },
     getValues,
+    reset,
   } = useForm<EditUserDataForm>({
-    defaultValues: {
-      username: userData?.username,
-      firstname: userData?.name,
-      lastname: userData?.surname,
-      email: userData?.email,
-      password: "",
-      phone: userData?.phone,
-    },
+    defaultValues,
   });
 
   const onSubmit = async (data: EditUserDataForm) => {
@@ -96,10 +100,8 @@ const EditProfileData: FC<{
         await userInterface?.updateUserInfo(dataToUpdate);
       }
       present({
+        type: "success",
         message: "Profile was successfully updated.",
-        position: "top",
-        swipeGesture: "vertical",
-        duration: 2000,
       });
       closeModal && closeModal();
     } catch (error) {
@@ -128,7 +130,11 @@ const EditProfileData: FC<{
     <>
       <Header {...headerProps} />
       <IonContent className={styles.wrapper} scrollY={true}>
-        <form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          ref={formRef}
+          className={styles.form}
+        >
           <div className={styles.avatarWrapper}>
             <Avatar
               size={96}
@@ -235,6 +241,7 @@ const EditProfileData: FC<{
                   backgroundColor="transparent"
                   borderRadius={5}
                   border="1rem solid #7E8CA8"
+                  onClick={() => reset(defaultValues)}
                 />
               }
               rightItem={

@@ -343,8 +343,8 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
     if (accessToken) {
       instance.defaults.headers.Authorization = `Bearer ${accessToken}`;
       getCoursesInstructions();
-      getAllCourses();
     }
+    getAllCourses();
   }, [accessToken]);
 
   return (

@@ -1,8 +1,8 @@
-import { FC, useState } from "react";
-import { IonIcon, useIonRouter, useIonToast } from "@ionic/react";
-import { useUser } from "../../context/UserContext";
+import { FC } from "react";
+import { IonIcon, useIonRouter } from "@ionic/react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
+import { useToast } from "../../hooks/useToast";
 import ExamIcon from "../../assets/icons/document-grade-A.svg";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import CommonButton from "../CommonButton/CommonButton";
@@ -20,7 +20,7 @@ const secondBreackpoint = 72 / modalHeight;
 
 const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
   const { courseId } = useParams<{ courseId: string }>();
-  const [present] = useIonToast();
+  const [present] = useToast();
   const router = useIonRouter();
 
   const modalParent = document.querySelector("ion-tabs");
@@ -39,18 +39,14 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
 
     if (!isLessonAvailable) {
       present({
+        type: "warning",
         message:
           "This lesson is not availabel. Please complete previous lessons",
-        duration: 2500,
-        position: "top",
       });
       return;
     }
     router.push(`/courses/course/${courseId}/tasks/${lesson.id}`);
   };
-
-  // console.log(course);
-  
 
   return (
     <CustomSheetModal

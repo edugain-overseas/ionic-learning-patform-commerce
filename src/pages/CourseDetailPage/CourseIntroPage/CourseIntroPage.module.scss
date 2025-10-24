@@ -27,7 +27,7 @@
   padding-inline: 18rem;
 }
 
-.contentBlock {
+.contentBlock:not(:last-child) {
   position: relative;
 
   &::before {

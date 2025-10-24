@@ -20,7 +20,7 @@ import HomeFooter from "../../components/HomeFooter/HomeFooter";
 const headerProps = {
   left: [{ name: "logo" }],
   right: [
-    { name: "notification", onClick: () => {} },
+    { name: "notification" },
     { name: "search", onClick: () => {} },
   ],
   mode: "transparent",

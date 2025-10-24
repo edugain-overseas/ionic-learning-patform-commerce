@@ -1,7 +1,8 @@
 import React, { FC, useState } from "react";
-import { IonIcon, useIonToast } from "@ionic/react";
+import { IonIcon } from "@ionic/react";
 import { useUser } from "../../context/UserContext";
 import { useForm } from "react-hook-form";
+import { useToast } from "../../hooks/useToast";
 import { emailRegex } from "../../constants/regExps";
 import User from "../../assets/icons/tabs/my-profile.svg";
 import InputText from "./Inputs/InutText";
@@ -50,7 +51,7 @@ const SingupForm: FC<{
 }> = ({ modals }) => {
   const user = useUser();
   const [isLoading, setIsLoading] = useState(false);
-  const [present] = useIonToast();
+  const [present] = useToast();
 
   const closeModal = () => {
     modals.find((modal) => modal.name === "sing-up")?.ref?.current?.dismiss();
@@ -82,9 +83,9 @@ const SingupForm: FC<{
       }));
 
       present({
+        type: 'guard',
         message: `Hello, ${data.username}, we cteated your account. Please activate your email: ${data.email}`,
         duration: 5000,
-        position: "top",
       });
 
       closeModal();

@@ -39,6 +39,13 @@ const CourseIntroPage: React.FC = () => {
     (item) => item.id === +courseId
   );
 
+  const coursesToPropose = courses?.filter(
+    (courseItem) => (courseItem.id !== +courseId) && !courseItem.bought
+  );
+
+  console.log(courses);
+  
+
   return (
     <>
       <IonHeader className={styles.header} mode="ios">
@@ -173,20 +180,18 @@ const CourseIntroPage: React.FC = () => {
               </ul>
               <img src={devices} alt="devices" className={styles.devicesImg} />
             </div>
-            <div className={styles.otherCourses}>
-              <span className={styles.otherCoursesTitle}>
-                Students also bought
-              </span>
-              <ul className={styles.coursesList}>
-                {courses
-                  ?.filter(
-                    (course) => course.id !== course?.id && !course.bought
-                  )
-                  .map((course) => (
+            {!!coursesToPropose?.length && (
+              <div className={styles.otherCourses}>
+                <span className={styles.otherCoursesTitle}>
+                  Students also bought
+                </span>
+                <ul className={styles.coursesList}>
+                  {coursesToPropose.map((course) => (
                     <CourseItem course={course} key={course.id} />
                   ))}
-              </ul>
-            </div>
+                </ul>
+              </div>
+            )}
           </div>
         </StickyScrollLayout>
 

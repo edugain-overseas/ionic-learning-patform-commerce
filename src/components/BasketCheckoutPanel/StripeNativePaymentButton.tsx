@@ -1,11 +1,12 @@
 import { FC, useEffect, useState } from "react";
 import { Stripe } from "@capacitor-community/stripe";
-import { IonIcon, useIonRouter, useIonToast } from "@ionic/react";
+import { IonIcon, useIonRouter } from "@ionic/react";
 import { instance } from "../../http/instance";
 import { useBasket } from "../../context/BasketContext";
 import { useUser } from "../../context/UserContext";
 import { useAuthUi } from "../../context/AuthUIContext";
 import { useCourses } from "../../context/CoursesContext";
+import { useToast } from "../../hooks/useToast";
 import AppleIcon from "../../assets/icons/auth/apple.svg";
 import GoogleIcon from "../../assets/icons/auth/google.svg";
 import CheckoutBtn from "./CheckoutBtn";
@@ -19,7 +20,7 @@ const StripeNativePaymentButton: FC = () => {
   const [isApplePayLoading, setIsApplePayLoading] = useState(false);
   const [isGooglePayAvailable, setIsGooglePayAvailable] = useState(false);
   const [isGooglePayLoading, setIsGooglePayLoading] = useState(false);
-  const [present] = useIonToast();
+  const [present] = useToast();
   const router = useIonRouter();
   const coursesInterface = useCourses();
   const authUiInterface = useAuthUi();
@@ -81,19 +82,18 @@ const StripeNativePaymentButton: FC = () => {
         handleSuccessPayment();
       } else {
         console.log("Payment not completed.");
+
         present({
+          type: "success",
           message: "Payment was not completed. Please try again.",
-          duration: 2500,
-          position: "top",
         });
       }
     } catch (error) {
       console.log("Error during payment:", error);
       present({
+        type: "error",
         message:
           "An error occurred during the payment process. Please try again.",
-        duration: 2500,
-        position: "top",
       });
     } finally {
       setIsLoading(false);
@@ -103,9 +103,8 @@ const StripeNativePaymentButton: FC = () => {
   const handleCheckoutBtnClick = () => {
     if (!isButtonActive) {
       present({
+        type: "warning",
         message: "There are no courses in your basket yet!",
-        duration: 2000,
-        position: "top",
       });
       return;
     }
@@ -125,10 +124,8 @@ const StripeNativePaymentButton: FC = () => {
     try {
       const paymentIntent = await fetchPaymentIntent(studentId);
 
-      const total = basketInterface?.checkout().total;
-      if (!total) return;
-
-      const amount = total * 100;
+      const amount = basketInterface?.checkout().total;
+      if (!amount) return;
 
       await Stripe.createApplePay({
         paymentIntentClientSecret: paymentIntent,
@@ -157,9 +154,8 @@ const StripeNativePaymentButton: FC = () => {
   const handlePayWithAppleBtnClick = async () => {
     if (!isButtonActive) {
       present({
+        type: "warning",
         message: "There are no courses in your basket yet!",
-        duration: 2000,
-        position: "top",
       });
       return;
     }
@@ -211,9 +207,8 @@ const StripeNativePaymentButton: FC = () => {
   const handlePayWithGoogleBtnClick = async () => {
     if (!isButtonActive) {
       present({
+        type: "warning",
         message: "There are no courses in your basket yet!",
-        duration: 2000,
-        position: "top",
       });
       return;
     }

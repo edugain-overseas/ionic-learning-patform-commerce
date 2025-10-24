@@ -1,11 +1,11 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useUser } from "../../context/UserContext";
+import { useToast } from "../../hooks/useToast";
 import InputText from "./Inputs/InutText";
 import CommonButton from "../CommonButton/CommonButton";
-import styles from "./Auth.module.scss";
-import { useIonToast } from "@ionic/react";
 import InputsWrapper from "./InputsWrapper";
+import styles from "./Auth.module.scss";
 
 type FormValues = {
   verificationCode: string;
@@ -18,7 +18,7 @@ const UserActivationForm: React.FC<{
   }[];
 }> = ({ modals }) => {
   const user = useUser();
-  const [present] = useIonToast();
+  const [present] = useToast();
 
   const {
     register,
@@ -39,11 +39,12 @@ const UserActivationForm: React.FC<{
         username: user.user.username,
         code: data.verificationCode,
       });
+
       present({
+        type: "success",
         message: `${user?.user.username}, you are succesfully avtivate you email`,
-        duration: 5000,
-        position: "top",
       });
+      
       modals
         .find((modal) => modal.name === "user-activation")
         ?.ref?.current?.dismiss();
