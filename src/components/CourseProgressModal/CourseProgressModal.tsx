@@ -72,6 +72,7 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
                   width={42}
                   height={10}
                   showValue={false}
+                  wrapperStyles={{ flexGrow: 1 }}
                 />
               </div>
             </div>

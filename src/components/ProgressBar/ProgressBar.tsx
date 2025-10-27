@@ -7,6 +7,7 @@ interface ProgressBarTypes {
   value?: number | undefined;
   disabled?: boolean | undefined;
   showValue?: boolean | undefined;
+  wrapperStyles?: React.CSSProperties;
 }
 
 const colors = {
@@ -38,6 +39,7 @@ const ProgressBar: React.FC<ProgressBarTypes> = ({
   value,
   disabled = false,
   showValue = true,
+  wrapperStyles = {},
 }) => {
   return (
     <div
@@ -47,6 +49,7 @@ const ProgressBar: React.FC<ProgressBarTypes> = ({
         height: `${height}rem`,
         borderRadius: `${width * 0.03}rem`,
         padding: `${width * 0.0175}rem`,
+        ...wrapperStyles,
       }}
     >
       <div
