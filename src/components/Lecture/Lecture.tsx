@@ -26,7 +26,7 @@ const Lecture: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
     <StickyScrollLayout
       posterSrc={`${serverName}/${taskData.image_path}`}
       topLabel="Lecture"
-      endPosition={208}
+      topScrollEndPosition={208}
     >
       <div className={styles.contentInnerWrapper}>
         <div className={styles.lectureHeader}>
@@ -40,7 +40,9 @@ const Lecture: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
           </div>
         </div>
         {taskData?.lessonData && "lecture_id" in taskData.lessonData ? (
-          <LectureContent lectureContent={taskData.lessonData.attributes} />
+          <div className={styles.contentInner}>
+            <LectureContent lectureContent={taskData.lessonData.attributes} />
+          </div>
         ) : (
           <div className="items-center-wrapper">
             <Spinner />

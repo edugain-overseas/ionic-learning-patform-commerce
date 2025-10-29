@@ -103,6 +103,7 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
           message: "Time is out. Your attept was sended!",
           duration: 5000,
         });
+        
         return;
       }
 
@@ -186,7 +187,7 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
       <StickyScrollLayout
         posterSrc={`${serverName}/${taskData.image_path}`}
         topLabel="Test"
-        endPosition={170}
+        topScrollEndPosition={190}
       >
         <div className={styles.contentInnerWrapper}>
           <div>
