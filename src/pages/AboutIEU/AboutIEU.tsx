@@ -10,7 +10,6 @@ import back from "../../assets/icons/header/back.svg";
 import logo from "../../assets/icons/logoIEU-short.svg";
 import poster from "../../assets/images/about-ieu.png";
 import textIcon from "../../assets/images/TextIcon.png";
-import PrimaryScrollConteinerLayout from "../../components/PrimaryScrollConteinerLayout/PrimaryScrollConteinerLayout";
 import styles from "./AboutIEU.module.scss";
 import StickyScrollLayout from "../../components/StickyScrollLayout/StickyScrollLayout";
 
@@ -29,7 +28,7 @@ const AboutIEU: React.FC = () => {
         <StickyScrollLayout
           topLabel="About University"
           posterSrc={poster}
-          startPosition={190}
+          topScrollStartPosition={190}
         >
           <div className={styles.contentInner}>
             <div className={`${styles.contentHeader} ${styles.contentBlock}`}>

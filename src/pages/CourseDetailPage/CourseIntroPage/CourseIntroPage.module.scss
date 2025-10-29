@@ -15,7 +15,6 @@
 }
 
 .content {
-  // --padding-top: var(--ion-safe-area-top);
   --content-offset-bottom: calc(96rem + var(--tabbar-offset));
 }
 
@@ -24,7 +23,7 @@
   display: flex;
   flex-direction: column;
   gap: 32rem;
-  padding-inline: 18rem;
+  padding: 28rem 18rem var(--content-offset-bottom);
 }
 
 .contentBlock:not(:last-child) {

@@ -1,74 +1,44 @@
-import { useEffect, useRef, useState } from "react";
-import image from "../../assets/images/subject_image.png";
+import { FC, ReactNode, useEffect, useRef } from "react";
 import styles from "./StickyScrollLayout.module.scss";
 
 type StickyScrollLayoutProps = {
-  children: React.ReactNode;
+  children: ReactNode;
   topLabel?: string;
   posterSrc: string;
-  startPosition?: number;
-  endPosition?: number;
+  topScrollStartPosition?: number;
+  topScrollEndPosition?: number;
 };
 
-const StickyScrollLayout = ({
+const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
   children,
   topLabel,
   posterSrc,
-  startPosition = 310,
-  endPosition = 68,
-}: StickyScrollLayoutProps) => {
+  topScrollStartPosition = 310,
+  topScrollEndPosition = 68,
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [scrollY, setScrollY] = useState(0);
-
-  const handleScroll = () => {
-    const scrollTop = containerRef.current!.scrollTop;
-
-    setScrollY(scrollTop);
-  };
 
   useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.style.setProperty(
-        "--startPosition",
-        `${startPosition}px`
-      );
-      containerRef.current.style.setProperty(
-        "--endPosition",
-        `${endPosition}px`
-      );
+    const container = containerRef.current;
+
+    if (container) {
+      container.style.setProperty("--defaultStart", `${topScrollStartPosition}px`);
+      container.style.setProperty("--defaultEnd", `${topScrollEndPosition}px`);
     }
-  }, [startPosition, endPosition, containerRef.current]);
+  }, []);
 
   return (
-    <div
-      className={styles.container}
-      onScroll={handleScroll}
-      ref={containerRef}
-    >
-      <div className={styles.top}>
-        <img src={posterSrc} />
+    <div className={styles.container} ref={containerRef}>
+      <div className={styles.posterContainer}>
+        <img src={posterSrc} alt={topLabel ? topLabel : "page-poster"} />
       </div>
-
-      <div className={styles.bottom}>
-        {topLabel && <div className={styles.topLabel}>{topLabel}</div>}
-        <div className={styles.bottomBg}>
-          <div className={styles.contentInner}>
-            <div
-              className={styles.scrollingText}
-              style={{
-                transform: `translateY(-${Math.max(
-                  0,
-                  scrollY - (startPosition - endPosition)
-                )}px)`,
-              }}
-            >
-              {children}
-            </div>
-          </div>
-        </div>
+      <div className={styles.contentBackground}>
+        {topLabel && <span className={styles.label}>{topLabel}</span>}
       </div>
+      <div className={styles.contentContainer}>{children}</div>
     </div>
   );
 };
 
 export default StickyScrollLayout;
+

@@ -1,84 +1,43 @@
-import React, { useEffect, useRef, useState } from "react";
+import { FC, ReactNode, useEffect, useRef } from "react";
 import styles from "./DoubleScrollLayout.module.scss";
 
-interface DoubleScrollLayoutTypes {
-  children: React.ReactNode;
+type StickyScrollLayoutProps = {
+  children: ReactNode;
   topLabel?: string;
   posterSrc: string;
-  posterPosition?: "fixed" | "absolute";
-  isBackgroundBlured?: boolean;
-  scrollTriggerValue?: number;
-}
+  topScrollStartPosition?: number;
+  topScrollEndPosition?: number;
+};
 
-const DoubleScrollLayout: React.FC<DoubleScrollLayoutTypes> = ({
+const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
   children,
   topLabel,
   posterSrc,
-  posterPosition = "fixed",
-  isBackgroundBlured = true,
-  scrollTriggerValue = 230,
+  topScrollStartPosition = 310,
+  topScrollEndPosition = 68,
 }) => {
-  const outerContentRef = useRef<HTMLDivElement>(null);
-  const innerContentRef = useRef<HTMLDivElement>(null);
-  const [scroll, setScroll] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const outerScroller = outerContentRef.current;
-    const innerScroller = innerContentRef.current;
-    const handleOuterScroll = () => {
-      if (outerScroller) {
-        const { offsetHeight, scrollTop, scrollHeight } = outerScroller;
-        if (offsetHeight + Math.round(scrollTop) >= scrollHeight) {
-          setScroll(true);
-        } else {
-          setScroll(false);
-        }
-      }
-    };
+    const container = containerRef.current;
 
-    const handleInnerScroll = () => {
-      if (innerScroller) {
-        const { scrollTop } = innerScroller;
-        if (scrollTop === 0) {
-          setScroll(false)
-        }
-      }
-    };
-
-    outerScroller?.addEventListener("scroll", handleOuterScroll);
-    innerScroller?.addEventListener("scroll", handleInnerScroll);
-
-    return () => {
-      outerScroller?.removeEventListener("scroll", handleOuterScroll);
-      innerScroller?.removeEventListener("scroll", handleInnerScroll);
-    };
-  }, [outerContentRef, innerContentRef]);
+    if (container) {
+      container.style.setProperty("--defaultStart", `${topScrollStartPosition}px`);
+      container.style.setProperty("--defaultEnd", `${topScrollEndPosition}px`);
+    }
+  }, []);
 
   return (
-    <div className={styles.pageWrapper} ref={outerContentRef}>
-      <img
-        src={posterSrc}
-        className={styles.poster}
-        style={{ position: posterPosition }}
-      />
-      <div
-        className={`${styles.contentBackground} ${
-          isBackgroundBlured ? styles.backgroundBlured : ""
-        }`}
-        style={{
-          height: `calc(100% + ${scrollTriggerValue}rem - var(--ion-safe-area-top))`,
-        }}
-      >
-        <div
-          ref={innerContentRef}
-          className={`${styles.contentInner}  ${scroll ? styles.scroll : ""}`}
-        >
-          <div className={styles.contenWrapper}>{children}</div>
-        </div>
-        {topLabel && <div className={styles.topLabel}>{topLabel}</div>}
+    <div className={styles.container} ref={containerRef}>
+      <div className={styles.posterContainer}>
+        <img src={posterSrc} alt={topLabel ? topLabel : "page-poster"} />
       </div>
+      <div className={styles.contentBackground}>
+        {topLabel && <span className={styles.label}>{topLabel}</span>}
+      </div>
+      <div className={styles.contentContainer}>{children}</div>
     </div>
   );
 };
 
-export default DoubleScrollLayout;
+export default StickyScrollLayout;

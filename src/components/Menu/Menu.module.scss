@@ -14,7 +14,7 @@
 
 .navPanel {
   height: 70%;
-  padding-inline-end: 36rem;
+  padding-inline-end: 64rem;
   display: flex;
   flex-direction: column;
 
@@ -36,6 +36,7 @@
       overflow: hidden;
       padding-block: 8rem;
       padding-inline-end: 12rem;
+      width: 100%;
     }
 
     .linkWrapper {
