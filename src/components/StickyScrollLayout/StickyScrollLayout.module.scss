@@ -7,8 +7,6 @@
   padding-top: calc(var(--start) - var(--end) - 16px);
   overflow-y: scroll;
   scroll-behavior: smooth;
-  scroll-timeline-name: --contentScroll;
-  scroll-timeline-axis: vertical;
 }
 
 .posterContainer {
@@ -34,13 +32,6 @@
   top: calc(var(--start));
   z-index: 2;
   border-radius: 16px;
-
-  animation-name: scrollUp;
-  animation-timeline: --contentScroll;
-  animation-duration: 1s;
-  animation-fill-mode: both;
-  animation-range: 0 calc(var(--start) - var(--end));
-  animation-timing-function: linear;
 
   .label {
     position: absolute;
@@ -69,14 +60,5 @@
   position: relative;
   z-index: 3;
   min-height: max(100%, 500px);
-}
-
-@keyframes scrollUp {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(calc((var(--start) - var(--end)) * -1));
-  }
 }
 

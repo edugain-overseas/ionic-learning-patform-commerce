@@ -22,7 +22,9 @@ const InfoBtn: React.FC<{ info?: string; ripple?: boolean }> = ({
       />
       <IonPopover trigger={uniqueId} showBackdrop={false} alignment="end">
         <IonContent className={styles.infoContent} scrollY={false}>
-          <IonText>{info}</IonText>
+          <IonText>
+            <span dangerouslySetInnerHTML={{ __html: `${info}` }}></span>
+          </IonText>
         </IonContent>
       </IonPopover>
     </>
