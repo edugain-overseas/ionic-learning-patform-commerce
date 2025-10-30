@@ -24,7 +24,7 @@ const AboutIEU: React.FC = () => {
           className={styles.bakcBtn}
         />
       </IonHeader>
-      <IonContent className={styles.content}>
+      <IonContent className={styles.content} scrollY={false}>
         <StickyScrollLayout
           topLabel="About University"
           posterSrc={poster}

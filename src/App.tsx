@@ -33,6 +33,7 @@ import "./App.scss";
 
 /* Theme variables */
 import "./theme/variables.css";
+import { IonReactRouter } from "@ionic/react-router";
 
 setupIonicReact();
 
@@ -44,7 +45,6 @@ const App: React.FC = () => {
   useGoogleAuthInit();
   useSetupStripe();
 
-
   return (
     <IonApp className="App">
       <UserProvider>
@@ -52,7 +52,9 @@ const App: React.FC = () => {
           <BasketProvider>
             <ListStyleProvider>
               <AuthUIProvider>
-                <Router />
+                <IonReactRouter>
+                  <Router />
+                </IonReactRouter>
               </AuthUIProvider>
             </ListStyleProvider>
           </BasketProvider>
