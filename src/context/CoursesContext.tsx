@@ -173,7 +173,7 @@ interface CoursesContextType {
     lessonId: string | number,
     courseId: number | string
   ) => Promise<void>;
-  confirmLecture: (lessonId: number) => Promise<void>;
+  confirmLecture: (lessonId: number) => Promise<CourseType[] | undefined>;
 }
 
 interface CoursesProviderType {
@@ -277,28 +277,27 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
         params: { lesson_id: lessonId },
       });
       if (response.status === 200) {
-        setCourses((prev) => {
-          const updatedCourses = prev.map((course) => {
-            if (course.lessons.find((lesson) => lesson.id === lessonId)) {
-              let lessonNumber = 0;
-              const updatedLessons = course.lessons.map((lesson) => {
-                if (lesson.id === lessonId) {
-                  lessonNumber = lesson.number;
-                  return { ...lesson, status: "completed" };
-                }
-                if (lesson.number !== 0 && lesson.number === lessonNumber + 1) {
-                  return { ...lesson, status: "active" };
-                }
-                return lesson;
-              });
-              console.log(updatedLessons);
+        const updatedCourses = courses.map((course) => {
+          if (course.lessons.find((lesson) => lesson.id === lessonId)) {
+            let lessonNumber = 0;
+            const updatedLessons = course.lessons.map((lesson) => {
+              if (lesson.id === lessonId) {
+                lessonNumber = lesson.number;
+                return { ...lesson, status: "completed" };
+              }
+              if (lesson.number !== 0 && lesson.number === lessonNumber + 1) {
+                return { ...lesson, status: "active" };
+              }
+              return lesson;
+            });
+            console.log(updatedLessons);
 
-              return { ...course, lessons: updatedLessons };
-            }
-            return course;
-          });
-          return updatedCourses;
+            return { ...course, lessons: updatedLessons };
+          }
+          return course;
         });
+        setCourses(updatedCourses);
+        return updatedCourses;
       }
     } catch (error) {
       throw error;

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams } from "react-router";
 import { useIonRouter } from "@ionic/react";
-import { useCourses } from "../context/CoursesContext";
+import { CourseType, useCourses } from "../context/CoursesContext";
 
 export const useTaskNavigation = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -23,17 +23,25 @@ export const useTaskNavigation = () => {
   const completeLecture = async (lessonId: number) => {
     setIsLoading(true);
     try {
-      await coursesInterface?.confirmLecture(lessonId);
+      return await coursesInterface?.confirmLecture(lessonId);
     } catch (error) {
     } finally {
       setIsLoading(false);
     }
   };
 
-  const getNextLessonId = (direction: "back" | "forward") => {
-    const availableLessons = courseData?.lessons
+  const getNextLessonId = (
+    direction: "back" | "forward",
+    updatedCourses?: CourseType[]
+  ) => {
+    const course = updatedCourses
+      ? updatedCourses.find((course) => course.id === +courseId)
+      : courseData;
+
+    const availableLessons = course?.lessons
       .filter((lesson) => lesson.status !== "blocked")
       .sort((a, b) => a.number - b.number);
+
     if (availableLessons) {
       const targetLessonIndex =
         availableLessons?.findIndex((lesson) => lesson.id === +taskId) +
@@ -49,9 +57,28 @@ export const useTaskNavigation = () => {
       taskData.status === "active" &&
       direction === "forward"
     ) {
-      await completeLecture(taskData.id);
+      const updatedCourses = await completeLecture(taskData.id);
+      if (updatedCourses) {
+        const targetLessonId = getNextLessonId(direction, updatedCourses);
+
+        if (targetLessonId) {
+          const targetLessonType = courseData?.lessons.find(
+            (lesson) => lesson.id === +targetLessonId
+          )?.type;
+
+          const taskLink =
+            targetLessonType === "exam"
+              ? `/courses/course/${courseId}/exam`
+              : `/courses/course/${courseId}/tasks/${targetLessonId}`;
+
+          router.push(taskLink, `${direction}`);
+        }
+      } else {
+        return;
+      }
     }
     const targetLessonId = getNextLessonId(direction);
+
     if (targetLessonId) {
       const targetLessonType = courseData?.lessons.find(
         (lesson) => lesson.id === +targetLessonId
@@ -61,7 +88,6 @@ export const useTaskNavigation = () => {
         targetLessonType === "exam"
           ? `/courses/course/${courseId}/exam`
           : `/courses/course/${courseId}/tasks/${targetLessonId}`;
-      console.log(taskLink);
 
       router.push(taskLink, `${direction}`);
     }

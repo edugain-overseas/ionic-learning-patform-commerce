@@ -21,8 +21,6 @@ export const useToast = () => {
   const [present] = useIonToast();
 
   const api = ({ type = "info", ...config }: ToastApiConfig) => {
-    console.log(type);
-
     return present({
       cssClass: ["toast", `toast-${type}`],
       swipeGesture: "vertical",

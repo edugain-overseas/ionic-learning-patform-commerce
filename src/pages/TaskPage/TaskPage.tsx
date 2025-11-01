@@ -34,8 +34,6 @@ const TaskPage: React.FC = () => {
 
   useEffect(() => {
     if (!lessonData && taskData) {
-      // console.log(lessonData, taskData);
-
       coursesInterface?.getLessonById(taskId, courseId);
     }
   }, [taskId, lessonData, taskData]);
@@ -57,7 +55,7 @@ const TaskPage: React.FC = () => {
         }`}
       >
         {taskData?.type === "lecture" && <Lecture taskData={taskData} />}
-        {taskData?.type === "test" && <Test taskData={taskData} />}
+        {taskData?.type === "test" && <Test taskData={taskData} key={taskId}/>}
       </IonContent>
       <CourseProgressModal />
     </>

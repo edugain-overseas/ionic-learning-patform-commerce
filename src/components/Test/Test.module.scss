@@ -177,11 +177,92 @@
   }
 }
 
+.landingBtns {
+  height: fit-content;
+  margin-top: 18rem;
+}
+
 .landingBtn {
-  text-align: end;
   font-size: 14rem;
+}
+
+.blockBtn {
+  max-width: 152rem;
   margin: 18rem auto;
-  max-width: calc(100% - 36rem);
+}
+
+.modal {
+  overflow: hidden;
+  --ion-safe-area-top: var(--ion-safe-area-top);
+
+  .modalToolbar {
+    padding: 0;
+  }
+}
+
+.modalContent {
+  flex-grow: 1;
+  max-height: calc(100% - 56rem - var(--ion-safe-area-top));
+  padding: 20rem;
+  overflow: auto;
+  padding-bottom: calc(20rem + var(--padding-bottom));
+
+  .accordion {
+    margin-top: 16rem;
+  }
+
+  .accordionItem {
+    border-radius: 5rem;
+    background: var(--custom-bg-rgba-secondary);
+    box-shadow: var(--custom-box-shadow-primary);
+    backdrop-filter: blur(16px);
+    margin-block: 4rem;
+  }
+
+  .attemptsHeader {
+    padding: 8rem 16rem;
+    display: flex;
+    gap: 4rem;
+    justify-content: space-between;
+
+    span {
+      font-size: 16rem;
+      color: var(--ion-color-light);
+    }
+  }
+
+  .attemptData {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+  }
+
+  .finalSubmitAttempt {
+    margin: 16rem auto 0;
+
+    width: 104rem;
+    height: 32rem;
+    border-radius: 5rem;
+    display: flex;
+    align-items: center;
+    gap: 10rem;
+    font-size: 16rem;
+    justify-content: center;
+    background-color: var(--ion-color-success);
+    color: var(--ion-color-primary-contrast);
+
+    span {
+      font-size: 14rem;
+      color: var(--ion-color-primary-contrast);
+    }
+  }
+
+  .attemptsContent {
+    border-top: 1px solid var(--ion-color-light);
+    padding: 16rem 8rem;
+    margin-inline: 8rem;
+    font-size: 14rem;
+  }
 }
 
 @keyframes slideDown {
