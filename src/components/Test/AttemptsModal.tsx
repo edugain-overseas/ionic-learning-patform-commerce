@@ -108,11 +108,8 @@ const AttemptsModal = ({
     toolbarClassName: styles.modalToolbar,
   };
 
-  console.log(isOpen);
-
   return (
     <IonModal
-      //   trigger={`open-test-attempts-modal-${test.id}`}
       ref={modalRef}
       className={styles.modal}
       isOpen={isOpen}

@@ -26,12 +26,15 @@ const TestContent: React.FC<{
   setStudentAnswers?: Dispatch<SetStateAction<any[]>>;
 }> = ({ test, studentAnswers, setStudentAnswers }) => {
   const { lessonData: testData } = test;
+  console.log(testData);
 
   const sortedQuestions = useMemo(
     () =>
-      [...(testData as TestDataType)?.questions].sort(
-        (a, b) => a.q_number - b.q_number
-      ),
+      (testData as TestDataType)?.questions
+        ? [...(testData as TestDataType)?.questions].sort(
+            (a, b) => a.q_number - b.q_number
+          )
+        : [],
     [testData]
   );
 

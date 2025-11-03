@@ -177,13 +177,15 @@
   }
 }
 
-.landingBtns {
-  height: fit-content;
+.landingBtnsContainer {
   margin-top: 18rem;
+  display: flex;
+  justify-content: space-evenly;
 }
 
 .landingBtn {
   font-size: 14rem;
+  max-width: 138rem;
 }
 
 .blockBtn {
@@ -202,10 +204,10 @@
 
 .modalContent {
   flex-grow: 1;
-  max-height: calc(100% - 56rem - var(--ion-safe-area-top));
+  height: calc(100% - 56rem - var(--ion-safe-area-top, 0rem));;
   padding: 20rem;
   overflow: auto;
-  padding-bottom: calc(20rem + var(--padding-bottom));
+  padding-bottom: calc(20rem + var(--padding-bottom, 0rem));
 
   .accordion {
     margin-top: 16rem;

@@ -33,8 +33,10 @@ type CurrentAttempt = {
 const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<number>(0);
+  const currentAttemptsRef = useRef<CurrentAttempt | null>(null);
   const [isTestOpen, setIsTestOpen] = useState(false);
   const [testAttempts, setTestAttempts] = useState<TestAttemptType[]>([]);
+  const [isAttemptLoading, setIsAttemptLoading] = useState(true);
   const [studentAnswers, setStudentAnswers] = useState<any[]>([]);
   const [isOpenAttemptsModal, setIsOpenAttemptsModal] = useState(false);
   const [currentAttempt, setCurrentAttempt, isStoreInit] =
@@ -67,6 +69,9 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
 
   const testData = taskData.lessonData as TestDataType;
 
+  const isAttemptAvailabel =
+    testData?.attempts && testData.attempts > testAttempts.length;
+
   const number =
     course?.lessons &&
     course?.lessons
@@ -98,6 +103,7 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
     setCurrentAttempt(null);
     setIsTestOpen(false);
     setStudentAnswers([]);
+    currentAttemptsRef.current = null;
     intervalRef.current = null;
     timerRef.current = 0;
   };
@@ -133,7 +139,8 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
   };
 
   const startAttempt = async () => {
-    const timer = minutesToSeconds(taskData.scheduled_time);
+    // const timer = minutesToSeconds(taskData.scheduled_time);
+    const timer = 10;
     const lessonId = taskData.id;
 
     setCurrentAttempt({
@@ -146,10 +153,14 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
   };
 
   const handleSubmitCurrentAttempt = async () => {
+    const studentAnswers =
+      currentAttempt?.studentAnswers ||
+      currentAttemptsRef.current?.studentAnswers;    
+
     try {
       const response = await instance.post("student-test/send", {
         lesson_id: taskData.id,
-        student_answers: currentAttempt?.studentAnswers,
+        student_answers: studentAnswers,
       });
       if (response.data) {
         present({
@@ -173,6 +184,7 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
   };
 
   const fetchAttempts = async () => {
+    setIsAttemptLoading(true);
     try {
       const response = await instance.get(
         `/student-test/attempts?test_id=${testData.test_id}`
@@ -184,8 +196,13 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsAttemptLoading(false);
     }
   };
+
+  const closeAttemptsModal = () => setIsOpenAttemptsModal(false);
+  const openAttemptsModal = () => setIsOpenAttemptsModal(true);
 
   useEffect(() => {
     if (currentAttempt && currentAttempt.timer !== 0 && !isTestOpen) {
@@ -202,6 +219,7 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
       if (!prev) {
         return prev;
       }
+      currentAttemptsRef.current = { ...prev, studentAnswers: studentAnswers };
       return { ...prev, studentAnswers: studentAnswers };
     });
   }, [studentAnswers]);
@@ -233,9 +251,6 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
       </div>
     );
   }
-
-  const closeAttemptsModal = () => setIsOpenAttemptsModal(false);
-  const openAttemptsModal = () => setIsOpenAttemptsModal(true);
 
   return (
     <>
@@ -309,55 +324,37 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
             timer={taskData.scheduled_time}
             minScore={testData?.score}
           />
-          {testAttempts.length !== 0 ? (
-            <EqualSpaceContainer
-              containerClassname={styles.landingBtns}
-              leftItem={
-                <CommonButton
-                  label="Start"
-                  block={true}
-                  width={200}
-                  height={32}
-                  backgroundColor="var(--ion-color-dark)"
-                  color="var(--ion-color-primary-contrast)"
-                  borderRadius={5}
-                  className={styles.landingBtn}
-                  onClick={() => {
-                    startAttempt();
-                    setIsTestOpen(true);
-                  }}
-                />
-              }
-              rightItem={
-                <CommonButton
-                  label="Show attempts"
-                  block={true}
-                  width={200}
-                  height={32}
-                  backgroundColor="var(--ion-color-light)"
-                  color="var(--ion-color-primary-contrast)"
-                  borderRadius={5}
-                  className={styles.landingBtn}
-                  onClick={openAttemptsModal}
-                />
-              }
-            />
-          ) : (
-            <CommonButton
-              label="Start"
-              block={true}
-              width={200}
-              height={32}
-              backgroundColor="var(--ion-color-dark)"
-              color="var(--ion-color-primary-contrast)"
-              borderRadius={5}
-              className={`${styles.landingBtn} ${styles.blockBtn}`}
-              onClick={() => {
-                startAttempt();
-                setIsTestOpen(true);
-              }}
-            />
-          )}
+          <div className={styles.landingBtnsContainer}>
+            {isAttemptAvailabel && !isAttemptLoading && (
+              <CommonButton
+                label="Start"
+                block={true}
+                width={138}
+                height={32}
+                backgroundColor="var(--ion-color-dark)"
+                color="var(--ion-color-primary-contrast)"
+                borderRadius={5}
+                className={styles.landingBtn}
+                onClick={() => {
+                  startAttempt();
+                  setIsTestOpen(true);
+                }}
+              />
+            )}
+            {testAttempts.length !== 0 && (
+              <CommonButton
+                label="Show attempts"
+                block={true}
+                width={138}
+                height={32}
+                backgroundColor="var(--ion-color-light)"
+                color="var(--ion-color-primary-contrast)"
+                borderRadius={5}
+                className={styles.landingBtn}
+                onClick={openAttemptsModal}
+              />
+            )}
+          </div>
         </>
       )}
       <AttemptsModal
