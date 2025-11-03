@@ -139,8 +139,7 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
   };
 
   const startAttempt = async () => {
-    // const timer = minutesToSeconds(taskData.scheduled_time);
-    const timer = 10;
+    const timer = minutesToSeconds(taskData.scheduled_time);
     const lessonId = taskData.id;
 
     setCurrentAttempt({
