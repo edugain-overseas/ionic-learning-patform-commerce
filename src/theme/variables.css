@@ -33,7 +33,7 @@ http://ionicframework.com/docs/theming/ */
 
   --custom-tr-time-max: 0.3s;
   --custom-tr-time-mid: 0.2s;
-  --custom-tr-time-min: 0.1s;
+  --custom-tr-time-min: 0.15s;
 
   --ion-color-primary: #d00000;
   --ion-color-primary-rgb: 208, 0, 0;

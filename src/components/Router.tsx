@@ -1,6 +1,5 @@
 import React from "react";
-import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route, useLocation } from "react-router";
+import { Redirect, Route } from "react-router";
 import { IonPage, IonRouterOutlet } from "@ionic/react";
 import Tabs from "./Tabs";
 import Menu from "./Menu/Menu";
@@ -16,13 +15,8 @@ import Basket from "../pages/Basket/Basket";
 import Search from "../pages/Search/Search";
 import CourseBuyStatusPage from "../pages/CourseDetailPage/CourseBuyStatusPage/CourseBuyStatusPage";
 import Support from "../pages/Support/Support";
-// import { useNavigationDirection } from "../hooks/useNavigationDirection";
-// import { AnimatedPage } from "./AnimatedPage";
 
 const Router: React.FC = () => {
-  // const location = useLocation();
-  // const direction = useNavigationDirection();
-
   return (
     <>
       <Menu />
@@ -30,45 +24,10 @@ const Router: React.FC = () => {
         <IonRouterOutlet id="main-content" animated={false}>
           <Tabs>
             <Route path="/home" component={Home} exact />
-              <Route path="/my-profile" component={UserProfile} exact />
-              <Route path="/courses" component={Courses} exact />
-              <Route path="/basket" component={Basket} exact />
-            {/* <Route
-              path="/home"
-              render={() => (
-                <AnimatedPage direction={direction}>
-                  <Home />
-                </AnimatedPage>
-              )}
-              exact
-            />
-            <Route
-              path="/my-profile"
-              render={() => (
-                <AnimatedPage direction={direction}>
-                  <UserProfile />
-                </AnimatedPage>
-              )}
-              exact
-            />
-            <Route
-              path="/courses"
-              render={() => (
-                <AnimatedPage direction={direction}>
-                  <Courses />
-                </AnimatedPage>
-              )}
-              exact
-            />
-            <Route
-              path="/basket"
-              render={() => (
-                <AnimatedPage direction={direction}>
-                  <Basket />
-                </AnimatedPage>
-              )}
-              exact
-            /> */}
+            <Route path="/my-profile" component={UserProfile} exact />
+            <Route path="/courses" component={Courses} exact />
+            <Route path="/basket" component={Basket} exact />
+
             <Route path="/aboutIEU" component={AboutIEU} exact />
             <Route path="/instructions" component={Instructions} exact />
             <Route path="/search" component={Search} />

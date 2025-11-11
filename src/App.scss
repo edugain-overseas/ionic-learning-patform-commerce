@@ -29,6 +29,8 @@ a {
   left: 0;
   right: 0;
 
+  text-transform: capitalize;
+
   transform: translateY(0);
   transition: transform var(--custom-tr-time-mid) ease;
 

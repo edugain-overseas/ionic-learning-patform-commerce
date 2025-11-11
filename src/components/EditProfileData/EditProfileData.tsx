@@ -251,7 +251,7 @@ const EditProfileData: FC<{
                     isSubmitting ? (
                       <IonSpinner color="light" />
                     ) : (
-                      <IonIcon src={SaveIcon} />
+                      <IonIcon src={SaveIcon} className={styles.saveIcon}/>
                     )
                   }
                   width={102}

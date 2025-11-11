@@ -4,6 +4,32 @@ import myProfileIcon from "../assets/icons/menu/my-profile.svg";
 import aboutIEUIcon from "../assets/icons/menu/aboutIEU.svg";
 import instructionsIcon from "../assets/icons/menu/instruction.svg";
 
+export type TabNameType = "home" | "courses" | "my-profile" | "basket";
+
+export type TabType = {
+  label: TabNameType;
+  href: `/${TabNameType}`;
+};
+
+export const tabsData: TabType[] = [
+  {
+    label: "home",
+    href: "/home",
+  },
+  {
+    label: "courses",
+    href: "/courses",
+  },
+  {
+    label: "my-profile",
+    href: "/my-profile",
+  },
+  {
+    label: "basket",
+    href: "/basket",
+  },
+];
+
 export const menuNav = [
   {
     label: "Home",

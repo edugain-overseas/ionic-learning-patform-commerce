@@ -1,22 +1,33 @@
-import { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router";
+import { useRef, useState } from "react";
+import { IonTabsCustomEvent } from "@ionic/core";
 
 export const useNavigationDirection = () => {
-  const location = useLocation();
   const [direction, setDirection] = useState<"left" | "right">("right");
-  const previousPath = useRef<string>("");
+  const prevTabRef = useRef("home");
 
-  useEffect(() => {
-    const tabOrder = ["/home", "/courses", "/my-profile", "/basket"];
-    const prevIndex = tabOrder.indexOf(previousPath.current);
-    const newIndex = tabOrder.indexOf(location.pathname);
+  const tabOrder = ["home", "courses", "my-profile", "basket"];
 
-    if (prevIndex !== -1 && newIndex !== -1) {
-      setDirection(newIndex > prevIndex ? "right" : "left");
+  console.log(direction);
+
+  const handleTabsWillChange = (
+    event: IonTabsCustomEvent<{
+      tab: string;
+    }>
+  ) => {
+    const tabIndex = tabOrder.indexOf(event.detail.tab);
+    const prevIndex = tabOrder.indexOf(prevTabRef.current);
+
+    if (prevIndex !== -1 && tabIndex !== -1) {
+      console.log(prevIndex, tabIndex);
+
+      if (tabIndex > prevIndex) setDirection("right");
+      else if (tabIndex < prevIndex) setDirection("left");
+    } else {
+      setDirection("right");
     }
 
-    previousPath.current = location.pathname;
-  }, [location]);
+    return tabIndex;
+  };
 
-  return direction;
+  return { direction, handleTabsWillChange } as const;
 };

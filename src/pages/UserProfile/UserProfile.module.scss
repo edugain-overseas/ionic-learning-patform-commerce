@@ -11,20 +11,12 @@
   }
 
   .mainInfoBlock,
-  .profileData,
   .progressData,
   .certificatesData {
     border-radius: var(--custom--border-radius-primary);
     background-color: var(--custom-bg-rgba-secondary);
     box-shadow: var(--custom-box-shadow-primary);
     margin-bottom: 16rem;
-  }
-
-  .progressData {
-    background: none;
-    border-radius: 0;
-    box-shadow: none;
-    
   }
 
   .certificatesData {
@@ -76,6 +68,41 @@
       top: -28rem;
       left: 14rem;
       border-radius: 50%;
+
+      .editAvatarBtn {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        z-index: 1;
+        width: 24rem;
+        height: 24rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        border-radius: 50%;
+        box-shadow: var(--custom-box-shadow-secondary-inset);
+        background-color: var(--ion-color-dark-contrast);
+
+        font-size: 10rem;
+        color: var(--ion-color-dark);
+
+        &:before {
+          content: "";
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 18rem;
+          height: 18rem;
+          border-radius: 50%;
+          box-shadow: var(--custom-box-shadow-thirtiary);
+          background-color: var(--ion-color-dark-contrast);
+        }
+
+        ion-icon {
+        }
+      }
 
       &::before {
         content: "";
@@ -176,9 +203,8 @@
 }
 
 div.profileData {
-  background: none;
-  box-shadow: none;
-  backdrop-filter: none;
+  margin-bottom: 16rem;
+
 
   .profileDataHeader {
     display: flex;
@@ -214,7 +240,8 @@ div.profileData {
       top: 10rem;
       left: 4rem;
       right: 4rem;
-      background-color: var(--ion-color-light);
+      background-color: var(--custom-color-decorate);
+      border-radius: 10rem;
     }
 
     .profileDataItem {
@@ -236,19 +263,58 @@ div.profileData {
   }
 }
 
-div.progressData {
-  display: flex;
-  gap: 16rem;
-  background-color: transparent;
-  box-shadow: none;
-  backdrop-filter: none;
+.progressData {
+  padding: 20rem 12rem;
+  position: relative;
 
-  & > div {
-    flex: 1;
-    border-radius: var(--custom--border-radius-primary);
-    background-color: var(--custom-bg-rgba-secondary);
-    box-shadow: var(--custom-box-shadow-primary);
-    // backdrop-filter: blur(16rem);
+  h3 {
+    padding-bottom: 22rem;
+    margin: 0;
+    margin-bottom: 12rem;
+    font-size: 14rem;
+    font-weight: 700;
+    position: relative;
+
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2rem;
+      border-radius: 10rem;
+      background-color: var(--custom-color-decorate);
+    }
+  }
+
+  .infoBtnWrapper {
+    position: absolute;
+    top: 12rem;
+    right: 8rem;
+  }
+
+  .graphStats {
+    display: flex;
+    gap: 30rem;
+
+    & > div {
+      flex: 1;
+
+      &:first-child {
+        position: relative;
+
+        &:after {
+          content: "";
+          position: absolute;
+          top: 4rem;
+          bottom: 0;
+          width: 1rem;
+          background-color: var(--custom-color-decorate);
+          border-radius: 10rem;
+          right: -14.5rem;
+        }
+      }
+    }
   }
 
   .progressContent {

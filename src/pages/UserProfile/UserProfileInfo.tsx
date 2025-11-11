@@ -5,6 +5,8 @@ import { getCountryByCode } from "../../utils/countries";
 import { UserType } from "../../types/user";
 
 const UserProfileInfo: FC<{ userData?: UserType }> = ({ userData }) => {
+  console.log(userData);
+
   return (
     <div className={styles.profileData}>
       <Accordion
@@ -59,7 +61,7 @@ const UserProfileInfo: FC<{ userData?: UserType }> = ({ userData }) => {
               <span className={styles.value}>
                 {userData?.country === "" || !userData?.country
                   ? "-"
-                  : getCountryByCode(userData.country)}
+                  : userData.country}
               </span>
             </li>
           </ul>

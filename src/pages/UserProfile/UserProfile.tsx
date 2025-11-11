@@ -60,7 +60,7 @@ const UserProfile: React.FC = () => {
     }
   };
 
-  const openEditAvatarModal = () => {
+  const openAvatarEditorModal = () => {
     if (editUserDataModalRef.current) {
       editUserDataModalRef.current.dismiss();
     }
@@ -80,7 +80,10 @@ const UserProfile: React.FC = () => {
       <Header {...headerProps} />
       <IonContent className={styles.pageWrapper}>
         {onRefresh && <PageRefresher onRefresh={onRefresh} />}
-        <UserMainInfo userData={userData} />
+        <UserMainInfo
+          userData={userData}
+          openAvatarEditorModal={openAvatarEditorModal}
+        />
         <UserProfileInfo userData={userData} />
         <UserStatistics userData={userData} />
         <UserCertificates />
@@ -93,7 +96,7 @@ const UserProfile: React.FC = () => {
         >
           <EditProfileData
             closeModal={closeEditUserDataModal}
-            openAvatarEditorModal={openEditAvatarModal}
+            openAvatarEditorModal={openAvatarEditorModal}
           />
         </IonModal>
         <SheetModalAuto refModal={editUserAvatarRef} keyboardClose={false}>

@@ -1,15 +1,19 @@
 import { FC } from "react";
+import { IonIcon } from "@ionic/react";
+import { UserType } from "../../types/user";
+import { convertMillisecondsToHoursAndMinutes } from "../../utils/millisecondsToSrt";
 import ClockIcon from "../../assets/icons/clock.svg";
 import TaskProgressIcon from "../../assets/icons/task-progress.svg";
 import TaskCompletedIcon from "../../assets/icons/task-completed.svg";
+import EditIcon from "../../assets/icons/pencil-filled.svg";
 import Avatar from "../../components/Avatar/Avatar";
 import TextOverrflowEllipsis from "../../components/TextOverrflowEllipsis/TextOverrflowEllipsis";
-import { IonIcon } from "@ionic/react";
 import styles from "./UserProfile.module.scss";
-import { convertMillisecondsToHoursAndMinutes } from "../../utils/millisecondsToSrt";
-import { UserType } from "../../types/user";
 
-const UserMainInfo: FC<{ userData?: UserType }> = ({ userData }) => {
+const UserMainInfo: FC<{
+  userData?: UserType;
+  openAvatarEditorModal: () => void;
+}> = ({ userData, openAvatarEditorModal }) => {
   const { hours, minutes } = userData
     ? convertMillisecondsToHoursAndMinutes(userData?.activeTime)
     : { hours: 0, minutes: 0 };
@@ -20,6 +24,12 @@ const UserMainInfo: FC<{ userData?: UserType }> = ({ userData }) => {
         <span className={styles.blockLable}>Information</span>
         <div className={styles.avatarInner}>
           <Avatar src={userData?.avatarURL} size={94} editable={false} />
+          <button
+            className={styles.editAvatarBtn}
+            onClick={openAvatarEditorModal}
+          >
+            <IonIcon src={EditIcon} />
+          </button>
         </div>
         <div className={styles.usernameWrapper}>
           <span className={styles.usernameLabel}>

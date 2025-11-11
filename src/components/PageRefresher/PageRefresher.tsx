@@ -24,6 +24,8 @@ const PageRefresher: FC<{
       onIonRefresh={handleRefresh}
       closeDuration="500ms"
       className={containerClassname}
+      pullMax={300}
+      pullMin={100}
     >
       <IonRefresherContent
         refreshingSpinner="crescent"

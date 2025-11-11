@@ -2,6 +2,7 @@ import { FC } from "react";
 import styles from "./UserProfile.module.scss";
 import CircleProgressCard from "../../components/CircleProgressCard/CircleProgressCard";
 import { UserType } from "../../types/user";
+import InfoBtn from "../../components/InfoBtn/InfoBtn";
 
 const mockedAvarage = 172;
 const mockedProgress = 75;
@@ -16,41 +17,45 @@ const UserStatistics: FC<{ userData?: UserType }> = ({ userData }) => {
 
   return (
     <div className={styles.progressData}>
-      <div className={styles.gradeWrapper}>
-        <CircleProgressCard
-          cardTitle="Grade Point Average"
-          width={90}
-          progress={isUserStatisticAvailable ? mockedAvarage * 0.5 : 0.1}
-          strokeWidth={4}
-          strokeColor={isUserStatisticAvailable ? "#FCC400" : "#BDC4D2"}
-          progressTitle={
-            <div className={styles.progressContent}>
-              <span className={styles.label}>Average</span>
-              <span className={styles.value}>
-                {isUserStatisticAvailable ? `${mockedAvarage}(B)` : "0(*)"}
-              </span>
-            </div>
-          }
-          infoText={gradeDescription}
-        />
+      <h3 className={styles.sectionHeader}>Your progress</h3>
+      <div className={styles.infoBtnWrapper}>
+        <InfoBtn info="The average score is calculated based on all courses you have completed" />
       </div>
-      <div className={styles.progressWrapper}>
-        <CircleProgressCard
-          cardTitle="Your progress"
-          width={90}
-          progress={isUserStatisticAvailable ? mockedProgress : 0.1}
-          strokeWidth={4}
-          strokeColor={isUserStatisticAvailable ? "#39ba6d" : "#BDC4D2"}
-          progressTitle={
-            <div className={styles.progressContent}>
-              <span className={styles.label}>Completed</span>
-              <span className={styles.value}>{`${
-                isUserStatisticAvailable ? mockedProgress : 0
-              }%`}</span>
-            </div>
-          }
-          infoText={progressDescription}
-        />
+      <div className={styles.graphStats}>
+        <div>
+          <CircleProgressCard
+            cardTitle="Grade Point Average"
+            width={124}
+            progress={isUserStatisticAvailable ? mockedAvarage * 0.5 : 0.1}
+            strokeWidth={8}
+            strokeColor={isUserStatisticAvailable ? "#FCC400" : "#BDC4D2"}
+            progressTitle={
+              <div className={styles.progressContent}>
+                <span className={styles.label}>Average</span>
+                <span className={styles.value}>
+                  {isUserStatisticAvailable ? `${mockedAvarage}(B)` : "0(*)"}
+                </span>
+              </div>
+            }
+          />
+        </div>
+        <div>
+          <CircleProgressCard
+            cardTitle="Your progress"
+            width={124}
+            progress={isUserStatisticAvailable ? mockedProgress : 0.1}
+            strokeWidth={8}
+            strokeColor={isUserStatisticAvailable ? "#39ba6d" : "#BDC4D2"}
+            progressTitle={
+              <div className={styles.progressContent}>
+                <span className={styles.label}>Completed</span>
+                <span className={styles.value}>{`${
+                  isUserStatisticAvailable ? mockedProgress : 0
+                }%`}</span>
+              </div>
+            }
+          />
+        </div>
       </div>
     </div>
   );

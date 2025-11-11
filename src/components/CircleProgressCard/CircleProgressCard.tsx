@@ -1,5 +1,4 @@
 import React from "react";
-import InfoBtn from "../InfoBtn/InfoBtn";
 import CircleProgressBar from "../CircleProgressBar/CircleProgressBar";
 import styles from "./CircleProgressCard.module.scss";
 
@@ -12,7 +11,6 @@ interface CircleProgressCardTypes {
   outerColor?: string;
   width?: number;
   strokeWidth?: number;
-  infoText?: string;
 }
 
 const CircleProgressCard: React.FC<CircleProgressCardTypes> = ({
@@ -24,7 +22,6 @@ const CircleProgressCard: React.FC<CircleProgressCardTypes> = ({
   outerColor = "#f7f6f5",
   width,
   strokeWidth,
-  infoText,
 }) => {
   return (
     <div className={styles.wrapper}>
@@ -43,9 +40,6 @@ const CircleProgressCard: React.FC<CircleProgressCardTypes> = ({
           />
         </div>
         <div className={styles.progressInner}>{progressTitle}</div>
-      </div>
-      <div className={styles.infoBtnWrapper}>
-        <InfoBtn info={infoText || cardTitle} />
       </div>
     </div>
   );
