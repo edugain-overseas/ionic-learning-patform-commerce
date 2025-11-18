@@ -29,6 +29,7 @@ export interface CourseCertificate {
   course_certificate_link: string | null;
   course_id: number;
   course_name: string;
+  course_status: "in_progress" | "completed" | null;
 }
 
 export interface CategoryCertificate {

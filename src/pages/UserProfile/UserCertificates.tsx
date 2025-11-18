@@ -18,6 +18,8 @@ import CommonButton from "../../components/CommonButton/CommonButton";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
+import Accordion from "../../components/Accordion/Accordion";
+import CertificateList from "../../components/CertificateList/CertificateList";
 
 // import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 
@@ -32,6 +34,10 @@ const UserCertificates: FC = () => {
   const isUserLoggedIn = useUser()?.user.accessToken !== null;
   const [certificateIndex, setCertificateIndex] = useState(0);
   const [isOpenModalCerficate, setIsOpenModalCerficate] = useState(false);
+
+  const certificatesData = useUser()?.user.certificates;
+
+  console.log(certificates);
 
   const handleCertificateClick = (index: number) => {
     setCertificateIndex(index);
@@ -98,19 +104,7 @@ const UserCertificates: FC = () => {
           <InfoBtn info="Certificates" />
         </div>
         {isUserLoggedIn ? (
-          <ul className={styles.certificatesList}>
-            {certificates.map(({ name }, index) => (
-              <li
-                className={`${styles.certificateItem} ion-activatable`}
-                key={name}
-                id="certificate"
-                onClick={() => handleCertificateClick(index)}
-              >
-                <span className={styles.certificateTitle}>{name}</span>
-                <IonRippleEffect></IonRippleEffect>
-              </li>
-            ))}
-          </ul>
+          <CertificateList />
         ) : (
           <UnauthorizedUserContentFallback />
         )}

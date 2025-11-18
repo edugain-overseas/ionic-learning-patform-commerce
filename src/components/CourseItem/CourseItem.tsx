@@ -3,18 +3,18 @@ import { IonIcon, IonRippleEffect, IonRouterLink } from "@ionic/react";
 import { CourseType } from "../../context/CoursesContext";
 import { serverName } from "../../http/server";
 import { useUser } from "../../context/UserContext";
+import { useListStyle } from "../../context/ListStyleContext";
+import { useBasket } from "../../context/BasketContext";
+import { pulseOne } from "../../animations/cardAnimations";
+import { flyToBasket } from "../../utils/flyToTarget";
 import basketIcon from "../../assets/icons/tabs/basket.svg";
 import deleteIcon from "../../assets/icons/delete.svg";
 import CardPrice from "../CardPrice/CardPrice";
 import InsetBtn from "../InsetBtn/InsetBtn";
 import ProgressBar from "../ProgressBar/ProgressBar";
-import styles from "./CourseItem.module.scss";
 import CardGrade from "../CardGrade/CardGrade";
 import InfoBtn from "../InfoBtn/InfoBtn";
-import { useListStyle } from "../../context/ListStyleContext";
-import { useBasket } from "../../context/BasketContext";
-import { pulseOne } from "../../animations/cardAnimations";
-import { flyToBasket } from "../../utils/flyToTarget";
+import styles from "./CourseItem.module.scss";
 
 interface CourseItemTypes {
   course: CourseType;

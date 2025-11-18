@@ -7,9 +7,16 @@ import styles from "./Accordion.module.scss";
 interface AccordionTypes {
   header: React.ReactNode;
   content: React.ReactNode;
+  headerClassname?: string;
+  contentClassname?: string;
 }
 
-const Accordion: React.FC<AccordionTypes> = ({ header, content }) => {
+const Accordion: React.FC<AccordionTypes> = ({
+  header,
+  content,
+  headerClassname = "",
+  contentClassname = "",
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const contentRef = useRef<HTMLDivElement | null>(null);
 
@@ -24,9 +31,9 @@ const Accordion: React.FC<AccordionTypes> = ({ header, content }) => {
 
   return (
     <div className={styles.accordionWrapper} id={isOpen ? "open" : "closed"}>
-      <div className={styles.accordionHeader}>
+      <div className={`${styles.accordionHeader} ${headerClassname}`}>
         {header}
-        <div className={styles.chevronInner}>
+        <div className={styles.chevronInner} id="accordion-toggle">
           <InsetBtn
             icon={
               <IonIcon
@@ -42,7 +49,10 @@ const Accordion: React.FC<AccordionTypes> = ({ header, content }) => {
           />
         </div>
       </div>
-      <div ref={contentRef} className={styles.accordionContent}>
+      <div
+        ref={contentRef}
+        className={`${styles.accordionContent} ${contentClassname}`}
+      >
         {content}
       </div>
     </div>

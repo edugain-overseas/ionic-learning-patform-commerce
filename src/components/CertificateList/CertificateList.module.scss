@@ -1,0 +1,57 @@
+.certificateList {
+  padding: 8rem 12rem 12rem;
+  font-size: 14rem;
+}
+
+.certificatesAccordionHeader {
+  display: block;
+  position: relative;
+  padding: 2rem;
+
+  div[id="accordion-toggle"] {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+  }
+}
+
+.itemContainer {
+  font-size: 14rem;
+}
+
+.certificateLink {
+  display: inline-flex;
+  align-items: center;
+  height: 36rem;
+  margin: 0 56rem 12rem 0;
+
+  .certificateTitle {
+    margin: 0;
+    font-size: 14rem;
+    font-weight: 600;
+    line-height: 18rem;
+    color: var(--ion-color-dark);
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.courseCertificatesList {
+  padding-top: 12rem;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 10rem;
+    left: 0;
+    width: 100%;
+    height: 2rem;
+    border-radius: 10rem;
+    background-color: var(--custom-color-decorate);
+  }
+}
