@@ -1,20 +1,15 @@
-import React, { MouseEvent, useRef } from "react";
-import { IonIcon, IonRippleEffect, IonRouterLink } from "@ionic/react";
+import React, { useRef } from "react";
+import { IonRippleEffect, IonRouterLink } from "@ionic/react";
 import { CourseType } from "../../context/CoursesContext";
 import { serverName } from "../../http/server";
 import { useUser } from "../../context/UserContext";
 import { useListStyle } from "../../context/ListStyleContext";
-import { useBasket } from "../../context/BasketContext";
-import { pulseOne } from "../../animations/cardAnimations";
-import { flyToBasket } from "../../utils/flyToTarget";
-import basketIcon from "../../assets/icons/tabs/basket.svg";
-import deleteIcon from "../../assets/icons/delete.svg";
 import CardPrice from "../CardPrice/CardPrice";
-import InsetBtn from "../InsetBtn/InsetBtn";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import CardGrade from "../CardGrade/CardGrade";
 import InfoBtn from "../InfoBtn/InfoBtn";
 import styles from "./CourseItem.module.scss";
+import BuyCourseBtn from "../BuyCourseBtn/BuyCourseBtn";
 
 interface CourseItemTypes {
   course: CourseType;
@@ -26,28 +21,7 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
     (userCourse) => userCourse.course_id === course.id
   );
 
-  const basket = useBasket();
-
   const listStyle = useListStyle()?.listStyle;
-
-  const isCourseInBasket =
-    basket?.items.findIndex((item) => item.id === course.id) !== -1;
-
-  const toggleItem = (e: MouseEvent<HTMLButtonElement>) => {
-    const buttonEl = e.currentTarget;
-
-    if (!itemRef.current) return;
-
-    if (isCourseInBasket) {
-      pulseOne(itemRef.current)
-        .onFinish(() => basket?.toggleItemToBasket(course.id))
-        .play();
-    } else {
-      flyToBasket(buttonEl)
-        ?.onFinish(() => basket?.toggleItemToBasket(course.id))
-        .play();
-    }
-  };
 
   return (
     <li className={styles.itemWrapper} ref={itemRef}>
@@ -91,19 +65,7 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
             ) : (
               <>
                 <CardPrice oldPrice={course.old_price} price={course.price} />
-                <InsetBtn
-                  icon={
-                    <IonIcon
-                      className={
-                        isCourseInBasket ? styles.removeIcon : styles.basketIcon
-                      }
-                      src={isCourseInBasket ? deleteIcon : basketIcon}
-                    />
-                  }
-                  width="32rem"
-                  height="32rem"
-                  onClick={toggleItem}
-                />
+                <BuyCourseBtn courseId={course.id} />
               </>
             )}
           </div>

@@ -3,8 +3,7 @@ import { useUser } from "../../context/UserContext";
 import Accordion from "../Accordion/Accordion";
 import styles from "./CertificateList.module.scss";
 import CertificateItem from "./CertificateItem";
-
-type CertificateListProps = {};
+import { CourseCertificate } from "../../types/user";
 
 export type CertificateItemDataType = {
   type: "course" | "category";
@@ -12,15 +11,22 @@ export type CertificateItemDataType = {
   certificateLink: string | null;
   status?: "completed" | "in_progress" | null;
   link?: string;
+  courses?: CourseCertificate[];
+  categoryId?: number;
+  courseId?: number;
 };
 
-const CertificateList = ({}) => {
+const CertificateList = () => {
   const certificatesData = useUser()?.user.certificates;
 
   console.log(certificatesData);
 
   if (!certificatesData || certificatesData.length === 0) {
-    return <p>You have no purchased courses yet.</p>;
+    return (
+      <p className={styles.noCoursesMessage}>
+        You have no purchased courses yet.
+      </p>
+    );
   }
   return (
     <ul className={styles.certificateList}>
@@ -29,6 +35,8 @@ const CertificateList = ({}) => {
           type: "category",
           name: certificate.category_name,
           certificateLink: certificate.category_certificate_link,
+          courses: certificate.course_certificate_data,
+          categoryId: certificate.category_id,
         };
 
         return (
@@ -47,6 +55,7 @@ const CertificateList = ({}) => {
                           courseCertificate.course_certificate_link,
                         status: courseCertificate.course_status,
                         link: `/courses/course/${courseCertificate.course_id}`,
+                        courseId: courseCertificate.course_id,
                       };
 
                       return (

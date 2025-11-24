@@ -20,7 +20,11 @@ const flyToTarget = (sourceEl: HTMLElement, targetElement: HTMLElement) => {
   const deltaX = taretRectRect.left - sourceRect.left;
   const deltaY = taretRectRect.top - sourceRect.top;
 
-  return flyTo(clone, deltaX, deltaY).onFinish(() => clone.remove());
+  sourceEl.style.setProperty("opacity", "0");
+  return flyTo(clone, deltaX, deltaY).onFinish(() => {
+    sourceEl.style.setProperty("opacity", "1");
+    clone.remove();
+  });
 };
 
 export const flyToBasket = (sourceEl: HTMLElement) => {

@@ -1,6 +1,16 @@
 .certificateList {
   padding: 8rem 12rem 12rem;
   font-size: 14rem;
+
+  & > li:not(:last-child) {
+    margin-bottom: 8rem;
+  }
+
+  div[id="open"] {
+    .btnsWrapper {
+      opacity: 1;
+    }
+  }
 }
 
 .certificatesAccordionHeader {
@@ -23,7 +33,7 @@
   display: inline-flex;
   align-items: center;
   height: 36rem;
-  margin: 0 56rem 12rem 0;
+  margin: 0 84rem 12rem 0;
 
   .certificateTitle {
     margin: 0;
@@ -41,7 +51,7 @@
 }
 
 .courseCertificatesList {
-  padding-top: 12rem;
+  padding-top: 8rem;
   position: relative;
 
   &::before {
@@ -54,4 +64,86 @@
     border-radius: 10rem;
     background-color: var(--custom-color-decorate);
   }
+
+  & > li:not(:last-child) {
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1rem;
+      border-radius: 10rem;
+      background-color: var(--custom-color-decorate);
+    }
+  }
+
+  .itemContainer {
+    padding: 8rem 4rem 8rem 12rem;
+    position: relative;
+
+    .certificateLink {
+      height: 18rem;
+      margin-bottom: 6rem;
+    }
+
+    .certificateTitle {
+      -webkit-line-clamp: 1;
+    }
+  }
 }
+
+.certificateContentContainer {
+  display: flex;
+  justify-content: space-between;
+  padding-inline-end: 4rem;
+  align-items: center;
+}
+
+.tagList {
+  display: flex;
+  gap: 16rem;
+}
+
+.commonTag {
+  width: 44rem;
+  justify-content: center;
+  text-transform: capitalize;
+}
+
+.noCoursesMessage {
+  font-size: 14rem;
+  padding: 20rem 20rem;
+}
+
+.btnsWrapper {
+  display: flex;
+  align-items: center;
+  gap: 16rem;
+  opacity: 0;
+
+  .certificateBtn {
+    color: var(--ion-color-light);
+    font-size: 24rem;
+    background: none;
+    width: 24rem;
+    height: 24rem;
+  }
+}
+
+.courseCertificatesList {
+  .btnsWrapper {
+    position: absolute;
+    right: 4rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .tagList {
+    padding-inline-end: 84rem;
+  }
+}
+
+

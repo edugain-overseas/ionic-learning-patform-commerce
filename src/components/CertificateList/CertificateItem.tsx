@@ -1,10 +1,16 @@
 import { IonRouterLink } from "@ionic/react";
 import { CertificateItemDataType } from "./CertificateList";
+import TagList from "./TagList";
 import styles from "./CertificateList.module.scss";
+import Buttons from "./Buttons";
 
 const CertificateItem = ({ data }: { data: CertificateItemDataType }) => {
   return (
-    <div className={styles.itemContainer}>
+    <div
+      className={`${styles.itemContainer} ${
+        styles[data.type + "CertificateItem"]
+      }`}
+    >
       <IonRouterLink
         routerLink={data.link}
         routerDirection="forward"
@@ -13,9 +19,8 @@ const CertificateItem = ({ data }: { data: CertificateItemDataType }) => {
         <h4 className={styles.certificateTitle}>{data.name}</h4>
       </IonRouterLink>
       <div className={styles.certificateContentContainer}>
-        <ul>
-          <li>{data.type}</li>
-        </ul>
+        <TagList data={data} />
+        <Buttons data={data} />
       </div>
     </div>
   );
