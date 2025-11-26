@@ -98,7 +98,7 @@
 .certificateContentContainer {
   display: flex;
   justify-content: space-between;
-  padding-inline-end: 4rem;
+  padding-inline-end: 2rem;
   align-items: center;
 }
 
@@ -130,6 +130,7 @@
     background: none;
     width: 24rem;
     height: 24rem;
+    position: relative;
   }
 }
 
@@ -146,4 +147,41 @@
   }
 }
 
+.cetrificateModalWrapper {
+  padding-block: 20rem;
 
+  .certificatesModalHeader {
+    margin-inline: 14rem;
+    text-align: center;
+    padding-bottom: 12rem;
+    margin-bottom: 16rem;
+    border-bottom: 2rem solid var(--ion-color-light);
+
+    span {
+      font-family: Roboto;
+      font-size: 14rem;
+      font-weight: 700;
+      color: var(--ion-color-dark);
+    }
+  }
+
+  .certificateModalDownload {
+    padding-top: 16rem;
+    margin-top: 8rem;
+    margin-inline: 14rem;
+    border-top: 2rem solid var(--ion-color-light);
+    display: flex;
+    justify-content: center;
+    color: var(--ion-color-light);
+
+    button {
+      font-family: Roboto;
+      font-size: 14rem;
+      font-weight: 600;
+    }
+
+    .docDownloadIcon {
+      font-size: 14rem;
+    }
+  }
+}

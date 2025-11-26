@@ -11,7 +11,9 @@ const CardGrade: FC<{ grade?: number; maxGrade?: number }> = ({
       <img src={gradeAIcon} />
       <div className={styles.infoWrapper}>
         {/* <div> */}
-        <span className={styles.userGrade}>{`${grade}`.padStart(3, "0")} </span>
+        <span className={styles.userGrade}>
+          {`${grade || 0}`.padStart(3, "0")}{" "}
+        </span>
         <span className={styles.divider}>\</span>
         <div className={styles.maxGradeWrapper}>
           <span className={styles.maxGradeLabel}>Grade</span>

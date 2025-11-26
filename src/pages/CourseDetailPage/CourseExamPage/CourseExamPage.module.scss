@@ -5,6 +5,17 @@
   --content-offset-bottom: calc(16rem + var(--tabbar-offset));
 }
 
+.contentInnerWrapper {
+  min-height: 500px;
+  height: 100%;
+  padding-block: 32rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 14rem;
+  
+}
+
 .landingWrapper {
   --font-size-small: 14rem;
   --font-size-mid: 16rem;

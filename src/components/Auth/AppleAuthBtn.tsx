@@ -12,6 +12,7 @@ import Apple from "../../assets/icons/auth/apple.svg";
 import CommonButton from "../CommonButton/CommonButton";
 import Spinner from "../Spinner/Spinner";
 import styles from "./Auth.module.scss";
+import { clientName } from "../../http/server";
 
 const AppleAuthBtn = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -33,8 +34,7 @@ const AppleAuthBtn = () => {
 
     let options: SignInWithAppleOptions = {
       clientId,
-      redirectURI: "https://vps2.online",
-      // redirectURI: "https://7dac-176-38-25-248.ngrok-free.app/",
+      redirectURI: clientName,
       scopes: "email name",
       state: "12345",
       nonce: "nonce",

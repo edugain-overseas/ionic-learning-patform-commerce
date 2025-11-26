@@ -12,11 +12,11 @@ import { useToast } from "../../../hooks/useToast";
 import useStorage from "../../../hooks/useStorage";
 import Header from "../../../components/Header/Header";
 import ExamLanding, { ExamLandingBtn } from "./ExamLanding";
-import PrimaryScrollConteinerLayout from "../../../components/PrimaryScrollConteinerLayout/PrimaryScrollConteinerLayout";
 import TestContent from "../../../components/Test/TestContent";
 import Spinner from "../../../components/Spinner/Spinner";
 import TestTimer from "../../../components/TestTimer/TestTimer";
 import styles from "./CourseExamPage.module.scss";
+import StickyScrollLayout from "../../../components/StickyScrollLayout/StickyScrollLayout";
 
 export type ExamResult = "acceptable" | "absolute" | "failed" | "no_result";
 
@@ -311,7 +311,7 @@ const CourseExamPage: FC = () => {
       return;
     }
 
-    const certificateName = `Certificate of ${certificate.course_name} course`;
+    const certificateName = `Certificate of ${certificate.course_name} course.pdf`;
     const certificateUrl = `${serverName}/${certificateLink}`;
 
     await downloadFile(certificateUrl, certificateName);
@@ -368,29 +368,32 @@ const CourseExamPage: FC = () => {
             <div className={styles.timerWrapper}>
               <TestTimer time={currentAttempt.timer} />
             </div>
-            <PrimaryScrollConteinerLayout
+            <StickyScrollLayout
               posterSrc={`${serverName}/${exam.image_path}`}
-              endPosition={132}
+              topScrollEndPosition={190}
+              topLabel="Exam"
             >
-              {examLessonData && (
-                <TestContent
-                  test={exam}
-                  studentAnswers={studentAnswers}
-                  setStudentAnswers={setStudentAnswers}
-                />
-              )}
-              <div className={styles.btnsWrapper}>
-                {examLessonData ? (
-                  <ExamLandingBtn
-                    label="Complete"
-                    variant="primary"
-                    onClick={sendAttempt}
+              <div className={styles.contentInnerWrapper}>
+                {examLessonData && (
+                  <TestContent
+                    test={exam}
+                    studentAnswers={studentAnswers}
+                    setStudentAnswers={setStudentAnswers}
                   />
-                ) : (
-                  <Spinner />
                 )}
+                <div className={styles.btnsWrapper}>
+                  {examLessonData ? (
+                    <ExamLandingBtn
+                      label="Complete"
+                      variant="primary"
+                      onClick={sendAttempt}
+                    />
+                  ) : (
+                    <Spinner />
+                  )}
+                </div>
               </div>
-            </PrimaryScrollConteinerLayout>
+            </StickyScrollLayout>
           </>
         ) : (
           <ExamLanding

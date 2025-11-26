@@ -454,35 +454,35 @@ div.profileData {
   }
 }
 
-div.swiper {
-  padding-bottom: 16rem;
-  --swiper-pagination-bottom: 0;
+// div.swiper {
+//   padding-bottom: 16rem;
+//   --swiper-pagination-bottom: 0;
 
-  .slide {
-    width: auto;
-  }
+//   .slide {
+//     width: auto;
+//   }
 
-  .customBullet {
-    display: inline-block;
-    width: 10rem;
-    height: 10rem;
-    background-color: var(--ion-tab-bar-color);
-    box-shadow: var(--custom-box-shadow-secondary-inset);
-    position: relative;
+//   .customBullet {
+//     display: inline-block;
+//     width: 10rem;
+//     height: 10rem;
+//     background-color: var(--ion-tab-bar-color);
+//     box-shadow: var(--custom-box-shadow-secondary-inset);
+//     position: relative;
 
-    &::before {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 6rem;
-      height: 6rem;
-      border-radius: 50%;
-      background-color: var(--ion-color-light);
-    }
-  }
-}
+//     &::before {
+//       content: "";
+//       position: absolute;
+//       top: 50%;
+//       left: 50%;
+//       transform: translate(-50%, -50%);
+//       width: 6rem;
+//       height: 6rem;
+//       border-radius: 50%;
+//       background-color: var(--ion-color-light);
+//     }
+//   }
+// }
 
 .editDataModal {
   --border-radius: 16rem;
