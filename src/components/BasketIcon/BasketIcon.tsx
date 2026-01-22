@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { useBasket } from "../../context/BasketContext";
 import { IonIcon } from "@ionic/react";
-import basketIcon from "../../assets/icons/tabs/basket.svg";
+import basketIcon from "../../assets/icons/nav/basket.svg";
 import styles from "./BasketIcon.module.scss";
 
 const BasketIcon: FC = () => {

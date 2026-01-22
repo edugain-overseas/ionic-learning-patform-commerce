@@ -17,7 +17,7 @@ const CategoryItem: React.FC<CategoryItemTypes> = ({ category }) => {
     >
       <IonRouterLink
         className={`${styles.link} ion-activatable`}
-        routerLink={`/courses/category/${category.id}`}
+        routerLink={`/category/${category.id}`}
       >
         <div className={styles.contentWrapper}>
           <div className={styles.itemIcon}>

@@ -35,7 +35,7 @@ http://ionicframework.com/docs/theming/ */
   --custom-tr-time-mid: 0.2s;
   --custom-tr-time-min: 0.15s;
 
-  --ion-color-primary: #d00000;
+  --ion-color-primary: #B80101;
   --ion-color-primary-rgb: 208, 0, 0;
   --ion-color-primary-contrast: #fcfcfc;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
@@ -86,7 +86,7 @@ http://ionicframework.com/docs/theming/ */
 
   --ion-color-medium: #bdc4d2;
   --ion-color-medium-rgb: 95, 95, 95;
-  --ion-color-medium-contrast: #fcfcfc;
+  --ion-color-medium-contrast: #fefefe;
   --ion-color-medium-contrast-rgb: 255, 255, 255;
   --ion-color-medium-shade: #545454;
   --ion-color-medium-tint: #6f6f6f;

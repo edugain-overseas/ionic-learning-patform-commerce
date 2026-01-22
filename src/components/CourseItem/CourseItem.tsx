@@ -7,7 +7,6 @@ import { useListStyle } from "../../context/ListStyleContext";
 import CardPrice from "../CardPrice/CardPrice";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import CardGrade from "../CardGrade/CardGrade";
-import InfoBtn from "../InfoBtn/InfoBtn";
 import styles from "./CourseItem.module.scss";
 import BuyCourseBtn from "../BuyCourseBtn/BuyCourseBtn";
 
@@ -22,6 +21,9 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
   );
 
   const listStyle = useListStyle()?.listStyle;
+
+console.log(course.bought);
+
 
   return (
     <li className={styles.itemWrapper} ref={itemRef}>
@@ -53,35 +55,31 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
           </div>
         )}
         <div className={styles.courseInfo}>
-          <div className={styles.colLeft}>
-            <h3 className={styles.courseTitle}>{course.title}</h3>
-          </div>
-          <div className={styles.colRight}>
-            {userCourseData ? (
+          <h3 className={styles.courseTitle}>{course.title}</h3>
+          <div className={styles.btnsWrapper}>
+            {course.bought ? (
               <>
+                <div className={styles.progress}>
+                  Progress:{" "}
+                  <ProgressBar
+                    value={course.progress}
+                    width={160}
+                    height={10}
+                    showValue={false}
+                  />
+                </div>
                 <CardGrade grade={course.grade} />
-                <InfoBtn info={course.intro_text} />
               </>
             ) : (
               <>
-                <CardPrice oldPrice={course.old_price} price={course.price} />
+                <CardPrice
+                  oldPrice={course.old_price}
+                  price={course.price}
+                />
                 <BuyCourseBtn courseId={course.id} />
               </>
             )}
           </div>
-        </div>
-        <div className={styles.progress}>
-          Progress:{" "}
-          {userCourseData ? (
-            <ProgressBar
-              value={course.progress}
-              width={160}
-              height={10}
-              showValue={false}
-            />
-          ) : (
-            "Not purchased"
-          )}
         </div>
         <IonRippleEffect></IonRippleEffect>
       </IonRouterLink>

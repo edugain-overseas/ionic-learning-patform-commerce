@@ -1,7 +1,7 @@
-import { FC, useEffect, useRef } from "react";
+import { FC, ReactElement, useEffect, useRef } from "react";
 import styles from "./Header.module.scss";
 
-const HeaderTitle: FC<{ title: string }> = ({ title }) => {
+const HeaderTitle: FC<{ title: string | ReactElement }> = ({ title }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLSpanElement>(null);
 

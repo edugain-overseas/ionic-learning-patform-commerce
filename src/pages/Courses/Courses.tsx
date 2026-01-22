@@ -1,16 +1,13 @@
 import { IonContent, IonPage, RefresherEventDetail } from "@ionic/react";
-import React, { useEffect, useState } from "react";
-import {
-  coursesPrivateNavItems,
-  coursesPublicNavItems,
-} from "../../constants/nav";
+import React, { useState } from "react";
+import { coursesFilter } from "../../constants/nav";
 import { useCourses } from "../../context/CoursesContext";
 import { useUser } from "../../context/UserContext";
 import Header from "../../components/Header/Header";
 import CategoryItem from "../../components/CategoryItem/CategoryItem";
 import SegmentNavPanel from "../../components/SegmentNavPanel/SegmentNavPanel";
-import styles from "./Courses.module.scss";
 import PageRefresher from "../../components/PageRefresher/PageRefresher";
+import styles from "./Courses.module.scss";
 
 const Courses: React.FC = () => {
   const userInterface = useUser();
@@ -19,45 +16,47 @@ const Courses: React.FC = () => {
   const categories = coursesInterface?.categories;
   const courses = coursesInterface?.courses;
   const userCourses = userInterface?.user.courses;
-  const [filter, setFilter] = useState<string>(isLoggedIn ? "my" : "available");
+  const [filter, setFilter] = useState<string>(coursesFilter[0].value);
 
   const handleFilterCategory = () => {
-    switch (filter) {
-      case "my": {
-        let userCoursesIds: number[] = [];
-        userCourses?.forEach((course) => userCoursesIds.push(course.course_id));
+    const availableCourses = courses?.filter((course) => !course.bought);
+    let categoriesIds: number[] = [];
 
-        let categoriesWithPurchasedCoursesIds: number[] = [];
-        courses?.forEach((course) => {
-          if (userCoursesIds.includes(course.id)) {
-            categoriesWithPurchasedCoursesIds.push(course.category_id);
+    switch (filter) {
+      case "all": {
+        availableCourses?.forEach((course) => {
+          if (!categoriesIds.includes(course.category_id)) {
+            categoriesIds.push(course.category_id);
           }
         });
 
         return categories?.filter((category) =>
-          categoriesWithPurchasedCoursesIds.includes(category.id)
+          categoriesIds.includes(category.id)
         );
       }
-      case "available":
-        return categories;
-      case "completed": {
-        const completedUserCourses = userCourses?.filter(
-          (course) => course.progress === 100
-        );
-        let userCoursesIds: number[] = [];
-        completedUserCourses?.forEach((course) =>
-          userCoursesIds.push(course.course_id)
-        );
-
-        let categoriesWithPurchasedCoursesIds: number[] = [];
-        courses?.forEach((course) => {
-          if (userCoursesIds.includes(course.id)) {
-            categoriesWithPurchasedCoursesIds.push(course.category_id);
+      case "short courses":
+        availableCourses?.forEach((course) => {
+          if (
+            course.type === "short" &&
+            !categoriesIds.includes(course.category_id)
+          ) {
+            categoriesIds.push(course.category_id);
           }
         });
-
         return categories?.filter((category) =>
-          categoriesWithPurchasedCoursesIds.includes(category.id)
+          categoriesIds.includes(category.id)
+        );
+      case "long courses": {
+        availableCourses?.forEach((course) => {
+          if (
+            course.type === "long" &&
+            !categoriesIds.includes(course.category_id)
+          ) {
+            categoriesIds.push(course.category_id);
+          }
+        });
+        return categories?.filter((category) =>
+          categoriesIds.includes(category.id)
         );
       }
       default:
@@ -65,21 +64,10 @@ const Courses: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      setFilter("my");
-    } else {
-      setFilter("available");
-    }
-  }, [isLoggedIn]);
-
   const headerProps = {
-    title: "Categories of Courses",
-    left: [{ name: "back" }, { name: "notification", onClick: () => {} }],
-    right: [
-      { name: "filter", onClick: () => {} },
-      { name: "search", onClick: () => {} },
-    ],
+    title: "Categories",
+    left: [{ name: "back" }, { name: "search", onClick: () => {} }],
+    right: [{ name: "notification" }, { name: "user" }],
   };
 
   const onRefresh = coursesInterface?.getAllCategories;
@@ -88,18 +76,15 @@ const Courses: React.FC = () => {
     <IonPage id="courses" className="primaryPage">
       <Header {...headerProps} />
       <IonContent className="custom-content-wrapper">
-        {isLoggedIn && (
+        <div style={{ marginBottom: "12rem" }}>
           <SegmentNavPanel
             value={filter}
             setValue={setFilter}
-            items={isLoggedIn ? coursesPrivateNavItems : coursesPublicNavItems}
+            items={coursesFilter}
           />
-        )}
+        </div>
         {onRefresh && <PageRefresher onRefresh={onRefresh} />}
-        <ul
-          className={styles.categoriesList}
-          style={{ paddingTop: isLoggedIn ? 0 : "16rem" }}
-        >
+        <ul className={styles.categoriesList}>
           {handleFilterCategory()?.map((category) => (
             <CategoryItem category={category} key={category.id} />
           ))}

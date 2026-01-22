@@ -1,4 +1,4 @@
-import { FC, ReactNode} from "react";
+import { FC, ReactNode } from "react";
 import {
   IonIcon,
   IonLabel,
@@ -10,36 +10,30 @@ import {
   IonTabs,
 } from "@ionic/react";
 import { TabNameType, tabsData, TabType } from "../constants/nav";
-import HomeIcon from "../assets/icons/tabs/home.svg";
-import CoursesIcon from "../assets/icons/tabs/courses.svg";
-import MyProfileIcon from "../assets/icons/tabs/my-profile.svg";
-import MenuIcon from "../assets/icons/tabs/menu.svg";
+import HomeIcon from "../assets/icons/nav/home.svg";
+import CoursesIcon from "../assets/icons/nav/courses.svg";
+import MyStudyIcon from "../assets/icons/nav/my-education.svg";
+import MenuIcon from "../assets/icons/nav/menu.svg";
 import BasketIcon from "./BasketIcon/BasketIcon";
 
 interface TabsTypes {
   children: ReactNode;
 }
 
-type IconsType = Record<Exclude<TabNameType, "basket">, string>;
+type IconsType = Record<Exclude<TabNameType, "Basket">, string>;
 
 const icons: IconsType = {
-  home: HomeIcon,
-  courses: CoursesIcon,
-  "my-profile": MyProfileIcon,
+  Home: HomeIcon,
+  "All Courses": CoursesIcon,
+  "My Study": MyStudyIcon,
 };
 
 const renderTabIcon = (tab: TabType): ReactNode =>
-  tab.label === "basket" ? (
+  tab.label === "Basket" ? (
     <BasketIcon />
   ) : (
     <IonIcon src={icons[tab.label]} className="custom-tab-icon" />
   );
-
-const renderTabLabel = (tab: TabType): ReactNode => (
-  <IonLabel>{tab.label === "my-profile" ? "profile" : tab.label}</IonLabel>
-);
-
-const tabOrder = ["home", "courses", "my-profile", "basket"];
 
 const Tabs: FC<TabsTypes> = ({ children }) => {
   return (
@@ -50,13 +44,13 @@ const Tabs: FC<TabsTypes> = ({ children }) => {
       <IonTabBar slot="bottom" className="custom-tab-bar" id="main-content">
         {tabsData.map((tab) => (
           <IonTabButton
-            key={tab.label}
-            tab={tab.label}
+            key={tab.href}
+            tab={tab.label.toLocaleLowerCase()}
             href={tab.href}
             className="ion-activatable"
           >
             {renderTabIcon(tab)}
-            {renderTabLabel(tab)}
+            <IonLabel>{tab.label}</IonLabel>
             <IonRippleEffect type="unbounded"></IonRippleEffect>
           </IonTabButton>
         ))}

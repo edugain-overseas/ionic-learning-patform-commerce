@@ -2,10 +2,9 @@ import { MouseEvent } from "react";
 import { IonIcon } from "@ionic/react";
 import { flyToBasket } from "../../utils/flyToTarget";
 import { useBasket } from "../../context/BasketContext";
-import basketIcon from "../../assets/icons/tabs/basket.svg";
-import deleteIcon from "../../assets/icons/delete.svg";
-import InsetBtn from "../InsetBtn/InsetBtn";
+import basketIcon from "../../assets/icons/nav/basket.svg";
 import styles from "./BuyCourseBtn.module.scss";
+import CommonButton from "../CommonButton/CommonButton";
 
 const BuyCourseBtn = ({
   courseId,
@@ -32,17 +31,13 @@ const BuyCourseBtn = ({
   };
 
   return (
-    <InsetBtn
-      icon={
-        <IonIcon
-          className={isCourseInBasket ? styles.removeIcon : styles.basketIcon}
-          src={isCourseInBasket ? deleteIcon : basketIcon}
-        />
-      }
-      width="32rem"
-      height="32rem"
+    <CommonButton
+      icon={<IonIcon className={styles.basketIcon} src={basketIcon} />}
+      label={isCourseInBasket ? "Remove" : "Buy"}
       onClick={toggleItem}
-      buttonClassName={className}
+      className={`${styles.buyCourseBtn} ${
+        isCourseInBasket ? styles.bgBlue : styles.bgRed
+      } ${className}`}
     />
   );
 };

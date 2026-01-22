@@ -2,7 +2,7 @@ import { FC } from "react";
 import { IonIcon } from "@ionic/react";
 import { useUser } from "../../context/UserContext";
 import { useAuthUi } from "../../context/AuthUIContext";
-import userIcon from "../../assets/icons/tabs/my-profile.svg";
+import userIcon from "../../assets/icons/nav/my-profile.svg";
 import singInIcon from "../../assets/icons/auth/sing-in.svg";
 import EqualSpaceContainer from "../EqualSpaceContainer/EqualSpaceContainer";
 import CommonButton from "../CommonButton/CommonButton";

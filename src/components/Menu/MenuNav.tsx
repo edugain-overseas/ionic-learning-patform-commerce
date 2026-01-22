@@ -1,11 +1,10 @@
-import React from "react";
-import { menuNav } from "../../constants/nav";
 import {
   IonIcon,
   IonMenuToggle,
   IonRippleEffect,
   IonRouterLink,
 } from "@ionic/react";
+import { menuNav } from "../../constants/nav";
 import styles from "./Menu.module.scss";
 
 const MenuNav = () => {

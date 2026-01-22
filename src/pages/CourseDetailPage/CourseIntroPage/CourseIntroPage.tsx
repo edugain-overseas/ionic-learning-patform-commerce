@@ -11,7 +11,7 @@ import clock from "../../../assets/icons/clock.svg";
 import schollOnline from "../../../assets/icons/introPage/school-online.svg";
 import clockBig from "../../../assets/icons/introPage/clock.svg";
 import certificate from "../../../assets/icons/introPage/certificate.svg";
-import basket from "../../../assets/icons/tabs/basket.svg";
+import basket from "../../../assets/icons/nav/basket.svg";
 import remove from "../../../assets/icons/delete.svg";
 import devices from "../../../assets/images/devices.png";
 import StickyScrollLayout from "../../../components/StickyScrollLayout/StickyScrollLayout";
@@ -40,11 +40,10 @@ const CourseIntroPage: React.FC = () => {
   );
 
   const coursesToPropose = courses?.filter(
-    (courseItem) => (courseItem.id !== +courseId) && !courseItem.bought
+    (courseItem) => courseItem.id !== +courseId && !courseItem.bought
   );
 
   console.log(courses);
-  
 
   return (
     <>
@@ -57,6 +56,7 @@ const CourseIntroPage: React.FC = () => {
         />
       </IonHeader>
       <IonContent scrollY={false} className={styles.content}>
+        {/* <CourseNavPanel /> */}
         <StickyScrollLayout
           posterSrc={`${serverName}/${course?.image_path}`}
           topLabel={`Category: ${category?.title}`}
@@ -194,11 +194,8 @@ const CourseIntroPage: React.FC = () => {
             )}
           </div>
         </StickyScrollLayout>
-
-        <div className={styles.bottomBar}>
-          {isCoursePurchased ? (
-            <CourseNavPanel />
-          ) : (
+        {!isCoursePurchased && (
+          <div className={styles.bottomBar}>
             <EqualSpaceContainer
               leftItem={
                 <div className={styles.priceWrapper}>
@@ -232,9 +229,9 @@ const CourseIntroPage: React.FC = () => {
                   }
                 />
               }
-            ></EqualSpaceContainer>
-          )}
-        </div>
+            />
+          </div>
+        )}
       </IonContent>
     </>
   );

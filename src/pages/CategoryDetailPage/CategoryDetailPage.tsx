@@ -1,14 +1,11 @@
 import {
   IonContent,
   IonPage,
-  IonSegment,
-  IonSegmentButton,
   ScrollDetail,
-  SegmentChangeEventDetail,
   useIonViewDidLeave,
   useIonViewWillEnter,
 } from "@ionic/react";
-import React, { useMemo, useRef } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
 import { useUser } from "../../context/UserContext";
@@ -21,23 +18,17 @@ import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import CourseItem from "../../components/CourseItem/CourseItem";
 import UnauthorizedUserContentFallback from "../../components/UnauthorizedUserContentFallback/UnauthorizedUserContentFallback";
 import Auth from "../../components/Auth/Auth";
-import styles from "./CategoryDetailPage.module.scss";
 import PageRefresher from "../../components/PageRefresher/PageRefresher";
+import styles from "./CategoryDetailPage.module.scss";
 
-const MAX_SCROLL_VALUE = 112;
-
-const headerProps = {
-  title: "Courses",
-  secondary: true,
-  left: [{ name: "back" }],
-  right: [{ name: "list-style", onClick: () => {} }],
-};
+const MAX_SCROLL_VALUE = 91;
 
 const CategoryDetailPage: React.FC = () => {
+  // const [headerShown, setHeaderShown] = useState(false);
+
   useIonViewWillEnter(() => {
     changeStausBarTheme("Dark");
   });
-
   useIonViewDidLeave(() => {
     changeStausBarTheme("Light");
   });
@@ -61,33 +52,45 @@ const CategoryDetailPage: React.FC = () => {
   const showContentFallback =
     filter === "In process" && userCourses?.length === 0;
 
-  const handleProgress = useMemo(() => {
-    let coursesIds: number[] = [];
-    courses?.forEach((course) => coursesIds.push(course.id));
+  // const handleProgress = useMemo(() => {
+  //   let coursesIds: number[] = [];
+  //   courses?.forEach((course) => coursesIds.push(course.id));
 
-    const purchasedCoursesData = userCourses?.filter((course) =>
-      coursesIds.includes(course.course_id)
-    );
-    if (courses && purchasedCoursesData) {
-      return Math.round(
-        purchasedCoursesData?.reduce(
-          (total, course) =>
-            course.progress ? total + course.progress : total,
-          0
-        ) / (courses.length ? courses.length : 1)
-      );
-    }
-  }, [userCourses]);
+  //   const purchasedCoursesData = userCourses?.filter((course) =>
+  //     coursesIds.includes(course.course_id)
+  //   );
+  //   if (courses && purchasedCoursesData) {
+  //     return Math.round(
+  //       purchasedCoursesData?.reduce(
+  //         (total, course) =>
+  //           course.progress ? total + course.progress : total,
+  //         0
+  //       ) / (courses.length ? courses.length : 1)
+  //     );
+  //   }
+  // }, [userCourses]);
 
   const contentRef = useRef<HTMLIonContentElement>(null);
   const topContentRef = useRef<HTMLDivElement>(null);
   const bottomInnerRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLSpanElement>(null);
+
+  const toggleHeaderTitleVisibility = (visible: Boolean) => {
+    if (visible) {
+      headerRef.current?.classList.add(styles.headerVisible);
+      return;
+    }
+    headerRef.current?.classList.remove(styles.headerVisible);
+  };
 
   const handleScroll = (e: CustomEvent<ScrollDetail>) => {
+    const hideCoef = e.detail.scrollTop / remToPx(MAX_SCROLL_VALUE);
     topContentRef.current?.style.setProperty(
       "--hide-coefficient",
-      `${e.detail.scrollTop / remToPx(MAX_SCROLL_VALUE)}`
-    );
+      `${hideCoef}`
+    );    
+
+    toggleHeaderTitleVisibility(hideCoef > 0.4)
   };
 
   const handleScrollEnd = async () => {
@@ -110,12 +113,12 @@ const CategoryDetailPage: React.FC = () => {
     }
   };
 
-  const onSegmentChange = (event: CustomEvent<SegmentChangeEventDetail>) => {
-    const { value } = event.detail;
-    if (value !== undefined) {
-      setFilter(`${value}`);
-    }
-  };
+  // const onSegmentChange = (event: CustomEvent<SegmentChangeEventDetail>) => {
+  //   const { value } = event.detail;
+  //   if (value !== undefined) {
+  //     setFilter(`${value}`);
+  //   }
+  // };
 
   const handleFilterCourses = () => {
     let userCoursesIds: number[] = [];
@@ -134,6 +137,13 @@ const CategoryDetailPage: React.FC = () => {
 
   const onRefresh = coursesInterface?.getAllCourses;
 
+  const headerProps = {
+    title: <span ref={headerRef} className={styles.headerTitle}>{category?.title}</span>,
+    secondary: true,
+    left: [{ name: "back" }, { name: "list-style" }],
+    right: [{ name: "notification" }, { name: "user" }],
+  };
+
   return (
     <IonPage className={styles.papeWrapper}>
       <Header {...headerProps} />
@@ -145,7 +155,12 @@ const CategoryDetailPage: React.FC = () => {
         ref={contentRef}
         style={{ overflow: "hidden" }}
       >
-        {onRefresh && <PageRefresher onRefresh={onRefresh} containerClassname={styles.refresher}/>}
+        {onRefresh && (
+          <PageRefresher
+            onRefresh={onRefresh}
+            containerClassname={styles.refresher}
+          />
+        )}
         <div className={styles.topContentWrapper} ref={topContentRef}>
           <div className={styles.topScaler}>
             <div className={styles.pageTitle}>
@@ -163,7 +178,7 @@ const CategoryDetailPage: React.FC = () => {
                 ></p>
               </div>
             </div>
-            <div className={styles.progressWrapper}>
+            {/* <div className={styles.progressWrapper}>
               <span className={styles.progressValue}>
                 Progress: {handleProgress} / 100%
               </span>
@@ -173,9 +188,9 @@ const CategoryDetailPage: React.FC = () => {
                 height={10}
                 showValue={false}
               />
-            </div>
+            </div> */}
           </div>
-          <IonSegment
+          {/* <IonSegment
             value={filter}
             className={styles.segment}
             mode="ios"
@@ -190,7 +205,7 @@ const CategoryDetailPage: React.FC = () => {
             <IonSegmentButton className={styles.segmentBtn} value="All courses">
               <span>All courses</span>
             </IonSegmentButton>
-          </IonSegment>
+          </IonSegment> */}
         </div>
         <div className={`${styles.bottomOuter} ${styles.background}`}>
           <div className={styles.controllerWrapper}>
@@ -198,7 +213,7 @@ const CategoryDetailPage: React.FC = () => {
           </div>
           <div className={styles.bottomInner} ref={bottomInnerRef}>
             <div className={styles.innerHeader}>
-              <div></div>
+              <div>Available</div>
               <div>
                 <span>Purchased:</span>{" "}
                 {`${

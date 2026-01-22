@@ -137,6 +137,7 @@ export interface CourseType {
   skills_text?: string;
   progress?: number;
   grade?: number;
+  type: "short" | "long";
 }
 
 export interface CategoryType {

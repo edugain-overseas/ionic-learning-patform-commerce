@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, ReactElement } from "react";
 import {
   IonBackButton,
   IonButton,
@@ -7,7 +7,6 @@ import {
   IonIcon,
   IonImg,
   IonToolbar,
-  useIonToast,
 } from "@ionic/react";
 import { useListStyle } from "../../context/ListStyleContext";
 import bellIcon from "../../assets/icons/header/bell.svg";
@@ -27,6 +26,7 @@ import HeaderTitle from "./HeaderTitle";
 import Spinner from "../Spinner/Spinner";
 import styles from "./Header.module.scss";
 import { useToast } from "../../hooks/useToast";
+import HeaderAvatar from "./HeaderAvatar";
 
 interface ButtonPropsTypes extends CustomBackButtonProps {
   name: string;
@@ -38,7 +38,7 @@ interface ButtonPropsTypes extends CustomBackButtonProps {
 }
 
 interface HeaderTypes {
-  title?: string;
+  title?: string | ReactElement;
   secondary?: boolean | undefined;
   left?: ButtonPropsTypes[];
   right?: ButtonPropsTypes[];
@@ -199,6 +199,18 @@ const renderBtn = (props: ButtonPropsTypes, handleNotification: () => void) => {
           )}
         </IonButton>
       );
+    case "user":
+      return (
+        <IonButton
+          key={props.name}
+          className={props.className ? props.className : ""}
+          routerLink="/my-profile"
+          routerDirection="forward"
+          id={props.id}
+        >
+          <HeaderAvatar />
+        </IonButton>
+      );
     default:
       break;
   }
@@ -216,7 +228,7 @@ const Header: FC<HeaderTypes> = ({
 
   const handleNotification = () => {
     present({
-      type: 'warning',
+      type: "warning",
       message: "You don't have notification yet",
       duration: 3000,
     });

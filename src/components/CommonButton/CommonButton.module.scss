@@ -2,11 +2,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8rem;
+  gap: 12rem;
   font-weight: inherit;
   font-size: inherit;
   box-shadow: var(--custom-box-shadow-primary);
   position: relative;
+  padding: 6rem 12rem;
+  color: inherit;
 
   span {
     font-weight: inherit;

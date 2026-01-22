@@ -1,10 +1,10 @@
-import React from "react";
+import React, { MouseEvent } from "react";
 import styles from "./CommonButton.module.scss";
 import { IonRippleEffect } from "@ionic/react";
 
 interface CommonButtonTypes {
   id?: string;
-  type?: "button" | "submit" | "reset" | undefined;
+  type?: "button" | "submit" | "reset";
   width?: number;
   height?: number | string;
   block?: boolean;
@@ -15,7 +15,7 @@ interface CommonButtonTypes {
   color?: string;
   backgroundColor?: string;
   className?: string;
-  onClick?: () => void;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
 }
 
@@ -23,9 +23,9 @@ const CommonButton: React.FC<CommonButtonTypes> = ({
   id,
   type = "button",
   width,
-  height = 'auto',
+  height = "auto",
   block = false,
-  borderRadius = 0,
+  borderRadius = 5,
   border,
   label,
   icon,
@@ -35,9 +35,10 @@ const CommonButton: React.FC<CommonButtonTypes> = ({
   disabled,
   onClick,
 }) => {
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     e.stopPropagation();
-    onClick && onClick();
+    onClick?.(e);
   };
   return (
     <button
@@ -46,9 +47,8 @@ const CommonButton: React.FC<CommonButtonTypes> = ({
       }`}
       style={{
         width: block ? "100%" : width ? `${width}rem` : "auto",
-        height: typeof(height) === 'number' ? `${height}rem` :  height,
-        color: color ? color : "inherit",
-        backgroundColor: backgroundColor ? backgroundColor : "inherit",
+        height: typeof height === "number" ? `${height}rem` : height,
+        backgroundColor: backgroundColor && backgroundColor,
         borderRadius: `${borderRadius}rem`,
         border: border ? border : "none",
       }}

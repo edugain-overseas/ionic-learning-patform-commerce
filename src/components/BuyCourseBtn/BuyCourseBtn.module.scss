@@ -1,9 +1,25 @@
+.buyCourseBtn {
+  color: var(--ion-color-primary-contrast);
+  transition: all var(--custom-tr-time-mid);
+  span {
+    font-size: 14rem;
+    font-weight: 500;
+  }
+}
+
+.bgRed {
+  background-color: var(--ion-color-primary);
+}
+
+.bgBlue {
+  background-color: var(--ion-color-light);
+}
+
 .basketIcon {
-  font-size: 16rem;
-  color: var(--ion-color-light);
+  font-size: 20rem;
 }
 
 .removeIcon {
   font-size: 32rem;
-  color: var(--ion-color-primary);
+  margin: -6rem;
 }

@@ -4,7 +4,7 @@ import { useUser } from "../../context/UserContext";
 import { useForm } from "react-hook-form";
 import { useToast } from "../../hooks/useToast";
 import { emailRegex } from "../../constants/regExps";
-import User from "../../assets/icons/tabs/my-profile.svg";
+import User from "../../assets/icons/nav/my-profile.svg";
 import InputText from "./Inputs/InutText";
 import InputPassword from "./Inputs/InputPassword";
 import CommonButton from "../CommonButton/CommonButton";

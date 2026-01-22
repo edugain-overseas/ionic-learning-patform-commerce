@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import EditIcon from "../../assets/icons/tabs/my-profile.svg";
+import EditIcon from "../../assets/icons/nav/my-profile.svg";
 import styles from "./Avatar.module.scss";
 import AvatarFallback from "./AvatarFallback/AvatarFallback";
 import { IonIcon } from "@ionic/react";
