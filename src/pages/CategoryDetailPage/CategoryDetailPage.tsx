@@ -5,7 +5,7 @@ import {
   useIonViewDidLeave,
   useIonViewWillEnter,
 } from "@ionic/react";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
 import { useUser } from "../../context/UserContext";
@@ -24,7 +24,6 @@ import styles from "./CategoryDetailPage.module.scss";
 const MAX_SCROLL_VALUE = 91;
 
 const CategoryDetailPage: React.FC = () => {
-  // const [headerShown, setHeaderShown] = useState(false);
 
   useIonViewWillEnter(() => {
     changeStausBarTheme("Dark");

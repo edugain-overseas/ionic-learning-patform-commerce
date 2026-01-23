@@ -44,6 +44,7 @@ interface HeaderTypes {
   right?: ButtonPropsTypes[];
   mode?: string;
   toolbarClassName?: string;
+  headerClassName?: string;
 }
 
 const renderBtn = (props: ButtonPropsTypes, handleNotification: () => void) => {
@@ -223,6 +224,7 @@ const Header: FC<HeaderTypes> = ({
   right = [],
   mode,
   toolbarClassName,
+  headerClassName,
 }) => {
   const [present] = useToast();
 
@@ -235,7 +237,11 @@ const Header: FC<HeaderTypes> = ({
   };
 
   return (
-    <IonHeader className={`${styles.header} ${mode ? styles[mode] : ""}`}>
+    <IonHeader
+      className={`${styles.header} ${mode ? styles[mode] : ""} ${
+        headerClassName ? headerClassName : ""
+      }`}
+    >
       <IonToolbar
         className={`${secondary ? styles.secondary : ""} ${styles.toolbar} ${
           toolbarClassName ? toolbarClassName : ""

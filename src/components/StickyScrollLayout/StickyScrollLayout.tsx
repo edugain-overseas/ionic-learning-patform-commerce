@@ -1,5 +1,10 @@
 import { FC, ReactNode, useEffect, useRef } from "react";
-import { useScroll, useTransform, motion } from "motion/react";
+import {
+  useScroll,
+  useTransform,
+  motion,
+  useMotionValueEvent,
+} from "motion/react";
 import styles from "./StickyScrollLayout.module.scss";
 
 type StickyScrollLayoutProps = {
@@ -8,6 +13,7 @@ type StickyScrollLayoutProps = {
   posterSrc: string;
   topScrollStartPosition?: number;
   topScrollEndPosition?: number;
+  onProgressChange?: (progress: number) => void;
 };
 
 const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
@@ -15,7 +21,8 @@ const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
   topLabel,
   posterSrc,
   topScrollStartPosition = 310,
-  topScrollEndPosition = 68,
+  topScrollEndPosition = 106,
+  onProgressChange,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -23,7 +30,13 @@ const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
 
   const maxOffset = topScrollStartPosition - topScrollEndPosition;
 
-  const moveY = useTransform(scrollY, [0, maxOffset], [0, -maxOffset]);
+  const progress = useTransform(scrollY, [maxOffset, 0], [1, 0], {
+    clamp: true,
+  });
+
+  useMotionValueEvent(progress, "change", (value) => {
+    onProgressChange?.(value);
+  });
 
   useEffect(() => {
     const container = containerRef.current;
@@ -42,9 +55,6 @@ const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
       <div className={styles.posterContainer}>
         <img src={posterSrc} alt={topLabel ? topLabel : "page-poster"} />
       </div>
-      <motion.div className={styles.contentBackground} style={{ y: moveY }}>
-        {topLabel && <span className={styles.label}>{topLabel}</span>}
-      </motion.div>
       <div className={styles.contentContainer}>{children}</div>
     </div>
   );

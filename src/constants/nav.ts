@@ -103,7 +103,7 @@ export const coursesFilter: {
 ];
 
 export const courseNavItems = (courseId: string) => [
-  { value: `/courses/course/${courseId}`, label: "Intro" },
-  { value: `/courses/course/${courseId}/tasks`, label: "Materials | Tasks" },
-  { value: `/courses/course/${courseId}/exam`, label: "Exam | Certificate" },
+  { value: `/course/${courseId}`, label: "Intro" },
+  { value: `/course/${courseId}/tasks`, label: "Tasks" },
+  { value: `/course/${courseId}/exam`, label: "Exam | Certificate" },
 ];

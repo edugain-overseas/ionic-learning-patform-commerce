@@ -1,11 +1,12 @@
-import { IonBackButton, IonContent, IonHeader, IonIcon } from "@ionic/react";
+import { useState } from "react";
+import { IonContent, IonIcon } from "@ionic/react";
 import { useParams } from "react-router";
+import { motion } from "motion/react";
 import { useCourses } from "../../../context/CoursesContext";
 import { serverName } from "../../../http/server";
 import { useUser } from "../../../context/UserContext";
 import { useBasket } from "../../../context/BasketContext";
-import back from "../../../assets/icons/header/back.svg";
-import file from "../../../assets/icons/file.svg";
+import { clamp } from "../../../utils/clamp";
 import laptop from "../../../assets/icons/laptop.svg";
 import clock from "../../../assets/icons/clock.svg";
 import schollOnline from "../../../assets/icons/introPage/school-online.svg";
@@ -14,6 +15,7 @@ import certificate from "../../../assets/icons/introPage/certificate.svg";
 import basket from "../../../assets/icons/nav/basket.svg";
 import remove from "../../../assets/icons/delete.svg";
 import devices from "../../../assets/images/devices.png";
+import IntoHeader from "./IntoHeader";
 import StickyScrollLayout from "../../../components/StickyScrollLayout/StickyScrollLayout";
 import CourseItem from "../../../components/CourseItem/CourseItem";
 import CardPrice from "../../../components/CardPrice/CardPrice";
@@ -22,13 +24,13 @@ import EqualSpaceContainer from "../../../components/EqualSpaceContainer/EqualSp
 import CommonButton from "../../../components/CommonButton/CommonButton";
 import styles from "./CourseIntroPage.module.scss";
 
+const threshold = 0.6;
+
 const CourseIntroPage: React.FC = () => {
+  const [scrollProgress, setScrollProgress] = useState(0);
   const { courseId } = useParams<{ courseId: string }>();
   const courses = useCourses()?.courses;
   const course = courses?.find(({ id }) => id === +courseId);
-  const category = useCourses()?.categories.find(
-    ({ id }) => id === course?.category_id
-  );
   const isCoursePurchased = useUser()?.user.courses?.find(
     (userCourse) => userCourse.course_id === +courseId
   );
@@ -43,30 +45,35 @@ const CourseIntroPage: React.FC = () => {
     (courseItem) => courseItem.id !== +courseId && !courseItem.bought
   );
 
-  console.log(courses);
+  const navPanelProgress = clamp(
+    0,
+    (scrollProgress - threshold) / (1 - threshold),
+    1
+  );
 
   return (
     <>
-      <IonHeader className={styles.header} mode="ios">
-        <IonBackButton
-          defaultHref="/courses"
-          text={""}
-          icon={back}
-          className={styles.bakcBtn}
-        />
-      </IonHeader>
+      <IntoHeader title={course?.title} scrollProgress={scrollProgress} />
       <IonContent scrollY={false} className={styles.content}>
-        {/* <CourseNavPanel /> */}
+        <motion.div
+          className={styles.courseIntroNavWrapper}
+          style={{
+            opacity: navPanelProgress,
+            transform: `translateY(${100 * navPanelProgress - 100}%)`,
+          }}
+        >
+          <CourseNavPanel />
+        </motion.div>
         <StickyScrollLayout
           posterSrc={`${serverName}/${course?.image_path}`}
-          topLabel={`Category: ${category?.title}`}
+          topLabel={"Intro"}
+          onProgressChange={(value) => setScrollProgress(value)}
         >
           <div className={styles.contentInnerWrapper}>
             <div className={`${styles.contentHeader} ${styles.contentBlock}`}>
               <div className={`${styles.titleWrapper} ${styles.titlePrimary}`}>
                 <span className={styles.title}>{course?.title}</span>
               </div>
-              <IonIcon src={file} className={styles.headerIcon} />
             </div>
             <div className={styles.contentBlock}>
               <p
@@ -199,11 +206,7 @@ const CourseIntroPage: React.FC = () => {
             <EqualSpaceContainer
               leftItem={
                 <div className={styles.priceWrapper}>
-                  <CardPrice
-                    price={course?.price}
-                    variant="primary"
-                    baseFontSize={30}
-                  />
+                  <CardPrice price={course?.price} />
                 </div>
               }
               rightItem={

@@ -2,9 +2,11 @@
   --start: calc(var(--defaultStart) + var(--ion-safe-area-top, 0px));
   --end: calc(var(--defaultEnd) + var(--ion-safe-area-top, 0px));
 
-  height: calc(100% - var(--end) - 16px);
-  margin-top: calc(var(--end) + 16px);
-  padding-top: calc(var(--start) - var(--end) - 16px);
+  // height: calc(100% - var(--end));
+  height: 100%;
+  // margin-top: calc(var(--end) + 16px);
+  margin-top: var(--end);
+  padding-top: calc(var(--start) - var(--end));
   overflow-y: scroll;
   scroll-behavior: smooth;
 }
@@ -16,7 +18,7 @@
 
   img {
     width: 100%;
-    height: calc(var(--start) + 8px);
+    height: calc(var(--start) + 56px + 8px);
     object-fit: cover;
   }
 }
@@ -60,5 +62,9 @@
   position: relative;
   z-index: 3;
   min-height: max(100%, 500px);
+  background-image: url("../../assets/images/body-bg.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat-y;
+  border-radius: 16rem;
 }
-

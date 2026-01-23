@@ -27,22 +27,22 @@ const CourseDetailPage: React.FC = () => {
   return (
     <IonPage className="primaryPage">
       <Route
-        path={`/courses/course/:courseId`}
+        path={`/course/:courseId`}
         component={CourseIntroPage}
         exact
       />
       <Route
-        path={`/courses/course/:courseId/tasks`}
+        path={`/course/:courseId/tasks`}
         component={CourseTasksPage}
         exact
       />
       <Route
-        path={`/courses/course/:courseId/exam`}
+        path={`/course/:courseId/exam`}
         component={CourseExamPage}
         exact
       />
       <Route
-        path={`/courses/course/:courseId/tasks/:taskId`}
+        path={`/course/:courseId/tasks/:taskId`}
         component={TaskPage}
       />
     </IonPage>

@@ -39,7 +39,7 @@ const Router: React.FC = () => {
               exact
             />
             <Route
-              path="/courses/course/:courseId"
+              path="/course/:courseId"
               component={CourseDetailPage}
             />
             <Route path="/payment" component={CourseBuyStatusPage} exact />

@@ -31,7 +31,7 @@ console.log(course.bought);
         className={`${styles.link} ${
           listStyle === "row" ? styles.row : ""
         } ion-activatable`}
-        routerLink={`/courses/course/${course.id}`}
+        routerLink={`/course/${course.id}`}
         routerDirection="forward"
       >
         {listStyle === "card" && (
