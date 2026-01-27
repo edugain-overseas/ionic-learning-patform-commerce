@@ -39,7 +39,7 @@ const CourseDetailPage: React.FC = () => {
       <Route
         path={`/course/:courseId/exam`}
         component={CourseExamPage}
-        exact
+        // exact
       />
       <Route
         path={`/course/:courseId/tasks/:taskId`}

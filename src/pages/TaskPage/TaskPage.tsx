@@ -1,15 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { IonContent, useIonRouter } from "@ionic/react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
 import { useLessonTabbarLayout } from "../../hooks/useTabbarLayout";
 import Lecture from "../../components/Lecture/Lecture";
 import Test from "../../components/Test/Test";
-import Header from "../../components/Header/Header";
 import CourseProgressModal from "../../components/CourseProgressModal/CourseProgressModal";
+import TaskHeader from "./TaskHeader";
 import styles from "./TaskPage.module.scss";
 
 const TaskPage: React.FC = () => {
+  const [scrollProgress, setScrollProgress] = useState<number>(0);
   useLessonTabbarLayout();
 
   const router = useIonRouter();
@@ -38,15 +39,12 @@ const TaskPage: React.FC = () => {
     }
   }, [taskId, lessonData, taskData]);
 
-  const headerProps = {
-    left: [{ name: "back", defaultHref: `/courses/course/${courseId}/tasks` }],
-    title: taskData?.title,
-    right: [{ name: "notification" }],
-  };
-
   return (
     <>
-      <Header {...headerProps} />
+      <TaskHeader
+        taskData={taskData}
+        scrollProgress={scrollProgress}
+      />
       <IonContent
         fullscreen={true}
         scrollY={false}
@@ -54,8 +52,20 @@ const TaskPage: React.FC = () => {
           taskData?.type ? styles[taskData.type] : ""
         }`}
       >
-        {taskData?.type === "lecture" && <Lecture taskData={taskData} />}
-        {taskData?.type === "test" && <Test taskData={taskData} key={taskId}/>}
+        {taskData?.type === "lecture" && (
+          <Lecture
+            key={taskId}
+            taskData={taskData}
+            onScrollProgress={(value) => setScrollProgress(value)}
+          />
+        )}
+        {taskData?.type === "test" && (
+          <Test
+            key={taskId}
+            taskData={taskData}
+            onScrollProgress={(value) => setScrollProgress(value)}
+          />
+        )}
       </IonContent>
       <CourseProgressModal />
     </>

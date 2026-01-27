@@ -2,7 +2,7 @@ import { useIonAlert } from "@ionic/react";
 import { useHistory } from "react-router";
 import { IonButton, IonIcon } from "@ionic/react";
 import backIcon from "../../assets/icons/header/back.svg";
-import styles from "../Header/Header.module.scss";
+import styles from "./Header.module.scss";
 
 export type CustomBackButtonProps = {
   defaultHref?: string;

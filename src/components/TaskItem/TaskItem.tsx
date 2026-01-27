@@ -1,13 +1,14 @@
 import { FC } from "react";
-import { LessonType } from "../../context/CoursesContext";
+import { LessonType, useCourses } from "../../context/CoursesContext";
 import { IonIcon, IonItem } from "@ionic/react";
+import { useListStyle } from "../../context/ListStyleContext";
+import { useProtectedNavigation } from "../../hooks/useProtectedNavigation";
 import { serverName } from "../../http/server";
 import TaskTypeIcon from "../../assets/icons/task-progress.svg";
 import StatusIcon from "../../assets/icons/check-in-circle.svg";
 import TimeIcon from "../../assets/icons/clock.svg";
 import QuestonIcon from "../../assets/icons/document-question.svg";
 import styles from "./TaskItem.module.scss";
-import { useListStyle } from "../../context/ListStyleContext";
 
 interface TaskItemType {
   task: LessonType;
@@ -15,7 +16,8 @@ interface TaskItemType {
 
 const TaskItem: FC<TaskItemType> = ({ task }) => {
   const listStyle = useListStyle()?.listStyle;
-  
+  const protectedNavigate = useProtectedNavigation();
+
   const Type = () => (
     <div className={styles.taskProp}>
       <IonIcon src={TaskTypeIcon} className={styles.taskPropIcon} />
@@ -61,19 +63,34 @@ const TaskItem: FC<TaskItemType> = ({ task }) => {
 
   const taskLink =
     task.type === "exam"
-      ? `/courses/course/${task.course_id}/exam`
-      : `/courses/course/${task.course_id}/tasks/${task.id}`;
+      ? `/course/${task.course_id}/exam`
+      : `/course/${task.course_id}/tasks/${task.id}`;
+
+  const isCoursePurchased = useCourses()?.courses.find(
+    (course) => course.id === task.course_id
+  )?.bought;
+
+  const isNavigationAllowed = !!(
+    isCoursePurchased && task.status !== "blocked"
+  );
+
+  const handleItemClick = () => {
+    protectedNavigate(
+      isNavigationAllowed,
+      taskLink,
+      "You can not access this lesson becouse it is blocked"
+    );
+  };
 
   return (
     <IonItem
-      routerLink={task.status !== "blocked" ? taskLink : undefined}
-      routerDirection="forward"
       button
       detail={false}
       lines="none"
       className={`${styles.wrapper} ${
         task.status === "completed" ? styles.completed : ""
       } ${listStyle === "row" ? styles.row : ""}`}
+      onClick={handleItemClick}
     >
       {listStyle === "card" && (
         <img

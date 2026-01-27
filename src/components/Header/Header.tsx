@@ -1,6 +1,5 @@
 import { FC, ReactElement } from "react";
 import {
-  IonBackButton,
   IonButton,
   IonButtons,
   IonHeader,
@@ -8,6 +7,7 @@ import {
   IonImg,
   IonToolbar,
 } from "@ionic/react";
+import { useToast } from "../../hooks/useToast";
 import { useListStyle } from "../../context/ListStyleContext";
 import bellIcon from "../../assets/icons/header/bell.svg";
 import searchIcon from "../../assets/icons/header/search.svg";
@@ -19,14 +19,12 @@ import SettingsIcon from "../../assets/icons/menu/settings.svg";
 import SaveIcon from "../../assets/icons/save.svg";
 import logoIEU from "../../assets/icons/logoIEU.svg";
 import detailsIcon from "../../assets/icons/header/details.svg";
-import CustomBackButton, {
-  CustomBackButtonProps,
-} from "../CustomBackBtn/CustomBackBtn";
+import CustomBackButton, { CustomBackButtonProps } from "./CustomBackBtn";
 import HeaderTitle from "./HeaderTitle";
 import Spinner from "../Spinner/Spinner";
-import styles from "./Header.module.scss";
-import { useToast } from "../../hooks/useToast";
 import HeaderAvatar from "./HeaderAvatar";
+import HeaderBackBtn from "./HeaderBackBtn";
+import styles from "./Header.module.scss";
 
 interface ButtonPropsTypes extends CustomBackButtonProps {
   name: string;
@@ -50,17 +48,7 @@ interface HeaderTypes {
 const renderBtn = (props: ButtonPropsTypes, handleNotification: () => void) => {
   switch (props.name) {
     case "back":
-      return (
-        <IonBackButton
-          key={props.name}
-          className={`${styles.backBtn} ${
-            props.className ? props.className : ""
-          }`}
-          defaultHref={props.defaultHref || "/"}
-          icon={backIcon}
-          text={""}
-        ></IonBackButton>
-      );
+      return <HeaderBackBtn className={props.className} key={props.name} />;
     case "custom-back":
       return (
         <CustomBackButton
@@ -252,7 +240,7 @@ const Header: FC<HeaderTypes> = ({
         </IonButtons>
         <HeaderTitle title={title} />
         <IonButtons slot="end" className={styles.buttonsWrapper}>
-          {right.map((name) => renderBtn(name, handleNotification))}
+          {right.map((props) => renderBtn(props, handleNotification))}
         </IonButtons>
       </IonToolbar>
     </IonHeader>

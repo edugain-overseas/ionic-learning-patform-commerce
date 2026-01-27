@@ -22,6 +22,7 @@
   .headerBg {
     position: absolute;
     inset: 0;
+    top: calc(var(--ion-safe-area-top) * -1);
     background-color: var(--ion-background-color);
     box-shadow: var(--custom-box-shadow-primary);
     backdrop-filter: blur(28px);
@@ -35,6 +36,11 @@
     width: 32rem;
     background-color: var(--custom-bg-rgba-secondary);
     border-radius: 5rem;
+  }
+
+  .backBtn {
+    --icon-margin-start: 0;
+    --icon-margin-end: 0;
   }
 
   .buttonsWrapper {
@@ -96,7 +102,7 @@
   display: flex;
   flex-direction: column;
   gap: 32rem;
-  padding: 28rem 18rem var(--content-offset-bottom);
+  padding: 18rem 18rem var(--content-offset-bottom);
 }
 
 .contentBlock:not(:last-child) {
@@ -367,27 +373,21 @@
 
 .bottomBar {
   position: absolute;
-  height: calc(65rem + var(--tabbar-offset));
+  height: calc(56rem + var(--tabbar-offset));
   bottom: 0;
+  padding-inline: 30rem;
   padding-bottom: var(--tabbar-offset);
   background-color: var(--custom-bg-rgba-secondary);
   box-shadow: var(--custom-box-shadow-primary);
-  backdrop-filter: blur(28rem);
+  backdrop-filter: blur(28px);
   border-top-left-radius: 16rem;
   border-top-right-radius: 16rem;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 42rem;
+  justify-content: space-between;
+  gap: 30rem;
   width: 100%;
   z-index: 3;
-
-  .priceWrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 
   .buyCourseBtn {
     display: flex;

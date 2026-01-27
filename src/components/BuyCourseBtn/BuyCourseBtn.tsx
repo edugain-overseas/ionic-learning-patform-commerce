@@ -19,6 +19,8 @@ const BuyCourseBtn = ({
     basket?.items.findIndex((item) => item.id === courseId) !== -1;
 
   const toggleItem = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
     const buttonEl = e.currentTarget;
 
     if (isCourseInBasket) {

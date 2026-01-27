@@ -2,13 +2,12 @@ import React, { useRef } from "react";
 import { IonRippleEffect, IonRouterLink } from "@ionic/react";
 import { CourseType } from "../../context/CoursesContext";
 import { serverName } from "../../http/server";
-import { useUser } from "../../context/UserContext";
 import { useListStyle } from "../../context/ListStyleContext";
 import CardPrice from "../CardPrice/CardPrice";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import CardGrade from "../CardGrade/CardGrade";
-import styles from "./CourseItem.module.scss";
 import BuyCourseBtn from "../BuyCourseBtn/BuyCourseBtn";
+import styles from "./CourseItem.module.scss";
 
 interface CourseItemTypes {
   course: CourseType;
@@ -16,14 +15,8 @@ interface CourseItemTypes {
 
 const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
   const itemRef = useRef<HTMLLIElement>(null);
-  const userCourseData = useUser()?.user?.courses?.find(
-    (userCourse) => userCourse.course_id === course.id
-  );
 
   const listStyle = useListStyle()?.listStyle;
-
-console.log(course.bought);
-
 
   return (
     <li className={styles.itemWrapper} ref={itemRef}>
@@ -63,7 +56,7 @@ console.log(course.bought);
                   Progress:{" "}
                   <ProgressBar
                     value={course.progress}
-                    width={160}
+                    width={128}
                     height={10}
                     showValue={false}
                   />
@@ -72,10 +65,7 @@ console.log(course.bought);
               </>
             ) : (
               <>
-                <CardPrice
-                  oldPrice={course.old_price}
-                  price={course.price}
-                />
+                <CardPrice oldPrice={course.old_price} price={course.price} />
                 <BuyCourseBtn courseId={course.id} />
               </>
             )}

@@ -9,22 +9,21 @@ import React, { useRef } from "react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
 import { useUser } from "../../context/UserContext";
-import { useFilter } from "../../hooks/useCategoryDetailPageFilter";
+// import { useFilter } from "../../hooks/useCategoryDetailPageFilter";
 import { remToPx } from "../../utils/pxToRem";
 import { changeStausBarTheme } from "../../hooks/useStatusBar";
 import categoryContrastIcon from "../../assets/icons/category-contrast.svg";
 import Header from "../../components/Header/Header";
-import ProgressBar from "../../components/ProgressBar/ProgressBar";
+// import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import CourseItem from "../../components/CourseItem/CourseItem";
-import UnauthorizedUserContentFallback from "../../components/UnauthorizedUserContentFallback/UnauthorizedUserContentFallback";
-import Auth from "../../components/Auth/Auth";
+// import UnauthorizedUserContentFallback from "../../components/UnauthorizedUserContentFallback/UnauthorizedUserContentFallback";
+// import Auth from "../../components/Auth/Auth";
 import PageRefresher from "../../components/PageRefresher/PageRefresher";
 import styles from "./CategoryDetailPage.module.scss";
 
 const MAX_SCROLL_VALUE = 91;
 
 const CategoryDetailPage: React.FC = () => {
-
   useIonViewWillEnter(() => {
     changeStausBarTheme("Dark");
   });
@@ -46,10 +45,10 @@ const CategoryDetailPage: React.FC = () => {
 
   const userCourses = useUser()?.user.courses;
 
-  const { filter, setFilter } = useFilter();
+  // const { filter, setFilter } = useFilter();
 
-  const showContentFallback =
-    filter === "In process" && userCourses?.length === 0;
+  // const showContentFallback =
+  //   filter === "In process" && userCourses?.length === 0;
 
   // const handleProgress = useMemo(() => {
   //   let coursesIds: number[] = [];
@@ -87,9 +86,9 @@ const CategoryDetailPage: React.FC = () => {
     topContentRef.current?.style.setProperty(
       "--hide-coefficient",
       `${hideCoef}`
-    );    
+    );
 
-    toggleHeaderTitleVisibility(hideCoef > 0.4)
+    toggleHeaderTitleVisibility(hideCoef > 0.4);
   };
 
   const handleScrollEnd = async () => {
@@ -120,24 +119,29 @@ const CategoryDetailPage: React.FC = () => {
   // };
 
   const handleFilterCourses = () => {
-    let userCoursesIds: number[] = [];
-    userCourses?.forEach((course) => userCoursesIds.push(course.course_id));
-    switch (filter) {
-      case "All courses":
-        return courses;
-      case "In process":
-        return courses?.filter((course) => userCoursesIds.includes(course.id));
-      case "Available":
-        return courses?.filter((course) => !userCoursesIds.includes(course.id));
-      default:
-        break;
-    }
+    // let userCoursesIds: number[] = [];
+    // userCourses?.forEach((course) => userCoursesIds.push(course.course_id));
+    // switch (filter) {
+    //   case "All courses":
+    //     return courses;
+    //   case "In process":
+    //     return courses?.filter((course) => userCoursesIds.includes(course.id));
+    //   case "Available":
+    //     return courses?.filter((course) => !userCoursesIds.includes(course.id));
+    //   default:
+    //     break;
+    // }
+    return courses?.filter((course) => !course.bought);
   };
 
   const onRefresh = coursesInterface?.getAllCourses;
 
   const headerProps = {
-    title: <span ref={headerRef} className={styles.headerTitle}>{category?.title}</span>,
+    title: (
+      <span ref={headerRef} className={styles.headerTitle}>
+        {category?.title}
+      </span>
+    ),
     secondary: true,
     left: [{ name: "back" }, { name: "list-style" }],
     right: [{ name: "notification" }, { name: "user" }],
@@ -224,23 +228,23 @@ const CategoryDetailPage: React.FC = () => {
                 } / ${courses?.length}`}
               </div>
             </div>
-            {showContentFallback ? (
+            {/* {showContentFallback ? (
               <UnauthorizedUserContentFallback
                 containerClassname={styles.contentFallbackContainer}
               />
-            ) : (
+            ) : ( */}
               <ul className={styles.coursesList}>
                 {handleFilterCourses()?.map((course) => (
                   <CourseItem course={course} key={course.id} />
                 ))}
               </ul>
-            )}
+            {/* )} */}
           </div>
         </div>
       </IonContent>
-      {showContentFallback && (
+      {/* {showContentFallback && (
         <Auth containerClassname={styles.authContainer} />
-      )}
+      )} */}
     </IonPage>
   );
 };

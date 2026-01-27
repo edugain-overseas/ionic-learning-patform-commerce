@@ -15,6 +15,10 @@
   font-size: 14rem;
   font-weight: 500;
   color: var(--ion-color-primary-contrast);
+
+  button {
+    padding-inline: 10rem;
+  }
 }
 .btnIcon {
   font-size: 22rem;
@@ -147,6 +151,7 @@
 
   .serviceBtn {
     flex-direction: row-reverse;
+    gap: 4rem;
   }
 
   .servicesIcon {

@@ -343,7 +343,12 @@ const CourseExamPage: FC = () => {
   };
 
   if (!exam || !studentId) {
-    return null;
+    return (
+      <>
+        <Header {...headerProps} />
+        <IonContent className={styles.content}></IonContent>
+      </>
+    );
   }
 
   if (isLoading) {

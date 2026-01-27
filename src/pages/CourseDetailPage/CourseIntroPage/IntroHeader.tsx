@@ -1,6 +1,4 @@
-import React from "react";
 import {
-  IonBackButton,
   IonButton,
   IonButtons,
   IonHeader,
@@ -10,19 +8,19 @@ import {
 import { motion } from "motion/react";
 import { useToast } from "../../../hooks/useToast";
 import { clamp } from "../../../utils/clamp";
-import back from "../../../assets/icons/header/back.svg";
 import bellIcon from "../../../assets/icons/header/bell.svg";
 import HeaderTitle from "../../../components/Header/HeaderTitle";
 import styles from "./CourseIntroPage.module.scss";
+import HeaderBackBtn from "../../../components/Header/HeaderBackBtn";
 
 type PropsType = {
   scrollProgress: number;
   title?: string;
 };
 
-const threshold = 0.4;
+const threshold = 0.25;
 
-const IntoHeader = ({ scrollProgress, title = "" }: PropsType) => {
+const IntroHeader = ({ scrollProgress, title = "" }: PropsType) => {
   const [present] = useToast();
 
   const handleNotification = () => {
@@ -55,13 +53,7 @@ const IntoHeader = ({ scrollProgress, title = "" }: PropsType) => {
             className={styles.backBtnBg}
             style={{ opacity: leftBgOpacity }}
           />
-          <IonBackButton
-            key="intro-back"
-            className={styles.backBtn}
-            defaultHref={"/"}
-            icon={back}
-            text={""}
-          ></IonBackButton>
+          <HeaderBackBtn />
         </IonButtons>
         <motion.div style={{ opacity: headerBgOpacity }}>
           <HeaderTitle title={title} />
@@ -87,4 +79,4 @@ const IntoHeader = ({ scrollProgress, title = "" }: PropsType) => {
   );
 };
 
-export default IntoHeader;
+export default IntroHeader;

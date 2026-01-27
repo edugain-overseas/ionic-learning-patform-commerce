@@ -2,9 +2,7 @@
   --start: calc(var(--defaultStart) + var(--ion-safe-area-top, 0px));
   --end: calc(var(--defaultEnd) + var(--ion-safe-area-top, 0px));
 
-  // height: calc(100% - var(--end));
-  height: 100%;
-  // margin-top: calc(var(--end) + 16px);
+  height: calc(100% - var(--end));
   margin-top: var(--end);
   padding-top: calc(var(--start) - var(--end));
   overflow-y: scroll;
@@ -18,7 +16,7 @@
 
   img {
     width: 100%;
-    height: calc(var(--start) + 56px + 8px);
+    height: calc(var(--start) + 8px);
     object-fit: cover;
   }
 }
@@ -67,4 +65,22 @@
   background-position: center;
   background-repeat: repeat-y;
   border-radius: 16rem;
+}
+
+.label {
+  padding: 6rem 12rem;
+  border-radius: 5rem;
+  box-shadow: var(--custom-box-shadow-secondary);
+  background-color: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+
+  font-family: Roboto;
+  font-size: 9.5rem;
+  font-weight: 700;
+  line-height: 10rem;
+
+  position: absolute;
+  top: 0;
+  right: 18rem;
+  transform: translateY(-50%);
 }

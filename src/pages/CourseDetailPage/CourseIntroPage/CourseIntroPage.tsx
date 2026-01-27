@@ -15,7 +15,7 @@ import certificate from "../../../assets/icons/introPage/certificate.svg";
 import basket from "../../../assets/icons/nav/basket.svg";
 import remove from "../../../assets/icons/delete.svg";
 import devices from "../../../assets/images/devices.png";
-import IntoHeader from "./IntoHeader";
+import IntoHeader from "./IntroHeader";
 import StickyScrollLayout from "../../../components/StickyScrollLayout/StickyScrollLayout";
 import CourseItem from "../../../components/CourseItem/CourseItem";
 import CardPrice from "../../../components/CardPrice/CardPrice";
@@ -23,8 +23,9 @@ import CourseNavPanel from "../../../components/CourseNavPanel/CourseNavPanel";
 import EqualSpaceContainer from "../../../components/EqualSpaceContainer/EqualSpaceContainer";
 import CommonButton from "../../../components/CommonButton/CommonButton";
 import styles from "./CourseIntroPage.module.scss";
+import BuyCourseBtn from "../../../components/BuyCourseBtn/BuyCourseBtn";
 
-const threshold = 0.6;
+const threshold = 0.75;
 
 const CourseIntroPage: React.FC = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -37,9 +38,9 @@ const CourseIntroPage: React.FC = () => {
 
   const basketInterface = useBasket();
 
-  const isCourseInBasket = basketInterface?.items.find(
-    (item) => item.id === +courseId
-  );
+  // const isCourseInBasket = basketInterface?.items.find(
+  //   (item) => item.id === +courseId
+  // );
 
   const coursesToPropose = courses?.filter(
     (courseItem) => courseItem.id !== +courseId && !courseItem.bought
@@ -66,7 +67,7 @@ const CourseIntroPage: React.FC = () => {
         </motion.div>
         <StickyScrollLayout
           posterSrc={`${serverName}/${course?.image_path}`}
-          topLabel={"Intro"}
+          topLabel="Intro"
           onProgressChange={(value) => setScrollProgress(value)}
         >
           <div className={styles.contentInnerWrapper}>
@@ -203,36 +204,8 @@ const CourseIntroPage: React.FC = () => {
         </StickyScrollLayout>
         {!isCoursePurchased && (
           <div className={styles.bottomBar}>
-            <EqualSpaceContainer
-              leftItem={
-                <div className={styles.priceWrapper}>
-                  <CardPrice price={course?.price} />
-                </div>
-              }
-              rightItem={
-                <CommonButton
-                  className={styles.buyCourseBtn}
-                  icon={
-                    isCourseInBasket ? (
-                      <IonIcon className={styles.remove} src={remove} />
-                    ) : (
-                      <IonIcon className={styles.buyIcon} src={basket} />
-                    )
-                  }
-                  label={isCourseInBasket ? "Remove" : "Buy"}
-                  block={true}
-                  height={32}
-                  borderRadius={5}
-                  backgroundColor="#920000"
-                  color="#fcfcfc"
-                  onClick={() =>
-                    course
-                      ? basketInterface?.toggleItemToBasket(course?.id)
-                      : null
-                  }
-                />
-              }
-            />
+            <CardPrice />
+            <BuyCourseBtn courseId={Number(courseId)} />
           </div>
         )}
       </IonContent>

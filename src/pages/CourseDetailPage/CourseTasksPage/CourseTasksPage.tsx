@@ -34,66 +34,65 @@ const CourseTasksPage: FC = () => {
 
   const headerProps = {
     title: course?.title,
-    left: [{ name: "back" }],
-    right: [{ name: "notification" }, { name: "list-style" }],
+    left: [{ name: "back", defaultHref: undefined }],
+    right: [{ name: "list-style" }],
   };
 
-  const handleScroll = (e: CustomEvent) => {
-    if (e.detail.deltaY > 0) {
-      const modalContentRef = document.getElementById(
-        "custom-sheet-modal-content"
-      );
+  // const handleScroll = (e: CustomEvent) => {
+  //   if (e.detail.deltaY > 0) {
+  //     const modalContentRef = document.getElementById(
+  //       "custom-sheet-modal-content"
+  //     );
 
-      const secondPoint = Math.round(remToPx(60 + secondBreackpoint));
+  //     const secondPoint = Math.round(remToPx(60 + secondBreackpoint));
 
-      if (modalContentRef) {
-        const modalHeight = Math.round(modalContentRef.clientHeight);
+  //     if (modalContentRef) {
+  //       const modalHeight = Math.round(modalContentRef.clientHeight);
 
-        if (modalHeight === secondPoint) {
-          if (animatingModal) return;
-          setAnimatingModal(true);
-          createAnimation()
-            .addElement(modalContentRef)
-            .beforeAddClass(customSheetModalStyles.directionDown)
-            .afterRemoveClass(customSheetModalStyles.directionDown)
-            .fromTo(
-              "height",
-              `${secondBreackpoint}rem`,
-              `${firstBreakpoint}rem`
-            )
-            .easing("ease-out")
-            .duration(300)
-            .play();
-        }
-      }
-    }
-  };
+  //       if (modalHeight === secondPoint) {
+  //         if (animatingModal) return;
+  //         setAnimatingModal(true);
+  //         createAnimation()
+  //           .addElement(modalContentRef)
+  //           .beforeAddClass(customSheetModalStyles.directionDown)
+  //           .afterRemoveClass(customSheetModalStyles.directionDown)
+  //           .fromTo(
+  //             "height",
+  //             `${secondBreackpoint}rem`,
+  //             `${firstBreakpoint}rem`
+  //           )
+  //           .easing("ease-out")
+  //           .duration(300)
+  //           .play();
+  //       }
+  //     }
+  //   }
+  // };
 
-  const handleScrollEnd = debounce((e: CustomEvent) => {
-    const modalContentRef = document.getElementById(
-      "custom-sheet-modal-content"
-    );
+  // const handleScrollEnd = debounce((e: CustomEvent) => {
+  //   const modalContentRef = document.getElementById(
+  //     "custom-sheet-modal-content"
+  //   );
 
-    if (modalContentRef) {
-      if (animatingModal) {
-        createAnimation()
-          .addElement(modalContentRef)
-          .beforeAddClass(customSheetModalStyles.directionUp)
-          .afterRemoveClass(customSheetModalStyles.directionUp)
-          .fromTo("height", `${firstBreakpoint}rem`, `${secondBreackpoint}rem`)
-          .easing("ease-in")
-          .duration(300)
-          .play();
-        setAnimatingModal(false);
-      }
-    }
-  }, 300);
+  //   if (modalContentRef) {
+  //     if (animatingModal) {
+  //       createAnimation()
+  //         .addElement(modalContentRef)
+  //         .beforeAddClass(customSheetModalStyles.directionUp)
+  //         .afterRemoveClass(customSheetModalStyles.directionUp)
+  //         .fromTo("height", `${firstBreakpoint}rem`, `${secondBreackpoint}rem`)
+  //         .easing("ease-in")
+  //         .duration(300)
+  //         .play();
+  //       setAnimatingModal(false);
+  //     }
+  //   }
+  // }, 300);
 
   const CourseStats = () => (
     <div className={styles.courseStats}>
-      <span className={styles.type}>Materials | Tasks</span>
+      <span className={styles.type}>Details Course:</span>
       <div className={styles.details}>
-        <span className={styles.detailsTitle}>Details course:</span>
         <ul className={styles.statsList}>
           <li className={styles.statsItem}>
             <InsetBtn
@@ -150,9 +149,7 @@ const CourseTasksPage: FC = () => {
               .sort((a, b) => a.number - b.number)
               .map((task) => <TaskItem task={task} key={task.id} />)}
         </ul>
-        <CourseProgressModal
-          isAnimating={animatingModal}
-        />
+        <CourseProgressModal isAnimating={animatingModal} />
       </IonContent>
     </>
   );

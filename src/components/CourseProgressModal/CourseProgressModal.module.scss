@@ -51,13 +51,9 @@
 }
 
 .modalHeader {
-  display: flex;
-  // gap: 40rem;
-  align-items: center;
   padding-bottom: 16rem;
+  padding-inline: 12rem;
   margin-bottom: 16rem;
-  // border-bottom: 1rem solid var(--ion-color-dark);
-  margin-inline: -18rem;
   font-size: 14rem;
   position: relative;
 
@@ -65,10 +61,17 @@
     content: "";
     position: absolute;
     bottom: 0;
-    left: 18rem;
-    right: 18rem;
+    left: 12rem;
+    right: 12rem;
     height: 1px;
-    background-color: var(--ion-color-dark);
+    background-color: var(--ion-color-light);
+  }
+
+  .btnsContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24rem;
   }
 
   .progressWrappper {
@@ -103,7 +106,7 @@
 
 .progressList {
   padding-bottom: 16rem;
-  // padding-inline: 18rem;
+  padding-inline: 12rem;
   li {
     display: flex;
     align-items: center;

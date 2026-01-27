@@ -8,13 +8,21 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import { useLocation } from "react-router";
+import { useProtectedNavigation } from "../../hooks/useProtectedNavigation";
 
-interface SegmentNavPanelTypes {
-  items: { value: string; label: string }[];
+export type SegmentItem = {
+  value: string;
+  label: string;
+  isAllowed?: boolean;
+  denyMessage?: string;
+};
+
+type SegmentNavPanelTypes = {
+  items: SegmentItem[];
   value?: string | number;
   setValue?: Dispatch<SetStateAction<any>>;
   routerNav?: boolean;
-}
+};
 
 const SegmentNavPanel: React.FC<SegmentNavPanelTypes> = ({
   items,
@@ -22,8 +30,13 @@ const SegmentNavPanel: React.FC<SegmentNavPanelTypes> = ({
   setValue,
   routerNav = false,
 }) => {
-  const pathmane = useLocation().pathname;
-  const router = useIonRouter()
+  const pathname = useLocation().pathname;
+  const activeValue = routerNav
+    ? items.find((item) => item.value === pathname && item.isAllowed !== false)
+        ?.value
+    : value;
+
+  const protectedNavigate = useProtectedNavigation();
 
   const onChange = (event: CustomEvent<SegmentChangeEventDetail>) => {
     const { value } = event.detail;
@@ -35,28 +48,32 @@ const SegmentNavPanel: React.FC<SegmentNavPanelTypes> = ({
   return (
     <IonSegment
       scrollable={true}
-      value={routerNav ? pathmane : value}
+      value={activeValue}
       className={styles.segment}
-      onIonChange={setValue && onChange}
+      onIonChange={!routerNav && setValue ? onChange : undefined}
     >
-      {items.map(({ label, value }) => (
-        <IonSegmentButton
-          key={label}
-          value={value}
-          mode="md"
-          className={styles.segmentBtn}
-          onClick={
-            routerNav
-              ? (e) => {
-                  e.preventDefault();
-                  router.push(value, 'root')
-                }
-              : undefined
-          }
-        >
-          <IonLabel className={styles.segmentLabel}>{label}</IonLabel>
-        </IonSegmentButton>
-      ))}
+      {items.map(
+        ({ label, value, isAllowed = true, denyMessage = "Access denied" }) => (
+          <IonSegmentButton
+            key={label}
+            mode="md"
+            value={value}
+            disabled={!isAllowed}
+            className={styles.segmentBtn}
+            onClick={
+              routerNav
+                ? (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    protectedNavigate(isAllowed, value, denyMessage);
+                  }
+                : undefined
+            }
+          >
+            <IonLabel className={styles.segmentLabel}>{label}</IonLabel>
+          </IonSegmentButton>
+        )
+      )}
     </IonSegment>
   );
 };

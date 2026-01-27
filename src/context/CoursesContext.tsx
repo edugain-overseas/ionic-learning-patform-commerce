@@ -98,6 +98,8 @@ export type ExamDataType = {
 
 export type LessonDataUnionType = LectureDataType | TestDataType | ExamDataType;
 
+export type LessonStatus = "completed" | "active" | "blocked";
+
 export interface LessonType {
   course_id: number;
   description: string;
@@ -108,7 +110,7 @@ export interface LessonType {
   scheduled_time: number;
   title: string;
   type: "test" | "lecture" | "exam";
-  status?: string;
+  status?: LessonStatus;
   count_questions?: number;
   lessonData?: LessonDataUnionType;
 }
@@ -174,7 +176,7 @@ interface CoursesContextType {
     lessonId: string | number,
     courseId: number | string
   ) => Promise<void>;
-  confirmLecture: (lessonId: number) => Promise<CourseType[] | undefined>;
+  confirmLecture: (lessonId: number) => Promise<void>;
 }
 
 interface CoursesProviderType {
@@ -297,8 +299,8 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
           }
           return course;
         });
-        setCourses(updatedCourses);
-        return updatedCourses;
+        setCourses(updatedCourses as CourseType[]);
+        // return updatedCourses;
       }
     } catch (error) {
       throw error;

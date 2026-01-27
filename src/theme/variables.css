@@ -17,7 +17,7 @@ http://ionicframework.com/docs/theming/ */
   --custom-color-decorate-secondary: #b7b7b7;
   --custom-color-decorate-thirdinary: #fbfbfb;
   --custom-primary-lg: #920000;
-  --custom-bg-rgba-primary: rgba(255, 255, 255, 0.8);
+  --custom-bg-rgba-primary: rgba(255, 255, 255, 0.9);
   --custom-bg-rgba-secondary: rgba(255, 255, 255, 0.65);
   --custom-bg-rgba-thirtiary: rgba(255, 255, 255, 0.45);
   --custom-bg-rgba-fourth: rgba(255, 255, 255, 0.3);
@@ -25,7 +25,7 @@ http://ionicframework.com/docs/theming/ */
   --custom-box-shadow-tabs: 0 -2rem 12rem 0 rgba(0, 0, 0, 0.08);
   --custom-box-shadow-content: 0 0 16rem 0 rgba(0, 0, 0, 0.12);
   --custom-box-shadow-primary: 0 2rem 12rem 0 rgba(0, 0, 0, 0.08);
-  --custom-box-shadow-secondary: 0 0 4rem 0 rgba(0, 0, 0, 0.16);
+  --custom-box-shadow-secondary: 0 0 4rem 0 rgba(0, 0, 0, 0.12);
   --custom-box-shadow-thirtiary: 0 0 2rem 0 rgba(0, 0, 0, 0.16);
   --custom-box-shadow-secondary-inset: 0 0 4rem 0 rgba(0, 0, 0, 0.16) inset;
   --custom--border-radius-primary: 5rem;
@@ -68,7 +68,7 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-warning-contrast: #000000;
   --ion-color-warning-contrast-rgb: 0, 0, 0;
   --ion-color-warning-shade: #e0bc00;
-  --ion-color-warning-tint: #ffda1a;
+  --ion-color-warning-tint: #ffa023;
 
   --ion-color-danger: #c5000f;
   --ion-color-danger-rgb: 197, 0, 15;

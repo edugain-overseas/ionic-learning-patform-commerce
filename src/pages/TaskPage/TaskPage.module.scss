@@ -1,3 +1,95 @@
+.taskHeader {
+  position: absolute;
+  box-shadow: none;
+  height: calc(56px + var(--ion-safe-area-top));
+  border-bottom-left-radius: 16rem;
+  border-bottom-right-radius: 16rem;
+  overflow: hidden;
+
+  ion-toolbar {
+    box-shadow: none;
+    --background: transparent;
+    --min-height: 56rem;
+    --border-style: none;
+    --padding-start: 14rem;
+    --padding-end: 14rem;
+    --ion-toolbar-color: var(--ion-color-dark);
+
+    border-bottom-left-radius: 16rem;
+    border-bottom-right-radius: 16rem;
+  }
+
+  .headerBg {
+    position: absolute;
+    inset: 0;
+    top: calc(var(--ion-safe-area-top) * -1);
+    background-color: var(--ion-background-color);
+    box-shadow: var(--custom-box-shadow-primary);
+    backdrop-filter: blur(28px);
+  }
+
+  .backBtnBg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 32rem;
+    background-color: var(--custom-bg-rgba-primary);
+    border-radius: 5rem;
+  }
+
+  .confirmBtnBg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 32rem;
+    background-color: var(--custom-bg-rgba-primary);
+    border-radius: 5rem;
+  }
+
+  .backBtn {
+    --icon-margin-start: 0;
+    --icon-margin-end: 0;
+  }
+
+  .buttonsWrapper {
+    gap: 8rem;
+    min-width: 80rem;
+    min-height: auto;
+
+    &[slot="start"] {
+      justify-content: flex-start;
+    }
+    &[slot="end"] {
+      justify-content: flex-end;
+    }
+
+    ion-button,
+    ion-back-button {
+      width: 32rem;
+      min-width: 32rem;
+      min-height: 32rem;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-grow: 0;
+      flex-shrink: 0;
+      margin-inline-start: 0;
+      margin-inline-end: 0;
+
+      --padding-start: 0;
+      --padding-end: 0;
+      --padding-top: 0;
+      --padding-bottom: 0;
+      --icon-font-size: 32rem;
+    }
+
+    ion-icon {
+      font-size: 32rem;
+    }
+  }
+}
+
 .disabled {
   ion-icon {
     color: var(--ion-color-medium);

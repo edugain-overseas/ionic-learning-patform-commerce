@@ -36,8 +36,6 @@ const CommonButton: React.FC<CommonButtonTypes> = ({
   onClick,
 }) => {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
     onClick?.(e);
   };
   return (
@@ -51,6 +49,7 @@ const CommonButton: React.FC<CommonButtonTypes> = ({
         backgroundColor: backgroundColor && backgroundColor,
         borderRadius: `${borderRadius}rem`,
         border: border ? border : "none",
+        color: color && color,
       }}
       onClick={handleClick}
       id={id}

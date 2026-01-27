@@ -7,7 +7,7 @@
 
 .courseStats {
   padding: 12rem;
-
+  margin-top: 12rem;
   border-radius: var(--custom--border-radius-primary);
   background: var(--custom-bg-rgba-secondary);
   box-shadow: var(--custom-box-shadow-primary);
@@ -20,7 +20,7 @@
     text-transform: capitalize;
     color: var(--ion-color-dark);
     display: block;
-    margin-bottom: 3rem;
+    margin-bottom: 10rem;
   }
 
   .details {

@@ -30,7 +30,10 @@ type CurrentAttempt = {
   lessonId: number;
 };
 
-const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
+const Test: React.FC<{
+  taskData: LessonType;
+  onScrollProgress: (value: number) => void;
+}> = ({ taskData, onScrollProgress }) => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<number>(0);
   const currentAttemptsRef = useRef<CurrentAttempt | null>(null);
@@ -154,7 +157,7 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
   const handleSubmitCurrentAttempt = async () => {
     const studentAnswers =
       currentAttempt?.studentAnswers ||
-      currentAttemptsRef.current?.studentAnswers;    
+      currentAttemptsRef.current?.studentAnswers;
 
     try {
       const response = await instance.post("student-test/send", {
@@ -283,7 +286,10 @@ const Test: React.FC<{ taskData: LessonType }> = ({ taskData }) => {
           <StickyScrollLayout
             posterSrc={`${serverName}/${taskData.image_path}`}
             topLabel="Test"
-            topScrollEndPosition={190}
+            topScrollStartPosition={235}
+            topScrollEndPosition={0}
+            onProgressChange={(value) => onScrollProgress(value)}
+            key={taskData.id}
           >
             <div className={styles.contentInnerWrapper}>
               <div>

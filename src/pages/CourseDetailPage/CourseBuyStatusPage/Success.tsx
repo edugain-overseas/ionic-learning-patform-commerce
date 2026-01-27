@@ -13,7 +13,7 @@ const Success: FC = () => {
         <p>Your purchase</p>
         <p> Was successful</p>
       </div>
-      <Link to="/courses" className={styles.link}>
+      <Link to="/my-education" className={styles.link}>
         <span>Go to the purchased course</span>
         <IonIcon src={ArrowIcon} />
       </Link>

@@ -40,12 +40,14 @@ const LoginForm: React.FC<{
   });
 
   const onSubmit = async (data: FormValues) => {
+    console.log(data);
+
     setIsLoading(true);
-    
+
     try {
       await user?.login(data);
       present({
-        type: 'success',
+        type: "success",
         message: `Welcome, ${data.username}!`,
       });
       modals.find((modal) => modal.name === "sing-in")?.ref?.current?.dismiss();
@@ -65,7 +67,7 @@ const LoginForm: React.FC<{
       } else if (error.response.status === 409) {
         user?.setUser((prev) => ({ ...prev, username: data.username }));
         present({
-          type: 'guard',
+          type: "guard",
           message: `Welcome back, ${data.username}. Please activate your email`,
           duration: 5000,
         });
@@ -89,12 +91,7 @@ const LoginForm: React.FC<{
   };
 
   return (
-    <form
-      className={styles.formWrapper}
-      onSubmit={handleSubmit((data) => {
-        onSubmit(data);
-      })}
-    >
+    <form className={styles.formWrapper} onSubmit={handleSubmit(onSubmit)}>
       <div className={styles.formHeader}>
         <span className={styles.title}>Sing in</span>
         <span className={styles.link}>
@@ -146,7 +143,7 @@ const LoginForm: React.FC<{
           block={true}
           height={32}
           borderRadius={5}
-          type='submit'
+          type="submit"
           disabled={isLoading}
         />
         <div

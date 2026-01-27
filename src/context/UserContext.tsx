@@ -73,7 +73,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
   }) => {
     const formData = new FormData();
     formData.append("username", username);
-    formData.append("password", password);
+    formData.append("password", password);    
 
     try {
       instance.defaults.headers["Content-Type"] =

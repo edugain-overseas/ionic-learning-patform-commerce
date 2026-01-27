@@ -1,0 +1,23 @@
+.footerCompleteBtn {
+  font-size: 14rem;
+
+  ion-icon {
+    font-size: 16rem;
+  }
+
+  .footerSpinner {
+    width: 16rem;
+    height: 16rem;
+  }
+}
+
+ion-button.headerCompleteBtn {
+  &.disabled ion-icon {
+    color: var(--ion-color-success);
+  }
+
+  ion-icon {
+    font-size: 14rem;
+    color: var(--ion-color-warning-tint);
+  }
+}

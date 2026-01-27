@@ -5,6 +5,7 @@ import {
   motion,
   useMotionValueEvent,
 } from "motion/react";
+import { clamp } from "../../utils/clamp";
 import styles from "./StickyScrollLayout.module.scss";
 
 type StickyScrollLayoutProps = {
@@ -15,6 +16,8 @@ type StickyScrollLayoutProps = {
   topScrollEndPosition?: number;
   onProgressChange?: (progress: number) => void;
 };
+
+const labelThreshold = 0.7;
 
 const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
   children,
@@ -38,6 +41,9 @@ const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
     onProgressChange?.(value);
   });
 
+  const labelOpacity =
+    1 - clamp(0, (progress.get() - labelThreshold) / (1 - labelThreshold), 1);
+
   useEffect(() => {
     const container = containerRef.current;
 
@@ -48,6 +54,7 @@ const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
       );
       container.style.setProperty("--defaultEnd", `${topScrollEndPosition}px`);
     }
+    onProgressChange?.(0)
   }, []);
 
   return (
@@ -55,7 +62,12 @@ const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
       <div className={styles.posterContainer}>
         <img src={posterSrc} alt={topLabel ? topLabel : "page-poster"} />
       </div>
-      <div className={styles.contentContainer}>{children}</div>
+      <div className={styles.contentContainer}>
+        <motion.div className={styles.label} style={{ opacity: labelOpacity }}>
+          {topLabel}
+        </motion.div>
+        {children}
+      </div>
     </div>
   );
 };
