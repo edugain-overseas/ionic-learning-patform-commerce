@@ -23,9 +23,8 @@
   }
 
   .mediaObject {
-    animation: fadeIn var(--animation-duration) ease-in forwards,
-      slideIn calc(var(--animation-duration) - var(--animation-delay)) ease-in
-        forwards;
+    animation: slideIn calc(var(--animation-duration) - var(--animation-delay))
+      ease-in forwards;
   }
 
   .mediaObjectShadow {
@@ -36,7 +35,6 @@
 }
 
 // outer
-
 .outerRotationCircle {
   width: 272rem;
   height: 272rem;
@@ -47,7 +45,6 @@
   top: 0;
   left: 8rem;
   transform-origin: center center;
-  // translate: -50% -50%;
 }
 
 .outerRotationCircle > div,
@@ -56,9 +53,6 @@
   justify-content: center;
   align-items: center;
   aspect-ratio: 1;
-
-  //   background-color: rgba(252, 252, 252, 0.65);
-  //   backdrop-filter: blur(16rem);
   background-color: #f4f4f4;
   filter: drop-shadow(0 0 6.484rem rgba(0, 0, 0, 0.12));
   border-radius: 50%;
@@ -149,10 +143,7 @@
   position: absolute;
   top: 33.3rem;
   left: 41.2rem;
-  // transform: translate(-50%, -50%);
-
   background-color: rgba(185, 185, 185, 0.1);
-  //   border: 1.5rem solid rgba(252, 252, 252, 0.85);
   box-shadow: 0 0 10rem 0 rgba(0, 0, 0, 0.1) inset;
   backdrop-filter: blur(22rem);
   border-radius: 50%;
@@ -162,7 +153,6 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-
   transform-origin: center;
 }
 
@@ -170,7 +160,6 @@
   top: 60.5rem;
   left: -5rem;
   width: 17.1rem;
-
   background: url("../../assets/images/HomeHero/icon-med.svg");
   background-size: 10rem;
   background-position: center center;
@@ -181,7 +170,6 @@
   bottom: 64rem;
   right: -5.5rem;
   width: 18.1rem;
-
   background: url("../../assets/images/HomeHero/icon-engineering.svg");
   background-size: 10rem;
   background-position: center center;
@@ -194,7 +182,6 @@
   border-radius: 50%;
   background-color: #eaeaea;
   filter: drop-shadow(0 0 10rem rgba(0, 0, 0, 0.1));
-
   position: absolute;
   top: 50%;
   left: 50%;
@@ -210,7 +197,6 @@
   bottom: 0;
   left: 0;
   right: 0;
-
   border-radius: 0 0 100rem 100rem;
   overflow: hidden;
 }
@@ -222,7 +208,8 @@
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.9;
+  opacity: 0.95;
+  opacity: 1;
 }
 
 .mediaObjectShadow {
@@ -234,7 +221,7 @@
   background-position: center;
   background-repeat: no-repeat;
   z-index: -1;
-  opacity: 0.9;
+  opacity: 0.8;
 }
 
 @keyframes fadeIn {

@@ -57,14 +57,17 @@
 }
 
 .contentContainer {
+  --content-min-height: calc(100% + var(--start) - var(--end));
   position: relative;
   z-index: 3;
-  min-height: max(100%, 500px);
+  min-height: var(--content-min-height);
   background-image: url("../../assets/images/body-bg.webp");
   background-size: cover;
   background-position: center;
   background-repeat: repeat-y;
   border-radius: 16rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .label {

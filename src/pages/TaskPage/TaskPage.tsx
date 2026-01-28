@@ -2,16 +2,15 @@ import React, { useEffect, useState } from "react";
 import { IonContent, useIonRouter } from "@ionic/react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
-import { useLessonTabbarLayout } from "../../hooks/useTabbarLayout";
 import Lecture from "../../components/Lecture/Lecture";
 import Test from "../../components/Test/Test";
 import CourseProgressModal from "../../components/CourseProgressModal/CourseProgressModal";
 import TaskHeader from "./TaskHeader";
 import styles from "./TaskPage.module.scss";
+import ViewModeToggleButton from "../../components/ViewModeToggleButton/ViewModeToggleButton";
 
 const TaskPage: React.FC = () => {
   const [scrollProgress, setScrollProgress] = useState<number>(0);
-  useLessonTabbarLayout();
 
   const router = useIonRouter();
 
@@ -41,10 +40,7 @@ const TaskPage: React.FC = () => {
 
   return (
     <>
-      <TaskHeader
-        taskData={taskData}
-        scrollProgress={scrollProgress}
-      />
+      <TaskHeader taskData={taskData} scrollProgress={scrollProgress} />
       <IonContent
         fullscreen={true}
         scrollY={false}
@@ -64,10 +60,12 @@ const TaskPage: React.FC = () => {
             key={taskId}
             taskData={taskData}
             onScrollProgress={(value) => setScrollProgress(value)}
+            scrollProgress={scrollProgress}
           />
         )}
       </IonContent>
       <CourseProgressModal />
+      <ViewModeToggleButton />
     </>
   );
 };

@@ -43,7 +43,6 @@ a {
     margin-top: calc(var(--ion-safe-area-bottom) / 4);
     position: relative;
     background: var(--custom-primary-lg);
-    // opacity: 1;
   }
 
   &.hidden {
@@ -105,11 +104,6 @@ a {
 //main page
 
 .ion-page.main {
-  // background-image: url("./assets/images/body-bg.webp");
-  // background-size: cover;
-  // background-position: center;
-  // background-repeat: no-repeat;
-
   &:before {
     content: "";
     position: absolute;
@@ -234,6 +228,10 @@ ion-modal::part(handle) {
 
 .toast::part(container) {
   padding: 1rem 9rem;
+}
+
+.modal-hidden {
+  transform: translateY(100%);
 }
 
 //keyboard

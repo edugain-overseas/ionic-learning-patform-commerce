@@ -22,10 +22,7 @@ const TaskHeader = ({ scrollProgress, taskData }: PropsType) => {
   );
 
   const headerBgOpacity = animationProgress;
-  const btnBgOpacity = 1 - animationProgress;
-
-  console.log(animationProgress);
-  
+  const btnBgOpacity = 1 - animationProgress;  
 
   return (
     <IonHeader className={styles.taskHeader}>

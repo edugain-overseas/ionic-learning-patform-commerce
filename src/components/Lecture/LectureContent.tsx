@@ -12,7 +12,6 @@ import AudioPlayer from "../AudioPlayer/AudioPlayer";
 const LectureContent: FC<{ lectureContent: LectureContentType[] }> = ({
   lectureContent,
 }) => {
-
   const renderLectureContent = () =>
     [...lectureContent]?.map((section) => {
       const {
@@ -50,13 +49,7 @@ const LectureContent: FC<{ lectureContent: LectureContentType[] }> = ({
           const filePath = files && files[0]?.file_path;
           const encodedFilePathPresent = filePath?.replace(/ /g, "%20");
           return (
-            <section
-              key={id}
-              id={type}
-              className={
-                hiden ? "hidden" : `${styles.section} ${styles.sectionPDF}`
-              }
-            >
+            <section key={id} id={type}>
               <h3
                 className={styles.sectionTitle}
                 dangerouslySetInnerHTML={{ __html: title }}
@@ -76,13 +69,7 @@ const LectureContent: FC<{ lectureContent: LectureContentType[] }> = ({
           const encodedFilePathAudio =
             files && files[0].file_path?.replace(/ /g, "%20");
           return (
-            <section
-              key={id}
-              id={type}
-              className={
-                hiden ? "hidden" : `${styles.section} ${styles.sectionAudio}`
-              }
-            >
+            <section key={id} id={type}>
               <h3
                 className={styles.sectionTitle}
                 dangerouslySetInnerHTML={{ __html: title }}
@@ -100,13 +87,7 @@ const LectureContent: FC<{ lectureContent: LectureContentType[] }> = ({
           const encodedFilePathVideo =
             files && files[0].file_path?.replace(/ /g, "%20");
           return (
-            <section
-              key={id}
-              id={type}
-              className={
-                hiden ? "hidden" : `${styles.section} ${styles.sectionVideo}`
-              }
-            >
+            <section key={id} id={type}>
               <h3
                 className={styles.sectionTitle}
                 dangerouslySetInnerHTML={{ __html: title }}
@@ -122,13 +103,7 @@ const LectureContent: FC<{ lectureContent: LectureContentType[] }> = ({
           );
         case "file":
           return (
-            <section
-              key={id}
-              id={type}
-              className={
-                hiden ? "hidden" : `${styles.section} ${styles.sectionFiles}`
-              }
-            >
+            <section key={id} id={type}>
               <h3
                 className={styles.sectionTitle}
                 dangerouslySetInnerHTML={{ __html: title }}
@@ -150,13 +125,7 @@ const LectureContent: FC<{ lectureContent: LectureContentType[] }> = ({
           );
         case "link":
           return (
-            <section
-              key={id}
-              id={type}
-              className={
-                hiden ? "hidden" : `${styles.section} ${styles.sectionFiles}`
-              }
-            >
+            <section key={id} id={type}>
               <h3
                 className={styles.sectionTitle}
                 dangerouslySetInnerHTML={{ __html: title }}
@@ -183,11 +152,7 @@ const LectureContent: FC<{ lectureContent: LectureContentType[] }> = ({
           );
         case "picture":
           return (
-            <section
-              key={id}
-              id={type}
-              className={hiden ? "hidden" : styles.section}
-            >
+            <section key={id} id={type}>
               <h3
                 className={styles.sectionTitle}
                 dangerouslySetInnerHTML={{ __html: title }}

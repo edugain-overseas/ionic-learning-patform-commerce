@@ -1,0 +1,32 @@
+.toggleViewContainer {
+  padding: 4rem 14rem 4rem 4rem;
+  position: absolute;
+  bottom: 100rem;
+  right: 0;
+  z-index: 10;
+  border-radius: 9rem 0 0 9rem;
+  background: var(--custom-bg-rgba-secondary);
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(16px);
+
+  button {
+    width: 32rem;
+    height: 32rem;
+    padding: 4rem;
+    border-radius: 7.5rem;
+    background-color: var(--custom-bg-rgba-secondary);
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16) inset;
+
+    span {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      background-color: var(--custom-bg-rgba-secondary);
+      border-radius: 5.5rem;
+      box-shadow: 0 0 3rem 0 rgba(0, 0, 0, 0.16);
+
+      font-size: 18rem;
+    }
+  }
+}

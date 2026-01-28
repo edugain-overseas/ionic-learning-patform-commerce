@@ -1,14 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
 import {
   LessonType,
   TestDataType,
   useCourses,
 } from "../../context/CoursesContext";
+import { TestAttemptType } from "../../types/user";
 import { serverName } from "../../http/server";
 import { instance } from "../../http/instance";
 import { minutesToSeconds } from "../../utils/formatTime";
 import { useToast } from "../../hooks/useToast";
-import { TestAttemptType } from "../../types/user";
+import { clamp } from "../../utils/clamp";
 import useStorage from "../../hooks/useStorage";
 import TestContent from "./TestContent";
 import ProgressBar from "../ProgressBar/ProgressBar";
@@ -30,10 +32,13 @@ type CurrentAttempt = {
   lessonId: number;
 };
 
+const threshold = 0.7;
+
 const Test: React.FC<{
   taskData: LessonType;
   onScrollProgress: (value: number) => void;
-}> = ({ taskData, onScrollProgress }) => {
+  scrollProgress?: number;
+}> = ({ taskData, onScrollProgress, scrollProgress = 0 }) => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<number>(0);
   const currentAttemptsRef = useRef<CurrentAttempt | null>(null);
@@ -46,6 +51,12 @@ const Test: React.FC<{
     useStorage<CurrentAttempt | null>(`test-${taskData.id}-attempt`, null);
   const [present] = useToast();
   const coursesInterface = useCourses();
+
+  const animationProgress = clamp(
+    0,
+    (scrollProgress * 1.25 - threshold) / (1 - threshold),
+    1
+  );
 
   const course = coursesInterface?.courses.find(
     (course) => course.id === taskData.course_id
@@ -264,7 +275,13 @@ const Test: React.FC<{
             </div>
           )}
           {!Number.isNaN(answersProgressValue) && (
-            <div className={styles.answersProgress}>
+            <motion.div
+              className={styles.answersProgress}
+              style={{
+                opacity: animationProgress,
+                transform: `translateY(${100 * animationProgress - 100}%)`,
+              }}
+            >
               <span
                 className={styles.answersProgressValue}
               >{`Progress: ${answersProgressValue} / 100%`}</span>
@@ -274,7 +291,7 @@ const Test: React.FC<{
                 height={10}
                 showValue={false}
               />
-            </div>
+            </motion.div>
           )}
           <LessonToolsPanel inset="calc(116rem + var(--ion-safe-area-top)) auto auto calc(100% - 50rem)">
             <TestTools

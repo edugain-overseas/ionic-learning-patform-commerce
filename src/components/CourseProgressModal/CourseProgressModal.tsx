@@ -1,8 +1,7 @@
 import { FC } from "react";
-import { IonIcon, useIonRouter } from "@ionic/react";
+import { IonIcon } from "@ionic/react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
-import { useToast } from "../../hooks/useToast";
 import ExamIcon from "../../assets/icons/document-grade-A.svg";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import CommonButton from "../CommonButton/CommonButton";
@@ -20,8 +19,6 @@ const secondBreackpoint = 72 / modalHeight;
 
 const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
   const { courseId } = useParams<{ courseId: string }>();
-  const [present] = useToast();
-  const router = useIonRouter();
 
   const modalParent = document.querySelector("ion-tabs");
 
@@ -52,7 +49,7 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
     const examLessonId = course?.lessons.find(
       (lesson) => lesson.type === "exam"
     )?.id;
-    
+
     handleTaskNavigate(examLessonId, true);
   };
 
@@ -65,6 +62,7 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
       initialBreakpoint={firstBreakpoint}
       allowFullViewOnLastBreakpoint={true}
       isAnimating={isAnimating}
+      id={`course-progress-modal`}
     >
       <div className={styles.modalHeader}>
         <div className={styles.btnsContainer}>

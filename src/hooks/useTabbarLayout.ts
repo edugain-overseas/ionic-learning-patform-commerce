@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 export const useLessonTabbarLayout = () => {
   const tabbar = document.querySelector("ion-tab-bar");
 
@@ -20,8 +18,5 @@ export const useLessonTabbarLayout = () => {
     }
   };
 
-  useEffect(() => {
-    hideTabbar();
-    return () => showTabbar();
-  }, []);
+  return [showTabbar, hideTabbar];
 };

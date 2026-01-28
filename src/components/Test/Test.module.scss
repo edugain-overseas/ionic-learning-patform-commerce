@@ -10,7 +10,7 @@
   top: var(--ion-safe-area-top);
   left: 0;
   width: 100%;
-  z-index: 2;
+  z-index: 5;
 
   height: 78rem;
   display: flex;
@@ -20,9 +20,9 @@
   padding: 62rem 20rem 6rem;
   border-radius: 14rem;
   background: rgba(255, 255, 255, 0.9);
-  box-shadow: var(--custom-box-shadow-primary);
+  box-shadow: var(--custom-box-shadow-secondary);
   backdrop-filter: blur(28rem);
-  animation: slideDown 0.5s ease-out forwards;
+  // animation: slideDown 0.5s ease-out forwards;
 
   .answersProgressValue {
     color: var(--ion-color-light);
@@ -50,7 +50,7 @@
 }
 
 .contentInnerWrapper {
-  min-height: 500px;
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -142,12 +142,13 @@
 
 .testFooter {
   margin: 26rem 0 0;
-  padding-block: 16rem 48rem;
+  padding-block: 16rem calc(48rem + var(--tabbar-offset));
   border-top-left-radius: 16rem;
   border-top-right-radius: 16rem;
   background: var(--custom-bg-rgba-secondary);
 
   box-shadow: var(--drop-shadow-button-main);
+  transition: padding-bottom var(--custom-tr-time-mid) ease;
 }
 
 .btnContainer {
@@ -204,7 +205,7 @@
 
 .modalContent {
   flex-grow: 1;
-  height: calc(100% - 56rem - var(--ion-safe-area-top, 0rem));;
+  height: calc(100% - 56rem - var(--ion-safe-area-top, 0rem));
   padding: 20rem;
   overflow: auto;
   padding-bottom: calc(20rem + var(--padding-bottom, 0rem));

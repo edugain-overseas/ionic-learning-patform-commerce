@@ -24,6 +24,7 @@ type CustomSheetModalType = {
   allowFullViewOnLastBreakpoint?: boolean;
   modalBackgroundColor?: string;
   isAnimating?: boolean;
+  id?: string;
 };
 
 const CustomSheetModal: FC<CustomSheetModalType> = ({
@@ -37,6 +38,7 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
   allowFullViewOnLastBreakpoint = false,
   modalBackgroundColor = "rgba(255, 255, 255, 0.9)",
   isAnimating,
+  id = "",
 }) => {
   const { taskId } = useParams<{ taskId: string }>();
   const maxHeight = height * breakpoints[breakpoints.length - 1];
@@ -295,7 +297,7 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
   };
 
   return createPortal(
-    <div className={styles.modalWrapper} ref={modalRef}>
+    <div className={styles.modalWrapper} ref={modalRef} id={id}>
       <div className={styles.backdrop} ref={backdropRef}></div>
       <div
         className={styles.modal}
