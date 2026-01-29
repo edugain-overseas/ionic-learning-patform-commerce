@@ -6,16 +6,21 @@ import {
 } from "@ionic/react";
 import { IonRefresherCustomEvent } from "@ionic/core";
 import "./PageRefresher.scss";
+import { onRefreshPromise } from "../../utils/onRefreshPromise";
 
 const PageRefresher: FC<{
-  onRefresh: () => Promise<void>;
+  onRefresh?: () => Promise<void>;
   refreshingText?: string;
   containerClassname?: string;
-}> = ({ onRefresh, refreshingText, containerClassname='refresher' }) => {
+}> = ({ onRefresh, refreshingText, containerClassname = "refresher" }) => {
   const handleRefresh = (
     event: IonRefresherCustomEvent<RefresherEventDetail>
   ) => {
-    onRefresh().finally(() => event.detail.complete());
+    if (onRefresh) {
+      onRefresh().finally(() => event.detail.complete());
+    } else {
+      onRefreshPromise(event);
+    }
   };
 
   return (
@@ -26,12 +31,13 @@ const PageRefresher: FC<{
       className={containerClassname}
       pullMax={300}
       pullMin={100}
+      pullFactor={0.5}
     >
       <IonRefresherContent
         refreshingSpinner="crescent"
         refreshingText={refreshingText}
         className="page-refresher"
-        pullingText="Pull to refresh"
+        // pullingText="Pull to refresh"
         pullingIcon={null}
       ></IonRefresherContent>
     </IonRefresher>

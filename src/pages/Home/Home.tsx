@@ -16,6 +16,7 @@ import HomeStats from "../../components/HomeStats/HomeStats";
 import HomeOfferInfo from "../../components/HomeOfferInfo/HomeOfferInfo";
 import { useUser } from "../../context/UserContext";
 import HomeFooter from "../../components/HomeFooter/HomeFooter";
+import PageRefresher from "../../components/PageRefresher/PageRefresher";
 
 const headerProps = {
   left: [{ name: "logo" }],
@@ -74,6 +75,7 @@ const Home: React.FC = () => {
     <IonPage className={`${styles.page} primaryPage`} id="home">
       <Header {...headerProps} />
       <IonContent fullscreen className={styles.homeContent} scrollY={false}>
+      <PageRefresher/>
         <div
           className={styles.contentWrapper}
           id="home-content"

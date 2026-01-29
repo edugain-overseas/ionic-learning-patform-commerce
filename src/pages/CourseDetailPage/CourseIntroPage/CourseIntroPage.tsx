@@ -24,6 +24,7 @@ import EqualSpaceContainer from "../../../components/EqualSpaceContainer/EqualSp
 import CommonButton from "../../../components/CommonButton/CommonButton";
 import styles from "./CourseIntroPage.module.scss";
 import BuyCourseBtn from "../../../components/BuyCourseBtn/BuyCourseBtn";
+import PageRefresher from "../../../components/PageRefresher/PageRefresher";
 
 const threshold = 0.75;
 
@@ -56,6 +57,7 @@ const CourseIntroPage: React.FC = () => {
     <>
       <IntoHeader title={course?.title} scrollProgress={scrollProgress} />
       <IonContent scrollY={false} className={styles.content}>
+        <PageRefresher />
         <motion.div
           className={styles.courseIntroNavWrapper}
           style={{

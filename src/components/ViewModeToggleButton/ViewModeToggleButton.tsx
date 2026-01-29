@@ -23,6 +23,13 @@ const ViewModeToggleButton = () => {
     }
   }, [isFullscreen]);
 
+  useEffect(() => {
+    return () => {
+      showModal();
+      showTabbar();
+    };
+  }, []);
+
   return (
     <div className={styles.toggleViewContainer}>
       <button onClick={toggleFullscreen}>

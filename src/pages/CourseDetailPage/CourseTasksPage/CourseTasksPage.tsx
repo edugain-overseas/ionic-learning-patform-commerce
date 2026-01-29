@@ -14,6 +14,7 @@ import TaskItem from "../../../components/TaskItem/TaskItem";
 import CourseProgressModal from "../../../components/CourseProgressModal/CourseProgressModal";
 import customSheetModalStyles from "../../../components/CustomSheetModal/CustomSheetModal.module.scss";
 import styles from "./CourseTasksPage.module.scss";
+import PageRefresher from "../../../components/PageRefresher/PageRefresher";
 
 const firstBreakpoint = 24;
 const secondBreackpoint = 72;
@@ -142,6 +143,7 @@ const CourseTasksPage: FC = () => {
         // onIonScroll={handleScroll}
         // onIonScrollEnd={handleScrollEnd}
       >
+        <PageRefresher/>
         <CourseStats />
         <ul className={styles.tasksList}>
           {course?.lessons &&

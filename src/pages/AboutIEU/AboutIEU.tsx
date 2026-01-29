@@ -29,6 +29,7 @@ const AboutIEU: React.FC = () => {
           topLabel="About University"
           posterSrc={poster}
           topScrollStartPosition={190}
+          topScrollEndPosition={0}
         >
           <div className={styles.contentInner}>
             <div className={`${styles.contentHeader} ${styles.contentBlock}`}>
