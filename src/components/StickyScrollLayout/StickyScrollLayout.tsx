@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useRef } from "react";
+import { FC, ReactNode, useEffect, useLayoutEffect, useRef } from "react";
 import {
   useScroll,
   useTransform,
@@ -7,6 +7,7 @@ import {
 } from "motion/react";
 import { clamp } from "../../utils/clamp";
 import styles from "./StickyScrollLayout.module.scss";
+import { useIonViewDidEnter } from "@ionic/react";
 
 type StickyScrollLayoutProps = {
   children: ReactNode;
@@ -70,6 +71,15 @@ const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
       );
     }
     onProgressChange?.(0);
+  }, []);
+
+  useIonViewDidEnter(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    container.style.setProperty(
+      "--offset-height",
+      `${container.offsetHeight}px`
+    );
   }, []);
 
   return (
