@@ -4,7 +4,6 @@
   height: calc(56px + var(--ion-safe-area-top));
   border-bottom-left-radius: 16rem;
   border-bottom-right-radius: 16rem;
-  overflow: hidden;
 
   ion-toolbar {
     box-shadow: none;
@@ -26,6 +25,8 @@
     background-color: var(--ion-background-color);
     box-shadow: var(--custom-box-shadow-primary);
     backdrop-filter: blur(28px);
+    border-bottom-left-radius: 16rem;
+    border-bottom-right-radius: 16rem;
   }
 
   .backBtnBg {

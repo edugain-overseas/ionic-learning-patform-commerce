@@ -18,7 +18,7 @@ type PropsType = {
   title?: string;
 };
 
-const threshold = 0.25;
+const threshold = 0.7;
 
 const IntroHeader = ({ scrollProgress, title = "" }: PropsType) => {
   const [present] = useToast();
@@ -43,11 +43,13 @@ const IntroHeader = ({ scrollProgress, title = "" }: PropsType) => {
 
   return (
     <IonHeader className={styles.introHeader}>
+      <motion.div
+        className={styles.headerBg}
+        style={{
+          transform: `translateY(calc(100% * ${animationProgress} - 100%))`,
+        }}
+      />
       <IonToolbar className={styles.toolbar}>
-        <motion.div
-          className={styles.headerBg}
-          style={{ opacity: headerBgOpacity }}
-        />
         <IonButtons slot="start" className={styles.buttonsWrapper}>
           <motion.div
             className={styles.backBtnBg}
@@ -55,13 +57,19 @@ const IntroHeader = ({ scrollProgress, title = "" }: PropsType) => {
           />
           <HeaderBackBtn />
         </IonButtons>
-        <motion.div style={{ opacity: headerBgOpacity }}>
+        <motion.div
+          style={{
+            opacity: headerBgOpacity,
+            transform: `translateY(calc(100% * ${animationProgress} - 100%))`,
+          }}
+        >
           <HeaderTitle title={title} />
         </motion.div>
         <IonButtons slot="end" className={styles.buttonsWrapper}>
           <motion.div
             style={{
               opacity: rightOpacity,
+              transform: `translateY(calc(100% * ${animationProgress} - 100%))`,
               pointerEvents: animationProgress > 0 ? "auto" : "none",
             }}
           >

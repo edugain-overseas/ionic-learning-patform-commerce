@@ -12,7 +12,7 @@ type PropsType = {
   taskData?: LessonType;
 };
 
-const threshold = 0.25;
+const threshold = 0.7;
 
 const TaskHeader = ({ scrollProgress, taskData }: PropsType) => {
   const animationProgress = clamp(
@@ -22,15 +22,18 @@ const TaskHeader = ({ scrollProgress, taskData }: PropsType) => {
   );
 
   const headerBgOpacity = animationProgress;
-  const btnBgOpacity = 1 - animationProgress;  
+  const btnBgOpacity = 1 - animationProgress;
 
   return (
     <IonHeader className={styles.taskHeader}>
+      <motion.div
+        className={styles.headerBg}
+        // style={{ opacity: headerBgOpacity }}
+        style={{
+          transform: `translateY(calc(100% * ${animationProgress} - 100%))`,
+        }}
+      />
       <IonToolbar className={styles.toolbar}>
-        <motion.div
-          className={styles.headerBg}
-          style={{ opacity: headerBgOpacity }}
-        />
         <IonButtons slot="start" className={styles.buttonsWrapper}>
           <motion.div
             className={styles.backBtnBg}
@@ -38,7 +41,12 @@ const TaskHeader = ({ scrollProgress, taskData }: PropsType) => {
           />
           <HeaderBackBtn />
         </IonButtons>
-        <motion.div style={{ opacity: headerBgOpacity }}>
+        <motion.div
+          style={{
+            opacity: animationProgress,
+            transform: `translateY(calc(100% * ${animationProgress} - 100%))`,
+          }}
+        >
           <HeaderTitle title={taskData?.title || ""} />
         </motion.div>
         <IonButtons slot="end" className={styles.buttonsWrapper}>

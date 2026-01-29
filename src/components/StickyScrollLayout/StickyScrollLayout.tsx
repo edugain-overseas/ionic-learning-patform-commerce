@@ -17,7 +17,8 @@ type StickyScrollLayoutProps = {
   onProgressChange?: (progress: number) => void;
 };
 
-const labelThreshold = 0.7;
+const labelThreshold = 0.9;
+const contentBorderTreshold = 0.9;
 
 const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
   children,
@@ -41,11 +42,21 @@ const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
     onProgressChange?.(value);
   });
 
-  const labelOpacity =
-    1 - clamp(0, (progress.get() - labelThreshold) / (1 - labelThreshold), 1);
+  const labelVisibility = progress.get() < labelThreshold;
+
+  const borderRadius =
+    16 -
+    16 *
+      clamp(
+        0,
+        (progress.get() - contentBorderTreshold) / (1 - contentBorderTreshold),
+        1
+      );
 
   useEffect(() => {
     const container = containerRef.current;
+
+    console.dir(container);
 
     if (container) {
       container.style.setProperty(
@@ -53,8 +64,12 @@ const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
         `${topScrollStartPosition}px`
       );
       container.style.setProperty("--defaultEnd", `${topScrollEndPosition}px`);
+      container.style.setProperty(
+        "--offset-height",
+        `${container.offsetHeight}px`
+      );
     }
-    onProgressChange?.(0)
+    onProgressChange?.(0);
   }, []);
 
   return (
@@ -62,8 +77,16 @@ const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
       <div className={styles.posterContainer}>
         <img src={posterSrc} alt={topLabel ? topLabel : "page-poster"} />
       </div>
+      <div className={styles.paddingTop} />
+      <motion.div
+        className={styles.stickyBg}
+        style={{ borderRadius: `${borderRadius}rem` }}
+      />
       <div className={styles.contentContainer}>
-        <motion.div className={styles.label} style={{ opacity: labelOpacity }}>
+        <motion.div
+          className={styles.label}
+          style={{ opacity: labelVisibility ? 1 : 0 }}
+        >
           {topLabel}
         </motion.div>
         {children}
