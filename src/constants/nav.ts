@@ -13,7 +13,8 @@ export type TabType = {
   href: TabHrefType;
 };
 
-type CoursesFilterNameType = "all" | "short courses" | "long courses";
+export type CoursesFilterNameType = "all" | "short courses" | "long courses";
+export type MyStudyFilterNameType = "in progress" | "completed" | "all courses";
 
 export const tabsData: TabType[] = [
   {
@@ -100,6 +101,14 @@ export const coursesFilter: {
   { value: "all", label: "all" },
   { value: "short courses", label: "short courses" },
   { value: "long courses", label: "long courses" },
+];
+export const myStudyFilter: {
+  value: MyStudyFilterNameType;
+  label: MyStudyFilterNameType;
+}[] = [
+  { value: "in progress", label: "in progress" },
+  { value: "completed", label: "completed" },
+  { value: "all courses", label: "all courses" },
 ];
 
 export const courseNavItems = (courseId: string) => [

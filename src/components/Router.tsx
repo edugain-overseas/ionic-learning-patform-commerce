@@ -15,6 +15,7 @@ import Basket from "../pages/Basket/Basket";
 import Search from "../pages/Search/Search";
 import CourseBuyStatusPage from "../pages/CourseDetailPage/CourseBuyStatusPage/CourseBuyStatusPage";
 import Support from "../pages/Support/Support";
+import MyStudy from "../pages/MyStudy/MyStudy";
 
 const Router: React.FC = () => {
   return (
@@ -26,7 +27,7 @@ const Router: React.FC = () => {
             <Route path="/home" component={Home} exact />
             <Route path="/my-profile" component={UserProfile} exact />
             <Route path="/courses" component={Courses} exact />
-            <Route path="/my-education" component={Courses} exact />
+            <Route path="/my-education" component={MyStudy} exact />
             <Route path="/basket" component={Basket} exact />
 
             <Route path="/aboutIEU" component={AboutIEU} exact />
@@ -38,10 +39,7 @@ const Router: React.FC = () => {
               component={CategoryDetailPage}
               exact
             />
-            <Route
-              path="/course/:courseId"
-              component={CourseDetailPage}
-            />
+            <Route path="/course/:courseId" component={CourseDetailPage} />
             <Route path="/payment" component={CourseBuyStatusPage} exact />
             <Route exact path="/" render={() => <Redirect to="/home" />} />
             <Route component={NotFound} />

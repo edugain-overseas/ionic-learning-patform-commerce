@@ -1,11 +1,15 @@
 import {
   IonContent,
   IonPage,
+  IonSegment,
+  IonSegmentButton,
   ScrollDetail,
+  SegmentChangeEventDetail,
+  useIonRouter,
   useIonViewDidLeave,
   useIonViewWillEnter,
 } from "@ionic/react";
-import React, { useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
 import { useUser } from "../../context/UserContext";
@@ -20,10 +24,18 @@ import CourseItem from "../../components/CourseItem/CourseItem";
 // import Auth from "../../components/Auth/Auth";
 import PageRefresher from "../../components/PageRefresher/PageRefresher";
 import styles from "./CategoryDetailPage.module.scss";
+import { useFilter } from "../../hooks/useCategoryDetailPageFilter";
+import ProgressBar from "../../components/ProgressBar/ProgressBar";
 
 const MAX_SCROLL_VALUE = 91;
+const MY_STUDY_MAX_SCROLL_VALUE = 162;
 
 const CategoryDetailPage: React.FC = () => {
+  const router = useIonRouter();
+
+  const tab = router.routeInfo.tab;
+  const isMyStudyTab = tab === "my study";
+
   useIonViewWillEnter(() => {
     changeStausBarTheme("Dark");
   });
@@ -45,28 +57,27 @@ const CategoryDetailPage: React.FC = () => {
 
   const userCourses = useUser()?.user.courses;
 
-  // const { filter, setFilter } = useFilter();
+  const { filter, setFilter } = useFilter();
 
   // const showContentFallback =
   //   filter === "In process" && userCourses?.length === 0;
 
-  // const handleProgress = useMemo(() => {
-  //   let coursesIds: number[] = [];
-  //   courses?.forEach((course) => coursesIds.push(course.id));
+  const handleProgress = useMemo(() => {
+    let coursesIds: number[] = [];
+    courses?.forEach((course) => coursesIds.push(course.id));
 
-  //   const purchasedCoursesData = userCourses?.filter((course) =>
-  //     coursesIds.includes(course.course_id)
-  //   );
-  //   if (courses && purchasedCoursesData) {
-  //     return Math.round(
-  //       purchasedCoursesData?.reduce(
-  //         (total, course) =>
-  //           course.progress ? total + course.progress : total,
-  //         0
-  //       ) / (courses.length ? courses.length : 1)
-  //     );
-  //   }
-  // }, [userCourses]);
+    const purchasedCoursesData = courses?.filter((course) => course.bought);
+
+    if (courses && purchasedCoursesData) {
+      return Math.round(
+        purchasedCoursesData?.reduce(
+          (total, course) =>
+            course.progress ? total + course.progress : total,
+          0
+        ) / (courses.length ? courses.length : 1)
+      );
+    }
+  }, [userCourses]);
 
   const contentRef = useRef<HTMLIonContentElement>(null);
   const topContentRef = useRef<HTMLDivElement>(null);
@@ -82,7 +93,9 @@ const CategoryDetailPage: React.FC = () => {
   };
 
   const handleScroll = (e: CustomEvent<ScrollDetail>) => {
-    const hideCoef = e.detail.scrollTop / remToPx(MAX_SCROLL_VALUE);
+    const hideCoef =
+      e.detail.scrollTop /
+      remToPx(isMyStudyTab ? MY_STUDY_MAX_SCROLL_VALUE : MAX_SCROLL_VALUE);
     topContentRef.current?.style.setProperty(
       "--hide-coefficient",
       `${hideCoef}`
@@ -100,7 +113,9 @@ const CategoryDetailPage: React.FC = () => {
     }
 
     if (
-      (remToPx(MAX_SCROLL_VALUE) - currentScroll) / remToPx(MAX_SCROLL_VALUE) >
+      (remToPx(isMyStudyTab ? MY_STUDY_MAX_SCROLL_VALUE : MAX_SCROLL_VALUE) -
+        currentScroll) /
+        remToPx(isMyStudyTab ? MY_STUDY_MAX_SCROLL_VALUE : MAX_SCROLL_VALUE) >
       0.5
     ) {
       contentRef.current?.scrollToTop(300);
@@ -111,27 +126,29 @@ const CategoryDetailPage: React.FC = () => {
     }
   };
 
-  // const onSegmentChange = (event: CustomEvent<SegmentChangeEventDetail>) => {
-  //   const { value } = event.detail;
-  //   if (value !== undefined) {
-  //     setFilter(`${value}`);
-  //   }
-  // };
+  const onSegmentChange = (event: CustomEvent<SegmentChangeEventDetail>) => {
+    const { value } = event.detail;
+    if (value !== undefined) {
+      setFilter(`${value}`);
+    }
+  };
 
   const handleFilterCourses = () => {
-    // let userCoursesIds: number[] = [];
-    // userCourses?.forEach((course) => userCoursesIds.push(course.course_id));
-    // switch (filter) {
-    //   case "All courses":
-    //     return courses;
-    //   case "In process":
-    //     return courses?.filter((course) => userCoursesIds.includes(course.id));
-    //   case "Available":
-    //     return courses?.filter((course) => !userCoursesIds.includes(course.id));
-    //   default:
-    //     break;
-    // }
-    return courses?.filter((course) => !course.bought);
+    let userCoursesIds: number[] = [];
+    courses?.forEach(
+      (course) => course.bought && userCoursesIds.push(course.id)
+    );
+
+    switch (filter) {
+      case "All courses":
+        return courses;
+      case "In process":
+        return courses?.filter((course) => userCoursesIds.includes(course.id));
+      case "Available":
+        return courses?.filter((course) => !userCoursesIds.includes(course.id));
+      default:
+        return [];
+    }
   };
 
   const onRefresh = coursesInterface?.getAllCourses;
@@ -181,34 +198,44 @@ const CategoryDetailPage: React.FC = () => {
                 ></p>
               </div>
             </div>
-            {/* <div className={styles.progressWrapper}>
-              <span className={styles.progressValue}>
-                Progress: {handleProgress} / 100%
-              </span>
-              <ProgressBar
-                value={handleProgress}
-                disabled={false}
-                height={10}
-                showValue={false}
-              />
-            </div> */}
+            {isMyStudyTab && (
+              <div className={styles.progressWrapper}>
+                <span className={styles.progressValue}>
+                  Progress: {handleProgress} / 100%
+                </span>
+                <ProgressBar
+                  value={handleProgress}
+                  disabled={false}
+                  height={10}
+                  showValue={false}
+                />
+              </div>
+            )}
           </div>
-          {/* <IonSegment
-            value={filter}
-            className={styles.segment}
-            mode="ios"
-            onIonChange={onSegmentChange}
-          >
-            <IonSegmentButton className={styles.segmentBtn} value="In process">
-              <span>In process</span>
-            </IonSegmentButton>
-            <IonSegmentButton className={styles.segmentBtn} value="Available">
-              <span>Available</span>
-            </IonSegmentButton>
-            <IonSegmentButton className={styles.segmentBtn} value="All courses">
-              <span>All courses</span>
-            </IonSegmentButton>
-          </IonSegment> */}
+          {isMyStudyTab && (
+            <IonSegment
+              value={filter}
+              className={styles.segment}
+              mode="ios"
+              onIonChange={onSegmentChange}
+            >
+              <IonSegmentButton
+                className={styles.segmentBtn}
+                value="In process"
+              >
+                <span>In process</span>
+              </IonSegmentButton>
+              <IonSegmentButton className={styles.segmentBtn} value="Available">
+                <span>Available</span>
+              </IonSegmentButton>
+              <IonSegmentButton
+                className={styles.segmentBtn}
+                value="All courses"
+              >
+                <span>All courses</span>
+              </IonSegmentButton>
+            </IonSegment>
+          )}
         </div>
         <div className={`${styles.bottomOuter} ${styles.background}`}>
           <div className={styles.controllerWrapper}>
@@ -216,16 +243,12 @@ const CategoryDetailPage: React.FC = () => {
           </div>
           <div className={styles.bottomInner} ref={bottomInnerRef}>
             <div className={styles.innerHeader}>
-              <div>Available</div>
+              <div>{isMyStudyTab ? filter : "Available"}</div>
               <div>
                 <span>Purchased:</span>{" "}
-                {`${
-                  userCourses?.filter((userCourse) =>
-                    courses?.find(
-                      (course) => course.id === userCourse.course_id
-                    )
-                  ).length
-                } / ${courses?.length}`}
+                {`${courses?.filter((course) => course.bought).length} / ${
+                  courses?.length
+                }`}
               </div>
             </div>
             {/* {showContentFallback ? (
@@ -233,11 +256,11 @@ const CategoryDetailPage: React.FC = () => {
                 containerClassname={styles.contentFallbackContainer}
               />
             ) : ( */}
-              <ul className={styles.coursesList}>
-                {handleFilterCourses()?.map((course) => (
-                  <CourseItem course={course} key={course.id} />
-                ))}
-              </ul>
+            <ul className={styles.coursesList}>
+              {handleFilterCourses()?.map((course) => (
+                <CourseItem course={course} key={course.id} />
+              ))}
+            </ul>
             {/* )} */}
           </div>
         </div>
