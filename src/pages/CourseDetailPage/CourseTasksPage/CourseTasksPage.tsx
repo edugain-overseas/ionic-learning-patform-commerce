@@ -16,6 +16,7 @@ import customSheetModalStyles from "../../../components/CustomSheetModal/CustomS
 import styles from "./CourseTasksPage.module.scss";
 import PageRefresher from "../../../components/PageRefresher/PageRefresher";
 import Auth from "../../../components/Auth/Auth";
+import { useUser } from "../../../context/UserContext";
 
 const firstBreakpoint = 24;
 const secondBreackpoint = 72;
@@ -23,6 +24,7 @@ const secondBreackpoint = 72;
 const CourseTasksPage: FC = () => {
   const [animatingModal, setAnimatingModal] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
+  const accessToken = useUser()?.user.accessToken;
 
   const { courseId } = useParams<{ courseId: string }>();
 
@@ -140,7 +142,9 @@ const CourseTasksPage: FC = () => {
       <Header {...headerProps} />
       <CourseNavPanel />
       <IonContent
-        className={styles.pageContentWrapper}
+        className={`${styles.pageContentWrapper} ${
+          accessToken ? "" : styles.withAuth
+        }`}
         scrollEvents={true}
         // onIonScroll={handleScroll}
         // onIonScrollEnd={handleScrollEnd}

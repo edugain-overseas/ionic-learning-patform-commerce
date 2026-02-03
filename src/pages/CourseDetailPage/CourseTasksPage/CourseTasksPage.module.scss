@@ -3,6 +3,13 @@
   --padding-start: 18rem;
   --padding-end: 18rem;
   --padding-bottom: calc(24rem + var(--tabbar-offset));
+  &::part(scroll) {
+    overscroll-behavior: none;
+  }
+
+  &.withAuth {
+    --padding-bottom: calc(24rem + var(--tabbar-offset) + 65rem);
+  }
 }
 
 .courseStats {

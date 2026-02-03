@@ -185,6 +185,7 @@ ion-modal::part(handle) {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  overscroll-behavior: none;
 }
 
 .items-center-wrapper {

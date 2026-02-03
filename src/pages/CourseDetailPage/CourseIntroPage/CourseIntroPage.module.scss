@@ -83,6 +83,10 @@
 
 .content {
   --content-offset-bottom: calc(96rem + var(--tabbar-offset));
+
+  &::part(scroll) {
+    overscroll-behavior: none;
+  }
 }
 
 .courseIntroNavWrapper {

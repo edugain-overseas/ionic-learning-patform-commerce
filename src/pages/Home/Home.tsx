@@ -74,6 +74,9 @@ const Home: React.FC = () => {
   const [isScrolling, setIsScrolling] = useState(false);
   const isAuthShown = !useUser()?.user.accessToken;
 
+  console.log(isScrolling);
+  
+
   return (
     <IonPage className={`${styles.page} primaryPage`} id="home">
       <Header {...headerProps} />
@@ -87,6 +90,7 @@ const Home: React.FC = () => {
           style={{ ["--padding-bottom"]: isAuthShown ? "64rem" : "0" }}
         >
           <PageRefresher />
+
           <div className={styles.hero}>
             <div className={styles.titleWrapper}>
               <span className={styles.mainTitle}>Online learning</span>
