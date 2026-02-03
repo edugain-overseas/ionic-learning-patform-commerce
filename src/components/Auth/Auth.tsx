@@ -10,18 +10,23 @@ import styles from "./Auth.module.scss";
 
 type AuthPropsType = {
   containerClassname?: string;
+  hidden?: boolean;
 };
 
-const Auth: FC<AuthPropsType> = ({ containerClassname = "" }) => {
+const Auth: FC<AuthPropsType> = ({ containerClassname = "", hidden }) => {
   const accessToken = useUser()?.user?.accessToken;
-  const isUserReady = useUser()?.user?.isTokenInit;  
+  const isUserReady = useUser()?.user?.isTokenInit;
 
   const authUiInterface = useAuthUi();
 
   return (
     <>
       {!accessToken && isUserReady && (
-        <div className={`${styles.authPanel} ${containerClassname}`}>
+        <div
+          className={`${styles.authPanel} ${
+            hidden ? styles.hidden : ""
+          } ${containerClassname}`}
+        >
           <EqualSpaceContainer
             leftItem={
               <CommonButton

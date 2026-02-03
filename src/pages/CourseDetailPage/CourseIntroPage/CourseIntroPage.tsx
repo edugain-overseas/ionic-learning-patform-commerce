@@ -5,23 +5,18 @@ import { motion } from "motion/react";
 import { useCourses } from "../../../context/CoursesContext";
 import { serverName } from "../../../http/server";
 import { useUser } from "../../../context/UserContext";
-// import { useBasket } from "../../../context/BasketContext";
 import { clamp } from "../../../utils/clamp";
 import laptop from "../../../assets/icons/laptop.svg";
 import clock from "../../../assets/icons/clock.svg";
 import schollOnline from "../../../assets/icons/introPage/school-online.svg";
 import clockBig from "../../../assets/icons/introPage/clock.svg";
 import certificate from "../../../assets/icons/introPage/certificate.svg";
-// import basket from "../../../assets/icons/nav/basket.svg";
-// import remove from "../../../assets/icons/delete.svg";
 import devices from "../../../assets/images/devices.png";
 import IntoHeader from "./IntroHeader";
 import StickyScrollLayout from "../../../components/StickyScrollLayout/StickyScrollLayout";
 import CourseItem from "../../../components/CourseItem/CourseItem";
 import CardPrice from "../../../components/CardPrice/CardPrice";
 import CourseNavPanel from "../../../components/CourseNavPanel/CourseNavPanel";
-// import EqualSpaceContainer from "../../../components/EqualSpaceContainer/EqualSpaceContainer";
-// import CommonButton from "../../../components/CommonButton/CommonButton";
 import BuyCourseBtn from "../../../components/BuyCourseBtn/BuyCourseBtn";
 import PageRefresher from "../../../components/PageRefresher/PageRefresher";
 import styles from "./CourseIntroPage.module.scss";
@@ -36,12 +31,6 @@ const CourseIntroPage: React.FC = () => {
   const isCoursePurchased = useUser()?.user.courses?.find(
     (userCourse) => userCourse.course_id === +courseId
   );
-
-  // const basketInterface = useBasket();
-
-  // const isCourseInBasket = basketInterface?.items.find(
-  //   (item) => item.id === +courseId
-  // );
 
   const coursesToPropose = courses?.filter(
     (courseItem) => courseItem.id !== +courseId && !courseItem.bought

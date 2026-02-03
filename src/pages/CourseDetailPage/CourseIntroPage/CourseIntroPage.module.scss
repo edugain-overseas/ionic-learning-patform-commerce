@@ -1,7 +1,7 @@
 .introHeader {
   position: absolute;
   box-shadow: none;
-  height: calc(56px + var(--ion-safe-area-top));
+  height: calc(56rem + var(--ion-safe-area-top));
   border-bottom-left-radius: 16rem;
   border-bottom-right-radius: 16rem;
 
@@ -93,7 +93,7 @@
   z-index: 4;
   background-image: url("/src/assets/images/body-bg.webp");
   background-size: cover;
-  padding-top: calc(56px + var(--ion-safe-area-top));
+  padding-top: calc(56rem + var(--ion-safe-area-top));
   transform: translateY(-100%);
   opacity: 0;
 }

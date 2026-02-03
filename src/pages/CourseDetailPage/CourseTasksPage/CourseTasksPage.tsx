@@ -15,12 +15,14 @@ import CourseProgressModal from "../../../components/CourseProgressModal/CourseP
 import customSheetModalStyles from "../../../components/CustomSheetModal/CustomSheetModal.module.scss";
 import styles from "./CourseTasksPage.module.scss";
 import PageRefresher from "../../../components/PageRefresher/PageRefresher";
+import Auth from "../../../components/Auth/Auth";
 
 const firstBreakpoint = 24;
 const secondBreackpoint = 72;
 
 const CourseTasksPage: FC = () => {
   const [animatingModal, setAnimatingModal] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
 
   const { courseId } = useParams<{ courseId: string }>();
 
@@ -142,8 +144,10 @@ const CourseTasksPage: FC = () => {
         scrollEvents={true}
         // onIonScroll={handleScroll}
         // onIonScrollEnd={handleScrollEnd}
+        onIonScrollStart={() => setIsScrolling(true)}
+        onIonScrollEnd={() => setIsScrolling(false)}
       >
-        <PageRefresher/>
+        <PageRefresher />
         <CourseStats />
         <ul className={styles.tasksList}>
           {course?.lessons &&
@@ -153,6 +157,7 @@ const CourseTasksPage: FC = () => {
         </ul>
         <CourseProgressModal isAnimating={animatingModal} />
       </IonContent>
+      <Auth containerClassname={styles.tasksAuth} hidden={isScrolling} />
     </>
   );
 };

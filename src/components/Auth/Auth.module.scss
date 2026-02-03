@@ -9,6 +9,13 @@
   box-shadow: var(--custom-box-shadow-primary);
   border-radius: 16rem 16rem 0 0;
   backdrop-filter: blur(28px);
+
+  transform: translateY(0);
+  transition: transform var(--custom-tr-time-max) ease-out;
+
+  &.hidden {
+    transform: translateY(100%);
+  }
 }
 
 .authButtonsWrapper {

@@ -5,7 +5,7 @@ import {
   IonRouterLink,
 } from "@ionic/react";
 import SearchIcon from "../../assets/icons/menu/search.svg";
-import SupportIcon from "../../assets/icons/menu/support.svg";
+// import SupportIcon from "../../assets/icons/menu/support.svg";
 import styles from "./Menu.module.scss";
 
 const MenuBottomTools = () => {
@@ -26,7 +26,7 @@ const MenuBottomTools = () => {
           </IonRouterLink>
         </IonMenuToggle>
       </li>
-      <li>
+      {/* <li>
         <IonMenuToggle>
           <IonRouterLink
             routerLink="/support"
@@ -40,7 +40,7 @@ const MenuBottomTools = () => {
             <IonRippleEffect type="unbounded"></IonRippleEffect>
           </IonRouterLink>
         </IonMenuToggle>
-      </li>
+      </li> */}
     </ul>
   );
 };

@@ -224,3 +224,8 @@
     border: 2rem solid transparent;
   }
 }
+
+.tasksAuth {
+  padding-bottom: calc(var(--tabbar-offset) + 24rem);
+  height: calc(65rem + var(--tabbar-offset) + 24rem);
+}

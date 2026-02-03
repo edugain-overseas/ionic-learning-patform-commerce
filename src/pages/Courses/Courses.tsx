@@ -2,10 +2,12 @@ import { IonContent, IonPage } from "@ionic/react";
 import React, { useState } from "react";
 import { coursesFilter } from "../../constants/nav";
 import { useCourses } from "../../context/CoursesContext";
+import { useUser } from "../../context/UserContext";
 import Header from "../../components/Header/Header";
 import CategoryItem from "../../components/CategoryItem/CategoryItem";
 import SegmentNavPanel from "../../components/SegmentNavPanel/SegmentNavPanel";
 import PageRefresher from "../../components/PageRefresher/PageRefresher";
+import Auth from "../../components/Auth/Auth";
 import styles from "./Courses.module.scss";
 
 const Courses: React.FC = () => {
@@ -13,6 +15,7 @@ const Courses: React.FC = () => {
   const categories = coursesInterface?.categories;
   const courses = coursesInterface?.courses;
   const [filter, setFilter] = useState<string>(coursesFilter[0].value);
+  const [isScrolling, setIsScrolling] = useState(false);
 
   const handleFilterCategory = () => {
     const availableCourses = courses?.filter((course) => !course.bought);
@@ -68,10 +71,19 @@ const Courses: React.FC = () => {
 
   const onRefresh = coursesInterface?.getAllCategories;
 
+  const isAuthShown = !useUser()?.user.accessToken;
+
   return (
     <IonPage id="courses" className="primaryPage">
       <Header {...headerProps} />
-      <IonContent className="custom-content-wrapper">
+      <IonContent
+        className={`custom-content-wrapper ${styles.content} ${
+          isAuthShown ? styles.withAuthPanel : ""
+        }`}
+        scrollEvents={true}
+        onIonScrollStart={() => setIsScrolling(true)}
+        onIonScrollEnd={() => setIsScrolling(false)}
+      >
         <div style={{ marginBottom: "12rem" }}>
           <SegmentNavPanel
             value={filter}
@@ -86,6 +98,7 @@ const Courses: React.FC = () => {
           ))}
         </ul>
       </IonContent>
+      <Auth hidden={isScrolling} />
     </IonPage>
   );
 };

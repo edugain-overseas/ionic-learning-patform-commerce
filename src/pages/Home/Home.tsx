@@ -1,9 +1,10 @@
+import { useState } from "react";
 import { IonContent, IonPage } from "@ionic/react";
+import { useUser } from "../../context/UserContext";
 import Header from "../../components/Header/Header";
 import HomeHero from "../../components/HomeHero/HomeHero";
 import HomeSearch from "../../components/HomeSearch/HomeSearch";
 import Auth from "../../components/Auth/Auth";
-import styles from "./Home.module.scss";
 import {
   CategoryType,
   CourseType,
@@ -14,15 +15,16 @@ import CategoryItem from "../../components/CategoryItem/CategoryItem";
 import CourseItem from "../../components/CourseItem/CourseItem";
 import HomeStats from "../../components/HomeStats/HomeStats";
 import HomeOfferInfo from "../../components/HomeOfferInfo/HomeOfferInfo";
-import { useUser } from "../../context/UserContext";
 import HomeFooter from "../../components/HomeFooter/HomeFooter";
 import PageRefresher from "../../components/PageRefresher/PageRefresher";
+import styles from "./Home.module.scss";
 
 const headerProps = {
   left: [{ name: "logo" }],
   right: [
     { name: "notification" },
     { name: "search", onClick: () => {} },
+    { name: "user" },
   ],
   mode: "transparent",
 };
@@ -69,18 +71,22 @@ const Courses = () => {
 };
 
 const Home: React.FC = () => {
+  const [isScrolling, setIsScrolling] = useState(false);
   const isAuthShown = !useUser()?.user.accessToken;
 
   return (
     <IonPage className={`${styles.page} primaryPage`} id="home">
       <Header {...headerProps} />
-      <IonContent fullscreen className={styles.homeContent} scrollY={false}>
-      <PageRefresher/>
-        <div
-          className={styles.contentWrapper}
-          id="home-content"
-          style={{ paddingBottom: isAuthShown ? "64rem" : "0" }}
+      <div style={{ flexGrow: 1, overflow: "hidden" }}>
+        <IonContent
+          fullscreen
+          className={styles.homeContent}
+          scrollEvents={true}
+          onIonScrollStart={() => setIsScrolling(true)}
+          onIonScrollEnd={() => setIsScrolling(false)}
+          style={{ ["--padding-bottom"]: isAuthShown ? "64rem" : "0" }}
         >
+          <PageRefresher />
           <div className={styles.hero}>
             <div className={styles.titleWrapper}>
               <span className={styles.mainTitle}>Online learning</span>
@@ -108,9 +114,9 @@ const Home: React.FC = () => {
           <HomeStats />
           <HomeOfferInfo />
           <HomeFooter />
-        </div>
-        <Auth containerClassname={styles.homeAuth}/>
-      </IonContent>
+        </IonContent>
+      </div>
+      <Auth containerClassname={styles.homeAuth} hidden={isScrolling} />
     </IonPage>
   );
 };

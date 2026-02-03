@@ -56,30 +56,27 @@ const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
 
   useEffect(() => {
     const container = containerRef.current;
-
-    console.dir(container);
-
     if (container) {
       container.style.setProperty(
         "--defaultStart",
         `${topScrollStartPosition}px`
       );
       container.style.setProperty("--defaultEnd", `${topScrollEndPosition}px`);
-      container.style.setProperty(
-        "--offset-height",
-        `${container.offsetHeight}px`
-      );
     }
     onProgressChange?.(0);
   }, []);
 
-  useIonViewDidEnter(() => {
-    const container = containerRef.current;
-    if (!container) return;
-    container.style.setProperty(
-      "--offset-height",
-      `${container.offsetHeight}px`
-    );
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const ro = new ResizeObserver(() => {
+      el.style.setProperty("--offset-height", `${el.offsetHeight}px`);
+    });
+
+    ro.observe(el);
+
+    return () => ro.disconnect();
   }, []);
 
   return (

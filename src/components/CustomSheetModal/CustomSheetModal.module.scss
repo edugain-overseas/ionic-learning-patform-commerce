@@ -46,6 +46,7 @@
   transition: all var(--custom-tr-time-max) ease;
   pointer-events: all;
   box-shadow: var(--custom-box-shadow-primary);
+  backdrop-filter: blur(28px);
 
   &.directionUp {
     .leftBar {

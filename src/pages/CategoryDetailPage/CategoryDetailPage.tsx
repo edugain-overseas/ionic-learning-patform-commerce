@@ -6,32 +6,36 @@ import {
   ScrollDetail,
   SegmentChangeEventDetail,
   useIonRouter,
+  useIonViewDidEnter,
   useIonViewDidLeave,
   useIonViewWillEnter,
 } from "@ionic/react";
-import React, { useMemo, useRef } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
 import { useUser } from "../../context/UserContext";
-// import { useFilter } from "../../hooks/useCategoryDetailPageFilter";
+import { useFilter } from "../../hooks/useCategoryDetailPageFilter";
 import { remToPx } from "../../utils/pxToRem";
 import { changeStausBarTheme } from "../../hooks/useStatusBar";
 import categoryContrastIcon from "../../assets/icons/category-contrast.svg";
 import Header from "../../components/Header/Header";
-// import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import CourseItem from "../../components/CourseItem/CourseItem";
-// import UnauthorizedUserContentFallback from "../../components/UnauthorizedUserContentFallback/UnauthorizedUserContentFallback";
-// import Auth from "../../components/Auth/Auth";
 import PageRefresher from "../../components/PageRefresher/PageRefresher";
-import styles from "./CategoryDetailPage.module.scss";
-import { useFilter } from "../../hooks/useCategoryDetailPageFilter";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
+import Auth from "../../components/Auth/Auth";
+import styles from "./CategoryDetailPage.module.scss";
 
 const MAX_SCROLL_VALUE = 91;
 const MY_STUDY_MAX_SCROLL_VALUE = 162;
 
 const CategoryDetailPage: React.FC = () => {
+  const contentRef = useRef<HTMLIonContentElement>(null);
+  const topContentRef = useRef<HTMLDivElement>(null);
+  const bottomInnerRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLSpanElement>(null);
   const router = useIonRouter();
+  const [isScrolling, setIsScrolling] = useState(false);
+  const accessToken = useUser()?.user.accessToken;
 
   const tab = router.routeInfo.tab;
   const isMyStudyTab = tab === "my study";
@@ -59,9 +63,6 @@ const CategoryDetailPage: React.FC = () => {
 
   const { filter, setFilter } = useFilter();
 
-  // const showContentFallback =
-  //   filter === "In process" && userCourses?.length === 0;
-
   const handleProgress = useMemo(() => {
     let coursesIds: number[] = [];
     courses?.forEach((course) => coursesIds.push(course.id));
@@ -79,11 +80,6 @@ const CategoryDetailPage: React.FC = () => {
     }
   }, [userCourses]);
 
-  const contentRef = useRef<HTMLIonContentElement>(null);
-  const topContentRef = useRef<HTMLDivElement>(null);
-  const bottomInnerRef = useRef<HTMLDivElement>(null);
-  const headerRef = useRef<HTMLSpanElement>(null);
-
   const toggleHeaderTitleVisibility = (visible: Boolean) => {
     if (visible) {
       headerRef.current?.classList.add(styles.headerVisible);
@@ -93,6 +89,7 @@ const CategoryDetailPage: React.FC = () => {
   };
 
   const handleScroll = (e: CustomEvent<ScrollDetail>) => {
+    setIsScrolling(true);
     const hideCoef =
       e.detail.scrollTop /
       remToPx(isMyStudyTab ? MY_STUDY_MAX_SCROLL_VALUE : MAX_SCROLL_VALUE);
@@ -105,6 +102,7 @@ const CategoryDetailPage: React.FC = () => {
   };
 
   const handleScrollEnd = async () => {
+    setIsScrolling(false);
     const scrollEl = await contentRef.current?.getScrollElement();
     const currentScroll = scrollEl?.scrollTop;
 
@@ -237,7 +235,14 @@ const CategoryDetailPage: React.FC = () => {
             </IonSegment>
           )}
         </div>
-        <div className={`${styles.bottomOuter} ${styles.background}`}>
+        <div
+          className={`${styles.bottomOuter} ${styles.background}`}
+          style={{
+            paddingBottom: `calc(var(--tabbar-offset) + ${
+              accessToken ? 0 : "65rem"
+            })`,
+          }}
+        >
           <div className={styles.controllerWrapper}>
             <button className={styles.controller}></button>
           </div>
@@ -251,23 +256,15 @@ const CategoryDetailPage: React.FC = () => {
                 }`}
               </div>
             </div>
-            {/* {showContentFallback ? (
-              <UnauthorizedUserContentFallback
-                containerClassname={styles.contentFallbackContainer}
-              />
-            ) : ( */}
             <ul className={styles.coursesList}>
               {handleFilterCourses()?.map((course) => (
                 <CourseItem course={course} key={course.id} />
               ))}
             </ul>
-            {/* )} */}
           </div>
         </div>
       </IonContent>
-      {/* {showContentFallback && (
-        <Auth containerClassname={styles.authContainer} />
-      )} */}
+      <Auth containerClassname={styles.authContainer} hidden={isScrolling} />
     </IonPage>
   );
 };

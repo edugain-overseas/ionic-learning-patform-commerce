@@ -1,3 +1,11 @@
+.content {
+  --padding-bottom: var(--tabbar-offset);
+
+  &.withAuthPanel {
+    --padding-bottom: calc(65rem) + var(--tabbar-offset);
+  }
+}
+
 .categoriesList {
   padding: 0 18rem 16rem;
   display: flex;

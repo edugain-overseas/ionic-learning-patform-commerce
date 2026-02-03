@@ -18,7 +18,7 @@ const CheckoutBtn: FC<CheckoutBtnProps> = ({
     <CommonButton
       label="Checkout"
       icon={isLoading && <Spinner color="#fff" />}
-      backgroundColor={disabled ? "#BDC4D2" : "#7E8CA8"}
+      backgroundColor={disabled ? "#BDC4D2" : "#39ba6d"}
       borderRadius={5}
       color="#FCFCFC"
       block={true}

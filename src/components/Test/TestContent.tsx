@@ -26,7 +26,6 @@ const TestContent: React.FC<{
   setStudentAnswers?: Dispatch<SetStateAction<any[]>>;
 }> = ({ test, studentAnswers, setStudentAnswers }) => {
   const { lessonData: testData } = test;
-  console.log(testData);
 
   const sortedQuestions = useMemo(
     () =>
