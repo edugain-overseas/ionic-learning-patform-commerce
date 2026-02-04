@@ -120,7 +120,7 @@ export interface CourseType {
   bought: boolean | null;
   title: string;
   about_text?: string;
-  c_access?: string;
+  c_credits?: number;
   c_award?: string;
   c_duration?: string;
   c_language?: string;
@@ -204,8 +204,6 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
   const getAllCategories = async () => {
     try {
       const response = await instance.get<CategoryType[]>("/category/all");
-      console.log("categories", response.data);
-
       setCategories(response.data);
     } catch (error) {
       console.error("Error fetching courses:", error);
@@ -215,8 +213,6 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
   const getAllCourses = async () => {
     try {
       const response = await instance.get<CourseType[]>("/course/all");
-      console.log("courses", response.data);
-
       setCourses(response.data);
     } catch (error) {
       console.error("Error fetching courses:", error);
@@ -293,7 +289,6 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
               }
               return lesson;
             });
-            console.log(updatedLessons);
 
             return { ...course, lessons: updatedLessons };
           }

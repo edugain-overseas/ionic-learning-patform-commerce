@@ -95,8 +95,6 @@ const CertificateDownloadBtn = ({
 };
 
 const Buttons = ({ data }: { data: CertificateItemDataType }) => {
-  console.log(data);
-
   const courseBtns = () => {
     if (data.status === null) {
       return data.courseId && <BuyCourseBtn courseId={data.courseId} />;

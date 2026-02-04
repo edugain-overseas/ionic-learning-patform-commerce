@@ -2,12 +2,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-inline: 20rem;
-  padding-block: 6rem;
 
   span {
-    font-size: 12rem;
-    font-weight: 700;
-    color: var(--ion-color-dark);
+    font-size: 10rem;
+    font-weight: 600;
+    color: var(--ion-color-light);
+    font-variant-numeric: tabular-nums;
   }
 }

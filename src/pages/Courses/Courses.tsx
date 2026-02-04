@@ -1,14 +1,25 @@
-import { IonContent, IonPage } from "@ionic/react";
+import { IonContent, IonIcon, IonPage } from "@ionic/react";
 import React, { useState } from "react";
 import { coursesFilter } from "../../constants/nav";
 import { useCourses } from "../../context/CoursesContext";
 import { useUser } from "../../context/UserContext";
+import EmptyMaterialsIcon from "../../assets/icons/empty-materials.svg";
+import { StyleReactProps } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
 import Header from "../../components/Header/Header";
 import CategoryItem from "../../components/CategoryItem/CategoryItem";
 import SegmentNavPanel from "../../components/SegmentNavPanel/SegmentNavPanel";
 import PageRefresher from "../../components/PageRefresher/PageRefresher";
 import Auth from "../../components/Auth/Auth";
 import styles from "./Courses.module.scss";
+
+const Empty = ({ style }: StyleReactProps) => (
+  <div className={styles.empty} style={style}>
+    <IonIcon src={EmptyMaterialsIcon} />
+    <span className={styles.emptyMessage}>
+      There are currently no materials available for you.{" "}
+    </span>
+  </div>
+);
 
 const Courses: React.FC = () => {
   const coursesInterface = useCourses();
@@ -19,6 +30,10 @@ const Courses: React.FC = () => {
 
   const handleFilterCategory = () => {
     const availableCourses = courses?.filter((course) => !course.bought);
+    if (availableCourses?.length === 0) {
+      return null;
+    }
+
     let categoriesIds: number[] = [];
 
     switch (filter) {
@@ -73,31 +88,55 @@ const Courses: React.FC = () => {
 
   const isAuthShown = !useUser()?.user.accessToken;
 
+  const filtredCategories = handleFilterCategory();
+
   return (
     <IonPage id="courses" className="primaryPage">
       <Header {...headerProps} />
-      <IonContent
-        className={`custom-content-wrapper ${styles.content} ${
-          isAuthShown ? styles.withAuthPanel : ""
-        }`}
-        scrollEvents={true}
-        onIonScrollStart={() => setIsScrolling(true)}
-        onIonScrollEnd={() => setIsScrolling(false)}
-      >
-        <div style={{ marginBottom: "12rem" }}>
-          <SegmentNavPanel
-            value={filter}
-            setValue={setFilter}
-            items={coursesFilter}
+      {filtredCategories !== null ? (
+        <IonContent
+          className={`custom-content-wrapper ${styles.content} ${
+            isAuthShown ? styles.withAuthPanel : ""
+          }`}
+          scrollEvents={true}
+          onIonScrollStart={() => setIsScrolling(true)}
+          onIonScrollEnd={() => setIsScrolling(false)}
+        >
+          <div style={{ marginBottom: "12rem" }}>
+            <SegmentNavPanel
+              value={filter}
+              setValue={setFilter}
+              items={coursesFilter}
+            />
+          </div>
+          {onRefresh && <PageRefresher onRefresh={onRefresh} />}
+          {filtredCategories?.length === 0 ? (
+            // <IonContent scrollY={false}>
+            //   </IonContent>
+            <Empty
+              style={{
+                paddingBottom: isAuthShown ? "65rem" : "0px",
+              }}
+            />
+          ) : (
+            <ul className={styles.categoriesList}>
+              {filtredCategories?.map((category) => (
+                <CategoryItem category={category} key={category.id} />
+              ))}
+            </ul>
+          )}
+        </IonContent>
+      ) : (
+        <IonContent scrollY={false}>
+          <Empty
+            style={{
+              paddingBottom: `calc(var(--tabbar-offset) + ${
+                isAuthShown ? "65rem" : "0px"
+              })`,
+            }}
           />
-        </div>
-        {onRefresh && <PageRefresher onRefresh={onRefresh} />}
-        <ul className={styles.categoriesList}>
-          {handleFilterCategory()?.map((category) => (
-            <CategoryItem category={category} key={category.id} />
-          ))}
-        </ul>
-      </IonContent>
+        </IonContent>
+      )}
       <Auth hidden={isScrolling} />
     </IonPage>
   );

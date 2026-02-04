@@ -3,11 +3,9 @@ import { formatDuration } from "../../utils/formatDuration";
 import styles from "./TestTimer.module.scss";
 
 const TestTimer: FC<{ time: number }> = ({ time }) => {
-
-
   return (
     <div className={styles.wrapper}>
-      <span>{formatDuration(time)}</span>
+      <span>{"Time: " + formatDuration(time)}</span>
     </div>
   );
 };

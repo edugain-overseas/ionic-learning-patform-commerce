@@ -69,8 +69,6 @@ const AttemptsModal = ({
         lesson_id: test.id,
       };
 
-      console.log(requestData);
-
       try {
         const response = await instance.post(
           "student-test/submit",

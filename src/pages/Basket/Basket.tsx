@@ -8,12 +8,12 @@ import {
   IonPopover,
 } from "@ionic/react";
 import { useBasket } from "../../context/BasketContext";
+import { Link } from "react-router-dom";
 import EmptyBasketIcon from "../../assets/icons/empty_basket.svg";
 import Header from "../../components/Header/Header";
 import BasketList from "../../components/BasketList/BasketList";
 import BasketCheckoutPanel from "../../components/BasketCheckoutPanel/BasketCheckoutPanel";
 import styles from "./Basket.module.scss";
-import { Link } from "react-router-dom";
 
 const headerProps = {
   left: [{ name: "back" }],

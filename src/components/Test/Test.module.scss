@@ -5,6 +5,12 @@
   align-items: center;
 }
 
+.content {
+  --padding-top: var(--ion-safe-area-top);
+  --padding-bottom: var(--ion-safe-area-bottom);
+  position: absolute;
+}
+
 .answersProgress {
   position: fixed;
   top: var(--ion-safe-area-top);
@@ -22,7 +28,6 @@
   background: rgba(255, 255, 255, 0.9);
   box-shadow: var(--custom-box-shadow-secondary);
   backdrop-filter: blur(28rem);
-  // animation: slideDown 0.5s ease-out forwards;
 
   .answersProgressValue {
     color: var(--ion-color-light);

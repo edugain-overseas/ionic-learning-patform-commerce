@@ -1,14 +1,15 @@
-import { IonContent, IonPage } from "@ionic/react";
+import { IonContent, IonIcon, IonPage } from "@ionic/react";
 import React, { useState } from "react";
 import { myStudyFilter, MyStudyFilterNameType } from "../../constants/nav";
 import { useCourses } from "../../context/CoursesContext";
 import { useUser } from "../../context/UserContext";
+import EmptyBasketIcon from "../../assets/icons/empty_basket.svg";
 import Header from "../../components/Header/Header";
 import CategoryItem from "../../components/CategoryItem/CategoryItem";
 import SegmentNavPanel from "../../components/SegmentNavPanel/SegmentNavPanel";
 import PageRefresher from "../../components/PageRefresher/PageRefresher";
-import styles from "./MyStudy.module.scss";
 import Auth from "../../components/Auth/Auth";
+import styles from "./MyStudy.module.scss";
 
 const MyStudy: React.FC = () => {
   const coursesInterface = useCourses();
@@ -76,33 +77,44 @@ const MyStudy: React.FC = () => {
     coursesInterface?.getAllCourses();
   };
 
-  const isAuthShown = !useUser()?.user.accessToken;
+  const isUserAuthorized = useUser()?.user.accessToken;
 
   return (
     <IonPage id="my-study" className="primaryPage">
       <Header {...headerProps} />
-      <IonContent
-        className={`custom-content-wrapper ${styles.content} ${
-          isAuthShown ? styles.withAuthPanel : ""
-        }`}
-        scrollEvents={true}
-        onIonScrollStart={() => setIsScrolling(true)}
-        onIonScrollEnd={() => setIsScrolling(false)}
-      >
-        {onRefresh && <PageRefresher onRefresh={onRefresh} />}
-        <div style={{ marginBottom: "12rem" }}>
-          <SegmentNavPanel
-            value={filter}
-            setValue={setFilter}
-            items={myStudyFilter}
-          />
-        </div>
-        <ul className={styles.categoriesList}>
-          {handleFilterCategory()?.map((category) => (
-            <CategoryItem category={category} key={category.id} />
-          ))}
-        </ul>
-      </IonContent>
+      {isUserAuthorized ? (
+        <IonContent
+          className={`custom-content-wrapper ${styles.content} ${
+            !isUserAuthorized ? styles.withAuthPanel : ""
+          }`}
+          scrollEvents={true}
+          onIonScrollStart={() => setIsScrolling(true)}
+          onIonScrollEnd={() => setIsScrolling(false)}
+        >
+          {onRefresh && <PageRefresher onRefresh={onRefresh} />}
+          <div style={{ marginBottom: "12rem" }}>
+            <SegmentNavPanel
+              value={filter}
+              setValue={setFilter}
+              items={myStudyFilter}
+            />
+          </div>
+          <ul className={styles.categoriesList}>
+            {handleFilterCategory()?.map((category) => (
+              <CategoryItem category={category} key={category.id} />
+            ))}
+          </ul>
+        </IonContent>
+      ) : (
+        <IonContent scrollY={false} className="custom-content-wrapper">
+          <div className={styles.empty}>
+            <IonIcon src={EmptyBasketIcon} />
+            <span className={styles.emptyMessage}>
+              This page is available to registered users.
+            </span>
+          </div>
+        </IonContent>
+      )}
       <Auth hidden={isScrolling} />
     </IonPage>
   );

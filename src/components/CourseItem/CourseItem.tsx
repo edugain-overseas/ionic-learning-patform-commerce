@@ -24,7 +24,7 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
         className={`${styles.link} ${
           listStyle === "row" ? styles.row : ""
         } ion-activatable`}
-        routerLink={`/course/${course.id}`}
+        routerLink={`/course/${course.id}` + `${course.bought ? "/tasks" : ""}`}
         routerDirection="forward"
       >
         {listStyle === "card" && (

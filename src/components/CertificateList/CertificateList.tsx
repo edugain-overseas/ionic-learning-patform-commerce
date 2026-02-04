@@ -19,8 +19,6 @@ export type CertificateItemDataType = {
 const CertificateList = () => {
   const certificatesData = useUser()?.user.certificates;
 
-  console.log(certificatesData);
-
   if (!certificatesData || certificatesData.length === 0) {
     return (
       <p className={styles.noCoursesMessage}>

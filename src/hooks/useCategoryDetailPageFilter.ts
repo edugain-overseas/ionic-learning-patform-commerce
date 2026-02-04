@@ -1,6 +1,5 @@
 import { useParams } from "react-router";
 import { useCourses } from "../context/CoursesContext";
-import { useUser } from "../context/UserContext";
 import { useEffect, useState } from "react";
 
 export const useFilter = () => {
@@ -10,21 +9,18 @@ export const useFilter = () => {
     (course) => course.category_id === +categoryId
   );
 
-  const userCourses = useUser()?.user.courses;
   const isUserHavePurchasedCourse =
-    courses?.filter((course) =>
-      userCourses?.find((userCourse) => userCourse.course_id === course.id)
-    )?.length !== 0;
+    courses?.filter((course) => course.bought)?.length !== 0;
 
   const [filter, setFilter] = useState<string>(
-    isUserHavePurchasedCourse ? "All courses" : "In process"
+    isUserHavePurchasedCourse ? "In process" : "Available"
   );
 
   useEffect(() => {
     if (isUserHavePurchasedCourse) {
       setFilter("In process");
     } else {
-      setFilter("All courses");
+      setFilter("Available");
     }
   }, [isUserHavePurchasedCourse]);
 

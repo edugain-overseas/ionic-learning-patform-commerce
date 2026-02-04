@@ -73,8 +73,6 @@ const Courses = () => {
 const Home: React.FC = () => {
   const [isScrolling, setIsScrolling] = useState(false);
   const isAuthShown = !useUser()?.user.accessToken;
-
-  console.log(isScrolling);
   
 
   return (

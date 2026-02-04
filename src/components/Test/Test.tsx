@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { IonContent } from "@ionic/react";
 import { motion } from "motion/react";
 import {
   LessonType,
@@ -14,8 +15,6 @@ import { clamp } from "../../utils/clamp";
 import useStorage from "../../hooks/useStorage";
 import TestContent from "./TestContent";
 import ProgressBar from "../ProgressBar/ProgressBar";
-import LessonToolsPanel from "../LessonToolsPanel/LessonToolsPanel";
-import TestTools from "../LessonToolsPanel/TestTools";
 import EqualSpaceContainer from "../EqualSpaceContainer/EqualSpaceContainer";
 import TaskFooterNavBtn from "../TaskFooterNavBtn/TaskFooterNavBtn";
 import TestLanding from "./TestLanding";
@@ -24,6 +23,8 @@ import StickyScrollLayout from "../StickyScrollLayout/StickyScrollLayout";
 import Spinner from "../Spinner/Spinner";
 import TestTimer from "../TestTimer/TestTimer";
 import AttemptsModal from "./AttemptsModal";
+import TaskHeader from "../../pages/TaskPage/TaskHeader";
+import CompleteLessonBtn from "../CompleteLessonBtn/CompleteLessonBtn";
 import styles from "./Test.module.scss";
 
 type CurrentAttempt = {
@@ -251,134 +252,169 @@ const Test: React.FC<{
 
   if (testStatus === undefined || isStoreInit === false) {
     return (
-      <div className={styles.loaderWrapper}>
-        <Spinner />
-      </div>
+      <>
+        <TaskHeader taskData={taskData} scrollProgress={scrollProgress} />
+        <IonContent
+          fullscreen={true}
+          scrollY={false}
+          className={styles.content}
+        >
+          <div className={styles.loaderWrapper}>
+            <Spinner />
+          </div>
+        </IonContent>
+      </>
     );
   }
 
   if (currentAttempt && currentAttempt.timer !== 0 && !isTestOpen) {
     return (
-      <div className={styles.loaderWrapper}>
-        <Spinner />
-      </div>
+      <>
+        <TaskHeader taskData={taskData} scrollProgress={scrollProgress} />
+        <IonContent
+          fullscreen={true}
+          scrollY={false}
+          className={styles.content}
+        >
+          <div className={styles.loaderWrapper}>
+            <Spinner />
+          </div>
+        </IonContent>
+      </>
     );
   }
 
+  const onCompleteClick = async () => {
+    if (isTestOpen && currentAttempt?.timer) {
+      await handleSubmitCurrentAttempt();
+    }
+    openAttemptsModal();
+  };
+
   return (
     <>
-      {isTestOpen || testStatus === "completed" ? (
-        <>
-          {currentAttempt?.timer && (
-            <div className={styles.timerWrapper}>
-              <TestTimer time={currentAttempt.timer} />
-            </div>
-          )}
-          {!Number.isNaN(answersProgressValue) && (
-            <motion.div
-              className={styles.answersProgress}
-              style={{
-                opacity: animationProgress,
-                transform: `translateY(${100 * animationProgress - 100}%)`,
-              }}
+      <TaskHeader
+        taskData={taskData}
+        scrollProgress={scrollProgress}
+        onTestCompleteClick={onCompleteClick}
+      />
+      <IonContent fullscreen={true} scrollY={false} className={styles.content}>
+        {isTestOpen || testStatus === "completed" ? (
+          <>
+            {!Number.isNaN(answersProgressValue) && currentAttempt && (
+              <motion.div
+                className={styles.answersProgress}
+                style={{
+                  opacity: animationProgress,
+                  transform: `translateY(${100 * animationProgress - 100}%)`,
+                }}
+              >
+                <span
+                  className={styles.answersProgressValue}
+                >{`Progress: ${answersProgressValue} / 100%`}</span>
+                <ProgressBar
+                  value={answersProgressValue}
+                  width={150}
+                  height={10}
+                  showValue={false}
+                />
+                {currentAttempt?.timer && (
+                  <TestTimer time={currentAttempt.timer} />
+                )}
+              </motion.div>
+            )}
+            <StickyScrollLayout
+              posterSrc={`${serverName}/${taskData.image_path}`}
+              topLabel="Test"
+              topScrollStartPosition={235}
+              topScrollEndPosition={0}
+              onProgressChange={(value) => onScrollProgress(value)}
+              key={taskData.id}
             >
-              <span
-                className={styles.answersProgressValue}
-              >{`Progress: ${answersProgressValue} / 100%`}</span>
-              <ProgressBar
-                value={answersProgressValue}
-                width={230}
-                height={10}
-                showValue={false}
-              />
-            </motion.div>
-          )}
-          <LessonToolsPanel inset="calc(116rem + var(--ion-safe-area-top)) auto auto calc(100% - 50rem)">
-            <TestTools
-              test={taskData}
-              handleSubmitCurrentAttempt={handleSubmitCurrentAttempt}
-              handleOpenAttemptsModal={openAttemptsModal}
-            />
-          </LessonToolsPanel>
-          <StickyScrollLayout
-            posterSrc={`${serverName}/${taskData.image_path}`}
-            topLabel="Test"
-            topScrollStartPosition={235}
-            topScrollEndPosition={0}
-            onProgressChange={(value) => onScrollProgress(value)}
-            key={taskData.id}
-          >
-            <div className={styles.contentInnerWrapper}>
-              <div>
-                <div className={styles.testHeader}>
-                  <div className={styles.title}>
-                    {`${course?.title}: `}
-                    <span className={styles.titleValue}>{taskData.title}</span>
+              <div className={styles.contentInnerWrapper}>
+                <div>
+                  <div className={styles.testHeader}>
+                    <div className={styles.title}>
+                      {`${course?.title}: `}
+                      <span className={styles.titleValue}>
+                        {taskData.title}
+                      </span>
+                    </div>
+                    <div className={styles.title}>
+                      {"Test №: "}
+                      <span className={styles.titleValue}>{number}</span>
+                    </div>
                   </div>
-                  <div className={styles.title}>
-                    {"Test №: "}
-                    <span className={styles.titleValue}>{number}</span>
-                  </div>
+                  {taskData?.lessonData && "test_id" in taskData.lessonData && (
+                    <TestContent
+                      test={taskData}
+                      studentAnswers={studentAnswers}
+                      setStudentAnswers={
+                        testStatus !== "completed"
+                          ? setStudentAnswers
+                          : undefined
+                      }
+                    />
+                  )}
                 </div>
-                {taskData?.lessonData && "test_id" in taskData.lessonData && (
-                  <TestContent
-                    test={taskData}
-                    studentAnswers={studentAnswers}
-                    setStudentAnswers={
-                      testStatus !== "completed" ? setStudentAnswers : undefined
+                <div className={styles.testFooter}>
+                  <EqualSpaceContainer
+                    containerClassname={styles.btnContainer}
+                    leftItem={<TaskFooterNavBtn direction="return" />}
+                    rightItem={
+                      taskData.status && (
+                        <CompleteLessonBtn
+                          variant="footer"
+                          status={taskData.status}
+                          onClick={onCompleteClick}
+                        />
+                      )
                     }
                   />
-                )}
+                </div>
               </div>
-              <div className={styles.testFooter}>
-                <EqualSpaceContainer
-                  containerClassname={styles.btnContainer}
-                  leftItem={<TaskFooterNavBtn direction="return" />}
-                  rightItem={<TaskFooterNavBtn direction="next" />}
+            </StickyScrollLayout>
+          </>
+        ) : (
+          <>
+            <TestLanding
+              timer={taskData.scheduled_time}
+              minScore={testData?.score}
+            />
+            <div className={styles.landingBtnsContainer}>
+              {isAttemptAvailabel && !isAttemptLoading && (
+                <CommonButton
+                  label="Start"
+                  block={true}
+                  width={138}
+                  height={32}
+                  backgroundColor="var(--ion-color-dark)"
+                  color="var(--ion-color-primary-contrast)"
+                  borderRadius={5}
+                  className={styles.landingBtn}
+                  onClick={() => {
+                    startAttempt();
+                    setIsTestOpen(true);
+                  }}
                 />
-              </div>
+              )}
+              {testAttempts.length !== 0 && (
+                <CommonButton
+                  label="Show attempts"
+                  block={true}
+                  width={138}
+                  height={32}
+                  backgroundColor="var(--ion-color-light)"
+                  color="var(--ion-color-primary-contrast)"
+                  borderRadius={5}
+                  className={styles.landingBtn}
+                  onClick={openAttemptsModal}
+                />
+              )}
             </div>
-          </StickyScrollLayout>
-        </>
-      ) : (
-        <>
-          <TestLanding
-            timer={taskData.scheduled_time}
-            minScore={testData?.score}
-          />
-          <div className={styles.landingBtnsContainer}>
-            {isAttemptAvailabel && !isAttemptLoading && (
-              <CommonButton
-                label="Start"
-                block={true}
-                width={138}
-                height={32}
-                backgroundColor="var(--ion-color-dark)"
-                color="var(--ion-color-primary-contrast)"
-                borderRadius={5}
-                className={styles.landingBtn}
-                onClick={() => {
-                  startAttempt();
-                  setIsTestOpen(true);
-                }}
-              />
-            )}
-            {testAttempts.length !== 0 && (
-              <CommonButton
-                label="Show attempts"
-                block={true}
-                width={138}
-                height={32}
-                backgroundColor="var(--ion-color-light)"
-                color="var(--ion-color-primary-contrast)"
-                borderRadius={5}
-                className={styles.landingBtn}
-                onClick={openAttemptsModal}
-              />
-            )}
-          </div>
-        </>
-      )}
+          </>
+        )}
+      </IonContent>
       <AttemptsModal
         test={taskData}
         testAttempts={testAttempts}

@@ -40,30 +40,32 @@ const TaskPage: React.FC = () => {
 
   return (
     <>
-      <TaskHeader taskData={taskData} scrollProgress={scrollProgress} />
-      <IonContent
-        fullscreen={true}
-        scrollY={false}
-        className={`${styles.content} ${
-          taskData?.type ? styles[taskData.type] : ""
-        }`}
-      >
-        {taskData?.type === "lecture" && (
-          <Lecture
-            key={taskId}
-            taskData={taskData}
-            onScrollProgress={(value) => setScrollProgress(value)}
-          />
-        )}
-        {taskData?.type === "test" && (
-          <Test
-            key={taskId}
-            taskData={taskData}
-            onScrollProgress={(value) => setScrollProgress(value)}
-            scrollProgress={scrollProgress}
-          />
-        )}
-      </IonContent>
+      {taskData?.type === "lecture" && (
+        <>
+          <TaskHeader taskData={taskData} scrollProgress={scrollProgress} />
+          <IonContent
+            fullscreen={true}
+            scrollY={false}
+            className={`${styles.content} ${
+              taskData?.type ? styles[taskData.type] : ""
+            }`}
+          >
+            <Lecture
+              key={taskId}
+              taskData={taskData}
+              onScrollProgress={(value) => setScrollProgress(value)}
+            />
+          </IonContent>
+        </>
+      )}
+      {taskData?.type === "test" && (
+        <Test
+          key={taskId}
+          taskData={taskData}
+          onScrollProgress={(value) => setScrollProgress(value)}
+          scrollProgress={scrollProgress}
+        />
+      )}
       <CourseProgressModal />
       <ViewModeToggleButton />
     </>

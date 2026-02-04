@@ -8,6 +8,10 @@ import { useUser } from "../../../context/UserContext";
 import { clamp } from "../../../utils/clamp";
 import laptop from "../../../assets/icons/laptop.svg";
 import clock from "../../../assets/icons/clock.svg";
+import award from "../../../assets/icons/award.svg";
+import language from "../../../assets/icons/language.svg";
+import level from "../../../assets/icons/brain.svg";
+import access from "../../../assets/icons/access.svg";
 import schollOnline from "../../../assets/icons/introPage/school-online.svg";
 import clockBig from "../../../assets/icons/introPage/clock.svg";
 import certificate from "../../../assets/icons/introPage/certificate.svg";
@@ -41,6 +45,8 @@ const CourseIntroPage: React.FC = () => {
     (scrollProgress - threshold) / (1 - threshold),
     1
   );
+
+  console.log(course);
 
   return (
     <>
@@ -95,7 +101,7 @@ const CourseIntroPage: React.FC = () => {
                 </li>
                 <li>
                   <div className={styles.left}>
-                    <IonIcon src={clock} className={styles.propIcon} />
+                    <IonIcon src={award} className={styles.propIcon} />
                     <div className={styles.propName}>Award:</div>
                   </div>
                   <div className={styles.right}>
@@ -104,7 +110,7 @@ const CourseIntroPage: React.FC = () => {
                 </li>
                 <li>
                   <div className={styles.left}>
-                    <IonIcon src={clock} className={styles.propIcon} />
+                    <IonIcon src={language} className={styles.propIcon} />
                     <div className={styles.propName}>Language:</div>
                   </div>
                   <div className={styles.right}>
@@ -113,7 +119,7 @@ const CourseIntroPage: React.FC = () => {
                 </li>
                 <li>
                   <div className={styles.left}>
-                    <IonIcon src={clock} className={styles.propIcon} />
+                    <IonIcon src={level} className={styles.propIcon} />
                     <div className={styles.propName}>Level:</div>
                   </div>
                   <div className={styles.right}>
@@ -122,17 +128,18 @@ const CourseIntroPage: React.FC = () => {
                 </li>
                 <li>
                   <div className={styles.left}>
-                    <IonIcon src={clock} className={styles.propIcon} />
-                    <div className={styles.propName}>Access:</div>
+                    <IonIcon src={access} className={styles.propIcon} />
+                    <div className={styles.propName}>Credits:</div>
                   </div>
                   <div className={styles.right}>
-                    <div className={styles.propValue}>{course?.c_access}</div>
+                    <div className={styles.propValue}>{course?.c_credits}</div>
                   </div>
                 </li>
               </ul>
               <div className={styles.courseSkills}>
                 <span className={styles.listTitle}>Skills you will learn:</span>
                 <div
+                  className={styles.infoText}
                   dangerouslySetInnerHTML={{
                     __html: course?.skills_text ? course?.skills_text : "",
                   }}

@@ -6,7 +6,6 @@ import {
   ScrollDetail,
   SegmentChangeEventDetail,
   useIonRouter,
-  useIonViewDidEnter,
   useIonViewDidLeave,
   useIonViewWillEnter,
 } from "@ionic/react";
@@ -98,7 +97,7 @@ const CategoryDetailPage: React.FC = () => {
       `${hideCoef}`
     );
 
-    toggleHeaderTitleVisibility(hideCoef > 0.4);
+    toggleHeaderTitleVisibility(hideCoef > 0.3);
   };
 
   const handleScrollEnd = async () => {
@@ -138,16 +137,25 @@ const CategoryDetailPage: React.FC = () => {
     );
 
     switch (filter) {
-      case "All courses":
-        return courses;
       case "In process":
-        return courses?.filter((course) => userCoursesIds.includes(course.id));
+        return courses?.filter(
+          (course) =>
+            userCoursesIds.includes(course.id) && course.progress !== 100
+        );
       case "Available":
         return courses?.filter((course) => !userCoursesIds.includes(course.id));
+      case "Completed":
+        return courses?.filter(
+          (course) =>
+            userCoursesIds.includes(course.id) && course.progress === 100
+        );
       default:
         return [];
     }
   };
+
+  console.log(filter);
+  
 
   const onRefresh = coursesInterface?.getAllCourses;
 
@@ -226,11 +234,8 @@ const CategoryDetailPage: React.FC = () => {
               <IonSegmentButton className={styles.segmentBtn} value="Available">
                 <span>Available</span>
               </IonSegmentButton>
-              <IonSegmentButton
-                className={styles.segmentBtn}
-                value="All courses"
-              >
-                <span>All courses</span>
+              <IonSegmentButton className={styles.segmentBtn} value="Completed">
+                <span>Completed</span>
               </IonSegmentButton>
             </IonSegment>
           )}
