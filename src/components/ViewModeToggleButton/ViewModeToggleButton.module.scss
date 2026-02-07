@@ -1,9 +1,9 @@
 .toggleViewContainer {
   padding: 4rem 14rem 4rem 4rem;
-  position: absolute;
-  bottom: 100rem;
-  right: 0;
-  z-index: 10;
+  position: fixed;
+  // bottom: 100rem;
+  // right: 0;
+  z-index: 1000;
   border-radius: 9rem 0 0 9rem;
   background: var(--custom-bg-rgba-secondary);
   box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.1);

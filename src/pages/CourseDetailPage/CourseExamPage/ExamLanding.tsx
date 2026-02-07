@@ -3,8 +3,9 @@ import { ExamResult, LandingBtnCallbacks } from "./CourseExamPage";
 import styles from "./CourseExamPage.module.scss";
 import Spinner from "../../../components/Spinner/Spinner";
 import CommonButton from "../../../components/CommonButton/CommonButton";
+import ExamLandingStats from "./ExamLandingStats";
 
-type Status = ExamResult | "completed" | null;
+export type Status = ExamResult | "completed" | null;
 
 type LandingPageProps = {
   status: Status;
@@ -99,6 +100,14 @@ const getTemplateText = (status: Status) => {
               <b>Before you begin, here are a few important points:</b>
             </p>
           </div>
+          <div>
+            <p className={styles.primaryText}>
+              Review Your Progress: Below, you'll find a summary of your
+              previous achievements and progress throughout the course. Take
+              pride in how far you've come!
+            </p>
+          </div>
+          <ExamLandingStats status={status} />
           <div>
             <p className={styles.secondaryText}>
               <b>Focus and Stay Present:</b> During the exam, it's essential to
@@ -303,12 +312,16 @@ const getTemplateBtns = (
     case "acceptable":
       return (
         <>
-          {hasAttempt && (
+          {hasAttempt ? (
             <ExamLandingBtn
               label="Re-take exam"
               variant="secondary"
               onClick={callbacks.startAttempt}
             />
+          ) : (
+            <p>
+              You are out of attempts! More attempts will charge in 24 hours
+            </p>
           )}
           <ExamLandingBtn
             label="Complete your course"
