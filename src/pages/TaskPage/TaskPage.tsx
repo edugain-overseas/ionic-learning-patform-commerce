@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { IonContent, useIonRouter } from "@ionic/react";
+import { IonContent, useIonRouter, useIonViewWillLeave } from "@ionic/react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
 import Lecture from "../../components/Lecture/Lecture";
 import Test from "../../components/Test/Test";
 import CourseProgressModal from "../../components/CourseProgressModal/CourseProgressModal";
 import TaskHeader from "./TaskHeader";
-import styles from "./TaskPage.module.scss";
 import ViewModeToggleButton from "../../components/ViewModeToggleButton/ViewModeToggleButton";
+import styles from "./TaskPage.module.scss";
 
 const TaskPage: React.FC = () => {
   const [scrollProgress, setScrollProgress] = useState<number>(0);
@@ -60,7 +60,6 @@ const TaskPage: React.FC = () => {
       )}
       {taskData?.type === "test" && (
         <Test
-          key={taskId}
           taskData={taskData}
           onScrollProgress={(value) => setScrollProgress(value)}
           scrollProgress={scrollProgress}

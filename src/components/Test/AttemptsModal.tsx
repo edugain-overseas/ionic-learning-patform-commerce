@@ -1,21 +1,29 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
-  AccordionGroupCustomEvent,
-  IonAccordion,
-  IonAccordionGroup,
   IonAlert,
+  IonContent,
   IonIcon,
   IonModal,
+  useIonViewWillLeave,
 } from "@ionic/react";
-import { LessonType, useCourses } from "../../context/CoursesContext";
+import { Empty } from "antd";
+import { useParams } from "react-router";
 import { TestAttemptType } from "../../types/user";
+import {
+  LessonType,
+  TestDataType,
+  useCourses,
+} from "../../context/CoursesContext";
 import { instance } from "../../http/instance";
 import { useToast } from "../../hooks/useToast";
 import CheckIcon from "../../assets/icons/check-in-circle.svg";
-import Header from "../Header/Header";
+import EyeIcon from "../../assets/icons/auth/eye-open.svg";
+import CrossIcon from "../../assets/icons/cross.svg";
 import TestContent from "./TestContent";
-import styles from "./Test.module.scss";
-import { useParams } from "react-router";
+import styles from "./AttemptsModal.module.scss";
+
+const MIN_HEIGHT = "250rem";
+const MAX_HEIGHT = "calc(100% - var(--ion-safe-area-top) - 16rem - 30px)";
 
 const AttemptsModal = ({
   test,
@@ -30,34 +38,16 @@ const AttemptsModal = ({
 }) => {
   const modalRef = useRef<HTMLIonModalElement>(null);
   const [testAttemptsData, setTestAttemptsData] = useState<any[]>([]);
+  const [presentingElement, setPresentingElement] =
+    useState<HTMLElement | null>(null);
+  const [activeAttemptId, setActiveAttemptId] = useState<number | null>(null);
   const [present] = useToast();
-
-  const { courseId } = useParams<{ courseId: string }>();
+  const { courseId, taskId } = useParams<{
+    courseId: string;
+    taskId: string;
+  }>();
 
   const getCourseDetailById = useCourses()?.getCourseDetailById;
-
-  const handleAccordionGroupChange = async (ev: AccordionGroupCustomEvent) => {
-    const selectedValue = ev.detail.value;
-    if (
-      testAttemptsData.findIndex((attempt) => attempt.id === +selectedValue) ===
-        -1 &&
-      selectedValue
-    ) {
-      try {
-        const response = await instance.get(
-          `student-test/attempt/${selectedValue}`
-        );
-        if (response.data) {
-          setTestAttemptsData((prev) => [
-            ...prev,
-            { id: +selectedValue, answers: response.data },
-          ]);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
 
   const handleSubmitAttempClick = async (attemptId: number) => {
     const attemptData = testAttempts.find(({ id }) => id === attemptId);
@@ -94,84 +84,148 @@ const AttemptsModal = ({
     }
   };
 
-  const modalHeaderProps = {
-    title: `${test.title} attempts`,
-    left: [
-      {
-        name: "prevLesson",
-        onClick: () => modalRef.current?.dismiss(),
-      },
-    ],
-    right: [],
-    toolbarClassName: styles.modalToolbar,
+  const handleToggleShowAttempt = async (attemptId: number) => {
+    if (activeAttemptId === attemptId) {
+      setActiveAttemptId(null);
+      return;
+    }
+
+    if (
+      testAttemptsData.findIndex((attempt) => attempt.id === attemptId) === -1
+    ) {
+      try {
+        const response = await instance.get(
+          `student-test/attempt/${attemptId}`
+        );
+        if (response.data) {
+          setTestAttemptsData((prev) => [
+            ...prev,
+            { id: attemptId, answers: response.data },
+          ]);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    setActiveAttemptId(attemptId);
   };
+
+  useEffect(() => {
+    const page = document.getElementById("course-page");
+    if (page) setPresentingElement(page);
+  }, []);
+
+  const testData = test.lessonData as TestDataType;
+  const testMaxAttempts = testData?.attempts;
+  const userHasCompletedAttempts = testAttempts.length !== 0;
+
+  console.log(isOpen);
 
   return (
     <IonModal
       ref={modalRef}
-      className={styles.modal}
       isOpen={isOpen}
+      presentingElement={presentingElement!}
       onDidDismiss={handleClose}
+      className={styles.attemptModal}
+      canDismiss={true}
+      style={{
+        "--height": activeAttemptId ? MAX_HEIGHT : MIN_HEIGHT,
+      }}
     >
-      <Header {...modalHeaderProps} />
-      <div className={styles.modalContent}>
-        <IonAccordionGroup
-          className={styles.accordion}
-          onIonChange={handleAccordionGroupChange}
-        >
-          {testAttempts.map((attempt) => (
-            <IonAccordion
-              value={`${attempt.id}`}
-              key={attempt.id}
-              className={styles.accordionItem}
-            >
-              <div slot="header" className={styles.attemptsHeader}>
-                <div className={styles.attemptData}>
-                  <span className={styles.attemptTitle}>
-                    {`Attempt № ${attempt.attempt_number}`}
-                  </span>
-                  <span className={styles.attemptTitle}>
-                    {`Score: ${attempt.attempt_score}`}
-                  </span>
-                </div>
-              </div>
-              <div slot="content" className={styles.attemptsContent}>
-                <TestContent
-                  test={test}
-                  studentAnswers={
-                    testAttemptsData.find(
-                      (attemptData) => attemptData.id === attempt.id
-                    )?.answers
-                  }
-                />
-                <button
-                  className={styles.finalSubmitAttempt}
-                  id={`present-alert-confirm-attempt-${attempt.id}`}
-                >
-                  <IonIcon src={CheckIcon} />
-                  <span>Submit</span>
-                </button>
-                <IonAlert
-                  trigger={`present-alert-confirm-attempt-${attempt.id}`}
-                  header="Submiting attempt"
-                  message="Are you sure you want to record this attempt?"
-                  buttons={[
-                    {
-                      role: "confirm",
-                      text: "Yes",
-                      handler: () => handleSubmitAttempClick(attempt.id),
-                    },
-                    {
-                      role: "cancel",
-                      text: "Cancel",
-                    },
-                  ]}
-                />
-              </div>
-            </IonAccordion>
-          ))}
-        </IonAccordionGroup>
+      <div className={styles.handle} />
+      <div className={styles.header}>
+        <span className={styles.label}>Your attempts</span>
+        {testMaxAttempts && (
+          <span>{`${
+            testMaxAttempts - testAttempts.length
+          } / ${testMaxAttempts}`}</span>
+        )}
       </div>
+      <IonContent className={styles.content} scrollY={false}>
+        {userHasCompletedAttempts ? (
+          <>
+            <ul className={styles.accordion}>
+              {testAttempts.map((attempt) =>
+                activeAttemptId && activeAttemptId !== attempt.id ? null : (
+                  <li className={styles.accordionItem} key={attempt.id}>
+                    <div className={styles.attemptsHeader}>
+                      <div className={styles.attemptScore}>
+                        <p>Grade</p>
+                        <p>
+                          <span>{attempt.attempt_score}</span>
+                          <span className={styles.divider}>\</span>
+                          <span>{testData?.score}</span>
+                        </p>
+                      </div>
+                      <div className={styles.attemptButtons}>
+                        <button
+                          className={styles.toggleShowAttempt}
+                          onClick={() => handleToggleShowAttempt(attempt.id)}
+                        >
+                          {activeAttemptId === attempt.id ? (
+                            <IonIcon src={CrossIcon} />
+                          ) : (
+                            <IonIcon src={EyeIcon} />
+                          )}
+                        </button>
+                        {!testData?.my_attempt_id ||
+                          (testData?.my_attempt_id === attempt.id && (
+                            <>
+                              <button
+                                className={styles.submitButton}
+                                id={`present-alert-confirm-attempt-${attempt.id}`}
+                                disabled={!!testData?.my_attempt_id}
+                              >
+                                <span>Submit</span>
+                                <IonIcon src={CheckIcon} />
+                              </button>
+                              <IonAlert
+                                trigger={`present-alert-confirm-attempt-${attempt.id}`}
+                                header="Submiting attempt"
+                                message="Are you sure you want to record this attempt?"
+                                buttons={[
+                                  {
+                                    role: "confirm",
+                                    text: "Yes",
+                                    handler: () =>
+                                      handleSubmitAttempClick(attempt.id),
+                                  },
+                                  {
+                                    role: "cancel",
+                                    text: "Cancel",
+                                  },
+                                ]}
+                              />
+                            </>
+                          ))}
+                      </div>
+                    </div>
+                  </li>
+                )
+              )}
+            </ul>
+            <div className={styles.attemptContent}>
+              <TestContent
+                test={test}
+                studentAnswers={
+                  testAttemptsData.find(
+                    (attemptData) => attemptData.id === activeAttemptId
+                  )?.answers
+                }
+              />
+            </div>
+          </>
+        ) : (
+          <Empty
+            description={
+              <span className={styles.emptyDesc}>
+                You have no completed attempts
+              </span>
+            }
+          />
+        )}
+      </IonContent>
     </IonModal>
   );
 };

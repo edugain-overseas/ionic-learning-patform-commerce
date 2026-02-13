@@ -29,6 +29,7 @@
   & > p {
     margin-bottom: 6rem;
     font-size: 12rem;
+    color: var(--ion-color-light);
   }
 
   & > ul {
@@ -43,7 +44,7 @@
     align-items: center;
     height: 24rem;
 
-   & > span {
+    & > span {
       color: var(--ion-color-light);
       font-size: 12rem;
       font-style: normal;

@@ -111,8 +111,6 @@ const Courses: React.FC = () => {
           </div>
           {onRefresh && <PageRefresher onRefresh={onRefresh} />}
           {filtredCategories?.length === 0 ? (
-            // <IonContent scrollY={false}>
-            //   </IonContent>
             <Empty
               style={{
                 paddingBottom: isAuthShown ? "65rem" : "0px",

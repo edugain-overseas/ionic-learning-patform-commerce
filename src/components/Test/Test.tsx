@@ -362,13 +362,16 @@ const Test: React.FC<{
                     containerClassname={styles.btnContainer}
                     leftItem={<TaskFooterNavBtn direction="return" />}
                     rightItem={
-                      taskData.status && (
+                      taskData.status &&
+                      (taskData.status !== "completed" ? (
                         <CompleteLessonBtn
                           variant="footer"
                           status={taskData.status}
                           onClick={onCompleteClick}
                         />
-                      )
+                      ) : (
+                        <TaskFooterNavBtn direction="next" />
+                      ))
                     }
                   />
                 </div>

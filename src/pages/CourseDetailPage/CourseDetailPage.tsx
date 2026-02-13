@@ -25,7 +25,7 @@ const CourseDetailPage: React.FC = () => {
   }, [courseId, accessToken, userId]);
 
   return (
-    <IonPage className="primaryPage">
+    <IonPage className="primaryPage" id="course-page">
       <Route path={`/course/:courseId`} component={CourseIntroPage} exact />
       <Route
         path={`/course/:courseId/tasks`}

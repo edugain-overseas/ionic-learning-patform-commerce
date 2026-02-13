@@ -57,7 +57,7 @@ const CompleteLessonBtn = ({
         status !== "active" ? styles.disabled : ""
       }`}
       onClick={handleComplete}
-      disabled={status !== "active"}
+      // disabled={status !== "active"}
     >
       <IonIcon src={checkIcon} style={{ fontSize: "20rem" }} />
     </IonButton>

@@ -152,10 +152,7 @@ const CategoryDetailPage: React.FC = () => {
       default:
         return [];
     }
-  };
-
-  console.log(filter);
-  
+  };  
 
   const onRefresh = coursesInterface?.getAllCourses;
 

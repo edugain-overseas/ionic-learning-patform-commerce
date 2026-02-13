@@ -30,6 +30,8 @@ const TaskHeader = ({
 
   const completeLecture = async () => {
     if (!taskData) return;
+    if (taskData.status === "completed") return;
+
     await useCourses?.()?.confirmLecture(taskData.id);
   };
 
