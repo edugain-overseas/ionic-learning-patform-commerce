@@ -423,6 +423,7 @@ const Test: React.FC<{
         testAttempts={testAttempts}
         isOpen={isOpenAttemptsModal}
         handleClose={closeAttemptsModal}
+        key={taskData.id}
       />
     </>
   );

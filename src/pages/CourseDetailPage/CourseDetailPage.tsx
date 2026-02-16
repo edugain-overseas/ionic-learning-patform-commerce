@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { IonPage } from "@ionic/react";
-import { Redirect, Route, useParams } from "react-router";
+import { Route, useParams } from "react-router";
 import { useUser } from "../../context/UserContext";
 import { useCourses } from "../../context/CoursesContext";
 import CourseIntroPage from "./CourseIntroPage/CourseIntroPage";
@@ -32,11 +32,7 @@ const CourseDetailPage: React.FC = () => {
         component={CourseTasksPage}
         exact
       />
-      <Route
-        path={`/course/:courseId/exam`}
-        component={CourseExamPage}
-        // exact
-      />
+      <Route path={`/course/:courseId/exam`} component={CourseExamPage} />
       <Route path={`/course/:courseId/tasks/:taskId`} component={TaskPage} />
     </IonPage>
   );

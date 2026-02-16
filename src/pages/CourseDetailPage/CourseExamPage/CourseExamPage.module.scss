@@ -13,7 +13,6 @@
   flex-direction: column;
   justify-content: space-between;
   font-size: 14rem;
-  
 }
 
 .landingWrapper {
@@ -24,6 +23,7 @@
   --font-weight-bold: 700;
 
   padding-inline: 18rem;
+  padding-bottom: calc(var(--tabbar-offset) + 16rem);
 
   .textWrapper {
     display: flex;

@@ -1,9 +1,9 @@
 import { FC, useState } from "react";
-import { ExamResult, LandingBtnCallbacks } from "./CourseExamPage";
-import styles from "./CourseExamPage.module.scss";
+import { ExamAttempt, ExamResult, LandingBtnCallbacks } from "./CourseExamPage";
 import Spinner from "../../../components/Spinner/Spinner";
 import CommonButton from "../../../components/CommonButton/CommonButton";
 import ExamLandingStats from "./ExamLandingStats";
+import styles from "./CourseExamPage.module.scss";
 
 export type Status = ExamResult | "completed" | null;
 
@@ -11,6 +11,7 @@ type LandingPageProps = {
   status: Status;
   callbacks: LandingBtnCallbacks;
   hasAttempt: boolean;
+  attempts: ExamAttempt[];
 };
 
 type ExamLandingBtnProps = {
@@ -79,7 +80,7 @@ export const ExamLandingBtn: FC<ExamLandingBtnProps> = ({
   );
 };
 
-const getTemplateText = (status: Status) => {
+const getTemplateText = (status: Status, attempts: ExamAttempt[]) => {
   switch (status) {
     case "no_result":
       return (
@@ -107,7 +108,7 @@ const getTemplateText = (status: Status) => {
               pride in how far you've come!
             </p>
           </div>
-          <ExamLandingStats status={status} />
+          <ExamLandingStats status={status} attempts={attempts} />
           <div>
             <p className={styles.secondaryText}>
               <b>Focus and Stay Present:</b> During the exam, it's essential to
@@ -356,11 +357,14 @@ const getTemplateBtns = (
 const ExamLanding: FC<LandingPageProps> = ({
   status,
   callbacks,
+  attempts,
   hasAttempt,
 }) => {
   return (
     <div className={styles.landingWrapper}>
-      <div className={styles.textWrapper}>{getTemplateText(status)}</div>
+      <div className={styles.textWrapper}>
+        {getTemplateText(status, attempts)}
+      </div>
       <div className={styles.btnsWrapper}>
         {getTemplateBtns(status, callbacks, hasAttempt)}
       </div>

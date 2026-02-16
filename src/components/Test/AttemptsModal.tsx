@@ -4,7 +4,6 @@ import {
   IonContent,
   IonIcon,
   IonModal,
-  useIonViewWillLeave,
 } from "@ionic/react";
 import { Empty } from "antd";
 import { useParams } from "react-router";
@@ -42,7 +41,7 @@ const AttemptsModal = ({
     useState<HTMLElement | null>(null);
   const [activeAttemptId, setActiveAttemptId] = useState<number | null>(null);
   const [present] = useToast();
-  const { courseId, taskId } = useParams<{
+  const { courseId } = useParams<{
     courseId: string;
     taskId: string;
   }>();

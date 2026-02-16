@@ -20,7 +20,7 @@ import StickyScrollLayout from "../../../components/StickyScrollLayout/StickyScr
 
 export type ExamResult = "acceptable" | "absolute" | "failed" | "no_result";
 
-type Attempt = {
+export type ExamAttempt = {
   id: number;
   spent_minutes: null | number;
   student_id: number;
@@ -52,7 +52,7 @@ const CourseExamPage: FC = () => {
   useLessonTabbarLayout();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [attempts, setAttempts] = useState<Attempt[]>([]);
+  const [attempts, setAttempts] = useState<ExamAttempt[]>([]);
   const [examResult, setExamResult] = useState<ExamResult | null>(null);
   const [studentAnswers, setStudentAnswers] = useState<any[]>([]);
   const { courseId } = useParams<{ courseId: string }>();
@@ -122,7 +122,7 @@ const CourseExamPage: FC = () => {
   }, [examId]);
 
   useEffect(() => {
-    const getExamResult = (attempts: Attempt[]): ExamResult => {
+    const getExamResult = (attempts: ExamAttempt[]): ExamResult => {
       if (!attempts.length) return "no_result";
 
       const bestAttempt = attempts.sort(
@@ -404,6 +404,7 @@ const CourseExamPage: FC = () => {
           <ExamLanding
             status={landingStatus}
             callbacks={landingBtnCallbacks}
+            attempts={attempts}
             hasAttempt={userHasAttempt}
           />
         )}

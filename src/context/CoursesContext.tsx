@@ -79,14 +79,15 @@ export interface LectureDataType {
 
 export type TestDataType = {
   test_id?: number;
-  score?: number;
-  attempts?: number;
+  score: number;
+  attempts: number;
   questions: TestContentType[];
   my_attempt_id?: number;
+  timer: number;
 };
 
 export type ExamDataType = {
-  exam_id?: number;
+  exam_id: number;
   min_score: number;
   my_score?: number;
   score: number;
@@ -113,6 +114,7 @@ export interface LessonType {
   status?: LessonStatus;
   count_questions?: number;
   lessonData?: LessonDataUnionType;
+  score: number | null;
 }
 
 export interface CourseType {
