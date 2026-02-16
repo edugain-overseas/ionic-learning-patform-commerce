@@ -1,0 +1,89 @@
+.statsWrapper {
+  margin-block: 4rem;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32rem;
+
+  li {
+    position: relative;
+  }
+
+  li:nth-child(2n - 1)::after {
+    content: "";
+    display: block;
+    width: 1rem;
+    position: absolute;
+    right: -15.5rem;
+    top: 6rem;
+    bottom: 0;
+    background-color: var(--ion-color-light);
+    border-radius: 100rem;
+  }
+  li:nth-child(3n)::after {
+    top: 0;
+    bottom: 6rem;
+  }
+
+  li:nth-child(-n + 2)::before {
+    content: "";
+    display: block;
+    height: 1rem;
+    position: absolute;
+    right: 0;
+    left: 6rem;
+    bottom: -15.5rem;
+    background-color: var(--ion-color-light);
+    border-radius: 100rem;
+  }
+
+  li:nth-child(2)::before {
+    left: 0;
+    right: 6rem;
+  }
+}
+
+.statContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+}
+
+.statIcon {
+  font-size: 42rem;
+  color: var(--ion-color-light);
+}
+
+.statValueContainer {
+  font-size: 16rem;
+  font-weight: 400;
+  color: var(--ion-color-dark);
+
+  span {
+    font-size: 32rem;
+  }
+}
+
+.scoreContainer {
+  display: flex;
+  gap: 1rem;
+
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  div span {
+    font-size: 16rem;
+    font-weight: 700;
+  }
+}
+
+.statLabel {
+  font-size: 10rem;
+  font-weight: 400;
+  color: var(--ion-color-light);
+}

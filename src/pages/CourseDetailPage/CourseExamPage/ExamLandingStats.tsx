@@ -1,13 +1,13 @@
 import { ReactNode } from "react";
-import { Status } from "./ExamLanding";
-import styles from "./CourseExamPage.module.scss";
-import { ExamAttempt, ExamResult } from "./CourseExamPage";
 import { IonIcon } from "@ionic/react";
+import { Status } from "./ExamLanding";
+import { ExamAttempt, ExamResult } from "./CourseExamPage";
+import { useParams } from "react-router";
+import { useExamLandidngStats } from "../../../hooks/useExamLandindgStats";
 import courseIcon from "../../../assets/icons/homeStats/courses.svg";
 import studentIcon from "../../../assets/icons/homeStats/students.svg";
 import scoreIcon from "../../../assets/icons/homeStats/score.svg";
-import { useParams } from "react-router";
-import { ExamDataType, useCourses } from "../../../context/CoursesContext";
+import styles from "./ExamLandingStats.module.scss";
 
 type StatType =
   | "passing-score"
@@ -19,7 +19,7 @@ type StatsByStatusType = Record<ExamResult | "completed", StatType[]>;
 type StatIconType = Record<StatType, string>;
 type StatValueType = Record<StatType, ReactNode>;
 
-const StatsByStatus: StatsByStatusType = {
+const STATS_BY_STATUS: StatsByStatusType = {
   no_result: [
     "passing-score",
     "exam-time",
@@ -32,27 +32,37 @@ const StatsByStatus: StatsByStatusType = {
   completed: [],
 };
 
-const StatIcon: StatIconType = {
+const STAT_ICONS: StatIconType = {
   "passing-score": courseIcon,
   "exam-time": studentIcon,
   "attempts-amount-left": scoreIcon,
-  "course-score": studentIcon,
+  "course-score": courseIcon,
 };
 
-const StatItem = ({
-  stat,
-  statValue,
-}: {
-  stat: StatType;
-  statValue: StatValueType;
-}) => {
-  return (
-    <div className={styles.statContainer}>
-      <IonIcon src={StatIcon[stat]} />
-      {statValue[stat]}
-    </div>
-  );
+const STAT_LABEL: StatValueType = {
+  "passing-score": (
+    <span className={styles.statLabel}>
+      <b>Points</b> for passing the Exam
+    </span>
+  ),
+  "exam-time": (
+    <span className={styles.statLabel}>
+      <b>Time</b> to pass the Exam
+    </span>
+  ),
+  "attempts-amount-left": (
+    <span className={styles.statLabel}>
+      <b>The best</b> result will be upheld
+    </span>
+  ),
+  "course-score": (
+    <span className={styles.statLabel}>
+      <b>Scores</b> in tests
+    </span>
+  ),
 };
+
+const COURSE_MAX_SCORE = 200;
 
 const ExamLandingStats = ({
   status,
@@ -62,26 +72,16 @@ const ExamLandingStats = ({
   attempts: ExamAttempt[];
 }) => {
   const { courseId } = useParams<{ courseId: string }>();
-  const course = useCourses()?.courses.find(
-    (course) => course.id === +courseId
-  );
-  const exam = course?.lessons.find((lesson) => lesson.type === "exam");
 
-  const examData = exam?.lessonData as ExamDataType;
-
-  console.log(exam);
-  console.log(course);
-
-  const testsScore = course?.lessons.reduce((score, lesson) => {
-    if (lesson.type === "test" && typeof lesson.score === "number") {
-      return (score += lesson.score);
-    }
-    return score;
-  }, 0);
+  const { course, exam, examData, testsScore, attemptsLeft } =
+    useExamLandidngStats({
+      courseId: +courseId,
+      examAttempts: attempts,
+    });
 
   if (!status || !exam || !examData) return null;
 
-  const statValue: StatValueType = {
+  const STAT_VALUES: StatValueType = {
     "passing-score": (
       <div className={styles.statValueContainer}>
         <span>{examData.score}</span> Points
@@ -94,28 +94,32 @@ const ExamLandingStats = ({
     ),
     "attempts-amount-left": (
       <div className={styles.statValueContainer}>
-        <span>{examData.attempts - attempts.length}</span> attempts
+        <span>{attemptsLeft}</span> attempts
       </div>
     ),
     "course-score": (
       <div className={`${styles.statValueContainer} ${styles.scoreContainer}`}>
         <span>{testsScore}/</span>
         <div>
-          <span>{200 - examData.score}</span>
+          <span>{Math.max(0, COURSE_MAX_SCORE - examData.score)}</span>
           Points
         </div>
       </div>
     ),
   };
 
-  console.log(StatsByStatus[status]);
+  console.log(STATS_BY_STATUS[status]);
 
   return (
     <div className={styles.statsWrapper}>
       <ul className={styles.statsGrid} style={{ fontSize: 20 }}>
-        {StatsByStatus[status].map((stat) => (
+        {STATS_BY_STATUS[status].map((stat) => (
           <li key={stat}>
-            <StatItem stat={stat} statValue={statValue} />
+            <div className={styles.statContainer}>
+              <IonIcon src={STAT_ICONS[stat]} className={styles.statIcon}/>
+              {STAT_VALUES[stat]}
+              {STAT_LABEL[stat]}
+            </div>
           </li>
         ))}
       </ul>
