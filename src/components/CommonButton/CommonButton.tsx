@@ -15,7 +15,7 @@ interface CommonButtonTypes {
   color?: string;
   backgroundColor?: string;
   className?: string;
-  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void | Promise<void>;
   disabled?: boolean;
 }
 
@@ -35,8 +35,8 @@ const CommonButton: React.FC<CommonButtonTypes> = ({
   disabled,
   onClick,
 }) => {
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    onClick?.(e);
+  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    await onClick?.(e);
   };
   return (
     <button

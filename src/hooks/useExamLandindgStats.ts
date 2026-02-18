@@ -19,7 +19,9 @@ export const useExamLandidngStats = ({
   const testsScore = course
     ? course.lessons.reduce(
         (score, lesson) =>
-          typeof lesson.score === "number" ? (score += lesson.score) : score,
+          typeof lesson.score === "number" && lesson.type === "test"
+            ? (score += lesson.score)
+            : score,
         0
       )
     : 0;
@@ -28,5 +30,9 @@ export const useExamLandidngStats = ({
     ? Math.max(0, examData.attempts - examAttempts.length)
     : 0;
 
-  return { course, exam, examData, testsScore, attemptsLeft };
+  const bestAttempt = examAttempts.sort(
+    (a, b) => b.attempt_score - a.attempt_score
+  )[0];
+
+  return { course, exam, examData, testsScore, attemptsLeft, bestAttempt };
 };

@@ -77,7 +77,7 @@ const CategoryDetailPage: React.FC = () => {
         ) / (courses.length ? courses.length : 1)
       );
     }
-  }, [userCourses]);
+  }, [userCourses, categoryId]);
 
   const toggleHeaderTitleVisibility = (visible: Boolean) => {
     if (visible) {
@@ -152,7 +152,7 @@ const CategoryDetailPage: React.FC = () => {
       default:
         return [];
     }
-  };  
+  };
 
   const onRefresh = coursesInterface?.getAllCourses;
 

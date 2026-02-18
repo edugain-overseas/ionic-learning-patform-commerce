@@ -6,13 +6,13 @@
 }
 
 .contentInnerWrapper {
-  min-height: 500px;
-  height: 100%;
-  padding-block: 32rem;
+  flex: 1;
+  padding-block: 32rem calc((32rem + var(--tabbar-offset)));
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   font-size: 14rem;
+  gap: 24rem;
 }
 
 .landingWrapper {
@@ -95,10 +95,79 @@
 .timerWrapper {
   position: absolute;
   top: 0;
-  z-index: 2;
+  z-index: 9;
   width: 100%;
-  padding-top: calc(var(--ion-safe-area-top) + 56rem);
-  background-color: var(--custom-bg-rgba-secondary);
+  padding-top: calc(var(--ion-safe-area-top) + 56rem + 4rem);
+  padding-bottom: 4rem;
   backdrop-filter: blur(5rem);
   border-radius: 0 0 16rem 16rem;
+  background-color: var(--custom-bg-rgba-secondary);
+  box-shadow: var(--custom-box-shadow-primary);
+}
+
+.leaveModalContentContainer {
+  padding: 16rem 33rem;
+
+  h4 {
+    margin: 0;
+    margin-bottom: 10rem;
+    padding-block: 12rem;
+    text-align: center;
+    font-family: Inter;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ion-color-dark);
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 2rem;
+      bottom: 0rem;
+      left: 0;
+      border-radius: 100%;
+      background-color: var(--ion-color-light);
+    }
+  }
+
+  .leaveModalMainInfo {
+    text-align: center;
+    font-family: Inter;
+    font-size: 12rem;
+    color: var(--ion-color-dark);
+    margin-bottom: 28rem;
+  }
+
+  .leaveModalButtons,
+  .leaveModalInputs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 32rem;
+    font-family: Roboto;
+    font-size: 14rem;
+    font-weight: 600;
+  }
+
+  .leaveModalInputs {
+    flex-direction: column;
+    gap: 16rem;
+
+    ion-icon {
+      font-size: 22rem;
+    }
+
+    button:disabled {
+      opacity: 0.5
+    }
+  }
+
+  .leaveModalAdditionalInfo {
+    text-align: center;
+    font-family: Inter;
+    font-size: 10rem;
+    font-weight: 400;
+    color: var(--ion-color-dark);
+    margin-bottom: 40rem;
+  }
 }

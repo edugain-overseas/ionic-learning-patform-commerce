@@ -1,6 +1,7 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { IonContent } from "@ionic/react";
 import { useParams } from "react-router";
+import { motion } from "motion/react";
 import { useUser } from "../../../context/UserContext";
 import { useLessonTabbarLayout } from "../../../hooks/useTabbarLayout";
 import { ExamDataType, useCourses } from "../../../context/CoursesContext";
@@ -9,14 +10,19 @@ import { serverName } from "../../../http/server";
 import { downloadFile } from "../../../utils/downloadFile";
 import { minutesToSeconds, secondsToMinutes } from "../../../utils/formatTime";
 import { useToast } from "../../../hooks/useToast";
+import { clamp } from "../../../utils/clamp";
+import { useNavigationBlocker } from "../../../hooks/useNavigationBlocker";
 import useStorage from "../../../hooks/useStorage";
 import Header from "../../../components/Header/Header";
 import ExamLanding, { ExamLandingBtn } from "./ExamLanding";
 import TestContent from "../../../components/Test/TestContent";
 import Spinner from "../../../components/Spinner/Spinner";
 import TestTimer from "../../../components/TestTimer/TestTimer";
-import styles from "./CourseExamPage.module.scss";
 import StickyScrollLayout from "../../../components/StickyScrollLayout/StickyScrollLayout";
+import SheetModalAuto from "../../../components/SheetModalAuto/SheetModalAuto";
+import CommonButton from "../../../components/CommonButton/CommonButton";
+import ExamCredentionForm from "./ExamCredentionForm";
+import styles from "./CourseExamPage.module.scss";
 
 export type ExamResult = "acceptable" | "absolute" | "failed" | "no_result";
 
@@ -48,21 +54,32 @@ export type LandingBtnCallbacks = {
   downloadCertificate: () => Promise<void>;
 };
 
+const timerTreshold = 0.5;
+
 const CourseExamPage: FC = () => {
-  useLessonTabbarLayout();
+  const [showTabbar, hideTabbar] = useLessonTabbarLayout();
 
   const [isLoading, setIsLoading] = useState(true);
   const [attempts, setAttempts] = useState<ExamAttempt[]>([]);
   const [examResult, setExamResult] = useState<ExamResult | null>(null);
   const [studentAnswers, setStudentAnswers] = useState<any[]>([]);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isCredentionModalOpen, setIsCredentionModalOpen] = useState(false);
   const { courseId } = useParams<{ courseId: string }>();
-  const [currentAttempt, setCurrentAttempt] = useStorage<CurrentAttempt | null>(
-    `exam-attempts-course-id-${courseId}`,
-    null
-  );
+  const [currentAttempt, setCurrentAttempt, isStoreInit, flush] =
+    useStorage<CurrentAttempt | null>(
+      `exam-attempts-course-id-${courseId}`,
+      null
+    );
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<number>(0);
   const [present] = useToast();
+
+  const {
+    isOpen: isLeaveModalOpen,
+    confirm,
+    cancel,
+  } = useNavigationBlocker(!!currentAttempt);
 
   const coursesInterface = useCourses();
   const userInterface = useUser();
@@ -144,6 +161,12 @@ const CourseExamPage: FC = () => {
     );
   }, [studentAnswers]);
 
+  useEffect(() => {
+    hideTabbar();
+
+    return () => showTabbar();
+  }, []);
+
   const getBestAttempt = () =>
     attempts.sort((a, b) => b.attempt_score - a.attempt_score)[0];
 
@@ -193,8 +216,6 @@ const CourseExamPage: FC = () => {
     timerRef.current = timer;
 
     intervalRef.current = setInterval(() => {
-      console.log("tik tok");
-
       if (timerRef.current <= 0) {
         present({
           type: "info",
@@ -266,6 +287,14 @@ const CourseExamPage: FC = () => {
     }
   }, [currentAttempt]);
 
+  const onCompleteCourseClick = async () => {
+    if (!user?.changedName || !user.changedSurname) {
+      setIsCredentionModalOpen(true);
+      return;
+    }
+    completeCourse();
+  };
+
   const completeCourse = async () => {
     if (attempts.length) {
       const bestAttempt = getBestAttempt();
@@ -317,10 +346,18 @@ const CourseExamPage: FC = () => {
     await downloadFile(certificateUrl, certificateName);
   };
 
+  const handleLeaveAttempt = async () => {
+    await sendAttempt();
+
+    await flush(null);
+
+    confirm();
+  };
+
   const landingStatus = exam?.status === "completed" ? "completed" : examResult;
   const landingBtnCallbacks: LandingBtnCallbacks = {
     startAttempt,
-    completeCourse,
+    completeCourse: onCompleteCourseClick,
     downloadCertificate,
   };
 
@@ -329,16 +366,7 @@ const CourseExamPage: FC = () => {
 
   const headerProps = {
     title: exam?.title || "Exam",
-    left: [
-      currentAttempt
-        ? {
-            name: "custom-back",
-            defaultHref: `/courses/course/${courseId}/tasks`,
-            header: "Do you want to leave your attempt?",
-            message: "If you leave, your current attempt will be closed.",
-          }
-        : { name: "back", defaultHref: `/courses/course/${courseId}/tasks` },
-    ],
+    left: [{ name: "back", defaultHref: `/courses/course/${courseId}/tasks` }],
     mode: currentAttempt ? "absolute" : undefined,
   };
 
@@ -351,7 +379,7 @@ const CourseExamPage: FC = () => {
     );
   }
 
-  if (isLoading) {
+  if (isLoading || !isStoreInit) {
     return (
       <>
         <Header {...headerProps} />
@@ -364,19 +392,31 @@ const CourseExamPage: FC = () => {
     );
   }
 
+  const animationProgress = clamp(
+    0,
+    (scrollProgress * 1.25 - timerTreshold) / (1 - timerTreshold),
+    1
+  );
+
   return (
     <>
       <Header {...headerProps} />
       <IonContent className={styles.content}>
         {currentAttempt ? (
           <>
-            <div className={styles.timerWrapper}>
+            <motion.div
+              className={styles.timerWrapper}
+              style={{
+                transform: `translateY(${100 * animationProgress - 100}%)`,
+              }}
+            >
               <TestTimer time={currentAttempt.timer} />
-            </div>
+            </motion.div>
             <StickyScrollLayout
               posterSrc={`${serverName}/${exam.image_path}`}
-              topScrollEndPosition={190}
+              topScrollEndPosition={0}
               topLabel="Exam"
+              onProgressChange={setScrollProgress}
             >
               <div className={styles.contentInnerWrapper}>
                 {examLessonData && (
@@ -399,14 +439,67 @@ const CourseExamPage: FC = () => {
                 </div>
               </div>
             </StickyScrollLayout>
+            <SheetModalAuto isOpen={isLeaveModalOpen} onDidDissmiss={cancel}>
+              <div className={styles.leaveModalContentContainer}>
+                <h4>Please note!</h4>
+                <p className={styles.leaveModalMainInfo}>
+                  <b>If you leave the exam now,</b> your result will be
+                  calculated based on your current progress and may not be fully
+                  counted.
+                </p>
+                <div className={styles.leaveModalButtons}>
+                  <CommonButton
+                    label="Continue exam"
+                    width={138}
+                    height={32}
+                    backgroundColor="#001c54"
+                    color="#fcfcfc"
+                    onClick={cancel}
+                  />
+                  <CommonButton
+                    label="Leave the exam"
+                    width={138}
+                    height={32}
+                    border="1rem solid #7e8ca8"
+                    color="#7e8ca8"
+                    onClick={handleLeaveAttempt}
+                  />
+                </div>
+                <p className={styles.leaveModalAdditionalInfo}>
+                  Click Leave to leave the exam and save your current result.
+                  Click Continue exam to continue the exam.
+                </p>
+              </div>
+            </SheetModalAuto>
           </>
         ) : (
-          <ExamLanding
-            status={landingStatus}
-            callbacks={landingBtnCallbacks}
-            attempts={attempts}
-            hasAttempt={userHasAttempt}
-          />
+          <>
+            <ExamLanding
+              status={landingStatus}
+              callbacks={landingBtnCallbacks}
+              attempts={attempts}
+              hasAttempt={userHasAttempt}
+            />
+            <SheetModalAuto
+              isOpen={isCredentionModalOpen}
+              onDidDissmiss={async () => {
+                await completeCourse();
+                setIsCredentionModalOpen(false);
+              }}
+            >
+              <ExamCredentionForm
+                onSubmitCallback={async () => {
+                  await completeCourse();
+                  setIsCredentionModalOpen(false);
+                }}
+                defaultValues={{ name: user.name, surname: user.surname }}
+                disabledFields={[
+                  { fieldName: "name", disabled: user.changedName },
+                  { fieldName: "surname", disabled: user.changedSurname },
+                ]}
+              />
+            </SheetModalAuto>
+          </>
         )}
       </IonContent>
     </>

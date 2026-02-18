@@ -146,6 +146,7 @@ const getTemplateText = (status: Status, attempts: ExamAttempt[]) => {
               <b>We are honored to celebrate your success!</b>
             </p>
           </div>
+          <ExamLandingStats status={status} attempts={attempts} />
           <div>
             <p className={styles.secondaryText}>
               Click the button below to <b>complete your course</b> to get your
@@ -172,16 +173,19 @@ const getTemplateText = (status: Status, attempts: ExamAttempt[]) => {
           <h3>Well Done on Completing the Exam!</h3>
           <div>
             <p className={styles.primaryText}>
-              You've achieved an exceptional score of points, the highest
-              possible mark! This outstanding result reflects your dedication,
-              perseverance, and mastery of the course material.
+              You've earned good number of points, an impressive score that
+              reflects your hard work and understanding of the material. Great
+              job!
             </p>
           </div>
           <div>
-            <p className={styles.secondaryText}>
-              <b>We are honored to celebrate your success!</b>
+            <p className={styles.primaryText}>
+              If you'd like to aim even higher, you have the opportunity to
+              retake the exam and improve your score. Remember, every step
+              toward mastery is a step toward success!
             </p>
           </div>
+          <ExamLandingStats status={status} attempts={attempts} />
           <div>
             <p className={styles.secondaryText}>
               Ready to finalize your achievement?
@@ -220,6 +224,7 @@ const getTemplateText = (status: Status, attempts: ExamAttempt[]) => {
               Don't be discouraged—every attempt is a step closer to mastery!
             </p>
           </div>
+          <ExamLandingStats status={status} attempts={attempts} />
           <div>
             <p className={styles.secondaryText}>
               You can retake the exam to improve your score and unlock your
@@ -263,6 +268,7 @@ const getTemplateText = (status: Status, attempts: ExamAttempt[]) => {
               <b>We are honored to celebrate your success!</b>
             </p>
           </div>
+          <ExamLandingStats status={status} attempts={attempts} />
           <div>
             <p className={styles.secondaryText}>
               You have <b>complete the course!</b>

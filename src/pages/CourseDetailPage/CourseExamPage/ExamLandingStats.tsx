@@ -4,6 +4,7 @@ import { Status } from "./ExamLanding";
 import { ExamAttempt, ExamResult } from "./CourseExamPage";
 import { useParams } from "react-router";
 import { useExamLandidngStats } from "../../../hooks/useExamLandindgStats";
+import { letterGrade } from "../../../utils/letterGrade";
 import courseIcon from "../../../assets/icons/homeStats/courses.svg";
 import studentIcon from "../../../assets/icons/homeStats/students.svg";
 import scoreIcon from "../../../assets/icons/homeStats/score.svg";
@@ -13,7 +14,10 @@ type StatType =
   | "passing-score"
   | "exam-time"
   | "attempts-amount-left"
-  | "course-score";
+  | "course-score"
+  | "point-scored"
+  | "time-spent"
+  | "final-score";
 
 type StatsByStatusType = Record<ExamResult | "completed", StatType[]>;
 type StatIconType = Record<StatType, string>;
@@ -26,10 +30,10 @@ const STATS_BY_STATUS: StatsByStatusType = {
     "attempts-amount-left",
     "course-score",
   ],
-  acceptable: [],
-  absolute: [],
-  failed: [],
-  completed: [],
+  acceptable: ["point-scored", "time-spent", "final-score"],
+  absolute: ["point-scored", "time-spent", "final-score"],
+  failed: ["point-scored", "time-spent", "final-score"],
+  completed: ["point-scored", "time-spent", "final-score"],
 };
 
 const STAT_ICONS: StatIconType = {
@@ -37,6 +41,9 @@ const STAT_ICONS: StatIconType = {
   "exam-time": studentIcon,
   "attempts-amount-left": scoreIcon,
   "course-score": courseIcon,
+  "point-scored": courseIcon,
+  "time-spent": studentIcon,
+  "final-score": courseIcon,
 };
 
 const STAT_LABEL: StatValueType = {
@@ -60,6 +67,21 @@ const STAT_LABEL: StatValueType = {
       <b>Scores</b> in tests
     </span>
   ),
+  "point-scored": (
+    <span className={styles.statLabel}>
+      <b>Points</b> scored
+    </span>
+  ),
+  "time-spent": (
+    <span className={styles.statLabel}>
+      <b>Time</b> spent on completion
+    </span>
+  ),
+  "final-score": (
+    <span className={styles.statLabel}>
+      <b>Your</b> final score
+    </span>
+  ),
 };
 
 const COURSE_MAX_SCORE = 200;
@@ -73,7 +95,7 @@ const ExamLandingStats = ({
 }) => {
   const { courseId } = useParams<{ courseId: string }>();
 
-  const { course, exam, examData, testsScore, attemptsLeft } =
+  const { course, exam, examData, testsScore, attemptsLeft, bestAttempt } =
     useExamLandidngStats({
       courseId: +courseId,
       examAttempts: attempts,
@@ -106,17 +128,40 @@ const ExamLandingStats = ({
         </div>
       </div>
     ),
+    "point-scored": (
+      <div className={`${styles.statValueContainer} ${styles.scoreContainer}`}>
+        <span>{bestAttempt?.attempt_score}/</span>
+        <div>
+          <span>{examData.score}</span>
+          Points
+        </div>
+      </div>
+    ),
+    "time-spent": (
+      <div className={`${styles.statValueContainer} ${styles.scoreContainer}`}>
+        <span>{bestAttempt?.spent_minutes}/</span>
+        <div>
+          <span>{examData.timer}</span>
+          min
+        </div>
+      </div>
+    ),
+    "final-score": (
+      <div className={styles.statValueContainer}>
+        <span>{`${bestAttempt?.attempt_score + testsScore}(${letterGrade(
+          bestAttempt?.attempt_score + testsScore
+        )})`}</span>
+      </div>
+    ),
   };
-
-  console.log(STATS_BY_STATUS[status]);
-
+  
   return (
     <div className={styles.statsWrapper}>
       <ul className={styles.statsGrid} style={{ fontSize: 20 }}>
         {STATS_BY_STATUS[status].map((stat) => (
           <li key={stat}>
             <div className={styles.statContainer}>
-              <IonIcon src={STAT_ICONS[stat]} className={styles.statIcon}/>
+              <IonIcon src={STAT_ICONS[stat]} className={styles.statIcon} />
               {STAT_VALUES[stat]}
               {STAT_LABEL[stat]}
             </div>

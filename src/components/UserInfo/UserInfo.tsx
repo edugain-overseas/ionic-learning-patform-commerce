@@ -20,6 +20,14 @@ const UserInfo = () => {
     userData?.username && router.push("/my-profile");
   };
 
+  console.log(userData);
+
+  const certificatesAmount = userData?.certificates.flatMap((catCert) =>
+    catCert.course_certificate_data.filter(
+      (course) => course.course_status === "completed"
+    )
+  ).length;
+
   return (
     <Container isUser={!!userData?.userId}>
       <div className={styles.wrapper} onClick={handleClick}>
@@ -33,7 +41,7 @@ const UserInfo = () => {
             <TextOverrflowEllipsis
               text={`${userData?.courses?.length} course`}
             />
-            <TextOverrflowEllipsis text="0 certificate" />
+            <TextOverrflowEllipsis text={`${certificatesAmount} certificate`} />
           </div>
         </div>
       </div>
