@@ -55,7 +55,8 @@ const renderBtn = (props: ButtonPropsTypes, handleNotification: () => void) => {
           className={`${styles.notificationBtn} ${
             props.className ? props.className : ""
           }`}
-          onClick={props.onClick ? props.onClick : handleNotification}
+          // onClick={props.onClick ? props.onClick : handleNotification}
+          routerLink="/notifications"
           id={props.id}
         >
           <IonIcon src={bellIcon} className={styles.bellIcon} />

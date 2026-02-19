@@ -16,6 +16,7 @@ import Search from "../pages/Search/Search";
 import CourseBuyStatusPage from "../pages/CourseDetailPage/CourseBuyStatusPage/CourseBuyStatusPage";
 import Support from "../pages/Support/Support";
 import MyStudy from "../pages/MyStudy/MyStudy";
+import Notifications from "../pages/Notifications/Notifications";
 
 const Router: React.FC = () => {
   return (
@@ -34,6 +35,7 @@ const Router: React.FC = () => {
             <Route path="/instructions" component={Instructions} exact />
             <Route path="/search" component={Search} />
             <Route path="/support" component={Support} />
+            <Route path="/notifications" component={Notifications} />
             <Route
               path="/category/:categoryId"
               component={CategoryDetailPage}

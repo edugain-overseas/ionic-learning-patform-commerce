@@ -206,6 +206,7 @@ ion-modal::part(handle) {
   --border-style: solid;
   --border-color: transparent;
 
+  --width: fit-content;
   --padding-inline-start: 24rem;
 
   &.toast-info,
