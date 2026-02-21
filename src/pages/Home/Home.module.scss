@@ -10,6 +10,15 @@
   }
 }
 
+.contentWrapper {
+  flex-grow: 1;
+  overflow: hidden;
+
+  &:has(.homeContent.isScrolling) + .homeAuth {
+    transform: translateY(100%);
+  }
+}
+
 .homeContent {
   --background: transparent;
   transform: translateY(calc(var(--keyboard-height) * -1));

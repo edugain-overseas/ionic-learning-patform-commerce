@@ -1,8 +1,7 @@
-import { IonIcon, useIonRouter } from "@ionic/react";
+import { useIonRouter } from "@ionic/react";
 import { FC, useState } from "react";
-import search from "../../assets/icons/header/search.svg";
-import InsetBtn from "../InsetBtn/InsetBtn";
 import styles from "./HomeSearch.module.scss";
+import MainSearchbar from "../MainSearchbar/MainSearchbar";
 
 const HomeSearch: FC = () => {
   const router = useIonRouter();
@@ -18,21 +17,7 @@ const HomeSearch: FC = () => {
   };
   return (
     <div className={styles.searchbar}>
-      <div className={styles.inputWrapper}>
-        <input
-          type="text"
-          placeholder="Search our courses..."
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-        />
-      </div>
-      <InsetBtn
-        width="40rem"
-        height="40rem"
-        backgroundColor="#7E8CA8"
-        icon={<IonIcon src={search} className={styles.searchbarIcon} />}
-        onClick={handleSearch}
-      />
+      <MainSearchbar />
     </div>
   );
 };

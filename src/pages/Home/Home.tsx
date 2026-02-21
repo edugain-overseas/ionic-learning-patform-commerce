@@ -71,20 +71,18 @@ const Courses = () => {
 };
 
 const Home: React.FC = () => {
-  const [isScrolling, setIsScrolling] = useState(false);
   const isAuthShown = !useUser()?.user.accessToken;
-  
 
   return (
     <IonPage className={`${styles.page} primaryPage`} id="home">
       <Header {...headerProps} />
-      <div style={{ flexGrow: 1, overflow: "hidden" }}>
+      <div className={styles.contentWrapper}>
         <IonContent
           fullscreen
           className={styles.homeContent}
           scrollEvents={true}
-          onIonScrollStart={() => setIsScrolling(true)}
-          onIonScrollEnd={() => setIsScrolling(false)}
+          onIonScrollStart={(e) => e.target.classList.add(styles.isScrolling)}
+          onIonScrollEnd={(e) => e.target.classList.remove(styles.isScrolling)}
           style={{ ["--padding-bottom"]: isAuthShown ? "64rem" : "0" }}
         >
           <PageRefresher />
@@ -118,7 +116,7 @@ const Home: React.FC = () => {
           <HomeFooter />
         </IonContent>
       </div>
-      <Auth containerClassname={styles.homeAuth} hidden={isScrolling} />
+      <Auth containerClassname={styles.homeAuth} />
     </IonPage>
   );
 };

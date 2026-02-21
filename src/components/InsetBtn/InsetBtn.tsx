@@ -2,7 +2,7 @@ import React, { MouseEvent, MouseEventHandler } from "react";
 import styles from "./InsetBtn.module.scss";
 import { IonRippleEffect } from "@ionic/react";
 
-interface InsetBtnTypes {
+type InsetBtnType = {
   icon?: React.ReactNode;
   width?: string | undefined;
   height?: string | undefined;
@@ -14,9 +14,10 @@ interface InsetBtnTypes {
   disabled?: boolean | undefined;
   id?: string;
   ripple?: boolean;
-}
+  type?: "button" | "submit" | "reset";
+};
 
-const InsetBtn: React.FC<InsetBtnTypes> = ({
+const InsetBtn: React.FC<InsetBtnType> = ({
   icon,
   width = "24rem",
   height = "24rem",
@@ -28,10 +29,13 @@ const InsetBtn: React.FC<InsetBtnTypes> = ({
   onClick = () => {},
   disabled = false,
   ripple = false,
+  type = "button",
 }) => {
   const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+    if (type !== "submit") {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     onClick(e);
   };
 
@@ -49,6 +53,7 @@ const InsetBtn: React.FC<InsetBtnTypes> = ({
       onClick={handleClick}
       disabled={disabled}
       id={id}
+      type={type}
     >
       <div style={backgroundColor ? { backgroundColor: backgroundColor } : {}}>
         {icon}
