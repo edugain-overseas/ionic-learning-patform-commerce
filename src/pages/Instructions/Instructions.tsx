@@ -7,10 +7,39 @@ import SegmentNavPanel from "../../components/SegmentNavPanel/SegmentNavPanel";
 import { instructionsNav } from "../../constants/nav";
 import styles from "./Instructions.module.scss";
 import Accordion from "../../components/Accordion/Accordion";
-import { useCourses } from "../../context/CoursesContext";
+import { InstructionType, useCourses } from "../../context/CoursesContext";
 import { getFormattedStrFromDate } from "../../utils/formatDate";
 import InstructionContent from "./InstructionContent";
 import PageRefresher from "../../components/PageRefresher/PageRefresher";
+
+export const IntructionAccordion = ({
+  instruction,
+}: {
+  instruction: InstructionType;
+}) => (
+  <Accordion
+    key={instruction.id}
+    header={
+      <div className={styles.header}>
+        <div className={styles.iconWrapper}>
+          <IonIcon src={TaskIcon} className={styles.intructionIcon} />
+        </div>
+        <div className={styles.intructionTitleWrapper}>
+          <span className={styles.title}>{instruction.name}</span>
+          <div className={styles.updateInfoWrapper}>
+            <IonIcon src={CalendarIcon} className={styles.updateInfoIcon} />
+            <span className={styles.updateInfoText}>
+              {`Last update: ${getFormattedStrFromDate(
+                instruction.last_update
+              )}`}
+            </span>
+          </div>
+        </div>
+      </div>
+    }
+    content={<InstructionContent instruction={instruction} />}
+  />
+);
 
 const Instructions: React.FC = () => {
   const coursesInterface = useCourses();
@@ -41,34 +70,38 @@ const Instructions: React.FC = () => {
         <div className={styles.container}>
           {instructions &&
             instructions[filter].map((instruction) => (
-              <Accordion
+              <IntructionAccordion
                 key={instruction.id}
-                header={
-                  <div className={styles.header}>
-                    <div className={styles.iconWrapper}>
-                      <IonIcon
-                        src={TaskIcon}
-                        className={styles.intructionIcon}
-                      />
-                    </div>
-                    <div className={styles.intructionTitleWrapper}>
-                      <span className={styles.title}>{instruction.name}</span>
-                      <div className={styles.updateInfoWrapper}>
-                        <IonIcon
-                          src={CalendarIcon}
-                          className={styles.updateInfoIcon}
-                        />
-                        <span className={styles.updateInfoText}>
-                          {`Last update: ${getFormattedStrFromDate(
-                            instruction.last_update
-                          )}`}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                }
-                content={<InstructionContent instruction={instruction} />}
+                instruction={instruction}
               />
+              // <Accordion
+              //   key={instruction.id}
+              //   header={
+              //     <div className={styles.header}>
+              //       <div className={styles.iconWrapper}>
+              //         <IonIcon
+              //           src={TaskIcon}
+              //           className={styles.intructionIcon}
+              //         />
+              //       </div>
+              //       <div className={styles.intructionTitleWrapper}>
+              //         <span className={styles.title}>{instruction.name}</span>
+              //         <div className={styles.updateInfoWrapper}>
+              //           <IonIcon
+              //             src={CalendarIcon}
+              //             className={styles.updateInfoIcon}
+              //           />
+              //           <span className={styles.updateInfoText}>
+              //             {`Last update: ${getFormattedStrFromDate(
+              //               instruction.last_update
+              //             )}`}
+              //           </span>
+              //         </div>
+              //       </div>
+              //     </div>
+              //   }
+              //   content={<InstructionContent instruction={instruction} />}
+              // />
             ))}
         </div>
       </IonContent>

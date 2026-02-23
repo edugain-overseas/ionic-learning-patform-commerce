@@ -1,96 +1,91 @@
-import { FC, useEffect, useState } from "react";
-import {
-  IonBackButton,
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonToolbar,
-  useIonRouter,
-  useIonViewWillEnter,
-} from "@ionic/react";
-import { useLocation } from "react-router";
-import { instance } from "../../http/instance";
+import { FC } from "react";
+import { IonContent, IonPage } from "@ionic/react";
 import {
   CategoryType,
   CourseType,
-  LessonType,
+  InstructionType,
+  useCourses,
 } from "../../context/CoursesContext";
-import backIcon from "../../assets/icons/header/back.svg";
-
-import Searchbar from "./Searchbar/Searchbar";
 import Spinner from "../../components/Spinner/Spinner";
 import SearchResults from "./SearchResults";
 import styles from "./Search.module.scss";
+import Header from "../../components/Header/Header";
+import { useMainSearchValue } from "../../hooks/useMainSearch";
+import MainSearchbar from "../../components/MainSearchbar/MainSearchbar";
+import HomeSlider from "../../components/HomeSlider/HomeSlider";
+import CategoryItem from "../../components/CategoryItem/CategoryItem";
+import CourseItem from "../../components/CourseItem/CourseItem";
+import SearchHistory from "./SearchHistory";
 
-export type ResultType = "categories" | "courses" | "lessons";
+export type ResultType = "categories" | "courses" | "instructions";
 
 export type Results = {
   categories: CategoryType[];
   courses: CourseType[];
-  lessons: LessonType[];
+  instructions: InstructionType[];
+};
+
+const headerProps = {
+  title: "Search",
+  left: [
+    {
+      name: "back",
+    },
+  ],
 };
 
 const Search: FC = () => {
-  const location = useLocation();
-  const router = useIonRouter();
-  const searchParams = new URLSearchParams(location.search);
-  const q = searchParams.get("q") || "";
+  const { isLoading, query, results } = useMainSearchValue();
 
-  const [query, setQuery] = useState<string>(q);
-  const [results, setResults] = useState<Results>();
-  const [isLoading, setIsLoading] = useState(false);
+  console.log(results);
 
-  const handleQueryChange = (e: Event) => {
-    const target = e.target as HTMLIonSearchbarElement;
-    const value = target.value!.toLowerCase();
-    setQuery(value);
-  };
-  console.log(query);
-
-  useEffect(() => {
-    const fetchResults = async () => {
-      setIsLoading(true);
-      try {
-        const { data } = await instance.get(`/user/search?query=${query}`);
-        setResults(data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    if (query) {
-      router.push(`?q=${query}`);
-      fetchResults();
-    }
-  }, [query]);
-
-  useIonViewWillEnter(() => {
-    console.log(q);
-    setQuery(q);
-  }, [q]);
+  const categories = useCourses()?.categories;
+  const courses = useCourses()?.courses;
 
   return (
     <IonPage className="primaryPage">
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start" className={styles.toolbarButtons}>
-            <IonBackButton
-              text=""
-              icon={backIcon}
-              className={styles.backBtn}
-              defaultHref="/"
-            />
-          </IonButtons>
-          <Searchbar onChange={handleQueryChange} value={q} />
-        </IonToolbar>
-      </IonHeader>
+      <Header {...headerProps} />
       <IonContent className={`custom-content-wrapper ${styles.searchContent}`}>
-        {isLoading ? (
-          <Spinner className={styles.spinner} />
+        <div className={styles.searchbarWrapper}>
+          <MainSearchbar />
+        </div>
+
+        {results ? (
+          isLoading ? (
+            <Spinner className={styles.spinner} />
+          ) : (
+            <SearchResults results={results} query={query} />
+          )
         ) : (
-          <SearchResults results={results} />
+          <>
+            <div className={styles.searchHistoryWrapper}>
+              <SearchHistory />
+            </div>
+            {categories && (
+              <div className={styles.popularCategories}>
+                <p className={styles.title}>
+                  Most frequently searched in categories
+                </p>
+                <HomeSlider
+                  items={categories}
+                  renderItem={(item: CategoryType) => (
+                    <CategoryItem category={item} />
+                  )}
+                />
+              </div>
+            )}
+            {courses && (
+              <div className={styles.popularCourses}>
+                <p className={styles.title}>Most frequently searched courses</p>
+                <HomeSlider
+                  items={courses}
+                  renderItem={(item: CourseType) => (
+                    <CourseItem course={item} />
+                  )}
+                />
+              </div>
+            )}
+          </>
         )}
       </IonContent>
     </IonPage>

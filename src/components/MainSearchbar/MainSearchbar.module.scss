@@ -13,6 +13,11 @@
   background: var(--custom-bg-rgba-fourth);
   box-shadow: var(--custom-box-shadow-secondary-inset);
   backdrop-filter: blur(16rem);
+  position: relative;
+
+  &:has(.clearBtn) input {
+    padding-right: 32rem;
+  }
 
   input {
     width: 100%;
@@ -36,6 +41,21 @@
     &::placeholder {
       color: var(--ion-color-light);
     }
+  }
+
+  .clearBtn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 4rem;
+    width: 32rem;
+    height: 32rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12rem;
+    color: var(--ion-color-light);
+    background: none;
   }
 }
 

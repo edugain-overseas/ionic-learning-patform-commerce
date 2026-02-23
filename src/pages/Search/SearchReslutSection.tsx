@@ -3,15 +3,15 @@ import { ResultType } from "./Search";
 import {
   CategoryType,
   CourseType,
-  LessonType,
+  InstructionType,
 } from "../../context/CoursesContext";
-import styles from "./Search.module.scss";
+import { IntructionAccordion } from "../Instructions/Instructions";
 import CategoryItem from "../../components/CategoryItem/CategoryItem";
 import CourseItem from "../../components/CourseItem/CourseItem";
-import TaskItem from "../../components/TaskItem/TaskItem";
+import styles from "./Search.module.scss";
 
 type SearchReslutSectionProps = {
-  data: CategoryType[] | CourseType[] | LessonType[];
+  data: CategoryType[] | CourseType[] | InstructionType[];
   type: ResultType;
 };
 
@@ -26,9 +26,9 @@ const SearchReslutSection: FC<SearchReslutSectionProps> = ({ data, type }) => {
         return (data as CourseType[]).map((course) => (
           <CourseItem course={course} key={course.id} />
         ));
-      case "lessons":
-        return (data as LessonType[]).map((lesson) => (
-          <TaskItem task={lesson} key={lesson.id} />
+      case "instructions":
+        return (data as InstructionType[]).map((instruction) => (
+          <IntructionAccordion key={instruction.id} instruction={instruction} />
         ));
       default:
         return null;
@@ -37,7 +37,9 @@ const SearchReslutSection: FC<SearchReslutSectionProps> = ({ data, type }) => {
 
   return (
     <div className={styles.searchResultSection} id={type}>
-      <h3>{type}</h3>
+      <h3 className={styles.title}>
+        Results in <span>{type}</span>
+      </h3>
       <ul>{elementsByType()}</ul>
     </div>
   );

@@ -5,6 +5,7 @@ import { instance } from "../http/instance";
 import {
   CategoryType,
   CourseType,
+  InstructionType,
   LessonType,
 } from "../context/CoursesContext";
 import useDebounceValue from "./useDebounce";
@@ -17,7 +18,7 @@ export type SuggestionType = {
 export type Results = {
   categories: CategoryType[];
   courses: CourseType[];
-  lessons: LessonType[];
+  instructions: InstructionType[];
 };
 
 const SUGGESTIONS_CACHE = new Map();
@@ -69,12 +70,11 @@ export const useMainSearchValue = () => {
   const router = useIonRouter();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const query = searchParams.get("q");
+  const query = searchParams.get("q") || "";
 
   const searchWithValue = (query: string) => {
     const validQuery = query.trim().toLowerCase();
-    if (!validQuery) return;
-    router.push(`/search?q=${query}`);
+    router.push(`/search?q=${validQuery}`);
   };
 
   useEffect(() => {
@@ -90,7 +90,7 @@ export const useMainSearchValue = () => {
       }
     };
 
-    fetchResults();
+    if (query) fetchResults();
   }, [query]);
 
   return { isLoading, query, results, handleSearch: searchWithValue };

@@ -36,7 +36,7 @@ const renderCourseCard = (course: CourseType) => {
   return <CourseItem course={course} />;
 };
 
-const Categories = () => {
+export const Categories = () => {
   const categories = useCourses()?.categories;
 
   if (!categories) {
@@ -53,7 +53,7 @@ const Categories = () => {
   );
 };
 
-const Courses = () => {
+export const Courses = () => {
   const courses = useCourses()?.courses;
 
   if (!courses) {

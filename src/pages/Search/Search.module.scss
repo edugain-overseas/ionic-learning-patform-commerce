@@ -1,34 +1,30 @@
-.toolbarButtons {
-  align-self: initial;
-}
-
-.backBtn {
-  --icon-font-size: 32rem;
-  --padding-start: 0;
-  --padding-end: 0;
-  color: var(--ion-color-dark);
-}
-
 .searchContent {
-  --padding-bottom: var(--tabbar-offset);
+  --padding-bottom: calc(18rem + var(--tabbar-offset));
+  --padding-start: 18rem;
+  --padding-end: 18rem;
+  --padding-top: 18rem;
+}
+
+.searchbarWrapper {
+  margin-bottom: 18rem;
+}
+
+.resultsDiscription {
+  margin-bottom: 18rem;
+  .title {
+    margin-bottom: 4rem;
+  }
 }
 
 .searchResultSection {
-  margin-block: 24rem;
-  margin-inline: 8rem;
-  padding: 8rem 12rem;
-  box-shadow: var(--custom-box-shadow-primary);
-  background: var(--custom-bg-rgba-secondary);
-  border-radius: 5rem;
-
+  margin-bottom: 18rem;
   h3 {
-    font-size: 18rem;
-    font-weight: 700;
-    color: var(--ion-color-dark);
-    text-transform: capitalize;
     margin: 0;
     margin-bottom: 16rem;
-    text-align: center;
+
+    span {
+      text-transform: capitalize;
+    }
   }
 
   ul {
@@ -36,21 +32,43 @@
     flex-direction: column;
     gap: 16rem;
   }
+}
 
-  &[id="categories"] ul {
-    gap: 8rem;
+.title {
+  font-family: Roboto;
+  font-size: 14rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--ion-color-dark);
+}
+
+.subtitle {
+  color: var(--ion-color-light);
+  font-family: Roboto;
+  font-size: 8rem;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.popularCategories,
+.popularCourses {
+  margin-inline: -18rem;
+
+  .title {
+    padding-inline: 18rem;
   }
 }
 
 .spinner {
-  position: absolute;
-  top: 8rem;
   left: 50%;
   transform: translateX(-50%);
 }
 
 .noResults {
-  font-size: 16rem;
+  font-family: Roboto;
+  font-size: 14rem;
+  font-weight: 700;
+  line-height: 1.1;
   text-align: center;
   padding: 8rem;
   color: var(--ion-color-dark);
