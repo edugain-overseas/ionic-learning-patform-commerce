@@ -18,8 +18,6 @@ const SearchResults: FC<SearchResultsProps> = ({ results, query }) => {
     0
   );
 
-  console.log(resultsLength);
-
   const isAnyResults = resultsLength !== 0;
 
   return (

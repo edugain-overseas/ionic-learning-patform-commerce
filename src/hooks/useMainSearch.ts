@@ -1,4 +1,3 @@
-import { useIonRouter } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { instance } from "../http/instance";
@@ -6,7 +5,6 @@ import {
   CategoryType,
   CourseType,
   InstructionType,
-  LessonType,
 } from "../context/CoursesContext";
 import useDebounceValue from "./useDebounce";
 
@@ -24,7 +22,11 @@ export type Results = {
 const SUGGESTIONS_CACHE = new Map();
 
 export const useMainSearchForm = () => {
-  const [value, setValue] = useState<string>("");
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const query = searchParams.get("q") || "";
+
+  const [value, setValue] = useState<string>(query);
   const [suggestions, setSuggestions] = useState<SuggestionType[]>([]);
   const debouncedValue = useDebounceValue(value, 300);
 
@@ -61,21 +63,20 @@ export const useMainSearchForm = () => {
     fetchSuggestions();
   }, [debouncedValue]);
 
+  useEffect(() => {
+    const validQuery = query.trim().toLowerCase();
+    if (validQuery && validQuery !== value) setValue(validQuery);
+  }, [query]);
+
   return { value, setValue, suggestions };
 };
 
 export const useMainSearchValue = () => {
   const [results, setResults] = useState<Results | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const router = useIonRouter();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const query = searchParams.get("q") || "";
-
-  const searchWithValue = (query: string) => {
-    const validQuery = query.trim().toLowerCase();
-    router.push(`/search?q=${validQuery}`);
-  };
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -90,8 +91,12 @@ export const useMainSearchValue = () => {
       }
     };
 
-    if (query) fetchResults();
+    if (query) {
+      fetchResults();
+    } else {
+      setResults(null);
+    }
   }, [query]);
 
-  return { isLoading, query, results, handleSearch: searchWithValue };
+  return { isLoading, query, results };
 };

@@ -6,16 +6,17 @@ import {
   InstructionType,
   useCourses,
 } from "../../context/CoursesContext";
+import { useSearchHistory } from "../../hooks/useSearchHistory";
+import { useMainSearchValue } from "../../hooks/useMainSearch";
 import Spinner from "../../components/Spinner/Spinner";
 import SearchResults from "./SearchResults";
-import styles from "./Search.module.scss";
 import Header from "../../components/Header/Header";
-import { useMainSearchValue } from "../../hooks/useMainSearch";
 import MainSearchbar from "../../components/MainSearchbar/MainSearchbar";
 import HomeSlider from "../../components/HomeSlider/HomeSlider";
 import CategoryItem from "../../components/CategoryItem/CategoryItem";
 import CourseItem from "../../components/CourseItem/CourseItem";
 import SearchHistory from "./SearchHistory";
+import styles from "./Search.module.scss";
 
 export type ResultType = "categories" | "courses" | "instructions";
 
@@ -36,8 +37,7 @@ const headerProps = {
 
 const Search: FC = () => {
   const { isLoading, query, results } = useMainSearchValue();
-
-  console.log(results);
+  const { searchHistory, isLoading: isHistoryLoading } = useSearchHistory();
 
   const categories = useCourses()?.categories;
   const courses = useCourses()?.courses;
@@ -58,9 +58,11 @@ const Search: FC = () => {
           )
         ) : (
           <>
-            <div className={styles.searchHistoryWrapper}>
-              <SearchHistory />
-            </div>
+            {isHistoryLoading ? (
+              <Spinner className={styles.spinner} />
+            ) : (
+              <SearchHistory history={searchHistory} />
+            )}
             {categories && (
               <div className={styles.popularCategories}>
                 <p className={styles.title}>

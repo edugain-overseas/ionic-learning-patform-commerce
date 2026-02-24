@@ -1,6 +1,5 @@
-import React from "react";
-import styles from "./MainSearchbar.module.scss";
 import { SuggestionType } from "../../hooks/useMainSearch";
+import styles from "./MainSearchbar.module.scss";
 
 const SuggestionsList = ({
   suggestions,

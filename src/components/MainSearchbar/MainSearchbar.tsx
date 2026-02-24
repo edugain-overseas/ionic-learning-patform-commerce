@@ -1,27 +1,37 @@
 import { FormEvent, useRef } from "react";
-import InsetBtn from "../InsetBtn/InsetBtn";
-import { IonIcon } from "@ionic/react";
+import { IonIcon, useIonRouter } from "@ionic/react";
+import { useMainSearchForm } from "../../hooks/useMainSearch";
+import { useLocation } from "react-router";
 import search from "../../assets/icons/header/search.svg";
 import cross from "../../assets/icons/cross.svg";
-import {
-  useMainSearchForm,
-  useMainSearchValue,
-} from "../../hooks/useMainSearch";
+import InsetBtn from "../InsetBtn/InsetBtn";
 import styles from "./MainSearchbar.module.scss";
 
 const MainSearchbar = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { value, setValue, suggestions } = useMainSearchForm();
-  const { handleSearch } = useMainSearchValue();
+  const router = useIonRouter();
+  const location = useLocation();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log("Submit ", value);
-
-    handleSearch(value);
+    const validQuery = value.trim().toLowerCase();
+    router.push(`/search?q=${validQuery}`);
   };
 
-  console.log(suggestions);
+  const handleClear = () => {
+    setValue("");
+    inputRef.current?.focus();
+    const params = new URLSearchParams(location.search);
+    params.delete("q");
+
+    const newSearch = params.toString();
+    router.push(
+      newSearch ? `${location.pathname}?${newSearch}` : location.pathname,
+      "forward",
+      "replace"
+    );
+  };
 
   return (
     <form className={styles.searchForm} onSubmit={handleSubmit}>
@@ -37,10 +47,7 @@ const MainSearchbar = () => {
           <button
             type="button"
             className={styles.clearBtn}
-            onClick={() => {
-              setValue("");
-              inputRef.current?.focus();
-            }}
+            onClick={handleClear}
           >
             <IonIcon src={cross} />
           </button>
