@@ -23,10 +23,11 @@ export const useToast = () => {
   const api = ({ type = "info", ...config }: ToastApiConfig) => {
     return present({
       cssClass: ["toast", `toast-${type}`],
+      mode: "ios",
       swipeGesture: "vertical",
       position: "top",
       icon: toastIcons[type],
-      duration: 3000,
+      duration: 500,
       ...config,
     });
   };

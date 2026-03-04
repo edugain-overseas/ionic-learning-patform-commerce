@@ -38,8 +38,5 @@ export const letterGrade = (grade: number) => {
   if (80 <= grade) {
     return "E";
   }
-  if (0 < grade) {
-    return "F";
-  }
-  return null;
+  return "F"
 };

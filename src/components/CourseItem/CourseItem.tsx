@@ -18,6 +18,8 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
 
   const listStyle = useListStyle()?.listStyle;
 
+  const isCourseCompleted = course.progress === 100;
+
   return (
     <li className={styles.itemWrapper} ref={itemRef}>
       <IonRouterLink
@@ -61,7 +63,10 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
                     showValue={false}
                   />
                 </div>
-                <CardGrade grade={course.grade} />
+                <CardGrade
+                  grade={course.grade}
+                  showLetter={isCourseCompleted}
+                />
               </>
             ) : (
               <>

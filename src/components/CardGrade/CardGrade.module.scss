@@ -8,34 +8,43 @@
 
   .infoWrapper {
     display: flex;
-    justify-content: center;
-    align-items: flex-end;
+    flex-direction: column;
+  }
+
+  .gradeWrapper {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .userGrade,
+  .maxGrade {
+    font-size: 14rem;
+    font-weight: 500;
   }
 
   .userGrade {
-    font-size: 12rem;
+    display: block;
+    width: 28rem;
+    text-align: end;
   }
 
   .divider {
-    font-size: 16rem;
+    font-size: 18rem;
     font-weight: 300;
   }
 
-  .maxGradeWrapper {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 4rem;
-  }
-
   .maxGradeLabel {
-    text-align: right;
-    font-size: 6rem;
+    font-size: 8px;
+    line-height: 1;
     font-weight: 500;
-    padding-inline-end: 1rem;
+    text-align: end;
+    margin-inline-end: 39rem;
+    margin-bottom: -1rem;
   }
 
-  .maxGrade {
-    display: inline-block;
-    font-size: 10rem;
+  .letterIcon {
+    font-size: 18rem;
+    margin-right: -2rem;
   }
 }

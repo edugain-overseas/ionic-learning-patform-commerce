@@ -122,6 +122,9 @@ export interface CourseType {
   bought: boolean | null;
   title: string;
   about_text?: string;
+  skills_text?: string;
+  intro_text?: string;
+  about_main_text?: string;
   c_credits?: number;
   c_award?: string;
   c_duration?: string;
@@ -131,14 +134,12 @@ export interface CourseType {
   category_id: number;
   icons?: IconType[];
   image_path: string;
-  intro_text?: string;
   is_published: boolean;
   lessons: LessonType[];
   old_price?: number;
   price: number;
   quantity_lecture: number;
   quantity_test: number;
-  skills_text?: string;
   progress?: number;
   grade?: number;
   type: "short" | "long";

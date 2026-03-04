@@ -1,11 +1,5 @@
 import { FC, useRef, useState } from "react";
-import {
-  IonContent,
-  IonIcon,
-  IonSpinner,
-  IonToast,
-  useIonToast,
-} from "@ionic/react";
+import { IonContent, IonIcon, IonSpinner, IonToast } from "@ionic/react";
 import { useUser } from "../../context/UserContext";
 import { useForm } from "react-hook-form";
 import { UserInfoToUpdateType } from "../../types/user";
@@ -251,7 +245,7 @@ const EditProfileData: FC<{
                     isSubmitting ? (
                       <IonSpinner color="light" />
                     ) : (
-                      <IonIcon src={SaveIcon} className={styles.saveIcon}/>
+                      <IonIcon src={SaveIcon} className={styles.saveIcon} />
                     )
                   }
                   width={102}

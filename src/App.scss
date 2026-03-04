@@ -197,7 +197,6 @@ ion-modal::part(handle) {
 /* Toast */
 
 .toast {
-  // top: calc(var(--ion-safe-area-top) + 56rem - 10px);
   color: var(--ion-color-dark);
   font-size: 14rem;
 
@@ -227,9 +226,15 @@ ion-modal::part(handle) {
     --border-color: #f5d4d4;
   }
 }
-
 .toast::part(container) {
   padding: 1rem 9rem;
+}
+
+.toast::part(message) {
+  line-height: normal;
+}
+.toast::part(icon) {
+  margin-right: -4rem;
 }
 
 .modal-hidden {

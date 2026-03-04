@@ -1,13 +1,13 @@
-import { FC, ReactNode, useEffect, useLayoutEffect, useRef } from "react";
+import { FC, ReactNode, useEffect, useRef } from "react";
 import {
   useScroll,
   useTransform,
   motion,
   useMotionValueEvent,
+  animate,
 } from "motion/react";
 import { clamp } from "../../utils/clamp";
 import styles from "./StickyScrollLayout.module.scss";
-import { useIonViewDidEnter } from "@ionic/react";
 
 type StickyScrollLayoutProps = {
   children: ReactNode;
@@ -15,6 +15,7 @@ type StickyScrollLayoutProps = {
   posterSrc: string;
   topScrollStartPosition?: number;
   topScrollEndPosition?: number;
+  spanTrashhold?: number;
   onProgressChange?: (progress: number) => void;
 };
 
@@ -28,6 +29,7 @@ const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
   topScrollStartPosition = 310,
   topScrollEndPosition = 106,
   onProgressChange,
+  spanTrashhold = 0.7,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -78,6 +80,64 @@ const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
 
     return () => ro.disconnect();
   }, []);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    let timeout: any;
+    let lastScrollTop = el.scrollTop;
+    let scrollDirection: "up" | "down" | null = null;
+    let isSnapping = false;
+
+    const handleScroll = () => {
+      if (isSnapping) return;
+
+      const currentScrollTop = el.scrollTop;
+
+      if (currentScrollTop > lastScrollTop) {
+        scrollDirection = "down";
+      } else if (currentScrollTop < lastScrollTop) {
+        scrollDirection = "up";
+      }
+
+      lastScrollTop = currentScrollTop;
+
+      clearTimeout(timeout);
+
+      timeout = setTimeout(() => {
+        const currentProgress = progress.get();
+        if (currentProgress < spanTrashhold || currentProgress >= 1) return;
+
+        let targetScroll: number;
+
+        if (scrollDirection === "down") {
+          targetScroll = maxOffset;
+        } else {
+          targetScroll = 0;
+        }
+
+        isSnapping = true;
+
+        animate(el.scrollTop, targetScroll, {
+          duration: 0.35,
+          ease: "easeOut",
+          onUpdate: (value) => {
+            el.scrollTop = value;
+          },
+          onComplete: () => {
+            isSnapping = false;
+          },
+        });
+      }, 150);
+    };
+
+    el.addEventListener("scroll", handleScroll);
+
+    return () => {
+      el.removeEventListener("scroll", handleScroll);
+    };
+  }, [maxOffset]);
 
   return (
     <div className={styles.container} ref={containerRef}>

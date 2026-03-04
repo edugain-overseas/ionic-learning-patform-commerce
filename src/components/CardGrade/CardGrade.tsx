@@ -1,25 +1,25 @@
 import { FC } from "react";
-import gradeAIcon from "../../assets/icons/gradeA.svg";
 import styles from "./CardGrade.module.scss";
+import GradeIcon from "./GradeIcon";
+import { letterGrade } from "../../utils/letterGrade";
 
-const CardGrade: FC<{ grade?: number; maxGrade?: number }> = ({
-  grade = 0,
-  maxGrade = 200,
-}) => {
+const CardGrade: FC<{
+  grade?: number;
+  maxGrade?: number;
+  showLetter?: boolean;
+}> = ({ grade = 0, maxGrade = 200, showLetter = true }) => {
+  console.log(grade);
+
   return (
     <div className={styles.wrapper}>
-      <img src={gradeAIcon} />
+      {showLetter && <GradeIcon letterGrade={letterGrade(grade)} classname={styles.letterIcon}/>}
       <div className={styles.infoWrapper}>
-        {/* <div> */}
-        <span className={styles.userGrade}>
-          {`${grade || 0}`.padStart(3, "0")}{" "}
-        </span>
-        <span className={styles.divider}>\</span>
-        <div className={styles.maxGradeWrapper}>
-          <span className={styles.maxGradeLabel}>Grade</span>
+        <span className={styles.maxGradeLabel}>Grade</span>
+        <div className={styles.gradeWrapper}>
+          <span className={styles.userGrade}>{grade}</span>
+          <span className={styles.divider}>\</span>
           <span className={styles.maxGrade}>{maxGrade}</span>
         </div>
-        {/* </div> */}
       </div>
     </div>
   );

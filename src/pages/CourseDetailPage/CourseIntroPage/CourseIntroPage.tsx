@@ -15,7 +15,7 @@ import access from "../../../assets/icons/access.svg";
 import schollOnline from "../../../assets/icons/introPage/school-online.svg";
 import clockBig from "../../../assets/icons/introPage/clock.svg";
 import certificate from "../../../assets/icons/introPage/certificate.svg";
-import devices from "../../../assets/images/devices.png";
+import devices from "../../../assets/images/devices.webp";
 import IntoHeader from "./IntroHeader";
 import StickyScrollLayout from "../../../components/StickyScrollLayout/StickyScrollLayout";
 import CourseItem from "../../../components/CourseItem/CourseItem";
@@ -45,8 +45,6 @@ const CourseIntroPage: React.FC = () => {
     (scrollProgress - threshold) / (1 - threshold),
     1
   );
-
-  console.log(course);
 
   return (
     <>
@@ -154,6 +152,14 @@ const CourseIntroPage: React.FC = () => {
               <div className={`${styles.titleWrapper} ${styles.titleMargin}`}>
                 <span className={styles.title}>About this course</span>
               </div>
+              <p
+                className={styles.infoText}
+                dangerouslySetInnerHTML={{
+                  __html: course?.about_main_text
+                    ? course?.about_main_text
+                    : "",
+                }}
+              ></p>
               <p
                 className={styles.infoText}
                 dangerouslySetInnerHTML={{
