@@ -8,7 +8,6 @@ const CardGrade: FC<{
   maxGrade?: number;
   showLetter?: boolean;
 }> = ({ grade = 0, maxGrade = 200, showLetter = true }) => {
-  console.log(grade);
 
   return (
     <div className={styles.wrapper}>

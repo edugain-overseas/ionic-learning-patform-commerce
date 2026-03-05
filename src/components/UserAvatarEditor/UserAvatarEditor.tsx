@@ -25,8 +25,9 @@ interface UserAvatarEditorPropsType {
 
 const UserAvatarEditor: FC<UserAvatarEditorPropsType> = ({ closeModal }) => {
   const userInterface = useUser();
-  const [image, setImage] = useState<Photo>();
   const [isLoading, setIsLoading] = useState(false);
+  const [image, setImage] = useState<Photo>();
+  const [scale, setScale] = useState(1);
   const editorRef = useRef<AvatarEditor>(null);
 
   useEffect(() => {
@@ -38,8 +39,7 @@ const UserAvatarEditor: FC<UserAvatarEditorPropsType> = ({ closeModal }) => {
       quality: 90,
       allowEditing: true,
       resultType: CameraResultType.Base64,
-      source: CameraSource.Camera,
-      direction: CameraDirection.Front,
+      source: CameraSource.Photos,
     });
     setImage(image);
   };
@@ -93,6 +93,8 @@ const UserAvatarEditor: FC<UserAvatarEditorPropsType> = ({ closeModal }) => {
             `image/${image.format}`
           )}
           editorRef={editorRef}
+          scale={scale}
+          setScale={setScale}
         />
       ) : (
         <>

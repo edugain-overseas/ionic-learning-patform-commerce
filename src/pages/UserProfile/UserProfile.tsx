@@ -1,19 +1,12 @@
 import {
   IonContent,
-  IonIcon,
   IonModal,
   IonPage,
-  IonRippleEffect,
 } from "@ionic/react";
 import React, { useEffect, useRef, useState } from "react";
-// import { Swiper, SwiperSlide } from "swiper/react";
-// import { certificates } from "../../constants";
 import { useUser } from "../../context/UserContext";
-// import DocumentDownloadIcon from "../../assets/icons/document-download.svg";
 import Header from "../../components/Header/Header";
-// import InfoBtn from "../../components/InfoBtn/InfoBtn";
 import SheetModalAuto from "../../components/SheetModalAuto/SheetModalAuto";
-// import CommonButton from "../../components/CommonButton/CommonButton";
 import EditProfileData from "../../components/EditProfileData/EditProfileData";
 import UserAvatarEditor from "../../components/UserAvatarEditor/UserAvatarEditor";
 import UserMainInfo from "./UserMainInfo";
