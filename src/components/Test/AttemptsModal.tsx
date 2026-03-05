@@ -1,10 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  IonAlert,
-  IonContent,
-  IonIcon,
-  IonModal,
-} from "@ionic/react";
+import { IonAlert, IonContent, IonIcon, IonModal } from "@ionic/react";
 import { Empty } from "antd";
 import { useParams } from "react-router";
 import { TestAttemptType } from "../../types/user";
@@ -141,7 +136,7 @@ const AttemptsModal = ({
           } / ${testMaxAttempts}`}</span>
         )}
       </div>
-      <IonContent className={styles.content} scrollY={false}>
+      <IonContent className={styles.content} scrollY={true}>
         {userHasCompletedAttempts ? (
           <>
             <ul className={styles.accordion}>
@@ -168,36 +163,45 @@ const AttemptsModal = ({
                             <IonIcon src={EyeIcon} />
                           )}
                         </button>
-                        {!testData?.my_attempt_id ||
-                          (testData?.my_attempt_id === attempt.id && (
-                            <>
+                        {testData?.my_attempt_id ? (
+                          <>
+                            {testData.my_attempt_id === attempt.id && (
                               <button
                                 className={styles.submitButton}
-                                id={`present-alert-confirm-attempt-${attempt.id}`}
-                                disabled={!!testData?.my_attempt_id}
+                                disabled={true}
                               >
-                                <span>Submit</span>
                                 <IonIcon src={CheckIcon} />
                               </button>
-                              <IonAlert
-                                trigger={`present-alert-confirm-attempt-${attempt.id}`}
-                                header="Submiting attempt"
-                                message="Are you sure you want to record this attempt?"
-                                buttons={[
-                                  {
-                                    role: "confirm",
-                                    text: "Yes",
-                                    handler: () =>
-                                      handleSubmitAttempClick(attempt.id),
-                                  },
-                                  {
-                                    role: "cancel",
-                                    text: "Cancel",
-                                  },
-                                ]}
-                              />
-                            </>
-                          ))}
+                            )}
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              className={styles.submitButton}
+                              id={`present-alert-confirm-attempt-${attempt.id}`}
+                            >
+                              <span>Submit</span>
+                              <IonIcon src={CheckIcon} />
+                            </button>
+                            <IonAlert
+                              trigger={`present-alert-confirm-attempt-${attempt.id}`}
+                              header="Submiting attempt"
+                              message="Are you sure you want to record this attempt?"
+                              buttons={[
+                                {
+                                  role: "confirm",
+                                  text: "Yes",
+                                  handler: () =>
+                                    handleSubmitAttempClick(attempt.id),
+                                },
+                                {
+                                  role: "cancel",
+                                  text: "Cancel",
+                                },
+                              ]}
+                            />
+                          </>
+                        )}
                       </div>
                     </div>
                   </li>

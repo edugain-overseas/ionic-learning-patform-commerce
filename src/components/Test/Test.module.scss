@@ -18,6 +18,9 @@
   width: 100%;
   z-index: 5;
 
+  will-change: transform;
+  transform: translateZ(0);
+
   height: 78rem;
   display: flex;
   align-items: center;

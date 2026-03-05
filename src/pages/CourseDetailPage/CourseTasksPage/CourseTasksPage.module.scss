@@ -10,6 +10,10 @@
   &.withAuth {
     --padding-bottom: calc(24rem + var(--tabbar-offset) + 65rem);
   }
+
+  &.isScrolling + .tasksAuth {
+    transform: translateY(100%);
+  }
 }
 
 .courseStats {

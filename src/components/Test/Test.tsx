@@ -208,9 +208,9 @@ const Test: React.FC<{
       } else {
         setTestAttempts([]);
       }
+      setIsAttemptLoading(false);
     } catch (error) {
       console.log(error);
-    } finally {
       setIsAttemptLoading(false);
     }
   };
@@ -298,7 +298,7 @@ const Test: React.FC<{
         scrollProgress={scrollProgress}
         onTestCompleteClick={onCompleteClick}
       />
-      <IonContent fullscreen={true} scrollY={false} className={styles.content}>
+      <IonContent fullscreen={true} scrollY={true} className={styles.content}>
         {isTestOpen || testStatus === "completed" ? (
           <>
             {!Number.isNaN(answersProgressValue) && currentAttempt && (
@@ -324,12 +324,13 @@ const Test: React.FC<{
               </motion.div>
             )}
             <StickyScrollLayout
+              key={taskData.id}
               posterSrc={`${serverName}/${taskData.image_path}`}
               topLabel="Test"
               topScrollStartPosition={235}
               topScrollEndPosition={0}
               onProgressChange={(value) => onScrollProgress(value)}
-              key={taskData.id}
+              snapTrashhold={0.5}
             >
               <div className={styles.contentInnerWrapper}>
                 <div>

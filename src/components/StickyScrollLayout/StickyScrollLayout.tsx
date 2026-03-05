@@ -15,7 +15,7 @@ type StickyScrollLayoutProps = {
   posterSrc: string;
   topScrollStartPosition?: number;
   topScrollEndPosition?: number;
-  spanTrashhold?: number;
+  snapTrashhold?: number;
   onProgressChange?: (progress: number) => void;
 };
 
@@ -28,8 +28,8 @@ const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
   posterSrc,
   topScrollStartPosition = 310,
   topScrollEndPosition = 106,
+  snapTrashhold = 0.7,
   onProgressChange,
-  spanTrashhold = 0.7,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -107,7 +107,7 @@ const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
 
       timeout = setTimeout(() => {
         const currentProgress = progress.get();
-        if (currentProgress < spanTrashhold || currentProgress >= 1) return;
+        if (currentProgress < snapTrashhold || currentProgress >= 1) return;
 
         let targetScroll: number;
 

@@ -38,6 +38,7 @@ const Lecture: React.FC<{
       topScrollEndPosition={0}
       onProgressChange={(value) => onScrollProgress(value)}
       key={taskData.id}
+      snapTrashhold={0.5}
     >
       <div className={styles.contentInnerWrapper}>
         <div className={styles.lectureHeader}>

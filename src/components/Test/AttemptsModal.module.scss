@@ -10,7 +10,7 @@
 
   &::part(backdrop) {
     top: calc(var(--ion-safe-area-top) + 16rem + 30px);
-    border-radius: 16rem;
+    border-radius: 16rem 16rem 0 0;
     background: var(--custom-bg-rgba-secondary);
     backdrop-filter: blur(5px);
     opacity: 1;

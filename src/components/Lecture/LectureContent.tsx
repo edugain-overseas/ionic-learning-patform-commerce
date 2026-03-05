@@ -12,164 +12,168 @@ import AudioPlayer from "../AudioPlayer/AudioPlayer";
 const LectureContent: FC<{ lectureContent: LectureContentType[] }> = ({
   lectureContent,
 }) => {
+  console.log(lectureContent);
+
   const renderLectureContent = () =>
-    [...lectureContent]?.map((section) => {
-      const {
-        a_type: type,
-        a_id: id,
-        a_title: title,
-        a_text: text,
-        hiden,
-        files,
-        links,
-      } = section;
-      switch (type) {
-        case "text":
-          return (
-            <section
-              key={id}
-              id={type}
-              className={hiden ? `${styles.section} hidden` : styles.section}
-            >
-              {title && (
+    [...lectureContent]
+      ?.sort((attrA, attrB) => attrA.a_number - attrB.a_number)
+      .map((section) => {
+        const {
+          a_type: type,
+          a_id: id,
+          a_title: title,
+          a_text: text,
+          hiden,
+          files,
+          links,
+        } = section;
+        switch (type) {
+          case "text":
+            return (
+              <section
+                key={id}
+                id={type}
+                className={hiden ? `${styles.section} hidden` : styles.section}
+              >
+                {title && (
+                  <h3
+                    className={styles.sectionTitle}
+                    dangerouslySetInnerHTML={{ __html: title }}
+                  ></h3>
+                )}
+                {text && (
+                  <div
+                    className={styles.sectionContentWrapper}
+                    dangerouslySetInnerHTML={{ __html: text }}
+                  ></div>
+                )}
+              </section>
+            );
+          case "present":
+            const filePath = files && files[0]?.file_path;
+            const encodedFilePathPresent = filePath?.replace(/ /g, "%20");
+            return (
+              <section key={id} id={type}>
                 <h3
                   className={styles.sectionTitle}
                   dangerouslySetInnerHTML={{ __html: title }}
                 ></h3>
-              )}
-              {text && (
-                <div
-                  className={styles.sectionContentWrapper}
-                  dangerouslySetInnerHTML={{ __html: text }}
-                ></div>
-              )}
-            </section>
-          );
-        case "present":
-          const filePath = files && files[0]?.file_path;
-          const encodedFilePathPresent = filePath?.replace(/ /g, "%20");
-          return (
-            <section key={id} id={type}>
-              <h3
-                className={styles.sectionTitle}
-                dangerouslySetInnerHTML={{ __html: title }}
-              ></h3>
-              <div className={styles.pdfWrapper}>
-                <PDFReader pdf={`${serverName}/${encodedFilePathPresent}`} />
-              </div>
-              {text && text !== "" && (
-                <div
-                  className={styles.sectionContentWrapper}
-                  dangerouslySetInnerHTML={{ __html: text }}
-                ></div>
-              )}
-            </section>
-          );
-        case "audio":
-          const encodedFilePathAudio =
-            files && files[0].file_path?.replace(/ /g, "%20");
-          return (
-            <section key={id} id={type}>
-              <h3
-                className={styles.sectionTitle}
-                dangerouslySetInnerHTML={{ __html: title }}
-              ></h3>
-              <AudioPlayer src={`${serverName}/${encodedFilePathAudio}`} />
-              {text && text !== "" && (
-                <div
-                  className={styles.sectionContentWrapper}
-                  dangerouslySetInnerHTML={{ __html: text }}
-                ></div>
-              )}
-            </section>
-          );
-        case "video":
-          const encodedFilePathVideo =
-            files && files[0].file_path?.replace(/ /g, "%20");
-          return (
-            <section key={id} id={type}>
-              <h3
-                className={styles.sectionTitle}
-                dangerouslySetInnerHTML={{ __html: title }}
-              ></h3>
-              <VideoPlayer url={`${serverName}/${encodedFilePathVideo}`} />
-              {text && text !== "" && (
-                <div
-                  className={styles.sectionContentWrapper}
-                  dangerouslySetInnerHTML={{ __html: text }}
-                ></div>
-              )}
-            </section>
-          );
-        case "file":
-          return (
-            <section key={id} id={type}>
-              <h3
-                className={styles.sectionTitle}
-                dangerouslySetInnerHTML={{ __html: title }}
-              ></h3>
-              {files && files.length !== 0 && (
-                <div className={styles.filesWrapper}>
-                  {files.map((file) => (
-                    <DocumentLink file={file} key={file.file_id} />
-                  ))}
+                <div className={styles.pdfWrapper}>
+                  <PDFReader pdf={`${serverName}/${encodedFilePathPresent}`} />
                 </div>
-              )}
-              {text && text !== "" && (
-                <div
-                  className={styles.sectionContentWrapper}
-                  dangerouslySetInnerHTML={{ __html: text }}
-                ></div>
-              )}
-            </section>
-          );
-        case "link":
-          return (
-            <section key={id} id={type}>
-              <h3
-                className={styles.sectionTitle}
-                dangerouslySetInnerHTML={{ __html: title }}
-              ></h3>
-              {links && links.length !== 0 && (
-                <div className={styles.linksWrapper}>
-                  {links.map(({ link_id, link, anchor }) => (
-                    <LinkCard
-                      key={link_id}
-                      link={link}
-                      text={anchor}
-                      styles={styles}
-                    />
-                  ))}
-                </div>
-              )}
-              {text && text !== "" && (
-                <div
-                  className={styles.sectionContentWrapper}
-                  dangerouslySetInnerHTML={{ __html: text }}
-                ></div>
-              )}
-            </section>
-          );
-        case "picture":
-          return (
-            <section key={id} id={type}>
-              <h3
-                className={styles.sectionTitle}
-                dangerouslySetInnerHTML={{ __html: title }}
-              ></h3>
-              <ImageGroup imagesData={files} />
-              {text && (
-                <div
-                  className={styles.sectionContentWrapper}
-                  dangerouslySetInnerHTML={{ __html: text }}
-                ></div>
-              )}
-            </section>
-          );
-        default:
-          return null;
-      }
-    });
+                {text && text !== "" && (
+                  <div
+                    className={styles.sectionContentWrapper}
+                    dangerouslySetInnerHTML={{ __html: text }}
+                  ></div>
+                )}
+              </section>
+            );
+          case "audio":
+            const encodedFilePathAudio =
+              files && files[0].file_path?.replace(/ /g, "%20");
+            return (
+              <section key={id} id={type}>
+                <h3
+                  className={styles.sectionTitle}
+                  dangerouslySetInnerHTML={{ __html: title }}
+                ></h3>
+                <AudioPlayer src={`${serverName}/${encodedFilePathAudio}`} />
+                {text && text !== "" && (
+                  <div
+                    className={styles.sectionContentWrapper}
+                    dangerouslySetInnerHTML={{ __html: text }}
+                  ></div>
+                )}
+              </section>
+            );
+          case "video":
+            const encodedFilePathVideo =
+              files && files[0].file_path?.replace(/ /g, "%20");
+            return (
+              <section key={id} id={type}>
+                <h3
+                  className={styles.sectionTitle}
+                  dangerouslySetInnerHTML={{ __html: title }}
+                ></h3>
+                <VideoPlayer url={`${serverName}/${encodedFilePathVideo}`} />
+                {text && text !== "" && (
+                  <div
+                    className={styles.sectionContentWrapper}
+                    dangerouslySetInnerHTML={{ __html: text }}
+                  ></div>
+                )}
+              </section>
+            );
+          case "file":
+            return (
+              <section key={id} id={type}>
+                <h3
+                  className={styles.sectionTitle}
+                  dangerouslySetInnerHTML={{ __html: title }}
+                ></h3>
+                {files && files.length !== 0 && (
+                  <div className={styles.filesWrapper}>
+                    {files.map((file) => (
+                      <DocumentLink file={file} key={file.file_id} />
+                    ))}
+                  </div>
+                )}
+                {text && text !== "" && (
+                  <div
+                    className={styles.sectionContentWrapper}
+                    dangerouslySetInnerHTML={{ __html: text }}
+                  ></div>
+                )}
+              </section>
+            );
+          case "link":
+            return (
+              <section key={id} id={type}>
+                <h3
+                  className={styles.sectionTitle}
+                  dangerouslySetInnerHTML={{ __html: title }}
+                ></h3>
+                {links && links.length !== 0 && (
+                  <div className={styles.linksWrapper}>
+                    {links.map(({ link_id, link, anchor }) => (
+                      <LinkCard
+                        key={link_id}
+                        link={link}
+                        text={anchor}
+                        styles={styles}
+                      />
+                    ))}
+                  </div>
+                )}
+                {text && text !== "" && (
+                  <div
+                    className={styles.sectionContentWrapper}
+                    dangerouslySetInnerHTML={{ __html: text }}
+                  ></div>
+                )}
+              </section>
+            );
+          case "picture":
+            return (
+              <section key={id} id={type}>
+                <h3
+                  className={styles.sectionTitle}
+                  dangerouslySetInnerHTML={{ __html: title }}
+                ></h3>
+                <ImageGroup imagesData={files} />
+                {text && (
+                  <div
+                    className={styles.sectionContentWrapper}
+                    dangerouslySetInnerHTML={{ __html: text }}
+                  ></div>
+                )}
+              </section>
+            );
+          default:
+            return null;
+        }
+      });
   return <div className={styles.contentWrapper}>{renderLectureContent()}</div>;
 };
 

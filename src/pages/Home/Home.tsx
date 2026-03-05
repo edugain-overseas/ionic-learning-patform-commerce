@@ -1,4 +1,4 @@
-import { IonContent, IonPage } from "@ionic/react";
+import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import { useUser } from "../../context/UserContext";
 import Header from "../../components/Header/Header";
 import HomeHero from "../../components/HomeHero/HomeHero";
@@ -17,16 +17,6 @@ import HomeOfferInfo from "../../components/HomeOfferInfo/HomeOfferInfo";
 import HomeFooter from "../../components/HomeFooter/HomeFooter";
 import PageRefresher from "../../components/PageRefresher/PageRefresher";
 import styles from "./Home.module.scss";
-
-const headerProps = {
-  left: [{ name: "logo" }],
-  right: [
-    { name: "notification" },
-    { name: "search", onClick: () => {} },
-    { name: "user" },
-  ],
-  mode: "transparent",
-};
 
 const renderCategoryCard = (category: CategoryType) => {
   return <CategoryItem category={category} />;
@@ -71,6 +61,17 @@ export const Courses = () => {
 
 const Home: React.FC = () => {
   const isAuthShown = !useUser()?.user.accessToken;
+  const router = useIonRouter();
+
+  const headerProps = {
+    left: [{ name: "logo", onClick: () => router.push("/home") }],
+    right: [
+      { name: "notification" },
+      { name: "search", onClick: () => {} },
+      { name: "user" },
+    ],
+    mode: "transparent",
+  };
 
   return (
     <IonPage className={`${styles.page} primaryPage`} id="home">

@@ -55,9 +55,9 @@ const renderBtn = (props: ButtonPropsTypes, handleNotification: () => void) => {
           className={`${styles.notificationBtn} ${
             props.className ? props.className : ""
           }`}
-          // onClick={props.onClick ? props.onClick : handleNotification}
           routerLink="/notifications"
           id={props.id}
+          mode="ios"
         >
           <IonIcon src={bellIcon} className={styles.bellIcon} />
         </IonButton>
@@ -71,6 +71,7 @@ const renderBtn = (props: ButtonPropsTypes, handleNotification: () => void) => {
           className={props.className ? props.className : ""}
           id={props.id}
           onClick={changeListStyle}
+          mode="ios"
         >
           <IonIcon
             src={listStyle === "card" ? gridIcon : rowIcon}
@@ -84,6 +85,7 @@ const renderBtn = (props: ButtonPropsTypes, handleNotification: () => void) => {
           key={props.name}
           className={props.className ? props.className : ""}
           id={props.id}
+          mode="ios"
         >
           <IonIcon src={filterIcon} />
         </IonButton>
@@ -96,6 +98,7 @@ const renderBtn = (props: ButtonPropsTypes, handleNotification: () => void) => {
           routerLink="/search"
           routerDirection="forward"
           id={props.id}
+          mode="ios"
         >
           <IonIcon src={searchIcon} className={styles.searchIcon} />
         </IonButton>
@@ -121,6 +124,7 @@ const renderBtn = (props: ButtonPropsTypes, handleNotification: () => void) => {
           }`}
           id={props.id}
           onClick={props.onClick}
+          mode="ios"
         >
           <IonIcon src={detailsIcon} className={styles.detailsIcon} />
         </IonButton>
@@ -143,6 +147,7 @@ const renderBtn = (props: ButtonPropsTypes, handleNotification: () => void) => {
           className={props.className ? props.className : ""}
           id={props.id}
           onClick={props.onClick}
+          mode="ios"
         >
           <IonIcon src={SaveIcon} className={styles.saveIcon} />
         </IonButton>
@@ -156,6 +161,7 @@ const renderBtn = (props: ButtonPropsTypes, handleNotification: () => void) => {
           }`}
           id={props.id}
           onClick={props.onClick}
+          mode="ios"
         >
           <IonIcon src={backIcon} className={styles.backIcon} />
         </IonButton>
@@ -169,6 +175,7 @@ const renderBtn = (props: ButtonPropsTypes, handleNotification: () => void) => {
           }`}
           id={props.id}
           onClick={props.onClick}
+          mode="ios"
         >
           {props.loading ? (
             <Spinner />
@@ -185,6 +192,7 @@ const renderBtn = (props: ButtonPropsTypes, handleNotification: () => void) => {
           routerLink="/my-profile"
           routerDirection="forward"
           id={props.id}
+          mode="ios"
         >
           <HeaderAvatar />
         </IonButton>
@@ -218,6 +226,7 @@ const Header: FC<HeaderTypes> = ({
       className={`${styles.header} ${mode ? styles[mode] : ""} ${
         headerClassName ? headerClassName : ""
       }`}
+      mode="ios"
     >
       <IonToolbar
         className={`${secondary ? styles.secondary : ""} ${styles.toolbar} ${

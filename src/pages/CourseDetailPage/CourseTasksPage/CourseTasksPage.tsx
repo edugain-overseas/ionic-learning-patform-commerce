@@ -1,9 +1,8 @@
 import { FC, useState } from "react";
-import { IonContent, IonIcon, createAnimation } from "@ionic/react";
+import { IonContent, IonIcon } from "@ionic/react";
 import { useParams } from "react-router";
 import { useCourses } from "../../../context/CoursesContext";
-import { remToPx } from "../../../utils/pxToRem";
-import { debounce } from "../../../utils/debounce";
+import { useUser } from "../../../context/UserContext";
 import LectureIcon from "../../../assets/icons/document-2-lines.svg";
 import TestIcon from "../../../assets/icons/task-completed.svg";
 import LanguagesIcon from "../../../assets/icons/languages.svg";
@@ -12,18 +11,12 @@ import CourseNavPanel from "../../../components/CourseNavPanel/CourseNavPanel";
 import InsetBtn from "../../../components/InsetBtn/InsetBtn";
 import TaskItem from "../../../components/TaskItem/TaskItem";
 import CourseProgressModal from "../../../components/CourseProgressModal/CourseProgressModal";
-import customSheetModalStyles from "../../../components/CustomSheetModal/CustomSheetModal.module.scss";
-import styles from "./CourseTasksPage.module.scss";
 import PageRefresher from "../../../components/PageRefresher/PageRefresher";
 import Auth from "../../../components/Auth/Auth";
-import { useUser } from "../../../context/UserContext";
-
-const firstBreakpoint = 24;
-const secondBreackpoint = 72;
+import styles from "./CourseTasksPage.module.scss";
 
 const CourseTasksPage: FC = () => {
   const [animatingModal, setAnimatingModal] = useState(false);
-  const [isScrolling, setIsScrolling] = useState(false);
   const accessToken = useUser()?.user.accessToken;
 
   const { courseId } = useParams<{ courseId: string }>();
@@ -42,57 +35,6 @@ const CourseTasksPage: FC = () => {
     left: [{ name: "back", defaultHref: undefined }],
     right: [{ name: "list-style" }],
   };
-
-  // const handleScroll = (e: CustomEvent) => {
-  //   if (e.detail.deltaY > 0) {
-  //     const modalContentRef = document.getElementById(
-  //       "custom-sheet-modal-content"
-  //     );
-
-  //     const secondPoint = Math.round(remToPx(60 + secondBreackpoint));
-
-  //     if (modalContentRef) {
-  //       const modalHeight = Math.round(modalContentRef.clientHeight);
-
-  //       if (modalHeight === secondPoint) {
-  //         if (animatingModal) return;
-  //         setAnimatingModal(true);
-  //         createAnimation()
-  //           .addElement(modalContentRef)
-  //           .beforeAddClass(customSheetModalStyles.directionDown)
-  //           .afterRemoveClass(customSheetModalStyles.directionDown)
-  //           .fromTo(
-  //             "height",
-  //             `${secondBreackpoint}rem`,
-  //             `${firstBreakpoint}rem`
-  //           )
-  //           .easing("ease-out")
-  //           .duration(300)
-  //           .play();
-  //       }
-  //     }
-  //   }
-  // };
-
-  // const handleScrollEnd = debounce((e: CustomEvent) => {
-  //   const modalContentRef = document.getElementById(
-  //     "custom-sheet-modal-content"
-  //   );
-
-  //   if (modalContentRef) {
-  //     if (animatingModal) {
-  //       createAnimation()
-  //         .addElement(modalContentRef)
-  //         .beforeAddClass(customSheetModalStyles.directionUp)
-  //         .afterRemoveClass(customSheetModalStyles.directionUp)
-  //         .fromTo("height", `${firstBreakpoint}rem`, `${secondBreackpoint}rem`)
-  //         .easing("ease-in")
-  //         .duration(300)
-  //         .play();
-  //       setAnimatingModal(false);
-  //     }
-  //   }
-  // }, 300);
 
   const CourseStats = () => (
     <div className={styles.courseStats}>
@@ -146,10 +88,8 @@ const CourseTasksPage: FC = () => {
           accessToken ? "" : styles.withAuth
         }`}
         scrollEvents={true}
-        // onIonScroll={handleScroll}
-        // onIonScrollEnd={handleScrollEnd}
-        onIonScrollStart={() => setIsScrolling(true)}
-        onIonScrollEnd={() => setIsScrolling(false)}
+        onIonScrollStart={(e) => e.target.classList.add(styles.isScrolling)}
+        onIonScrollEnd={(e) => e.target.classList.remove(styles.isScrolling)}
       >
         <PageRefresher />
         <CourseStats />
@@ -161,7 +101,7 @@ const CourseTasksPage: FC = () => {
         </ul>
         <CourseProgressModal isAnimating={animatingModal} />
       </IonContent>
-      <Auth containerClassname={styles.tasksAuth} hidden={isScrolling} />
+      <Auth containerClassname={styles.tasksAuth} />
     </>
   );
 };

@@ -1,8 +1,8 @@
 import { FC } from "react";
+import { Image } from "antd";
+import { IonModal } from "@ionic/react";
 import { serverName } from "../../http/server";
 import styles from "./ImageGroup.module.scss";
-import { IonModal } from "@ionic/react";
-import { Image } from "antd";
 
 type Image = {
   filename: string;
@@ -14,28 +14,24 @@ type Image = {
 };
 
 const ImageGroup: FC<{ imagesData?: Image[] }> = ({ imagesData }) => {
-
   return (
     <>
       <ul className={styles.imageGroup}>
         {imagesData &&
           imagesData.map((image) => (
             <li key={image.file_id} className={styles.groupItem}>
-              {/* <img
+              <Image
                 src={`${serverName}/${image.file_path}`}
                 alt={image.filename}
                 className={styles.image}
-              /> */}
-              <Image src={`${serverName}/${image.file_path}`} alt={image.filename} className={styles.image}/>
+              />
               <div className={styles.description}>
                 {image.file_description || "No discription provided"}
               </div>
             </li>
           ))}
       </ul>
-      <IonModal>
-        
-      </IonModal>
+      <IonModal></IonModal>
     </>
   );
 };

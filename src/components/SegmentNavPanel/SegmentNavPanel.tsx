@@ -51,6 +51,7 @@ const SegmentNavPanel: React.FC<SegmentNavPanelTypes> = ({
       value={activeValue}
       className={styles.segment}
       onIonChange={!routerNav && setValue ? onChange : undefined}
+      mode="ios"
     >
       {items.map(
         ({ label, value, isAllowed = true, denyMessage = "Access denied" }) => (
