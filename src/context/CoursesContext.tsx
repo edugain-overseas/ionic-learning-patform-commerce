@@ -145,6 +145,12 @@ export interface CourseType {
   type: "short" | "long";
 }
 
+export type CategoryIconType = {
+  id: number;
+  is_main: boolean;
+  path: string;
+};
+
 export interface CategoryType {
   id: number;
   title: string;
@@ -152,6 +158,7 @@ export interface CategoryType {
   certificate_info?: string;
   image_path: string;
   discount?: number;
+  icons: CategoryIconType[];
 }
 
 export interface InstructionType {

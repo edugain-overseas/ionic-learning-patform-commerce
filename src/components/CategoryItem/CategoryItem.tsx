@@ -4,12 +4,17 @@ import { CategoryType } from "../../context/CoursesContext";
 import categoryIcon from "../../assets/icons/category.svg";
 import InfoBtn from "../InfoBtn/InfoBtn";
 import styles from "./CategoryItem.module.scss";
+import { serverName } from "../../http/server";
 
 interface CategoryItemTypes {
   category: CategoryType;
 }
 
 const CategoryItem: React.FC<CategoryItemTypes> = ({ category }) => {
+  console.log(category);
+
+  const categoryIconPath = category.icons?.find((icon) => icon.is_main)?.path;
+
   return (
     <li
       key={category.id}
@@ -21,7 +26,13 @@ const CategoryItem: React.FC<CategoryItemTypes> = ({ category }) => {
       >
         <div className={styles.contentWrapper}>
           <div className={styles.itemIcon}>
-            <img src={categoryIcon} />
+            <img
+              src={
+                categoryIconPath
+                  ? `${serverName}/${categoryIconPath}`
+                  : categoryIcon
+              }
+            />
           </div>
           <div>
             <IonText>

@@ -23,6 +23,7 @@ import PageRefresher from "../../components/PageRefresher/PageRefresher";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import Auth from "../../components/Auth/Auth";
 import styles from "./CategoryDetailPage.module.scss";
+import { serverName } from "../../http/server";
 
 const MAX_SCROLL_VALUE = 91;
 const MY_STUDY_MAX_SCROLL_VALUE = 162;
@@ -167,6 +168,8 @@ const CategoryDetailPage: React.FC = () => {
     right: [{ name: "notification" }, { name: "user" }],
   };
 
+  const categoryIconPath = category?.icons.find((icon) => !icon.is_main)?.path;
+
   return (
     <IonPage className={styles.papeWrapper}>
       <Header {...headerProps} />
@@ -188,7 +191,13 @@ const CategoryDetailPage: React.FC = () => {
           <div className={styles.topScaler}>
             <div className={styles.pageTitle}>
               <div className={styles.categoryImage}>
-                <img src={categoryContrastIcon} />
+                <img
+                  src={
+                    categoryIconPath
+                      ? `${serverName}/${categoryIconPath}`
+                      : categoryContrastIcon
+                  }
+                />
               </div>
               <div className={styles.categoryTitle}>
                 <h3>{category?.title}</h3>
