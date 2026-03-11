@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IonContent, IonIcon } from "@ionic/react";
+import { IonContent, IonIcon, IonPage } from "@ionic/react";
 import { useParams } from "react-router";
 import { motion } from "motion/react";
 import { useCourses } from "../../../context/CoursesContext";
@@ -47,7 +47,7 @@ const CourseIntroPage: React.FC = () => {
   );
 
   return (
-    <>
+    <IonPage className="primaryPage">
       <IntoHeader title={course?.title} scrollProgress={scrollProgress} />
       <IonContent scrollY={false} className={styles.content}>
         <PageRefresher />
@@ -213,7 +213,7 @@ const CourseIntroPage: React.FC = () => {
           </div>
         )}
       </IonContent>
-    </>
+    </IonPage>
   );
 };
 

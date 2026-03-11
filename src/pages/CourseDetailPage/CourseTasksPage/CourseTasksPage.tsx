@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { IonContent, IonIcon } from "@ionic/react";
+import { IonContent, IonIcon, IonPage } from "@ionic/react";
 import { useParams } from "react-router";
 import { useCourses } from "../../../context/CoursesContext";
 import { useUser } from "../../../context/UserContext";
@@ -80,7 +80,7 @@ const CourseTasksPage: FC = () => {
   );
 
   return (
-    <>
+    <IonPage className="primaryPage">
       <Header {...headerProps} />
       <CourseNavPanel />
       <IonContent
@@ -102,7 +102,7 @@ const CourseTasksPage: FC = () => {
         <CourseProgressModal isAnimating={animatingModal} />
       </IonContent>
       <Auth containerClassname={styles.tasksAuth} />
-    </>
+    </IonPage>
   );
 };
 
