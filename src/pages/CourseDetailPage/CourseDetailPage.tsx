@@ -26,7 +26,7 @@ const CourseDetailPage: React.FC = () => {
 
   return (
     <IonPage id="course-page">
-      <IonRouterOutlet>
+      <IonRouterOutlet animated={false}>
         <Route path={`/course/:courseId`} component={CourseIntroPage} exact />
         <Route
           path={`/course/:courseId/tasks`}

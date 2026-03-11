@@ -73,6 +73,7 @@ const StickyScrollLayout: FC<StickyScrollLayoutProps> = ({
     if (!el) return;
 
     const ro = new ResizeObserver(() => {
+      if (!el.offsetHeight) return;
       el.style.setProperty("--offset-height", `${el.offsetHeight}px`);
     });
 
