@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { IonPage } from "@ionic/react";
+import { IonPage, IonRouterOutlet } from "@ionic/react";
 import { Route, useParams } from "react-router";
 import { useUser } from "../../context/UserContext";
 import { useCourses } from "../../context/CoursesContext";
@@ -25,15 +25,17 @@ const CourseDetailPage: React.FC = () => {
   }, [courseId, accessToken, userId]);
 
   return (
-    <IonPage className="primaryPage" id="course-page">
-      <Route path={`/course/:courseId`} component={CourseIntroPage} exact />
-      <Route
-        path={`/course/:courseId/tasks`}
-        component={CourseTasksPage}
-        exact
-      />
-      <Route path={`/course/:courseId/exam`} component={CourseExamPage} />
-      <Route path={`/course/:courseId/tasks/:taskId`} component={TaskPage} />
+    <IonPage id="course-page">
+      <IonRouterOutlet animated={false}>
+        <Route path={`/course/:courseId`} component={CourseIntroPage} exact />
+        <Route
+          path={`/course/:courseId/tasks`}
+          component={CourseTasksPage}
+          exact
+        />
+        <Route path={`/course/:courseId/exam`} component={CourseExamPage} />
+        <Route path={`/course/:courseId/tasks/:taskId`} component={TaskPage} />
+      </IonRouterOutlet>
     </IonPage>
   );
 };
