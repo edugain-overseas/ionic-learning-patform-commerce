@@ -1,6 +1,6 @@
 .form {
   padding: 30rem 32rem 68rem;
-//   backdrop-filter: blur(0rem);
+  //   backdrop-filter: blur(0rem);
 
   button {
     width: 100%;
@@ -19,8 +19,8 @@
     }
 
     ion-icon {
-        font-size: 18rem;
-        rotate: 180deg;
+      font-size: 18rem;
+      rotate: 180deg;
     }
   }
 }
@@ -52,12 +52,23 @@
     display: flex;
     align-items: center;
     gap: 6rem;
+    position: relative;
 
-    border-radius: 5rem;
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 4rem 0 rgba(0, 0, 0, 0.16) inset;
+    &:has(.error) {
+      border-color: var(--ion-color-primary);
+    }
 
-    span {
+    .error {
+      position: absolute;
+      top: 100%;
+      right: 0;
+
+      color: var(--ion-color-primary);
+      font-size: 6rem;
+      font-weight: 500;
+    }
+
+    span:first-child {
       width: 54rem;
       flex-shrink: 0;
       color: var(--ion-color-light);
@@ -90,17 +101,43 @@
     }
   }
 
+  .textareaWrapper {
+    position: relative;
+
+    .error {
+      position: absolute;
+      top: 100%;
+      right: 0;
+
+      color: var(--ion-color-primary);
+      font-size: 6rem;
+      font-weight: 500;
+    }
+
+    &:has(.error) textarea {
+      border-color: var(--ion-color-primary);
+    }
+  }
+
+  label,
   textarea {
-    background-color: transparent;
-    padding: 7rem;
+    border: 1rem solid transparent;
+
+    transition: border-color var(--custom-tr-time-mid) ease;
     border-radius: 5rem;
     background: rgba(255, 255, 255, 0.2);
     box-shadow: 0 0 4rem 0 rgba(0, 0, 0, 0.16) inset;
+    width: 100%;
+  }
+
+  textarea {
+    background-color: transparent;
+    padding: 7rem;
+
     outline: none;
     font-size: 14rem;
     font-weight: 400;
     color: var(--ion-color-dark);
-    border: none;
 
     &::placeholder {
       color: var(--ion-color-light);
