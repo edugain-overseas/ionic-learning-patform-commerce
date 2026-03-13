@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { IonContent, useIonRouter, useIonViewWillLeave } from "@ionic/react";
+import {
+  IonContent,
+  IonPage,
+  useIonRouter,
+  useIonViewWillLeave,
+} from "@ionic/react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
 import Lecture from "../../components/Lecture/Lecture";
@@ -39,7 +44,7 @@ const TaskPage: React.FC = () => {
   }, [taskId, lessonData, taskData]);
 
   return (
-    <>
+    <IonPage className="primaryPage">
       {taskData?.type === "lecture" && (
         <>
           <TaskHeader taskData={taskData} scrollProgress={scrollProgress} />
@@ -67,7 +72,7 @@ const TaskPage: React.FC = () => {
       )}
       <CourseProgressModal />
       <ViewModeToggleButton />
-    </>
+    </IonPage>
   );
 };
 

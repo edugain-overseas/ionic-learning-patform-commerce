@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { IonContent } from "@ionic/react";
+import { IonContent, IonPage } from "@ionic/react";
 import { useParams } from "react-router";
 import { motion } from "motion/react";
 import { useUser } from "../../../context/UserContext";
@@ -372,23 +372,23 @@ const CourseExamPage: FC = () => {
 
   if (!exam || !studentId) {
     return (
-      <>
+      <IonPage className="primaryPage">
         <Header {...headerProps} />
         <IonContent className={styles.content}></IonContent>
-      </>
+      </IonPage>
     );
   }
 
   if (isLoading || !isStoreInit) {
     return (
-      <>
+      <IonPage className="primaryPage">
         <Header {...headerProps} />
         <IonContent className={styles.content}>
           <div className={styles.btnsWrapper}>
             <Spinner />
           </div>
         </IonContent>
-      </>
+      </IonPage>
     );
   }
 
@@ -399,7 +399,7 @@ const CourseExamPage: FC = () => {
   );
 
   return (
-    <>
+    <IonPage className="primaryPage">
       <Header {...headerProps} />
       <IonContent className={styles.content}>
         {currentAttempt ? (
@@ -502,7 +502,7 @@ const CourseExamPage: FC = () => {
           </>
         )}
       </IonContent>
-    </>
+    </IonPage>
   );
 };
 
