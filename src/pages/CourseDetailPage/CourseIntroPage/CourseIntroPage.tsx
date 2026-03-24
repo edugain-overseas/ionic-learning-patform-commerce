@@ -22,7 +22,6 @@ import CourseItem from "../../../components/CourseItem/CourseItem";
 import CardPrice from "../../../components/CardPrice/CardPrice";
 import CourseNavPanel from "../../../components/CourseNavPanel/CourseNavPanel";
 import BuyCourseBtn from "../../../components/BuyCourseBtn/BuyCourseBtn";
-import PageRefresher from "../../../components/PageRefresher/PageRefresher";
 import styles from "./CourseIntroPage.module.scss";
 
 const threshold = 0.9;
@@ -49,8 +48,7 @@ const CourseIntroPage: React.FC = () => {
   return (
     <IonPage className="primaryPage">
       <IntoHeader title={course?.title} scrollProgress={scrollProgress} />
-      <IonContent scrollY={false} className={styles.content}>
-        <PageRefresher />
+      <IonContent className={styles.content} scrollY={false}>
         <motion.div
           className={styles.courseIntroNavWrapper}
           style={{
