@@ -291,6 +291,12 @@ const Test: React.FC<{
     openAttemptsModal();
   };
 
+  const bestAttempt = testAttempts.toSorted(
+    (a, b) => a.attempt_score - b.attempt_number
+  )[0];
+
+  const isStudentHasCompleteAttept = testAttempts.length !== 0;
+
   return (
     <>
       <TaskHeader
@@ -380,20 +386,34 @@ const Test: React.FC<{
             </StickyScrollLayout>
           </>
         ) : (
-          <>
+          <div className={styles.landingScroller}>
             <TestLanding
-              timer={taskData.scheduled_time}
-              minScore={testData?.score}
+              timer={taskData?.scheduled_time}
+              passingScore={Math.round(testData?.score * 0.6)}
+              attemptsLeft={testData?.attempts - testAttempts.length}
+              maxScore={bestAttempt?.attempt_score}
             />
             <div className={styles.landingBtnsContainer}>
               {isAttemptAvailabel && !isAttemptLoading && (
                 <CommonButton
-                  label="Start"
+                  label={testAttempts.length ? "Retake" : "Start"}
                   block={true}
-                  width={138}
                   height={32}
-                  backgroundColor="var(--ion-color-dark)"
-                  color="var(--ion-color-primary-contrast)"
+                  backgroundColor={
+                    isStudentHasCompleteAttept
+                      ? "transparent"
+                      : "var(--ion-color-dark)"
+                  }
+                  color={
+                    isStudentHasCompleteAttept
+                      ? "var(--ion-color-dark)"
+                      : "var(--ion-color-primary-contrast)"
+                  }
+                  border={
+                    isStudentHasCompleteAttept
+                      ? "1rem solid var(--ion-color-light)"
+                      : "1rem solid var(--ion-color-dark)"
+                  }
                   borderRadius={5}
                   className={styles.landingBtn}
                   onClick={() => {
@@ -406,7 +426,6 @@ const Test: React.FC<{
                 <CommonButton
                   label="Show attempts"
                   block={true}
-                  width={138}
                   height={32}
                   backgroundColor="var(--ion-color-light)"
                   color="var(--ion-color-primary-contrast)"
@@ -416,7 +435,7 @@ const Test: React.FC<{
                 />
               )}
             </div>
-          </>
+          </div>
         )}
       </IonContent>
       <AttemptsModal

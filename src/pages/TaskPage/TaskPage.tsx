@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {
-  IonContent,
-  IonPage,
-  useIonRouter,
-  useIonViewWillLeave,
-} from "@ionic/react";
+import { IonContent, IonPage, useIonRouter } from "@ionic/react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
 import Lecture from "../../components/Lecture/Lecture";
 import Test from "../../components/Test/Test";
-import CourseProgressModal from "../../components/CourseProgressModal/CourseProgressModal";
 import TaskHeader from "./TaskHeader";
 import ViewModeToggleButton from "../../components/ViewModeToggleButton/ViewModeToggleButton";
 import styles from "./TaskPage.module.scss";
@@ -70,7 +64,6 @@ const TaskPage: React.FC = () => {
           scrollProgress={scrollProgress}
         />
       )}
-      <CourseProgressModal />
       <ViewModeToggleButton />
     </IonPage>
   );

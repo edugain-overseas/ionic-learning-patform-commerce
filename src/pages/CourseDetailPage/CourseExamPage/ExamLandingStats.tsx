@@ -95,7 +95,7 @@ const ExamLandingStats = ({
 }) => {
   const { courseId } = useParams<{ courseId: string }>();
 
-  const { course, exam, examData, testsScore, attemptsLeft, bestAttempt } =
+  const { exam, examData, testsScore, attemptsLeft, bestAttempt } =
     useExamLandidngStats({
       courseId: +courseId,
       examAttempts: attempts,

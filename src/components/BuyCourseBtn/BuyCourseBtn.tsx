@@ -1,5 +1,5 @@
 import { MouseEvent } from "react";
-import { IonIcon } from "@ionic/react";
+import { IonIcon, useIonRouter } from "@ionic/react";
 import { flyToBasket } from "../../utils/flyToTarget";
 import { useBasket } from "../../context/BasketContext";
 import basketIcon from "../../assets/icons/nav/basket.svg";
@@ -14,6 +14,7 @@ const BuyCourseBtn = ({
   className?: string;
 }) => {
   const basket = useBasket();
+  const router = useIonRouter();
 
   const isCourseInBasket =
     basket?.items.findIndex((item) => item.id === courseId) !== -1;
@@ -32,11 +33,17 @@ const BuyCourseBtn = ({
     }
   };
 
+  const handleOpenNavigateToBasket = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    router.push("/basket");
+  };
+
   return (
     <CommonButton
       icon={<IonIcon className={styles.basketIcon} src={basketIcon} />}
-      label={isCourseInBasket ? "Remove" : "Buy"}
-      onClick={toggleItem}
+      label={isCourseInBasket ? "Open" : "Buy"}
+      onClick={isCourseInBasket ? handleOpenNavigateToBasket : toggleItem}
       className={`${styles.buyCourseBtn} ${
         isCourseInBasket ? styles.bgBlue : styles.bgRed
       } ${className}`}

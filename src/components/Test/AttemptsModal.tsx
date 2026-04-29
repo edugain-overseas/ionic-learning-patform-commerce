@@ -113,7 +113,7 @@ const AttemptsModal = ({
   const testMaxAttempts = testData?.attempts;
   const userHasCompletedAttempts = testAttempts.length !== 0;
 
-  console.log(isOpen);
+  console.log(test);
 
   return (
     <IonModal
@@ -175,32 +175,35 @@ const AttemptsModal = ({
                             )}
                           </>
                         ) : (
-                          <>
-                            <button
-                              className={styles.submitButton}
-                              id={`present-alert-confirm-attempt-${attempt.id}`}
-                            >
-                              <span>Submit</span>
-                              <IonIcon src={CheckIcon} />
-                            </button>
-                            <IonAlert
-                              trigger={`present-alert-confirm-attempt-${attempt.id}`}
-                              header="Submiting attempt"
-                              message="Are you sure you want to record this attempt?"
-                              buttons={[
-                                {
-                                  role: "confirm",
-                                  text: "Yes",
-                                  handler: () =>
-                                    handleSubmitAttempClick(attempt.id),
-                                },
-                                {
-                                  role: "cancel",
-                                  text: "Cancel",
-                                },
-                              ]}
-                            />
-                          </>
+                          attempt.attempt_score >=
+                            (test.lessonData as TestDataType).score! * 0.6 && (
+                            <>
+                              <button
+                                className={styles.submitButton}
+                                id={`present-alert-confirm-attempt-${attempt.id}`}
+                              >
+                                <span>Submit</span>
+                                <IonIcon src={CheckIcon} />
+                              </button>
+                              <IonAlert
+                                trigger={`present-alert-confirm-attempt-${attempt.id}`}
+                                header="Submiting attempt"
+                                message="Are you sure you want to record this attempt?"
+                                buttons={[
+                                  {
+                                    role: "confirm",
+                                    text: "Yes",
+                                    handler: () =>
+                                      handleSubmitAttempClick(attempt.id),
+                                  },
+                                  {
+                                    role: "cancel",
+                                    text: "Cancel",
+                                  },
+                                ]}
+                              />
+                            </>
+                          )
                         )}
                       </div>
                     </div>
