@@ -109,10 +109,9 @@ const TestContent: React.FC<{
   };
 
   const renderTestContent = () =>
-    sortedQuestions.map((question) => {
+    sortedQuestions.map((question, index) => {
       const {
         q_id: id,
-        q_number: number,
         q_score: score,
         q_text: text,
         q_type: type,
@@ -129,7 +128,7 @@ const TestContent: React.FC<{
             <div key={id} className={styles.questionWrapper}>
               <div className={styles.questionHeader}>
                 <p className={styles.text}>
-                  <span>{`${number}) `}</span>
+                  <span>{`${index + 1}) `}</span>
                   {text}
                 </p>
               </div>
@@ -159,7 +158,7 @@ const TestContent: React.FC<{
             <div key={id} className={styles.questionWrapper}>
               <div className={styles.questionHeader}>
                 <p className={styles.text}>
-                  <span>{`${number}) `}</span>
+                  <span>{`${index + 1}) `}</span>
                   {text}
                 </p>
                 <span className={styles.score}>{`${score}/${
@@ -189,7 +188,7 @@ const TestContent: React.FC<{
             <div key={id} className={styles.questionWrapper}>
               <div className={styles.questionHeader}>
                 <p className={styles.text}>
-                  <span>{`${number}) `}</span>
+                  <span>{`${index + 1}) `}</span>
                   {text}
                 </p>
                 <span className={styles.score}>{`${score}/${
@@ -219,7 +218,7 @@ const TestContent: React.FC<{
             <div key={id} className={styles.questionWrapper}>
               <div className={styles.questionHeader}>
                 <p className={styles.text}>
-                  <span>{`${number}) `}</span>
+                  <span>{`${index + 1}) `}</span>
                   {text}
                 </p>
                 <span className={styles.score}>{`${score}/${
@@ -251,7 +250,7 @@ const TestContent: React.FC<{
             <div key={id} className={styles.questionWrapper}>
               <div className={styles.questionHeader}>
                 <p className={styles.text}>
-                  <span>{`${number})`}</span> {text}
+                  <span>{`${index + 1})`}</span> {text}
                 </p>
                 <span className={styles.score}>{`${score}/${
                   (testData as TestDataType).score
@@ -286,7 +285,7 @@ const TestContent: React.FC<{
             <div key={id} className={styles.questionWrapper}>
               <div className={styles.questionHeader}>
                 <p className={styles.text}>
-                  <span>{`${number}) `}</span>
+                  <span>{`${index + 1}) `}</span>
                   {text}
                 </p>
                 <span className={styles.score}>{`${score}/${
