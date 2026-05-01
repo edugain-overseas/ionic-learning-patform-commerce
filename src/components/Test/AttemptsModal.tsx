@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { IonAlert, IonContent, IonIcon, IonModal } from "@ionic/react";
 import { Empty } from "antd";
 import { useParams } from "react-router";
@@ -15,6 +15,7 @@ import EyeIcon from "../../assets/icons/auth/eye-open.svg";
 import CrossIcon from "../../assets/icons/cross.svg";
 import TestContent from "./TestContent";
 import styles from "./AttemptsModal.module.scss";
+import { Capacitor } from "@capacitor/core";
 
 const MIN_HEIGHT = "250rem";
 const MAX_HEIGHT = "calc(100% - var(--ion-safe-area-top) - 16rem - 30px)";
@@ -40,6 +41,17 @@ const AttemptsModal = ({
     courseId: string;
     taskId: string;
   }>();
+
+  const [platform, setPlatform] = useState(() => {
+    const mainPlatform = Capacitor.getPlatform();
+
+    if (mainPlatform !== "web") {
+      return Capacitor.getPlatform();
+    }
+    return document.documentElement.classList.contains("ios")
+      ? "ios"
+      : "android";
+  });
 
   const getCourseDetailById = useCourses()?.getCourseDetailById;
 
@@ -119,13 +131,21 @@ const AttemptsModal = ({
     <IonModal
       ref={modalRef}
       isOpen={isOpen}
-      presentingElement={presentingElement!}
+      presentingElement={platform === "ios" ? presentingElement! : undefined}
+      // presentingElement={presentingElement!}
+      breakpoints={platform === "ios" ? undefined : [0, 1]}
+      // breakpoints={[0, 1]}
+      initialBreakpoint={1}
       onDidDismiss={handleClose}
       className={styles.attemptModal}
       canDismiss={true}
       style={{
+        alignItems: "end",
         "--height": activeAttemptId ? MAX_HEIGHT : MIN_HEIGHT,
+        "--border-radius": "16rem 16rem 0 0",
       }}
+      mode="ios"
+      handle={false}
     >
       <div className={styles.handle} />
       <div className={styles.header}>
@@ -176,7 +196,7 @@ const AttemptsModal = ({
                           </>
                         ) : (
                           attempt.attempt_score >=
-                            (test.lessonData as TestDataType).score! * 0.6 && (
+                            (test.lessonData as TestDataType)?.score * 0.6 && (
                             <>
                               <button
                                 className={styles.submitButton}
@@ -189,6 +209,7 @@ const AttemptsModal = ({
                                 trigger={`present-alert-confirm-attempt-${attempt.id}`}
                                 header="Submiting attempt"
                                 message="Are you sure you want to record this attempt?"
+                                className={`${styles.alert} ${styles.customAlert}`}
                                 buttons={[
                                   {
                                     role: "confirm",

@@ -7,6 +7,7 @@ import Test from "../../components/Test/Test";
 import TaskHeader from "./TaskHeader";
 import ViewModeToggleButton from "../../components/ViewModeToggleButton/ViewModeToggleButton";
 import styles from "./TaskPage.module.scss";
+import CourseProgressModal from "../../components/CourseProgressModal/CourseProgressModal";
 
 const TaskPage: React.FC = () => {
   const [scrollProgress, setScrollProgress] = useState<number>(0);

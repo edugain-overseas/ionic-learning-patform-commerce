@@ -33,8 +33,8 @@ const CourseDetailPage: React.FC = () => {
           component={CourseTasksPage}
           exact
         />
-        <Route path={`/course/:courseId/exam`} component={CourseExamPage} />
         <Route path={`/course/:courseId/tasks/:taskId`} component={TaskPage} />
+        <Route path={`/course/:courseId/exam`} component={CourseExamPage} />
       </IonRouterOutlet>
     </IonPage>
   );

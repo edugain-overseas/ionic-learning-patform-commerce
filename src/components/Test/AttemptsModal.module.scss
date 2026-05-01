@@ -2,10 +2,12 @@
   --min-height: 250rem;
   --max-height: calc(100% - var(--ion-safe-area-top) - 16rem);
   --height: 250rem;
-  --border-radius: 16rem;
+  --border-radius: 16rem 16rem 0 0;
+  --backdrop-opacity: 1;
 
   &::part(content) {
     transition: height var(--custom-tr-time-max) ease-out;
+    border-radius: 16rem 16rem 0 0;
   }
 
   &::part(backdrop) {
@@ -14,6 +16,7 @@
     background: var(--custom-bg-rgba-secondary);
     backdrop-filter: blur(5px);
     opacity: 1;
+    pointer-events: auto;
   }
 
   .ion-page {
@@ -47,6 +50,7 @@
 
 .content {
   --padding-bottom: var(--ion-safe-area-top);
+  --background: transparent;
   flex: 1;
 
   &::part(scroll) {
@@ -170,4 +174,19 @@
 
 .attemptsContent {
   font-size: 14rem;
+}
+
+.alert.customAlert {
+  font-size: 14rem;
+  h2 {
+    font-size: 17rem;
+  }
+
+  div {
+    font-size: 13rem;
+  }
+
+  button {
+    font-size: 17rem;
+  }
 }

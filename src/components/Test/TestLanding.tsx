@@ -53,50 +53,54 @@ const TestLanding: FC<TestLandingPropsType> = ({
         This test will assess your knowledge based on the lecture material
         you've just studied. All questions are designed to reinforce and
         evaluate your understanding of key concepts.
-        <br />
-        <br />
-        <ul className={styles.landingStats}>
+      </p>
+      <br />
+      <br />
+      <ul className={styles.landingStats}>
+        <li>
+          <TestStat
+            icon={coursesIcon}
+            value={passingScore}
+            label="Points"
+            description="<b>Points</b> for passing the Test"
+          />
+        </li>
+        <li>
+          <TestStat
+            icon={studentIcon}
+            value={timer}
+            label="min"
+            description="<b>Time</b> to pass the Test"
+          />
+        </li>
+        <li>
+          <TestStat
+            icon={scoreIcon}
+            value={attemptsLeft}
+            label="attempts"
+            description="<b>The best</b> result will be upheld"
+          />
+        </li>
+        {!!maxScore && (
           <li>
             <TestStat
               icon={coursesIcon}
-              value={passingScore}
+              value={maxScore}
               label="Points"
-              description="<b>Points</b> for passing the Test"
+              description={"<b>Points</b> scored in best attempt"}
             />
           </li>
-          <li>
-            <TestStat
-              icon={studentIcon}
-              value={timer}
-              label="min"
-              description="<b>Time</b> to pass the Test"
-            />
-          </li>
-          <li>
-            <TestStat
-              icon={scoreIcon}
-              value={attemptsLeft}
-              label="attempts"
-              description="<b>The best</b> result will be upheld"
-            />
-          </li>
-          {!!maxScore && (
-            <li>
-              <TestStat
-                icon={coursesIcon}
-                value={maxScore}
-                label="Points"
-                description={"<b>Points</b> scored in best attempt"}
-              />
-            </li>
-          )}
-        </ul>
-        <br />
-        <br />
+        )}
+      </ul>
+      <br />
+      <br />
+      <p>
         Please read each question carefully and answer to the best of your
         ability. Your results will help track your progress through the course.
-        <br />
-        <br />
+      </p>
+      <br />
+      <br />
+      <p>
         <b>Good luck!</b>
       </p>
     </div>
