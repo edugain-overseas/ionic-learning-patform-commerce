@@ -29,6 +29,8 @@
   width: 100%;
   aspect-ratio: 16/9;
   object-fit: contain;
+  background-color: var(--custom-bg-rgba-secondary);
+  backdrop-filter: blur(28px);
 }
 
 .description {
@@ -38,4 +40,15 @@
   font-weight: 500;
   color: var(--ion-color-dark);
   text-align: center;
+}
+
+.imagePreviewWrapper {
+  img {
+    background-color: var(--custom-bg-rgba-secondary);
+    backdrop-filter: blur(28px);
+  }
+}
+
+.imagePreviewMask {
+  background-color: var(--custom-bg-rgba-secondary);
 }

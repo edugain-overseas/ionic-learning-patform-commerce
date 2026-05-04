@@ -42,7 +42,7 @@ const AttemptsModal = ({
     taskId: string;
   }>();
 
-  const [platform, setPlatform] = useState(() => {
+  const [platform, _] = useState(() => {
     const mainPlatform = Capacitor.getPlatform();
 
     if (mainPlatform !== "web") {
@@ -132,9 +132,7 @@ const AttemptsModal = ({
       ref={modalRef}
       isOpen={isOpen}
       presentingElement={platform === "ios" ? presentingElement! : undefined}
-      // presentingElement={presentingElement!}
       breakpoints={platform === "ios" ? undefined : [0, 1]}
-      // breakpoints={[0, 1]}
       initialBreakpoint={1}
       onDidDismiss={handleClose}
       className={styles.attemptModal}
@@ -197,15 +195,17 @@ const AttemptsModal = ({
                         ) : (
                           attempt.attempt_score >=
                             (test.lessonData as TestDataType)?.score * 0.6 && (
-                            <>
-                              <button
-                                className={styles.submitButton}
-                                id={`present-alert-confirm-attempt-${attempt.id}`}
-                              >
-                                <span>Submit</span>
-                                <IonIcon src={CheckIcon} />
-                              </button>
-                              <IonAlert
+                            <button
+                              className={styles.submitButton}
+                              id={`present-alert-confirm-attempt-${attempt.id}`}
+                              onClick={() =>
+                                handleSubmitAttempClick(attempt.id)
+                              }
+                            >
+                              <span>Submit</span>
+                              <IonIcon src={CheckIcon} />
+                            </button>
+                            /* <IonAlert
                                 trigger={`present-alert-confirm-attempt-${attempt.id}`}
                                 header="Submiting attempt"
                                 message="Are you sure you want to record this attempt?"
@@ -222,8 +222,7 @@ const AttemptsModal = ({
                                     text: "Cancel",
                                   },
                                 ]}
-                              />
-                            </>
+                              /> */
                           )
                         )}
                       </div>

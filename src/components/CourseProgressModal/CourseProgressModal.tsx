@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { IonIcon, useIonViewDidLeave, useIonViewWillLeave } from "@ionic/react";
+import { IonIcon, useIonViewDidLeave } from "@ionic/react";
 import { useLocation, useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
 import ExamIcon from "../../assets/icons/document-grade-A.svg";
@@ -53,13 +53,14 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
 
     handleTaskNavigate(examLessonId, true);
   };
-  
-  useIonViewDidLeave(()=>{
-    document.getElementById(`course-progress-modal-${pathname}`)?.remove()
-  })
+
+  useIonViewDidLeave(() => {
+    document.getElementById(`course-progress-modal-${pathname}`)?.remove();
+  });
 
   if (!pathname.includes("tasks")) return null;
 
+  console.log(course?.lessons);
 
   return (
     <CustomSheetModal

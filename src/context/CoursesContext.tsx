@@ -287,14 +287,16 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
       });
       if (response.status === 200) {
         const updatedCourses = courses.map((course) => {
+          let lessonNumber = 0;
           if (course.lessons.find((lesson) => lesson.id === lessonId)) {
-            let lessonNumber = 0;
             const updatedLessons = course.lessons.map((lesson) => {
+              console.log(lessonNumber, lesson.title);
+
               if (lesson.id === lessonId) {
                 lessonNumber = lesson.number;
                 return { ...lesson, status: "completed" };
               }
-              if (lesson.number !== 0 && lesson.number === lessonNumber + 1) {
+              if (lessonNumber !== 0 && lesson.number === lessonNumber + 1) {
                 return { ...lesson, status: "active" };
               }
               return lesson;
@@ -305,7 +307,6 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
           return course;
         });
         setCourses(updatedCourses as CourseType[]);
-        // return updatedCourses;
       }
     } catch (error) {
       throw error;

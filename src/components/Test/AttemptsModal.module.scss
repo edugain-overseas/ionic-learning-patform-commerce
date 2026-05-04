@@ -8,6 +8,9 @@
   &::part(content) {
     transition: height var(--custom-tr-time-max) ease-out;
     border-radius: 16rem 16rem 0 0;
+    background: var(--custom-bg-rgba-secondary);
+    backdrop-filter: blur(28px);
+    box-shadow: var(--custom-box-shadow-primary);
   }
 
   &::part(backdrop) {
@@ -176,17 +179,17 @@
   font-size: 14rem;
 }
 
-.alert.customAlert {
-  font-size: 14rem;
-  h2 {
-    font-size: 17rem;
-  }
+// .alert.customAlert {
+//   font-size: 14rem;
+//   h2 {
+//     font-size: 17rem;
+//   }
 
-  div {
-    font-size: 13rem;
-  }
+//   div {
+//     font-size: 13rem;
+//   }
 
-  button {
-    font-size: 17rem;
-  }
-}
+//   button {
+//     font-size: 17rem;
+//   }
+// }

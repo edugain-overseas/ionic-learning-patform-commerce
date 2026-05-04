@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { Image } from "antd";
-import { IonModal } from "@ionic/react";
 import { serverName } from "../../http/server";
 import styles from "./ImageGroup.module.scss";
 
@@ -24,6 +23,11 @@ const ImageGroup: FC<{ imagesData?: Image[] }> = ({ imagesData }) => {
                 src={`${serverName}/${image.file_path}`}
                 alt={image.filename}
                 className={styles.image}
+                preview={{
+                  imageRender: (node) => (
+                    <div className={styles.imagePreviewWrapper}>{node}</div>
+                  ),
+                }}
               />
               <div className={styles.description}>
                 {image.file_description || "No discription provided"}
@@ -31,7 +35,6 @@ const ImageGroup: FC<{ imagesData?: Image[] }> = ({ imagesData }) => {
             </li>
           ))}
       </ul>
-      <IonModal></IonModal>
     </>
   );
 };

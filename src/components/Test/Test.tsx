@@ -26,6 +26,7 @@ import AttemptsModal from "./AttemptsModal";
 import TaskHeader from "../../pages/TaskPage/TaskHeader";
 import CompleteLessonBtn from "../CompleteLessonBtn/CompleteLessonBtn";
 import styles from "./Test.module.scss";
+import { useParams } from "react-router";
 
 type CurrentAttempt = {
   studentAnswers: any[];
@@ -40,6 +41,9 @@ const Test: React.FC<{
   onScrollProgress: (value: number) => void;
   scrollProgress?: number;
 }> = ({ taskData, onScrollProgress, scrollProgress = 0 }) => {
+  const { courseId } = useParams<{
+    courseId: string;
+  }>();
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<number>(0);
   const currentAttemptsRef = useRef<CurrentAttempt | null>(null);
@@ -288,14 +292,52 @@ const Test: React.FC<{
     if (isTestOpen && currentAttempt?.timer) {
       await handleSubmitCurrentAttempt();
     }
-    openAttemptsModal();
   };
 
   const bestAttempt = testAttempts.toSorted(
     (a, b) => a.attempt_score - b.attempt_number
   )[0];
 
+  const isBestAttemptPassed =
+    bestAttempt?.attempt_score >= Math.round(testData?.score * 0.6);
+
   const isStudentHasCompleteAttept = testAttempts.length !== 0;
+
+  const getCourseDetailById = useCourses()?.getCourseDetailById;
+
+  const handleCompleteTestWithAttemptId = async (attemptId: number) => {
+    const attemptData = testAttempts.find(({ id }) => id === attemptId);
+
+    if (attemptData) {
+      const requestData = {
+        attempt_id: attemptData.id,
+        student_id: attemptData.student_id,
+        lesson_id: taskData.id,
+      };
+
+      try {
+        const response = await instance.post(
+          "student-test/submit",
+          requestData
+        );
+
+        await getCourseDetailById?.(courseId);
+
+        present({
+          type: "success",
+          message: `${response.data.Message}!`,
+          duration: 5000,
+        });
+      } catch (error) {
+        console.error(error);
+        present({
+          type: "error",
+          message: `Something went wrong!`,
+          duration: 5000,
+        });
+      }
+    }
+  };
 
   return (
     <>
@@ -394,6 +436,20 @@ const Test: React.FC<{
               maxScore={bestAttempt?.attempt_score}
             />
             <div className={styles.landingBtnsContainer}>
+              {isBestAttemptPassed && (
+                <CommonButton
+                  label="Complete"
+                  block={true}
+                  height={32}
+                  className={styles.landingBtn}
+                  backgroundColor="var(--ion-color-success)"
+                  color="var(--ion-color-primary-contrast)"
+                  borderRadius={5}
+                  onClick={() =>
+                    handleCompleteTestWithAttemptId(bestAttempt.id)
+                  }
+                />
+              )}
               {isAttemptAvailabel && !isAttemptLoading && (
                 <CommonButton
                   label={testAttempts.length ? "Retake" : "Start"}
