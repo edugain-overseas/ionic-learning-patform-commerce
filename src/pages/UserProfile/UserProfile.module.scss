@@ -205,7 +205,6 @@
 div.profileData {
   margin-bottom: 16rem;
 
-
   .profileDataHeader {
     display: flex;
     flex-direction: column;
@@ -458,7 +457,7 @@ div.profileData {
   --border-radius: 16rem;
   --background: url("../../assets/images/body-bg.webp"),
     rgba(255, 255, 255, 0.8);
-  bottom: var(--keyboard-height, 0rem);
+  bottom: calc(var(--keyboard-height) - 20px);
 
   &::part(content) {
     background-size: 100% 100%;

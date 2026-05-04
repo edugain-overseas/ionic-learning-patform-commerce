@@ -18,6 +18,8 @@ const GoogleAuthButton: FC = () => {
       setIsLoading(true);
       const googleUser = await GoogleAuth.signIn();
 
+      console.log(googleUser);
+
       const googleToken = googleUser?.authentication?.idToken;
       if (googleToken) {
         const user = await userInterface?.loginWithGoogle(googleToken);
@@ -32,7 +34,7 @@ const GoogleAuthButton: FC = () => {
         });
       }
     } catch (error) {
-      console.log(error);
+      console.log("GOOGLE SINGIN ERROR: ", error);
     } finally {
       setIsLoading(false);
     }

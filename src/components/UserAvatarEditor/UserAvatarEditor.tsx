@@ -18,6 +18,7 @@ import InsetBtn from "../InsetBtn/InsetBtn";
 import AvatarEditorComponent from "./AvatarEditorComponent";
 import AvatarEditor from "react-avatar-editor";
 import styles from "./UserAvatarEditor.module.scss";
+import { Capacitor } from "@capacitor/core";
 
 interface UserAvatarEditorPropsType {
   closeModal?: () => void;
@@ -29,6 +30,7 @@ const UserAvatarEditor: FC<UserAvatarEditorPropsType> = ({ closeModal }) => {
   const [image, setImage] = useState<Photo>();
   const [scale, setScale] = useState(1);
   const editorRef = useRef<AvatarEditor>(null);
+  const platform = Capacitor.getPlatform();
 
   useEffect(() => {
     userInterface?.getLastUserImages();
@@ -39,7 +41,8 @@ const UserAvatarEditor: FC<UserAvatarEditorPropsType> = ({ closeModal }) => {
       quality: 90,
       allowEditing: true,
       resultType: CameraResultType.Base64,
-      source: CameraSource.Photos,
+      // source: CameraSource.Photos,
+      source: platform !== "android" ? undefined : CameraSource.Photos,
     });
     setImage(image);
   };

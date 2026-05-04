@@ -6,6 +6,8 @@ export const useKeyboard = () => {
   useEffect(() => {
     if (Capacitor.getPlatform() === "android") {
       Keyboard.addListener("keyboardWillShow", (info) => {
+        console.log("KEYBOARD: " + info.keyboardHeight);
+
         document
           .getElementById("root")
           ?.style.setProperty("--keyboard-height", `${info.keyboardHeight}px`);

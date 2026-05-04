@@ -21,7 +21,7 @@
 
 .homeContent {
   --background: transparent;
-  transform: translateY(calc(var(--keyboard-height) * -1));
+  // transform: translateY(calc(var(--keyboard-height) * -1));
   transition: transform var(--custom-tr-time-min) ease-in-out;
 
   overscroll-behavior: none;
