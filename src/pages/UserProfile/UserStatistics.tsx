@@ -3,6 +3,7 @@ import styles from "./UserProfile.module.scss";
 import CircleProgressCard from "../../components/CircleProgressCard/CircleProgressCard";
 import { UserType } from "../../types/user";
 import InfoBtn from "../../components/InfoBtn/InfoBtn";
+import { letterGrade } from "../../utils/letterGrade";
 
 const mockedAvarage = 172;
 const mockedProgress = 75;
@@ -15,6 +16,22 @@ const progressDescription =
 const UserStatistics: FC<{ userData?: UserType }> = ({ userData }) => {
   const isUserStatisticAvailable = userData?.username;
 
+  const userCourses = userData?.courses || [];
+
+  const userCompletedCourses = userCourses.filter(
+    (course) => course.status === "completed"
+  );
+
+  const userAvarageScore = Math.round(
+    userCompletedCourses.reduce((sum, course) => {
+      return sum + course.grade;
+    }, 0) / userCompletedCourses.length
+  );
+  const userTotalProgress = Math.round(
+    userCompletedCourses.reduce((sum, course) => {
+      return sum + course.progress;
+    }, 0) / userCompletedCourses.length
+  );
   return (
     <div className={styles.progressData}>
       <h3 className={styles.sectionHeader}>Your progress</h3>
@@ -33,7 +50,9 @@ const UserStatistics: FC<{ userData?: UserType }> = ({ userData }) => {
               <div className={styles.progressContent}>
                 <span className={styles.label}>Average</span>
                 <span className={styles.value}>
-                  {isUserStatisticAvailable ? `${mockedAvarage}(B)` : "0(*)"}
+                  {isUserStatisticAvailable
+                    ? `${userAvarageScore}(${letterGrade(userAvarageScore)})`
+                    : "0(*)"}
                 </span>
               </div>
             }
@@ -43,14 +62,14 @@ const UserStatistics: FC<{ userData?: UserType }> = ({ userData }) => {
           <CircleProgressCard
             cardTitle="Your progress"
             width={124}
-            progress={isUserStatisticAvailable ? mockedProgress : 0.1}
+            progress={isUserStatisticAvailable ? userTotalProgress : 0.1}
             strokeWidth={8}
             strokeColor={isUserStatisticAvailable ? "#39ba6d" : "#BDC4D2"}
             progressTitle={
               <div className={styles.progressContent}>
                 <span className={styles.label}>Completed</span>
                 <span className={styles.value}>{`${
-                  isUserStatisticAvailable ? mockedProgress : 0
+                  isUserStatisticAvailable ? userTotalProgress : 0
                 }%`}</span>
               </div>
             }

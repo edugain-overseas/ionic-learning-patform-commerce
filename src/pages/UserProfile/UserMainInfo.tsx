@@ -18,6 +18,12 @@ const UserMainInfo: FC<{
     ? convertMillisecondsToHoursAndMinutes(userData?.activeTime)
     : { hours: 0, minutes: 0 };
 
+  const userCoursesCompleted =
+    userData?.courses.filter((course) => course.status === "completed") || [];
+
+  const userCoursesInProgress =
+    userData?.courses.filter((course) => course.status === "in_progress") || [];
+
   return (
     <div className={styles.mainInfoBlock}>
       <div className={styles.topWrapper}>
@@ -56,8 +62,8 @@ const UserMainInfo: FC<{
           <IonIcon src={TaskProgressIcon} className={styles.achiveIcon} />
           <span className={styles.achiveValue}>
             <TextOverrflowEllipsis
-              text={`${userData?.courses?.length} course${
-                userData?.courses && userData.courses.length > 1 ? "s" : ""
+              text={`${userCoursesInProgress.length} course${
+                userCoursesInProgress.length > 1 ? "s" : ""
               }`}
             />
           </span>
@@ -69,15 +75,13 @@ const UserMainInfo: FC<{
           <IonIcon src={TaskCompletedIcon} className={styles.achiveIcon} />
           <span className={styles.achiveValue}>
             <TextOverrflowEllipsis
-              text={`${
-                userData?.courses &&
-                userData?.courses.filter(({ status }) => status === "completed")
-                  .length
-              } completed`}
+              text={`${userCoursesCompleted.length} course${
+                userCoursesCompleted.length > 1 ? "s" : ""
+              }`}
             />
           </span>
           <span className={styles.achiveLabel}>
-            <TextOverrflowEllipsis text="courses" />
+            <TextOverrflowEllipsis text="completed" />
           </span>
         </li>
       </ul>

@@ -24,9 +24,12 @@ const ImageGroup: FC<{ imagesData?: Image[] }> = ({ imagesData }) => {
                 alt={image.filename}
                 className={styles.image}
                 preview={{
-                  imageRender: (node) => (
-                    <div className={styles.imagePreviewWrapper}>{node}</div>
-                  ),
+                  styles: {
+                    mask: {
+                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                      backdropFilter: "blur(28rem)",
+                    },
+                  },
                 }}
               />
               <div className={styles.description}>
