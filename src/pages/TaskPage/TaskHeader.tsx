@@ -1,11 +1,19 @@
-import { IonButtons, IonHeader, IonToolbar } from "@ionic/react";
-import { motion } from "motion/react";
+import {
+  IonButton,
+  IonButtons,
+  IonHeader,
+  IonIcon,
+  IonToolbar,
+} from "@ionic/react";
+import { motion, transform } from "motion/react";
 import { clamp } from "../../utils/clamp";
 import { LessonType, useCourses } from "../../context/CoursesContext";
+import backIcon from "../../assets/icons/header/back.svg";
 import HeaderTitle from "../../components/Header/HeaderTitle";
 import HeaderBackBtn from "../../components/Header/HeaderBackBtn";
 import CompleteLessonBtn from "../../components/CompleteLessonBtn/CompleteLessonBtn";
 import styles from "./TaskPage.module.scss";
+import { useTaskNavigation } from "../../hooks/useTasksNavigation";
 
 type PropsType = {
   scrollProgress: number;
@@ -23,7 +31,7 @@ const TaskHeader = ({
   const animationProgress = clamp(
     0,
     (scrollProgress * 1.25 - threshold) / (1 - threshold),
-    1
+    1,
   );
 
   const btnBgOpacity = 1 - animationProgress;
@@ -35,6 +43,8 @@ const TaskHeader = ({
 
     await confirmLecture?.(taskData.id);
   };
+
+  const taskNavigation = useTaskNavigation();
 
   return (
     <IonHeader className={styles.taskHeader}>
@@ -62,7 +72,7 @@ const TaskHeader = ({
         </motion.div>
         <IonButtons slot="end" className={styles.buttonsWrapper}>
           {taskData?.status && (
-            <>
+            <div style={{ position: "relative" }}>
               <motion.div
                 className={styles.confirmBtnBg}
                 style={{ opacity: btnBgOpacity }}
@@ -76,7 +86,18 @@ const TaskHeader = ({
                     : onTestCompleteClick
                 }
               />
-            </>
+            </div>
+          )}
+          {taskData?.status === "completed" && taskNavigation.canGoForward && (
+            <div style={{ position: "relative" }}>
+              <motion.div
+                className={styles.confirmBtnBg}
+                style={{ opacity: btnBgOpacity }}
+              />
+              <IonButton onClick={()=>taskNavigation.handleNavigateLesson('forward')}>
+                <IonIcon src={backIcon} style={{ rotate: "180deg" }} />
+              </IonButton>
+            </div>
           )}
         </IonButtons>
       </IonToolbar>

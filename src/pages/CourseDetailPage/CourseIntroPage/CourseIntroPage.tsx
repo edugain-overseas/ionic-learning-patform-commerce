@@ -206,7 +206,7 @@ const CourseIntroPage: React.FC = () => {
         </StickyScrollLayout>
         {!isCoursePurchased && (
           <div className={styles.bottomBar}>
-            <CardPrice />
+            <CardPrice price={course?.price} oldPrice={course?.old_price} />
             <BuyCourseBtn courseId={Number(courseId)} />
           </div>
         )}

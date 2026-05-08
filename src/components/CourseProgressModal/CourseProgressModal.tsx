@@ -60,8 +60,6 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
 
   if (!pathname.includes("tasks")) return null;
 
-  console.log(course?.lessons);
-
   return (
     <CustomSheetModal
       height={432}

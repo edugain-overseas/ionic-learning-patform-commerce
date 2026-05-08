@@ -16,6 +16,9 @@ const useTimer = ({
   const [secondsLeft, setSecondsLeft] = useState(initialSeconds);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
+  console.log();
+  
+
   const stop = () => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);

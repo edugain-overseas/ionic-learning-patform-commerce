@@ -5,12 +5,14 @@
   --background: var(--custom-bg-rgba-primary);
   --max-height: calc(100% - var(--ion-safe-area-top));
   top: 0;
-  bottom: calc(var(--keyboard-height) - 20px);
+  bottom: 0;
   transition: bottom var(--custom-tr-time-min) ease-in-out;
   backdrop-filter: blur(5px);
   --overflow: hidden;
 
   &::part(content) {
     border-radius: 16rem 16rem 0 0;
+    padding-bottom: max(calc(var(--keyboard-height) - 20px), 0px);
+    transition: padding-bottom var(--custom-tr-time-min) ease-in-out;
   }
 }

@@ -319,8 +319,6 @@ const TestContent: React.FC<{
       setStudentAnswers &&
       studentAnswers?.length === 0
     ) {
-      console.log("initial test content");
-
       setStudentAnswers((prev) => {
         const updatedAnswers = [...prev];
         sortedQuestions.forEach((question) => {

@@ -11,8 +11,6 @@ interface CategoryItemTypes {
 }
 
 const CategoryItem: React.FC<CategoryItemTypes> = ({ category }) => {
-  console.log(category);
-
   const categoryIconPath = category.icons?.find((icon) => icon.is_main)?.path;
 
   return (

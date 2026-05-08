@@ -1,8 +1,9 @@
-import { FC, ReactNode, createContext, useContext } from "react";
+import { FC, ReactNode, createContext, useContext, useEffect } from "react";
 import useStorage from "../hooks/useStorage";
 import { useCourses } from "./CoursesContext";
 import { groupByKey } from "../utils/groupByKey";
 import { useUser } from "./UserContext";
+import { useToast } from "../hooks/useToast";
 
 export interface ItemType {
   id: number;
@@ -26,6 +27,7 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [items, setItems] = useStorage<ItemType[]>("basket-items", []);
   const coursesInterface = useCourses();
   const userInterface = useUser();
+  const [present] = useToast();
   const courses = coursesInterface?.courses;
   const categories = coursesInterface?.categories;
 
@@ -125,6 +127,37 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const total = subTotal - discount;
     return { subTotal, discount, total };
   };
+
+  useEffect(() => {
+    const userCourses = userInterface?.user.courses;
+
+    if (userCourses?.length) {
+      setItems((items) =>
+        items.filter((item) => {
+          const userCourseInBasket = userCourses.find(
+            (userCourse) => userCourse.course_id === item.id
+          );
+
+          if (userCourseInBasket) {
+            const courseData = courses?.find(
+              (course) => course.id === userCourseInBasket.course_id
+            );
+
+            const message = `You already have bought course ${
+              courseData?.title ? courseData.title : ""
+            }. It was removed from basket.`;
+
+            present({
+              type: "info",
+              message: message,
+              duration: 5000,
+            });
+          }
+          return !userCourseInBasket;
+        })
+      );
+    }
+  }, [userInterface?.user]);
 
   return (
     <BasketContext.Provider

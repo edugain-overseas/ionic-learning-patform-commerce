@@ -457,9 +457,14 @@ div.profileData {
   --border-radius: 16rem;
   --background: url("../../assets/images/body-bg.webp"),
     rgba(255, 255, 255, 0.8);
-  bottom: calc(var(--keyboard-height) - 20px);
+  bottom: 0;
 
   &::part(content) {
     background-size: 100% 100%;
+    padding-bottom: max(
+      calc(var(--keyboard-height) - 20px),
+      var(--ion-safe-area-bottom)
+    );
+    transition: padding-bottom var(--custom-tr-time-min) ease-in-out;
   }
 }

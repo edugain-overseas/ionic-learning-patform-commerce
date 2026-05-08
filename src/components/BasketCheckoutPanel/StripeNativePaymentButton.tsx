@@ -114,9 +114,9 @@ const StripeNativePaymentButton: FC = () => {
       return;
     }
     authUiInterface?.openAuthUI("sing-up");
-    authUiInterface?.setSuccessAuthCallback((freshStudentId: number) =>
-      handlePayment(freshStudentId)
-    );
+    authUiInterface?.setSuccessAuthCallback((freshStudentId: number) => {
+      handlePayment(freshStudentId);
+    });
   };
 
   const handlePayWithApple = async (studentId: number) => {
@@ -257,38 +257,40 @@ const StripeNativePaymentButton: FC = () => {
       />
       {isApplePayAvailable && (
         <CommonButton
-          label="Pay with"
+          // label="Pay with"
           icon={
             isApplePayLoading ? (
               <Spinner color="#fff" />
             ) : (
-              <IonIcon src={AppleIcon} className={styles.serviceIcon} />
+              <IonIcon src={AppleIcon} />
             )
           }
-          width={162}
-          height="40px"
+          width={72}
+          height="40rem"
           backgroundColor="#343434"
           color="#fcfcfc"
           onClick={handlePayWithAppleBtnClick}
           borderRadius={5}
+          className={styles.serviceBtn}
         />
       )}
       {isGooglePayAvailable && (
         <CommonButton
-          label="Pay with"
+          // label="Pay with"
           icon={
             isApplePayLoading ? (
               <Spinner color="#fff" />
             ) : (
-              <IonIcon src={GoogleIcon} className={styles.serviceIcon} />
+              <IonIcon src={GoogleIcon} />
             )
           }
-          width={162}
+          width={72}
           height="40px"
           backgroundColor="#fcfcfc"
           color="#343434"
           onClick={handlePayWithGoogleBtnClick}
           borderRadius={5}
+          className={styles.serviceBtn}
         />
       )}
     </div>

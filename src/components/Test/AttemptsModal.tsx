@@ -125,8 +125,6 @@ const AttemptsModal = ({
   const testMaxAttempts = testData?.attempts;
   const userHasCompletedAttempts = testAttempts.length !== 0;
 
-  console.log(test);
-
   return (
     <IonModal
       ref={modalRef}

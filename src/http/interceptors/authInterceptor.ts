@@ -1,21 +1,25 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { instance } from "../instance";
 import { Dispatch, SetStateAction } from "react";
 
 let isRefreshing = false;
+
 let failedQueue: {
   resolve: (token: string) => void;
-  reject: (err: any) => void;
+  reject: (error: any) => void;
 }[] = [];
 
+let refreshPromise: Promise<string> | null = null;
+
 const processQueue = (error: any, token: string | null = null) => {
-  failedQueue.forEach((prom) => {
+  failedQueue.forEach((p) => {
     if (error) {
-      prom.reject(error);
+      p.reject(error);
     } else {
-      prom.resolve(token!);
+      p.resolve(token!);
     }
   });
+
   failedQueue = [];
 };
 
@@ -25,54 +29,87 @@ export const setupInterceptors = (
 ) => {
   instance.interceptors.response.use(
     (response) => response,
+
     async (error: AxiosError<any>) => {
-      const originalRequest = error.config as any;
+      const originalRequest: any = error.config;
 
-      const isTokenExpired =
-        error.response?.status === 401 &&
-        error.response?.data?.detail === "Access token expired";
+      const status = error.response?.status;
+      const detail = error.response?.data?.detail;
 
-      if (isTokenExpired && !originalRequest._retry) {
-        originalRequest._retry = true;
+      const isRefreshRequest = originalRequest?.url?.includes(
+        "/user/refresh-token"
+      );
 
-        if (isRefreshing) {
-          // Wait until the ongoing refresh finishes
-          return new Promise((resolve, reject) => {
-            failedQueue.push({ resolve, reject });
-          }).then((token) => {
-            originalRequest.headers["Authorization"] = `Bearer ${token}`;
+      // refresh token помер -> logout
+      if (isRefreshRequest && status === 401) {
+        logout();
+        return Promise.reject(error);
+      }
+
+      const isAccessExpired =
+        status === 401 && detail === "Access token expired";
+
+      if (!isAccessExpired) {
+        return Promise.reject(error);
+      }
+
+      // already retried
+      if (originalRequest._retry) {
+        return Promise.reject(error);
+      }
+
+      originalRequest._retry = true;
+
+      // якщо refresh already running
+      if (isRefreshing && refreshPromise) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then((token) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
             return instance(originalRequest);
-          });
-        }
+          })
+          .catch((err) => Promise.reject(err));
+      }
 
-        isRefreshing = true;
+      isRefreshing = true;
 
+      refreshPromise = new Promise(async (resolve, reject) => {
         try {
-          const { data } = await instance.post("/user/refresh-token", null, {
+          const { data } = await instance.get("/user/refresh", {
             withCredentials: true,
           });
 
-          const newAccessToken = data.access_token;
+          const newToken = data.access_token;
 
-          instance.defaults.headers[
-            "Authorization"
-          ] = `Bearer ${newAccessToken}`;
-          setAccessToken(newAccessToken);
+          instance.defaults.headers.Authorization = `Bearer ${newToken}`;
 
-          processQueue(null, newAccessToken);
+          setAccessToken(newToken);
 
-          originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
-          return instance(originalRequest);
-        } catch (refreshError) {
-          processQueue(refreshError, null);
+          processQueue(null, newToken);
+
+          resolve(newToken);
+        } catch (err) {
+          processQueue(err, null);
+
           logout();
-          return Promise.reject(refreshError);
+
+          reject(err);
         } finally {
           isRefreshing = false;
+          refreshPromise = null;
         }
-      }
+      });
 
-      return Promise.reject(error);
+      try {
+        const token = await refreshPromise;
+
+        originalRequest.headers.Authorization = `Bearer ${token}`;
+
+        return instance(originalRequest);
+      } catch (err) {
+        return Promise.reject(err);
+      }
     }
   );
 };

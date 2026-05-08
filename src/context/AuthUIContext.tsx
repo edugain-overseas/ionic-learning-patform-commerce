@@ -52,9 +52,6 @@ export const AuthUIProvider: FC<{ children: ReactNode }> = ({ children }) => {
       modals.forEach((modal) => modal.ref?.current?.dismiss());
     }
     if (accessToken && studentId && callbackRef.current) {
-      console.log(callbackRef.current);
-      console.log(studentId);
-
       callbackRef.current(studentId);
       callbackRef.current = null;
     }

@@ -5,9 +5,6 @@ import studentIcon from "../../assets/icons/homeStats/students.svg";
 import scoreIcon from "../../assets/icons/homeStats/score.svg";
 import styles from "./Test.module.scss";
 
-const TIMER = 60;
-const MIN_SCORE = 20;
-
 type TestLandingPropsType = {
   timer?: number;
   passingScore?: number;
@@ -22,7 +19,7 @@ const TestStat = ({
   description,
 }: {
   icon: string;
-  value: number;
+  value?: number;
   label: string;
   description: string;
 }) => {
@@ -30,7 +27,7 @@ const TestStat = ({
     <div className={styles.landingStat}>
       <IonIcon src={icon} />
       <p>
-        <span>{value ? value : null} </span>
+        <span>{value || value === 0 ? value : null} </span>
         {label}
       </p>
       <p dangerouslySetInnerHTML={{ __html: description }}></p>
@@ -41,11 +38,9 @@ const TestStat = ({
 const TestLanding: FC<TestLandingPropsType> = ({
   timer = 0,
   passingScore = 0,
-  attemptsLeft = 0,
+  attemptsLeft,
   maxScore = 0,
 }) => {
-  console.log(timer, passingScore, attemptsLeft, maxScore);
-
   return (
     <div className={styles.landingWrapper}>
       <h3>Welcome to Your Assessment</h3>
@@ -100,9 +95,11 @@ const TestLanding: FC<TestLandingPropsType> = ({
       </p>
       <br />
       <br />
-      <p>
-        <b>Good luck!</b>
-      </p>
+      {maxScore <= passingScore && !!attemptsLeft && (
+        <p>
+          <b>Good luck!</b>
+        </p>
+      )}
     </div>
   );
 };

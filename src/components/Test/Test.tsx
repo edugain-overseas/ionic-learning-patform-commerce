@@ -27,6 +27,7 @@ import TaskHeader from "../../pages/TaskPage/TaskHeader";
 import CompleteLessonBtn from "../CompleteLessonBtn/CompleteLessonBtn";
 import styles from "./Test.module.scss";
 import { useParams } from "react-router";
+import ExpiredAttemptsMessage from "../ExpiredAttemptsMessage/ExpiredAttemptsMessage";
 
 type CurrentAttempt = {
   studentAnswers: any[];
@@ -60,11 +61,11 @@ const Test: React.FC<{
   const animationProgress = clamp(
     0,
     (scrollProgress * 1.25 - threshold) / (1 - threshold),
-    1
+    1,
   );
 
   const course = coursesInterface?.courses.find(
-    (course) => course.id === taskData.course_id
+    (course) => course.id === taskData.course_id,
   );
 
   const answersProgressValue = Math.round(
@@ -81,7 +82,7 @@ const Test: React.FC<{
       return false;
     }).length /
       (taskData.lessonData as TestDataType)?.questions.length) *
-      100
+      100,
   );
 
   const testStatus = taskData.status;
@@ -102,7 +103,7 @@ const Test: React.FC<{
     const getSubmitedAttempt = async () => {
       try {
         const response = await instance.get(
-          `/student-test/attempt/${testData.my_attempt_id}`
+          `/student-test/attempt/${testData.my_attempt_id}`,
         );
         setStudentAnswers(response.data);
       } catch (error) {
@@ -129,7 +130,7 @@ const Test: React.FC<{
 
   const timerCallback = () =>
     setCurrentAttempt((prev) =>
-      prev ? { ...prev, timer: timerRef.current } : null
+      prev ? { ...prev, timer: timerRef.current } : null,
     );
 
   const setUpTimer = (timer: number, callback: () => void) => {
@@ -184,6 +185,7 @@ const Test: React.FC<{
         present({
           type: "info",
           message: response.data.message,
+          duration: 5000
         });
         await fetchAttempts();
       }
@@ -205,7 +207,7 @@ const Test: React.FC<{
     setIsAttemptLoading(true);
     try {
       const response = await instance.get(
-        `/student-test/attempts?test_id=${testData.test_id}`
+        `/student-test/attempts?test_id=${testData.test_id}`,
       );
       if (response.data !== null) {
         setTestAttempts(response.data);
@@ -295,13 +297,15 @@ const Test: React.FC<{
   };
 
   const bestAttempt = testAttempts.toSorted(
-    (a, b) => a.attempt_score - b.attempt_number
+    (a, b) => a.attempt_score - b.attempt_number,
   )[0];
 
   const isBestAttemptPassed =
     bestAttempt?.attempt_score >= Math.round(testData?.score * 0.6);
 
   const isStudentHasCompleteAttept = testAttempts.length !== 0;
+
+  const attemptsLeft = testData?.attempts - testAttempts.length;
 
   const getCourseDetailById = useCourses()?.getCourseDetailById;
 
@@ -318,7 +322,7 @@ const Test: React.FC<{
       try {
         const response = await instance.post(
           "student-test/submit",
-          requestData
+          requestData,
         );
 
         await getCourseDetailById?.(courseId);
@@ -436,6 +440,12 @@ const Test: React.FC<{
               maxScore={bestAttempt?.attempt_score}
             />
             <div className={styles.landingBtnsContainer}>
+              {attemptsLeft === 0 && (
+                <ExpiredAttemptsMessage
+                  testId={testData?.test_id}
+                  fetchAttempts={fetchAttempts}
+                />
+              )}
               {isBestAttemptPassed && (
                 <CommonButton
                   label="Complete"

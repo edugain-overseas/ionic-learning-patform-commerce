@@ -23,7 +23,7 @@ import Spinner from "../Spinner/Spinner";
 import styles from "./BasketCheckoutPanel.module.scss";
 
 const stripePromise = loadStripe(
-  import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY_DEV
+  import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY_DEV,
 );
 
 const expressCheckoutElementOptions: StripeExpressCheckoutElementOptions = {
@@ -111,7 +111,7 @@ const StripeWebPaymentButton: FC = () => {
     setIsLoading(true);
     try {
       await instance.post(
-        `/stripe/course-subscribe/app?payment_intent=${clientSecret}`
+        `/stripe/course-subscribe/app?payment_intent=${clientSecret}`,
       );
       basketInterface?.clearBasket();
       await coursesInterface?.getAllCourses();
@@ -129,7 +129,9 @@ const StripeWebPaymentButton: FC = () => {
       return;
     }
     authUiInterface?.openAuthUI("sing-up");
-    authUiInterface?.setSuccessAuthCallback(() => setIsOpenModal(true));
+    authUiInterface?.setSuccessAuthCallback(() => {
+      setIsOpenModal(true);
+    });
   };
 
   useEffect(() => {
@@ -144,6 +146,9 @@ const StripeWebPaymentButton: FC = () => {
         });
 
         const paymentIntent = data.paymentIntent;
+
+        console.log("fetchingClientSecret");
+
         setClientSecret(paymentIntent);
         return paymentIntent;
       } catch (error) {
@@ -152,10 +157,13 @@ const StripeWebPaymentButton: FC = () => {
         setIsLoading(false);
       }
     };
+    console.log(items, studentId);
+
     if (items?.length !== 0 && studentId) {
       getClientSecret();
     } else {
       setClientSecret("");
+      setIsOpenModal(false);
     }
   }, [items?.length, studentId]);
 

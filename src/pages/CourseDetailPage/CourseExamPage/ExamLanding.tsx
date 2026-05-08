@@ -17,7 +17,7 @@ type LandingPageProps = {
 type ExamLandingBtnProps = {
   label: string;
   variant: "primary" | "secondary";
-  onClick: () => Promise<void>;
+  onClick: () => Promise<void> | void;
 };
 
 export const ExamLandingBtn: FC<ExamLandingBtnProps> = ({
@@ -349,11 +349,18 @@ const getTemplateBtns = (
       );
     case "completed":
       return (
-        <ExamLandingBtn
-          label="Download certificate"
-          variant="primary"
-          onClick={callbacks.downloadCertificate}
-        />
+        <>
+          <ExamLandingBtn
+            label="Download certificate"
+            variant="primary"
+            onClick={callbacks.downloadCertificate}
+          />
+          <ExamLandingBtn
+            label="All Courses"
+            variant="secondary"
+            onClick={callbacks.goToAllCourses}
+          />
+        </>
       );
     default:
       return <Spinner />;

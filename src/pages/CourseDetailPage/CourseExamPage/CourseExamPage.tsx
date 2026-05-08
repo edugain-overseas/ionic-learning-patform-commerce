@@ -1,6 +1,11 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { IonContent, IonPage } from "@ionic/react";
-import { useParams } from "react-router";
+import {
+  IonContent,
+  IonPage,
+  useIonRouter,
+  useIonViewWillEnter,
+} from "@ionic/react";
+import { useLocation, useParams } from "react-router";
 import { motion } from "motion/react";
 import { useUser } from "../../../context/UserContext";
 import { useLessonTabbarLayout } from "../../../hooks/useTabbarLayout";
@@ -52,6 +57,7 @@ export type LandingBtnCallbacks = {
   startAttempt: () => Promise<void>;
   completeCourse: () => Promise<void>;
   downloadCertificate: () => Promise<void>;
+  goToAllCourses: () => void;
 };
 
 const timerTreshold = 0.5;
@@ -69,11 +75,13 @@ const CourseExamPage: FC = () => {
   const [currentAttempt, setCurrentAttempt, isStoreInit, flush] =
     useStorage<CurrentAttempt | null>(
       `exam-attempts-course-id-${courseId}`,
-      null
+      null,
     );
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<number>(0);
   const [present] = useToast();
+  const router = useIonRouter();
+  const location = useLocation();
 
   const {
     isOpen: isLeaveModalOpen,
@@ -85,7 +93,7 @@ const CourseExamPage: FC = () => {
   const userInterface = useUser();
 
   const course = coursesInterface?.courses.find(
-    (course) => course.id === +courseId
+    (course) => course.id === +courseId,
   );
 
   const exam = course?.lessons.find((lesson) => lesson.type === "exam");
@@ -99,17 +107,17 @@ const CourseExamPage: FC = () => {
   const certificate = user?.certificates
     .find(
       (categoryCertificateData) =>
-        categoryCertificateData.category_id === course?.category_id
+        categoryCertificateData.category_id === course?.category_id,
     )
     ?.course_certificate_data.find(
-      (courseCertificate) => courseCertificate.course_id === +courseId
+      (courseCertificate) => courseCertificate.course_id === +courseId,
     );
 
   const getExamAttempts = async () => {
     setIsLoading(true);
     try {
       const { data: attempts } = await instance.get(
-        `student-exam/attempts?exam_id=${examId}`
+        `student-exam/attempts?exam_id=${examId}`,
       );
       if (attempts) {
         attempts && setAttempts(attempts);
@@ -143,7 +151,7 @@ const CourseExamPage: FC = () => {
       if (!attempts.length) return "no_result";
 
       const bestAttempt = attempts.sort(
-        (a, b) => b.attempt_score - a.attempt_score
+        (a, b) => b.attempt_score - a.attempt_score,
       )[0];
 
       if (bestAttempt.attempt_score === examLessonData?.score) {
@@ -157,15 +165,23 @@ const CourseExamPage: FC = () => {
 
   useEffect(() => {
     setCurrentAttempt((prev) =>
-      prev ? { ...prev, studentAnswers: studentAnswers } : null
+      prev ? { ...prev, studentAnswers: studentAnswers } : null,
     );
   }, [studentAnswers]);
 
-  useEffect(() => {
-    hideTabbar();
+  useIonViewWillEnter(() => {
+    console.log("will enter");
 
-    return () => showTabbar();
-  }, []);
+    hideTabbar();
+  });
+
+  useEffect(() => {
+    
+    console.log(`/course/${courseId}/exam`, router.routeInfo.pathname);
+    if (router.routeInfo.pathname !== `/course/${courseId}/exam`) {
+      showTabbar();
+    }
+  }, [router.routeInfo]);
 
   const getBestAttempt = () =>
     attempts.sort((a, b) => b.attempt_score - a.attempt_score)[0];
@@ -195,7 +211,7 @@ const CourseExamPage: FC = () => {
     try {
       const response = await instance.post(
         `/student-exam/send`,
-        attemptDataTosSend
+        attemptDataTosSend,
       );
       const { message, ...rest } = response.data;
 
@@ -244,7 +260,7 @@ const CourseExamPage: FC = () => {
 
     const callback = () =>
       setCurrentAttempt((prev) =>
-        prev ? { ...prev, timer: timerRef.current } : null
+        prev ? { ...prev, timer: timerRef.current } : null,
       );
 
     setUpTimer(timer, callback);
@@ -258,7 +274,7 @@ const CourseExamPage: FC = () => {
 
       const callback = () =>
         setCurrentAttempt((prev) =>
-          prev ? { ...prev, timer: timerRef.current } : null
+          prev ? { ...prev, timer: timerRef.current } : null,
         );
 
       setStudentAnswers([...currentAttempt.studentAnswers]);
@@ -354,11 +370,17 @@ const CourseExamPage: FC = () => {
     confirm();
   };
 
+  const goToAllCourses = () => {
+    showTabbar();
+    router.push("/courses", "forward", "push");
+  };
+
   const landingStatus = exam?.status === "completed" ? "completed" : examResult;
   const landingBtnCallbacks: LandingBtnCallbacks = {
     startAttempt,
     completeCourse: onCompleteCourseClick,
     downloadCertificate,
+    goToAllCourses,
   };
 
   const userHasAttempt =
@@ -395,7 +417,7 @@ const CourseExamPage: FC = () => {
   const animationProgress = clamp(
     0,
     (scrollProgress * 1.25 - timerTreshold) / (1 - timerTreshold),
-    1
+    1,
   );
 
   return (

@@ -13,7 +13,7 @@ const HeaderBackBtn = ({ className }: HeaderBackButtonProps) => {
     if (router.canGoBack()) {
       router.goBack();
     } else {
-      router.push("/", "back");
+      router.push("/home", "back");
     }
   };
   return (

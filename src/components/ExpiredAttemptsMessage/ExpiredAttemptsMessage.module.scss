@@ -1,0 +1,10 @@
+.wrapper {
+  font-size: 14rem;
+  color: var(--ion-color-primary);
+  text-align: center;
+
+  span {
+    font-variant-numeric: tabular-nums;
+    font-weight: bold;
+  }
+}

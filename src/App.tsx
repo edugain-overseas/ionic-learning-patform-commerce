@@ -1,4 +1,5 @@
 import { IonApp, setupIonicReact } from "@ionic/react";
+import { IonReactRouter } from "@ionic/react-router";
 import { CoursesProvider } from "./context/CoursesContext";
 import { UserProvider } from "./context/UserContext";
 import { ListStyleProvider } from "./context/ListStyleContext";
@@ -6,7 +7,7 @@ import { useStatusBar } from "./hooks/useStatusBar";
 import { useKeyboard } from "./hooks/useKeyboard";
 import { useDynamicFontSize } from "./hooks/useDynamicFontSize";
 import { BasketProvider } from "./context/BasketContext";
-import { useAxios } from "./hooks/useAxios";
+// import { useAxios } from "./hooks/useAxios";
 import { useGoogleAuthInit } from "./hooks/useGoogleAuthInit";
 import { AuthUIProvider } from "./context/AuthUIContext";
 import { useSetupStripe } from "./hooks/useSetupStripe";
@@ -33,7 +34,6 @@ import "./App.scss";
 
 /* Theme variables */
 import "./theme/variables.css";
-import { IonReactRouter } from "@ionic/react-router";
 
 setupIonicReact();
 
@@ -41,7 +41,7 @@ const App: React.FC = () => {
   useDynamicFontSize();
   useStatusBar();
   useKeyboard();
-  useAxios();
+  // useAxios();
   useGoogleAuthInit();
   useSetupStripe();
 

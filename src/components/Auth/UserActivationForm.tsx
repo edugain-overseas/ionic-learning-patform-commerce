@@ -44,7 +44,7 @@ const UserActivationForm: React.FC<{
         type: "success",
         message: `${user?.user.username}, you are succesfully avtivate you email`,
       });
-      
+
       modals
         .find((modal) => modal.name === "user-activation")
         ?.ref?.current?.dismiss();
@@ -79,7 +79,9 @@ const UserActivationForm: React.FC<{
           Let us know that this email address belongs to you. Enter the code
           from the email sent to{" "}
           <span className={styles.modalReTrigger}>
-            {user?.user.email ? user?.user.email : "your email"}
+            {user?.user.email || user?.user.username
+              ? user?.user.email || user?.user.username
+              : "your email"}
           </span>
         </span>
       </div>

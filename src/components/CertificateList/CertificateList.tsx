@@ -52,7 +52,7 @@ const CertificateList = () => {
                         certificateLink:
                           courseCertificate.course_certificate_link,
                         status: courseCertificate.course_status,
-                        link: `/courses/course/${courseCertificate.course_id}`,
+                        link: `/course/${courseCertificate.course_id}`,
                         courseId: courseCertificate.course_id,
                       };
 
