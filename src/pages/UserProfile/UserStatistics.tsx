@@ -32,6 +32,7 @@ const UserStatistics: FC<{ userData?: UserType }> = ({ userData }) => {
       return sum + course.progress;
     }, 0) / userCompletedCourses.length
   );
+
   return (
     <div className={styles.progressData}>
       <h3 className={styles.sectionHeader}>Your progress</h3>
@@ -43,7 +44,7 @@ const UserStatistics: FC<{ userData?: UserType }> = ({ userData }) => {
           <CircleProgressCard
             cardTitle="Grade Point Average"
             width={124}
-            progress={isUserStatisticAvailable ? mockedAvarage * 0.5 : 0.1}
+            progress={isUserStatisticAvailable ? userAvarageScore * 0.5 : 0.1}
             strokeWidth={8}
             strokeColor={isUserStatisticAvailable ? "#FCC400" : "#BDC4D2"}
             progressTitle={

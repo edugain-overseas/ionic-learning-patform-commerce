@@ -11,12 +11,9 @@ import useStorage from "../hooks/useStorage";
 import { SignInWithAppleResponse } from "@capacitor-community/apple-sign-in";
 
 // Types
-import {
-  UserType,
-  UserInfoToUpdateType,
-  UserContextType,
-} from "../types/user";
+import { UserType, UserInfoToUpdateType, UserContextType } from "../types/user";
 import { setupInterceptors } from "../http/interceptors/authInterceptor";
+import { useActiveTimeTracker } from "../hooks/useActiveTimeTracker";
 
 interface UserProviderType {
   children: ReactNode;
@@ -49,9 +46,18 @@ const initialState: UserType = {
 export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
   const [accessToken, setAccessToken, isTokenInit] = useStorage(
     "accessToken",
-    null
+    null,
   );
   const [user, setUser] = useState<UserType>(initialState);
+
+  const { activeTime: currentActiveTime } = useActiveTimeTracker({
+    accessToken,
+    initialTime: user.activeTime,
+  });
+
+  useEffect(() => {
+    setUser((prev) => ({ ...prev, activeTime: currentActiveTime }));
+  }, [currentActiveTime]);
 
   useEffect(() => {
     if (accessToken && !user.userId) {
@@ -73,7 +79,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
   }) => {
     const formData = new FormData();
     formData.append("username", username);
-    formData.append("password", password);    
+    formData.append("password", password);
 
     try {
       instance.defaults.headers["Content-Type"] =
@@ -112,7 +118,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
     const { data } = await instance.post(
       "/user/activate",
       { username, code },
-      { withCredentials: true }
+      { withCredentials: true },
     );
     setUser((prev) => ({
       ...prev,
@@ -130,7 +136,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
     const { data } = await instance.post(
       "/user/login-with-google",
       { google_token: googleToken },
-      { withCredentials: true }
+      { withCredentials: true },
     );
     setAccessToken(data.access_token);
     return data;
@@ -138,7 +144,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
 
   const loginWithApple = async (
     appleResponse: SignInWithAppleResponse,
-    platform: string
+    platform: string,
   ) => {
     const { data } = await instance.post(
       "/user/login-with-apple",
@@ -148,7 +154,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
         name: appleResponse.response.givenName || null,
         surname: appleResponse.response.familyName || null,
       },
-      { withCredentials: true }
+      { withCredentials: true },
     );
     setAccessToken(data.access_token);
     return data;
@@ -208,7 +214,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
     const { data } = await instance.put(
       "/user/update/username",
       { username },
-      { withCredentials: true }
+      { withCredentials: true },
     );
     setAccessToken(data.access_token);
     setUser((prev) => ({ ...prev, username }));
@@ -259,7 +265,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
       setMainImage,
       getLastUserImages,
     }),
-    [user, accessToken, isTokenInit]
+    [user, accessToken, isTokenInit],
   );
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
