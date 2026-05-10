@@ -13,12 +13,14 @@ import SingupForm from "../components/Auth/SingupForm";
 import LoginForm from "../components/Auth/LoginForm";
 import PasswordRecoveryForm from "../components/Auth/PasswordRecoveryForm";
 import UserActivationForm from "../components/Auth/UserActivationForm";
+import CorrectEmailForm from "../components/Auth/CorrectEmailForm";
 
 type modalName =
   | "sing-up"
   | "sing-in"
   | "password-recovery"
-  | "user-activation";
+  | "user-activation"
+  | "correct-email";
 
 type ModalType = {
   name: modalName;
@@ -110,6 +112,16 @@ export const AuthUIProvider: FC<{ children: ReactNode }> = ({ children }) => {
           }
         >
           <UserActivationForm modals={modals} />
+        </SheetModalAuto>
+        <SheetModalAuto
+          setModal={(modalRef) =>
+            setModals((prev) => [
+              ...prev.filter((modal) => modal.name !== "correct-email"),
+              { name: "correct-email", ref: modalRef },
+            ])
+          }
+        >
+          <CorrectEmailForm modals={modals} />
         </SheetModalAuto>
       </>
     </AuthUIContext.Provider>

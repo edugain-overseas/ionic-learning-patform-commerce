@@ -66,6 +66,16 @@ const UserActivationForm: React.FC<{
     }
   };
 
+  const handleOpenCorrectEmail = () => {
+    modals
+      .find((modal) => modal.name === "user-activation")
+      ?.ref?.current?.dismiss();
+
+    modals
+      .find((modal) => modal.name === "correct-email")
+      ?.ref?.current?.present();
+  };
+
   return (
     <form
       className={styles.formWrapper}
@@ -112,9 +122,14 @@ const UserActivationForm: React.FC<{
           type="submit"
         />
       </div>
-      <span className={styles.resend} onClick={handleResendCode}>
-        Send the code <b className={styles.link}>again!</b>
-      </span>
+      <div className={styles.formAdditionalBtnsWrapper}>
+        <span className={styles.resend} onClick={handleOpenCorrectEmail}>
+          Correct <b className={styles.link}>email</b>
+        </span>
+        <span className={styles.resend} onClick={handleResendCode}>
+          Send the code <b className={styles.link}>again!</b>
+        </span>
+      </div>
     </form>
   );
 };
