@@ -72,7 +72,12 @@ export const useActiveTimeTracker = ({
 
   // timer
   useEffect(() => {
-    if (!accessToken) return;
+    if (!accessToken) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+      return;
+    }
 
     intervalRef.current = setInterval(async () => {
       if (!isActiveRef.current) return;

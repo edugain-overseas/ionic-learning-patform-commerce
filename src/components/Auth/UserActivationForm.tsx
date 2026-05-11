@@ -55,6 +55,13 @@ const UserActivationForm: React.FC<{
           message: error.response.data.detail,
         });
       }
+      if (error.response.data.detail === "Invalid activate code") {
+        setError("verificationCode", {
+          type: "server reponse",
+          message: error.response.data.detail,
+        });
+        present({ type: "error", message: error.response.data.detail });
+      }
     }
   };
 

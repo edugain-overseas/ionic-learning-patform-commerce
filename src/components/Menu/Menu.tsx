@@ -1,4 +1,10 @@
-import { IonIcon, IonMenu, IonMenuToggle, IonRippleEffect } from "@ionic/react";
+import {
+  IonIcon,
+  IonMenu,
+  IonMenuToggle,
+  IonRippleEffect,
+  useIonRouter,
+} from "@ionic/react";
 import { useRef, useState } from "react";
 import { changeStausBarTheme } from "../../hooks/useStatusBar";
 import { useUser } from "../../context/UserContext";
@@ -21,6 +27,7 @@ const Menu = () => {
   const menuRef = useRef<HTMLIonMenuElement>(null);
   const logout = useUser()?.logout;
   const [isLoading, setIsLoading] = useState(false);
+  const router = useIonRouter();
 
   const handleLogout = async () => {
     if (logout) {
@@ -50,7 +57,7 @@ const Menu = () => {
     document.querySelectorAll("ion-modal").forEach((modal) => {
       modal.style.setProperty(
         "transition",
-        "scale var(--custom-tr-time-min) ease-in-out 500ms"
+        "scale var(--custom-tr-time-min) ease-in-out 500ms",
       );
     });
 
@@ -74,6 +81,11 @@ const Menu = () => {
   const handleMenuWillClose = () => {
     const baseEl = document.getElementById("main-content");
     menuLeavePageAnimation(baseEl!).play();
+  };
+
+  const navigateToSettings = () => {
+    router.push("/settings");
+    console.log("navigate to settings");
   };
 
   return (
@@ -118,11 +130,16 @@ const Menu = () => {
                 </li>
               )}
               <li>
-                <button className="ion-activatable">
-                  <IonIcon src={Settings} className={styles.footerIcon} />
-                  <span>Settings</span>
-                  <IonRippleEffect type="unbounded"></IonRippleEffect>
-                </button>
+                <IonMenuToggle>
+                  <button
+                    className="ion-activatable"
+                    onClick={navigateToSettings}
+                  >
+                    <IonIcon src={Settings} className={styles.footerIcon} />
+                    <span>Settings</span>
+                    <IonRippleEffect type="unbounded"></IonRippleEffect>
+                  </button>
+                </IonMenuToggle>
               </li>
             </ul>
             <div className={styles.closeBtn}>

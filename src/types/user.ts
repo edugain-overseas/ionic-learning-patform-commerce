@@ -82,11 +82,11 @@ export interface UserContextType {
   }) => Promise<void>;
   resendActivationCode: (username: string) => Promise<void>;
   loginWithGoogle: (
-    googleToken: string
+    googleToken: string,
   ) => Promise<{ access_token: string; username: string }>;
   loginWithApple: (
     appleResponse: SignInWithAppleResponse,
-    platform: string
+    platform: string,
   ) => Promise<{ access_token: string; username: string }>;
   resetPassword: (email: string) => Promise<void>;
   setNewPassword: (credentials: {
@@ -101,4 +101,5 @@ export interface UserContextType {
   updateUserImage: (formData: FormData) => Promise<void>;
   getLastUserImages: () => Promise<void>;
   setMainImage: (imageId: number) => Promise<void>;
+  refreshUser: () => void;
 }

@@ -27,7 +27,7 @@ export const useToast = () => {
       swipeGesture: "vertical",
       position: "top",
       icon: toastIcons[type],
-      duration: 500,
+      duration: 5000,
       ...config,
     });
   };

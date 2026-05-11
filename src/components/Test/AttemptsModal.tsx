@@ -1,5 +1,6 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { IonAlert, IonContent, IonIcon, IonModal } from "@ionic/react";
+import { useEffect, useRef, useState } from "react";
+import { Capacitor } from "@capacitor/core";
+import { IonContent, IonIcon, IonModal } from "@ionic/react";
 import { Empty } from "antd";
 import { useParams } from "react-router";
 import { TestAttemptType } from "../../types/user";
@@ -15,7 +16,6 @@ import EyeIcon from "../../assets/icons/auth/eye-open.svg";
 import CrossIcon from "../../assets/icons/cross.svg";
 import TestContent from "./TestContent";
 import styles from "./AttemptsModal.module.scss";
-import { Capacitor } from "@capacitor/core";
 
 const MIN_HEIGHT = "250rem";
 const MAX_HEIGHT = "calc(100% - var(--ion-safe-area-top) - 16rem - 30px)";
@@ -68,7 +68,7 @@ const AttemptsModal = ({
       try {
         const response = await instance.post(
           "student-test/submit",
-          requestData
+          requestData,
         );
 
         await getCourseDetailById?.(courseId);
@@ -101,7 +101,7 @@ const AttemptsModal = ({
     ) {
       try {
         const response = await instance.get(
-          `student-test/attempt/${attemptId}`
+          `student-test/attempt/${attemptId}`,
         );
         if (response.data) {
           setTestAttemptsData((prev) => [
@@ -203,30 +203,12 @@ const AttemptsModal = ({
                               <span>Submit</span>
                               <IonIcon src={CheckIcon} />
                             </button>
-                            /* <IonAlert
-                                trigger={`present-alert-confirm-attempt-${attempt.id}`}
-                                header="Submiting attempt"
-                                message="Are you sure you want to record this attempt?"
-                                className={`${styles.alert} ${styles.customAlert}`}
-                                buttons={[
-                                  {
-                                    role: "confirm",
-                                    text: "Yes",
-                                    handler: () =>
-                                      handleSubmitAttempClick(attempt.id),
-                                  },
-                                  {
-                                    role: "cancel",
-                                    text: "Cancel",
-                                  },
-                                ]}
-                              /> */
                           )
                         )}
                       </div>
                     </div>
                   </li>
-                )
+                ),
               )}
             </ul>
             <div className={styles.attemptContent}>
@@ -234,7 +216,7 @@ const AttemptsModal = ({
                 test={test}
                 studentAnswers={
                   testAttemptsData.find(
-                    (attemptData) => attemptData.id === activeAttemptId
+                    (attemptData) => attemptData.id === activeAttemptId,
                   )?.answers
                 }
               />

@@ -1,0 +1,29 @@
+.mainTools {
+  padding: 18rem;
+}
+
+.button {
+  font-size: 14rem;
+  font-weight: 600;
+  background-color: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+.alert.customAlert {
+  font-size: 14rem;
+  h2 {
+    font-size: 17rem;
+  }
+
+  div {
+    font-size: 13rem;
+  }
+
+  button {
+    font-size: 17rem;
+  }
+}

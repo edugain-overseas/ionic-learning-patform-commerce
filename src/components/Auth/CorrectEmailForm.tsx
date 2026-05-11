@@ -6,6 +6,9 @@ import CommonButton from "../CommonButton/CommonButton";
 import InputsWrapper from "./InputsWrapper";
 import InputText from "./Inputs/InutText";
 import styles from "./Auth.module.scss";
+import { instance } from "../../http/instance";
+import { useState } from "react";
+import Spinner from "../Spinner/Spinner";
 
 type FormValues = {
   email: string;
@@ -21,6 +24,7 @@ const CorrectEmailForm = ({
 }) => {
   const user = useUser();
   const [present] = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -33,9 +37,18 @@ const CorrectEmailForm = ({
     },
   });
 
-  const onSubmit = (data: FormValues) => {
-    console.log(data);
+  const onSubmit = async (data: FormValues) => {
     try {
+      setIsLoading(true);
+      const response = await instance.post(
+        "/user/change-email-before-activation",
+        { username: user?.user.username, new_email: data.email },
+      );
+      console.log(response.data);
+      user?.setUser((user) => ({ ...user, email: data.email }));
+
+      present({ type: "success", message: response.data.message });
+
       modals
         .find((modal) => modal.name === "correct-email")
         ?.ref?.current?.dismiss();
@@ -44,6 +57,8 @@ const CorrectEmailForm = ({
         ?.ref?.current?.present();
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -87,6 +102,8 @@ const CorrectEmailForm = ({
           height={32}
           borderRadius={5}
           type="submit"
+          icon={isLoading ? <Spinner color="light" /> : null}
+          disabled={isLoading}
         />
       </div>
     </form>

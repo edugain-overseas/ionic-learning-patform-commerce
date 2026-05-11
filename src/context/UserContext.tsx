@@ -175,9 +175,20 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
   };
 
   const logout = async () => {
-    await instance.get("/user/logout", { withCredentials: true });
-    setAccessToken(null);
+    try {
+      await instance.get("/user/logout", { withCredentials: true });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setAccessToken(null);
+      setUser(initialState);
+      instance.defaults.headers["Authorization"] = "";
+    }
+  };
+
+  const refreshUser = () => {
     setUser(initialState);
+    setAccessToken(null);
     instance.defaults.headers["Authorization"] = "";
   };
 
@@ -264,6 +275,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
       updateUserImage,
       setMainImage,
       getLastUserImages,
+      refreshUser,
     }),
     [user, accessToken, isTokenInit],
   );
