@@ -161,6 +161,10 @@
     gap: 4rem;
   }
 
+  span {
+    flex-shrink: 0;
+  }
+
   .servicesIcon {
     font-size: 22rem;
   }

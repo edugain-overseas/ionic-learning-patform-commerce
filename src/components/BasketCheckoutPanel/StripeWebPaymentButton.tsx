@@ -1,11 +1,4 @@
 import { FC, useEffect, useState } from "react";
-import CheckoutBtn from "./CheckoutBtn";
-import { instance } from "../../http/instance";
-import { useBasket } from "../../context/BasketContext";
-import { useUser } from "../../context/UserContext";
-import { IonModal, useIonRouter } from "@ionic/react";
-import { useCourses } from "../../context/CoursesContext";
-import { useAuthUi } from "../../context/AuthUIContext";
 import {
   loadStripe,
   StripeExpressCheckoutElementOptions,
@@ -17,7 +10,14 @@ import {
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
+import { instance } from "../../http/instance";
+import { useBasket } from "../../context/BasketContext";
+import { useUser } from "../../context/UserContext";
+import { IonModal, useIonRouter } from "@ionic/react";
+import { useCourses } from "../../context/CoursesContext";
+import { useAuthUi } from "../../context/AuthUIContext";
 import { useToast } from "../../hooks/useToast";
+import CheckoutBtn from "./CheckoutBtn";
 import CommonButton from "../CommonButton/CommonButton";
 import Spinner from "../Spinner/Spinner";
 import styles from "./BasketCheckoutPanel.module.scss";
@@ -179,6 +179,8 @@ const StripeWebPaymentButton: FC = () => {
       });
 
       const result = await pr.canMakePayment();
+      console.log(result);
+
       setCanMakePayment(!!result);
     };
     checkPaymentAvailability();
@@ -191,6 +193,7 @@ const StripeWebPaymentButton: FC = () => {
         onDidDismiss={() => setIsOpenModal(false)}
         breakpoints={[0, 1]}
         initialBreakpoint={1}
+        className={styles.paymentModal}
       >
         {clientSecret && (
           <Elements stripe={stripePromise} options={{ clientSecret }}>

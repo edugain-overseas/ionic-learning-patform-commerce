@@ -72,3 +72,11 @@
 .checkoutForm {
   padding: 32rem 16rem;
 }
+
+.paymentModal {
+  --background: rgba(255, 255, 255, 0.8);
+
+  &::part(content) {
+    backdrop-filter: blur(28px);
+  }
+}

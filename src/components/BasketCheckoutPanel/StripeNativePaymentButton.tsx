@@ -77,7 +77,7 @@ const StripeNativePaymentButton: FC = () => {
 
       if (paymentResult === "paymentSheetCompleted") {
         await instance.post(
-          `/stripe/course-subscribe/app?payment_intent=${paymentIntent}`
+          `/stripe/course-subscribe/app?payment_intent=${paymentIntent}`,
         );
         handleSuccessPayment();
       } else {
@@ -166,7 +166,7 @@ const StripeNativePaymentButton: FC = () => {
     }
     authUiInterface?.openAuthUI("sing-up");
     authUiInterface?.setSuccessAuthCallback((freshStudentId: number) =>
-      handlePayWithApple(freshStudentId)
+      handlePayWithApple(freshStudentId),
     );
   };
 
@@ -219,7 +219,7 @@ const StripeNativePaymentButton: FC = () => {
     }
     authUiInterface?.openAuthUI("sing-up");
     authUiInterface?.setSuccessAuthCallback((freshStudentId: number) =>
-      handlePayWithGoogle(freshStudentId)
+      handlePayWithGoogle(freshStudentId),
     );
   };
 
@@ -257,7 +257,6 @@ const StripeNativePaymentButton: FC = () => {
       />
       {isApplePayAvailable && (
         <CommonButton
-          // label="Pay with"
           icon={
             isApplePayLoading ? (
               <Spinner color="#fff" />
@@ -276,7 +275,6 @@ const StripeNativePaymentButton: FC = () => {
       )}
       {isGooglePayAvailable && (
         <CommonButton
-          // label="Pay with"
           icon={
             isApplePayLoading ? (
               <Spinner color="#fff" />

@@ -44,8 +44,9 @@ const AppleAuthBtn = () => {
 
     try {
       const result: SignInWithAppleResponse = await SignInWithApple.authorize(
-        options
+        options,
       );
+
       const user = await userInterface?.loginWithApple(result, platform);
 
       present({
@@ -54,7 +55,6 @@ const AppleAuthBtn = () => {
       });
     } catch (error) {
       console.log(error);
-
       present({
         type: "error",
         message: `Apple service is unvailable`,
