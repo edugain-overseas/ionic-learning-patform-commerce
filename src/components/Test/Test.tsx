@@ -352,7 +352,7 @@ const Test: React.FC<{
         scrollProgress={scrollProgress}
         onTestCompleteClick={onCompleteClick}
       />
-      <IonContent fullscreen={true} scrollY={true} className={styles.content}>
+      <IonContent fullscreen={true} scrollY={false} className={styles.content}>
         {isTestOpen || testStatus === "completed" ? (
           <>
             {!Number.isNaN(answersProgressValue) && currentAttempt && (
