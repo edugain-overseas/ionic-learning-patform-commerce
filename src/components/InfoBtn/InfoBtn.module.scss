@@ -6,4 +6,8 @@
   --padding-start: 8rem;
   --padding-end: 8rem;
   font-size: 10rem;
+
+  &::part(scroll) {
+    backdrop-filter: blur(16px);
+  }
 }

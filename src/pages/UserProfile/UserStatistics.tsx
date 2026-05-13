@@ -19,19 +19,28 @@ const UserStatistics: FC<{ userData?: UserType }> = ({ userData }) => {
   const userCourses = userData?.courses || [];
 
   const userCompletedCourses = userCourses.filter(
-    (course) => course.status === "completed"
+    (course) => course.status === "completed",
   );
 
-  const userAvarageScore = Math.round(
-    userCompletedCourses.reduce((sum, course) => {
-      return sum + course.grade;
-    }, 0) / userCompletedCourses.length
-  );
-  const userTotalProgress = Math.round(
-    userCompletedCourses.reduce((sum, course) => {
-      return sum + course.progress;
-    }, 0) / userCompletedCourses.length
-  );
+  console.log(userCompletedCourses);
+
+  const userAvarageScore = userCompletedCourses.length
+    ? Math.round(
+        userCompletedCourses.reduce((sum, course) => {
+          return sum + course.grade;
+        }, 0) / userCompletedCourses.length,
+      )
+    : undefined;
+
+  const userTotalProgress = userCompletedCourses.length
+    ? Math.round(
+        userCompletedCourses.reduce((sum, course) => {
+          return sum + course.progress;
+        }, 0) / userCompletedCourses.length,
+      )
+    : undefined;
+
+  console.log(userAvarageScore);
 
   return (
     <div className={styles.progressData}>
@@ -44,14 +53,18 @@ const UserStatistics: FC<{ userData?: UserType }> = ({ userData }) => {
           <CircleProgressCard
             cardTitle="Grade Point Average"
             width={124}
-            progress={isUserStatisticAvailable ? userAvarageScore * 0.5 : 0.1}
+            progress={
+              isUserStatisticAvailable && userAvarageScore
+                ? userAvarageScore * 0.5
+                : 0.1
+            }
             strokeWidth={8}
             strokeColor={isUserStatisticAvailable ? "#FCC400" : "#BDC4D2"}
             progressTitle={
               <div className={styles.progressContent}>
                 <span className={styles.label}>Average</span>
                 <span className={styles.value}>
-                  {isUserStatisticAvailable
+                  {isUserStatisticAvailable && userAvarageScore
                     ? `${userAvarageScore}(${letterGrade(userAvarageScore)})`
                     : "0(*)"}
                 </span>
@@ -63,14 +76,14 @@ const UserStatistics: FC<{ userData?: UserType }> = ({ userData }) => {
           <CircleProgressCard
             cardTitle="Your progress"
             width={124}
-            progress={isUserStatisticAvailable ? userTotalProgress : 0.1}
+            progress={isUserStatisticAvailable && userTotalProgress ? userTotalProgress : 0.1}
             strokeWidth={8}
             strokeColor={isUserStatisticAvailable ? "#39ba6d" : "#BDC4D2"}
             progressTitle={
               <div className={styles.progressContent}>
                 <span className={styles.label}>Completed</span>
                 <span className={styles.value}>{`${
-                  isUserStatisticAvailable ? userTotalProgress : 0
+                  isUserStatisticAvailable && userTotalProgress ? userTotalProgress : 0
                 }%`}</span>
               </div>
             }

@@ -185,7 +185,7 @@ const Test: React.FC<{
         present({
           type: "info",
           message: response.data.message,
-          duration: 5000
+          duration: 5000,
         });
         await fetchAttempts();
       }
@@ -297,8 +297,10 @@ const Test: React.FC<{
   };
 
   const bestAttempt = testAttempts.toSorted(
-    (a, b) => a.attempt_score - b.attempt_number,
+    (a, b) => b.attempt_score - a.attempt_number,
   )[0];
+
+  console.log(testAttempts, bestAttempt);
 
   const isBestAttemptPassed =
     bestAttempt?.attempt_score >= Math.round(testData?.score * 0.6);

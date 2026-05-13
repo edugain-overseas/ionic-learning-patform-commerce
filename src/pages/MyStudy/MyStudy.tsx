@@ -1,4 +1,4 @@
-import { IonContent, IonIcon, IonPage } from "@ionic/react";
+import { IonContent, IonIcon, IonPage, IonRouterLink } from "@ionic/react";
 import React, { useState } from "react";
 import { myStudyFilter, MyStudyFilterNameType } from "../../constants/nav";
 import { useCourses } from "../../context/CoursesContext";
@@ -10,13 +10,14 @@ import SegmentNavPanel from "../../components/SegmentNavPanel/SegmentNavPanel";
 import PageRefresher from "../../components/PageRefresher/PageRefresher";
 import Auth from "../../components/Auth/Auth";
 import styles from "./MyStudy.module.scss";
+import { Empty } from "antd";
 
 const MyStudy: React.FC = () => {
   const coursesInterface = useCourses();
   const categories = coursesInterface?.categories;
   const courses = coursesInterface?.courses;
   const [filter, setFilter] = useState<MyStudyFilterNameType>(
-    myStudyFilter[0].value
+    myStudyFilter[0].value,
   );
   const [isScrolling, setIsScrolling] = useState(false);
 
@@ -35,7 +36,7 @@ const MyStudy: React.FC = () => {
         });
 
         return categories?.filter((category) =>
-          categoriesIds.includes(category.id)
+          categoriesIds.includes(category.id),
         );
       }
       case "completed":
@@ -48,7 +49,7 @@ const MyStudy: React.FC = () => {
         });
 
         return categories?.filter((category) =>
-          categoriesIds.includes(category.id)
+          categoriesIds.includes(category.id),
         );
       case "all courses": {
         purchasedCourses?.forEach((course) => {
@@ -58,13 +59,15 @@ const MyStudy: React.FC = () => {
         });
 
         return categories?.filter((category) =>
-          categoriesIds.includes(category.id)
+          categoriesIds.includes(category.id),
         );
       }
       default:
         break;
     }
   };
+
+  const filtredCategories = handleFilterCategory();
 
   const headerProps = {
     title: "My Study",
@@ -100,9 +103,21 @@ const MyStudy: React.FC = () => {
             />
           </div>
           <ul className={styles.categoriesList}>
-            {handleFilterCategory()?.map((category) => (
-              <CategoryItem category={category} key={category.id} />
-            ))}
+            {filtredCategories && filtredCategories.length !== 0 ? (
+              filtredCategories?.map((category) => (
+                <CategoryItem category={category} key={category.id} />
+              ))
+            ) : (
+              <div className={styles.empty} style={{ height: "500rem" }}>
+                <Empty description={null} />
+                <span className={styles.emptyMessage}>
+                  There are nothing here yet.
+                </span>
+                <IonRouterLink routerLink="/courses">
+                  <span className={styles.emptyMessage}>Go to courses</span>
+                </IonRouterLink>
+              </div>
+            )}
           </ul>
         </IonContent>
       ) : (

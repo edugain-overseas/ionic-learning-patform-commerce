@@ -47,7 +47,7 @@ const CategoryItem: React.FC<CategoryItemTypes> = ({ category }) => {
       </IonRouterLink>
       <div className={styles.infoBtn}>
         {category.description && (
-          <InfoBtn info={category.description} ripple={false} />
+          <InfoBtn info={category.description} ripple={false} popoverClassName={styles.catInfoPopover}/>
         )}
       </div>
     </li>

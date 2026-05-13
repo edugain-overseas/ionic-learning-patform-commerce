@@ -204,7 +204,7 @@ const StripeWebPaymentButton: FC = () => {
       <div className={styles.paymentButtonsWrapper}>
         <CheckoutBtn
           handleClick={handleCheckoutBtnClick}
-          disabled={items?.length === 0}
+          disabled={items?.length === 0 || isLoading}
           isLoading={isLoading}
         />
 

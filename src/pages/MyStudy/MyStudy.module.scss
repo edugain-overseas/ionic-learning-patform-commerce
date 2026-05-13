@@ -34,4 +34,9 @@
     font-weight: 600;
     text-align: center;
   }
+
+  ion-router-link {
+    color: var(--ion-color-dark);
+    text-decoration: underline;
+  }
 }
