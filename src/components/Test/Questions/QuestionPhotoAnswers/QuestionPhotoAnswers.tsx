@@ -2,10 +2,10 @@ import React from "react";
 import { getLetterVatiantsByIndex } from "../../../../utils/getLetterVatiantsByIndex";
 import { Image } from "antd";
 // import noImage from "../../../../assets/images/";
-import styles from "./QuestionPhotoAnswers.module.scss";
 import { TestQuestionType } from "../../TestContent";
 import { serverName } from "../../../../http/server";
 import InputRadio from "../../../InputRadio/InputRadio";
+import styles from "./QuestionPhotoAnswers.module.scss";
 
 const QuestionPhotoAnswers: React.FC<TestQuestionType> = ({
   answers,
@@ -25,7 +25,7 @@ const QuestionPhotoAnswers: React.FC<TestQuestionType> = ({
     return answers.map(
       (
         { a_id: answerId, a_text: answerText, image_path: imagePath },
-        index
+        index,
       ) => {
         return (
           <div key={answerId} className={styles.imageCard}>
@@ -38,6 +38,12 @@ const QuestionPhotoAnswers: React.FC<TestQuestionType> = ({
                     {originalNode}
                   </div>
                 ),
+                styles: {
+                  mask: {
+                    backgroundColor: "rgba(255, 255, 255, 0.8)",
+                    backdropFilter: "blur(28rem)",
+                  },
+                },
               }}
             />
             <InputRadio
@@ -51,7 +57,7 @@ const QuestionPhotoAnswers: React.FC<TestQuestionType> = ({
             />
           </div>
         );
-      }
+      },
     );
   };
   return <form className={styles.answersWrapper}>{renderAnswers()}</form>;

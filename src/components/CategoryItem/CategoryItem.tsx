@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { IonRippleEffect, IonRouterLink, IonText } from "@ionic/react";
 import { CategoryType } from "../../context/CoursesContext";
 import categoryIcon from "../../assets/icons/category.svg";
@@ -11,12 +11,23 @@ interface CategoryItemTypes {
 }
 
 const CategoryItem: React.FC<CategoryItemTypes> = ({ category }) => {
+  const itemRef = useRef<HTMLLIElement | null>(null);
   const categoryIconPath = category.icons?.find((icon) => icon.is_main)?.path;
+
+  useEffect(() => {
+    if (itemRef.current && categoryIconPath) {
+      itemRef.current.style.setProperty(
+        "--bg",
+        `url(${serverName}/${categoryIconPath})`,
+      );
+    }
+  }, []);
 
   return (
     <li
       key={category.id}
       className={`${styles.categoriesItem} ion-activatable`}
+      ref={itemRef}
     >
       <IonRouterLink
         className={`${styles.link} ion-activatable`}
@@ -47,7 +58,11 @@ const CategoryItem: React.FC<CategoryItemTypes> = ({ category }) => {
       </IonRouterLink>
       <div className={styles.infoBtn}>
         {category.description && (
-          <InfoBtn info={category.description} ripple={false} popoverClassName={styles.catInfoPopover}/>
+          <InfoBtn
+            info={category.description}
+            ripple={false}
+            popoverClassName={styles.catInfoPopover}
+          />
         )}
       </div>
     </li>

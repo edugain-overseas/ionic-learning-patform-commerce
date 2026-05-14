@@ -126,6 +126,8 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
       userId: data.user_id,
     }));
     setAccessToken(data.access_token);
+    instance.defaults.headers["Authorization"] = `Bearer ${data.access_token}`;
+    await getUser();
   };
 
   const resendActivationCode = async (username: string) => {

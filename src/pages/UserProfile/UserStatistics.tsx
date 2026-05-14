@@ -5,42 +5,34 @@ import { UserType } from "../../types/user";
 import InfoBtn from "../../components/InfoBtn/InfoBtn";
 import { letterGrade } from "../../utils/letterGrade";
 
-const mockedAvarage = 172;
-const mockedProgress = 75;
+// const mockedAvarage = 172;
+// const mockedProgress = 75;
 
-const gradeDescription =
-  "This statistic shows the average grade of all the courses you have completed. It is calculated based on your final scores across all completed courses, giving you an overview of your overall learning performance.";
-const progressDescription =
-  "This statistic represents the total progress across all the courses you have purchased. It sums up your progress in each course, giving you an overview of how much you have completed in your learning journey.";
+// const gradeDescription =
+//   "This statistic shows the average grade of all the courses you have completed. It is calculated based on your final scores across all completed courses, giving you an overview of your overall learning performance.";
+// const progressDescription =
+//   "This statistic represents the total progress across all the courses you have purchased. It sums up your progress in each course, giving you an overview of how much you have completed in your learning journey.";
 
 const UserStatistics: FC<{ userData?: UserType }> = ({ userData }) => {
   const isUserStatisticAvailable = userData?.username;
 
   const userCourses = userData?.courses || [];
 
-  const userCompletedCourses = userCourses.filter(
-    (course) => course.status === "completed",
-  );
-
-  console.log(userCompletedCourses);
-
-  const userAvarageScore = userCompletedCourses.length
+  const userAvarageScore = userCourses.length
     ? Math.round(
-        userCompletedCourses.reduce((sum, course) => {
+        userCourses.reduce((sum, course) => {
           return sum + course.grade;
-        }, 0) / userCompletedCourses.length,
+        }, 0) / userCourses.length,
       )
     : undefined;
 
-  const userTotalProgress = userCompletedCourses.length
+  const userTotalProgress = userCourses.length
     ? Math.round(
-        userCompletedCourses.reduce((sum, course) => {
+        userCourses.reduce((sum, course) => {
           return sum + course.progress;
-        }, 0) / userCompletedCourses.length,
+        }, 0) / userCourses.length,
       )
     : undefined;
-
-  console.log(userAvarageScore);
 
   return (
     <div className={styles.progressData}>
@@ -76,14 +68,20 @@ const UserStatistics: FC<{ userData?: UserType }> = ({ userData }) => {
           <CircleProgressCard
             cardTitle="Your progress"
             width={124}
-            progress={isUserStatisticAvailable && userTotalProgress ? userTotalProgress : 0.1}
+            progress={
+              isUserStatisticAvailable && userTotalProgress
+                ? userTotalProgress
+                : 0.1
+            }
             strokeWidth={8}
             strokeColor={isUserStatisticAvailable ? "#39ba6d" : "#BDC4D2"}
             progressTitle={
               <div className={styles.progressContent}>
                 <span className={styles.label}>Completed</span>
                 <span className={styles.value}>{`${
-                  isUserStatisticAvailable && userTotalProgress ? userTotalProgress : 0
+                  isUserStatisticAvailable && userTotalProgress
+                    ? userTotalProgress
+                    : 0
                 }%`}</span>
               </div>
             }

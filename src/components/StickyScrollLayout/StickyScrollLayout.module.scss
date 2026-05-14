@@ -8,6 +8,7 @@
   overflow-y: scroll;
   scroll-behavior: smooth;
 
+  isolation: isolate;
   position: relative;
 }
 
@@ -18,7 +19,7 @@
 
   img {
     width: 100%;
-    height: calc(var(--start) + 8px);
+    height: calc(var(--start) + 16px);
     object-fit: cover;
   }
 }
@@ -39,6 +40,9 @@
   background-repeat: repeat-y;
   z-index: 1;
   border-radius: 16rem 16rem 0 0;
+  
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .contentBackground {
@@ -50,7 +54,7 @@
   background-position: center;
   background-repeat: no-repeat;
   top: calc(var(--start));
-  z-index: 2;
+  z-index: 10;
   border-radius: 16px;
 }
 

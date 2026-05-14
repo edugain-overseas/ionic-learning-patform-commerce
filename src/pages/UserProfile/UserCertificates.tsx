@@ -35,7 +35,7 @@ const UserCertificates: FC = () => {
       root: document.querySelector(`.${styles.pageWrapper}`),
       rootMargin: "0px",
       threshold: 0.5,
-    }
+    },
   );
 
   return (
@@ -45,7 +45,7 @@ const UserCertificates: FC = () => {
           <span className={styles.certificatesTitle}>
             Certificates of completed courses
           </span>
-          <InfoBtn info="Certificates" />
+          <InfoBtn info="Your certificates will always be available here. Track your course progress and completion status anytime." />
         </div>
         {isUserLoggedIn ? (
           <CertificateList />

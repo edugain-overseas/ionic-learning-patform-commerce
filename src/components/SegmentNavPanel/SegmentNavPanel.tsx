@@ -45,6 +45,19 @@ const SegmentNavPanel: React.FC<SegmentNavPanelTypes> = ({
     }
   };
 
+  // const onRouterNavChange = (event: CustomEvent<SegmentChangeEventDetail>) => {
+  //   console.log(event);
+  //   const value = event.detail.value;
+
+  //   const isValueAllowed = items.find(
+  //     (item) => item.value === value,
+  //   )?.isAllowed;
+
+  //   if (!isValueAllowed) {
+  //     event.currentTarget?.value! =
+  //   }
+  // };
+
   return (
     <IonSegment
       scrollable={true}
@@ -73,7 +86,7 @@ const SegmentNavPanel: React.FC<SegmentNavPanelTypes> = ({
           >
             <IonLabel className={styles.segmentLabel}>{label}</IonLabel>
           </IonSegmentButton>
-        )
+        ),
       )}
     </IonSegment>
   );

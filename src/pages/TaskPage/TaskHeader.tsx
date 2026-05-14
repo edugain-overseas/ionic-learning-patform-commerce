@@ -5,7 +5,7 @@ import {
   IonIcon,
   IonToolbar,
 } from "@ionic/react";
-import { motion, transform } from "motion/react";
+import { motion } from "motion/react";
 import { clamp } from "../../utils/clamp";
 import { LessonType, useCourses } from "../../context/CoursesContext";
 import backIcon from "../../assets/icons/header/back.svg";
@@ -28,6 +28,7 @@ const TaskHeader = ({
   taskData,
   onTestCompleteClick,
 }: PropsType) => {
+
   const animationProgress = clamp(
     0,
     (scrollProgress * 1.25 - threshold) / (1 - threshold),
@@ -88,17 +89,21 @@ const TaskHeader = ({
               />
             </div>
           )}
-          {taskData?.status === "completed" && taskNavigation.canGoForward && (
-            <div style={{ position: "relative" }}>
-              <motion.div
-                className={styles.confirmBtnBg}
-                style={{ opacity: btnBgOpacity }}
-              />
-              <IonButton onClick={()=>taskNavigation.handleNavigateLesson('forward')}>
-                <IonIcon src={backIcon} style={{ rotate: "180deg" }} />
-              </IonButton>
-            </div>
-          )}
+          {taskData?.status === "completed" &&
+            taskNavigation.canGoForward &&
+            taskData.type !== "exam" && (
+              <div style={{ position: "relative" }}>
+                <motion.div
+                  className={styles.confirmBtnBg}
+                  style={{ opacity: btnBgOpacity }}
+                />
+                <IonButton
+                  onClick={() => taskNavigation.handleNavigateLesson("forward")}
+                >
+                  <IonIcon src={backIcon} style={{ rotate: "180deg" }} />
+                </IonButton>
+              </div>
+            )}
         </IonButtons>
       </IonToolbar>
     </IonHeader>

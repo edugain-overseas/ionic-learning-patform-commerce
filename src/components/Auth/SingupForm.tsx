@@ -15,8 +15,8 @@ import styles from "./Auth.module.scss";
 
 type FormValues = {
   username: string;
-  firstName?: string;
-  lastName?: string;
+  name?: string;
+  surname?: string;
   email: string;
   password: string;
 };
@@ -65,8 +65,8 @@ const SingupForm: FC<{
   } = useForm<FormValues>({
     defaultValues: {
       username: "",
-      firstName: "",
-      lastName: "",
+      name: "",
+      surname: "",
       email: "",
       password: "",
     },
@@ -76,6 +76,7 @@ const SingupForm: FC<{
     setIsLoading(true);
     try {
       await user?.singup(data);
+
       user?.setUser((prev) => ({
         ...prev,
         username: data.username,
@@ -83,7 +84,7 @@ const SingupForm: FC<{
       }));
 
       present({
-        type: 'guard',
+        type: "guard",
         message: `Hello, ${data.username}, we cteated your account. Please activate your email: ${data.email}`,
         duration: 5000,
       });
@@ -144,13 +145,13 @@ const SingupForm: FC<{
           name="firstName"
           placeholder="First Name"
           height="32rem"
-          registerProps={register("firstName")}
+          registerProps={register("name")}
         />
         <InputText
           name="lastName"
           placeholder="Last Name"
           height="32rem"
-          registerProps={register("lastName")}
+          registerProps={register("surname")}
         />
         <InputText
           name="email"

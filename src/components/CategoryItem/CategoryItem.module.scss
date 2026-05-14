@@ -9,7 +9,7 @@
     content: "";
     width: 78rem;
     height: 78rem;
-    background-image: url("../../assets/icons/category.svg");
+    background-image: var(--bg, url("../../assets/icons/category.svg"));
     background-size: cover;
     position: absolute;
     top: -10rem;

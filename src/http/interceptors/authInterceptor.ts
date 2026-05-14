@@ -25,7 +25,7 @@ const processQueue = (error: any, token: string | null = null) => {
 
 export const setupInterceptors = (
   logout: () => void,
-  setAccessToken: Dispatch<SetStateAction<null>>
+  setAccessToken: Dispatch<SetStateAction<null>>,
 ) => {
   instance.interceptors.response.use(
     (response) => response,
@@ -37,8 +37,16 @@ export const setupInterceptors = (
       const detail = error.response?.data?.detail;
 
       const isRefreshRequest = originalRequest?.url?.includes(
-        "/user/refresh-token"
+        "/user/refresh-token",
       );
+
+      const isRefreshExpired =
+        status === 401 && detail === "Invalid refresh token";
+
+      if (isRefreshExpired) {
+        logout();
+        return Promise.reject(error);
+      }
 
       // refresh token помер -> logout
       if (isRefreshRequest && status === 401) {
@@ -110,6 +118,6 @@ export const setupInterceptors = (
       } catch (err) {
         return Promise.reject(err);
       }
-    }
+    },
   );
 };

@@ -10,7 +10,7 @@ import {
 } from "@ionic/react";
 import { clamp } from "../../utils/clamp";
 import { pxToRem } from "../../utils/pxToRem";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 
 type CustomSheetModalType = {
   portalTo?: HTMLElement | HTMLIonTabsElement;
@@ -40,7 +40,6 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
   isAnimating,
   id = "",
 }) => {
-  const { taskId } = useParams<{ taskId: string }>();
   const maxHeight = height * breakpoints[breakpoints.length - 1];
 
   const modalRef = useRef<HTMLDivElement>(null);
@@ -50,38 +49,9 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
   const gesture = useRef<Gesture | null>(null);
   const animation = useRef<Animation | null>(null);
   const started = useRef<boolean>(false);
+  const pathname = useLocation().pathname;
 
   const currentHeight = useRef<number>(initialBreakpoint * maxHeight);
-
-  useEffect(() => {
-    const closeModal = () => {
-      if (started.current) {
-        animation.current!.destroy();
-        started.current = false;
-      }
-
-      createAnimation()
-        .addElement(modalContentRef.current!)
-        .beforeAddClass(styles.directionUp)
-        .afterRemoveClass(styles.directionUp)
-        .duration(300)
-        .easing("ease-in")
-        .fromTo(
-          "height",
-          `${currentHeight.current}rem`,
-          `${breakpoints[0] * height}rem`
-        )
-        .play();
-
-      modalRef.current?.classList.remove(styles.fullView);
-
-      backdropRef.current?.style.setProperty(
-        "background",
-        `rgba(255, 255, 255, 0)`
-      );
-    };
-    closeModal();
-  }, [taskId]);
 
   // use effect for setting all css variables, gesture and creating animation
   useEffect(() => {
@@ -150,7 +120,7 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
         const backdropOpacity = clamp(0, step, 1) * 0.65;
         backdropRef.current?.style.setProperty(
           "background",
-          `rgba(255, 255, 255, ${backdropOpacity})`
+          `rgba(255, 255, 255, ${backdropOpacity})`,
         );
       }
 
@@ -190,12 +160,12 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
       if (step > points[1]) {
         backdropRef.current?.style.setProperty(
           "background",
-          `rgba(255, 255, 255, 0.65)`
+          `rgba(255, 255, 255, 0.65)`,
         );
       } else {
         backdropRef.current?.style.setProperty(
           "background",
-          `rgba(255, 255, 255, 0)`
+          `rgba(255, 255, 255, 0)`,
         );
       }
 
@@ -226,7 +196,7 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
   const toggleBreakpoint = () => {
     const currentStep = currentHeight.current / maxHeight;
     const currentStepIndex = breakpoints.findIndex(
-      (breakpoint) => breakpoint === currentStep
+      (breakpoint) => breakpoint === currentStep,
     );
     const nextStepIndex = currentStepIndex + 1;
 
@@ -247,7 +217,7 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
         .fromTo(
           "height",
           `${currentHeight.current}rem`,
-          `${nexStep * height}rem`
+          `${nexStep * height}rem`,
         )
         .play();
 
@@ -262,7 +232,7 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
         .fromTo(
           "height",
           `${currentHeight.current}rem`,
-          `${breakpoints[0] * height}rem`
+          `${breakpoints[0] * height}rem`,
         )
         .play();
 
@@ -272,12 +242,12 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
     if (nextStepIndex === breakpoints.length - 1) {
       backdropRef.current?.style.setProperty(
         "background",
-        `rgba(255, 255, 255, 0.65)`
+        `rgba(255, 255, 255, 0.65)`,
       );
     } else {
       backdropRef.current?.style.setProperty(
         "background",
-        `rgba(255, 255, 255, 0)`
+        `rgba(255, 255, 255, 0)`,
       );
     }
 
@@ -296,9 +266,25 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
     }
   };
 
+  useEffect(() => {
+    const isModalOpen = modalRef.current?.classList.contains(styles.fullView);
+    if (isModalOpen) toggleBreakpoint();
+  }, [pathname]);
+
+  const handleBackdropClick = () => {
+    const isFullView = modalRef.current?.classList.contains(styles.fullView);
+    if (isFullView) {
+      toggleBreakpoint();
+    }
+  };
+
   return createPortal(
     <div className={styles.modalWrapper} ref={modalRef} id={id}>
-      <div className={styles.backdrop} ref={backdropRef}></div>
+      <div
+        className={styles.backdrop}
+        ref={backdropRef}
+        onClick={handleBackdropClick}
+      ></div>
       <div
         className={styles.modal}
         style={{
@@ -321,7 +307,7 @@ const CustomSheetModal: FC<CustomSheetModalType> = ({
         <div className={styles.content}>{children}</div>
       </div>
     </div>,
-    portalTo ? portalTo : document.body
+    portalTo ? portalTo : document.body,
   );
 };
 

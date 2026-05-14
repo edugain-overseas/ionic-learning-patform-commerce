@@ -24,7 +24,7 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
   const modalParent = document.querySelector("ion-tabs");
 
   const course = useCourses()?.courses.find(
-    (course) => course.id === +courseId
+    (course) => course.id === +courseId,
   );
 
   const isCoursePurchased = course?.bought;
@@ -36,9 +36,13 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
       return;
     }
 
+    console.log(lesson, isExam);
+
     const isLessonAvailable = lesson?.status !== "blocked";
     const isAllowed = !!(isCoursePurchased && isLessonAvailable);
-    const path = `/course/${courseId}/tasks/${isExam ? "exam" : lesson.id}`;
+    const path = `/course/${courseId}/${
+      isExam ? "exam" : `tasks/${lesson.id}`
+    }`;
     const message = isCoursePurchased
       ? "This lesson is not availabel. Please complete previous lessons"
       : "You can not access this lesson becouse it is blocked";
@@ -48,15 +52,11 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
 
   const handleExamClick = () => {
     const examLessonId = course?.lessons.find(
-      (lesson) => lesson.type === "exam"
+      (lesson) => lesson.type === "exam",
     )?.id;
 
     handleTaskNavigate(examLessonId, true);
   };
-
-  useIonViewDidLeave(() => {
-    document.getElementById(`course-progress-modal-${pathname}`)?.remove();
-  });
 
   if (!pathname.includes("tasks")) return null;
 
@@ -107,7 +107,9 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
             <li
               className={styles.progressItem}
               key={lesson.id}
-              onClick={() => handleTaskNavigate(lesson.id)}
+              onClick={() =>
+                handleTaskNavigate(lesson.id, lesson.type === "exam")
+              }
             >
               <div
                 className={`${styles.progressIconOuter} ${

@@ -1,11 +1,11 @@
 import React from "react";
 import { Image } from "antd";
 import { getLetterVatiantsByIndex } from "../../../../utils/getLetterVatiantsByIndex";
-// import noImage from "../../../../images/noImage.jpeg";
-import styles from "./QuestionPhoto.module.scss";
-import InputRadio from "../../../InputRadio/InputRadio";
 import { TestQuestionType } from "../../TestContent";
 import { serverName } from "../../../../http/server";
+// import noImage from "../../../../images/noImage.jpeg";
+import InputRadio from "../../../InputRadio/InputRadio";
+import styles from "./QuestionPhoto.module.scss";
 
 const QuestionPhoto: React.FC<TestQuestionType> = ({
   answers,
@@ -48,6 +48,12 @@ const QuestionPhoto: React.FC<TestQuestionType> = ({
             imageRender: (originalNode) => (
               <div className={styles.previewImageWrapper}>{originalNode}</div>
             ),
+            styles: {
+              mask: {
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
+                backdropFilter: "blur(28rem)",
+              },
+            },
           }}
         />
       </div>

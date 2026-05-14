@@ -4,10 +4,10 @@ import { serverName } from "../../http/server";
 import PDFReader from "../PDFReader/PDFReader";
 import DocumentLink from "../DocumentLink/DocumentLink";
 import LinkCard from "../LinkCard/LinkCard";
-import styles from "./Lecture.module.scss";
 import ImageGroup from "../ImageGroup/ImageGroup";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
+import styles from "./Lecture.module.scss";
 
 const LectureContent: FC<{ lectureContent: LectureContentType[] }> = ({
   lectureContent,

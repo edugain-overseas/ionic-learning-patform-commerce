@@ -28,6 +28,7 @@ import SheetModalAuto from "../../../components/SheetModalAuto/SheetModalAuto";
 import CommonButton from "../../../components/CommonButton/CommonButton";
 import ExamCredentionForm from "./ExamCredentionForm";
 import styles from "./CourseExamPage.module.scss";
+import TaskHeader from "../../TaskPage/TaskHeader";
 
 export type ExamResult = "acceptable" | "absolute" | "failed" | "no_result";
 
@@ -176,7 +177,6 @@ const CourseExamPage: FC = () => {
   });
 
   useEffect(() => {
-    
     console.log(`/course/${courseId}/exam`, router.routeInfo.pathname);
     if (router.routeInfo.pathname !== `/course/${courseId}/exam`) {
       showTabbar();
@@ -420,9 +420,19 @@ const CourseExamPage: FC = () => {
     1,
   );
 
+  const onCompleteHeaderClick = async () => {
+    if (!currentAttempt) return;
+    await sendAttempt();
+  };
+
   return (
     <IonPage className="primaryPage">
-      <Header {...headerProps} />
+      {/* <Header {...headerProps} /> */}
+      <TaskHeader
+        scrollProgress={scrollProgress}
+        taskData={exam}
+        onTestCompleteClick={onCompleteHeaderClick}
+      />
       <IonContent className={styles.content}>
         {currentAttempt ? (
           <>
