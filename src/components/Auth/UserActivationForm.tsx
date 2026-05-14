@@ -42,7 +42,7 @@ const UserActivationForm: React.FC<{
 
       present({
         type: "success",
-        message: `${user?.user.username}, you are succesfully activated you email`,
+        message: `${user?.user.username}, you are successfully activated you email`,
       });
 
       modals

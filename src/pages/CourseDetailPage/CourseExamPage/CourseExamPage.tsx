@@ -235,7 +235,7 @@ const CourseExamPage: FC = () => {
       if (timerRef.current <= 0) {
         present({
           type: "info",
-          message: "Time is out. Your attept was sended!",
+          message: "Time is out. Your attempt was sent!",
           duration: 5000,
         });
         return;
@@ -330,7 +330,7 @@ const CourseExamPage: FC = () => {
 
         present({
           type: "success",
-          message: `Congratulation! Course ${course?.title} was completed!`,
+          message: `Congratulations! Course ${course?.title} was completed!`,
         });
       } catch (error) {
         // negative scenario

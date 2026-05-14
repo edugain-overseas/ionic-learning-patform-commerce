@@ -85,7 +85,7 @@ const SingupForm: FC<{
 
       present({
         type: "guard",
-        message: `Hello, ${data.username}, we cteated your account. Please activate your email: ${data.email}`,
+        message: `Hello, ${data.username}, we created your account. Please activate your email: ${data.email}`,
         duration: 5000,
       });
 
@@ -162,7 +162,7 @@ const SingupForm: FC<{
             required: "This field is required",
             pattern: {
               value: emailRegex,
-              message: "Invaid Email. Example: example@mail.com",
+              message: "Invalid Email. Example: example@mail.com",
             },
           })}
           error={errors.email?.message}

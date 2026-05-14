@@ -30,7 +30,7 @@ const GoogleAuthButton: FC = () => {
       } else {
         present({
           type: "error",
-          message: `Google service is unvailable`,
+          message: `Google service is unavailable`,
         });
       }
     } catch (error) {

@@ -7,15 +7,15 @@
   // padding-top: calc(var(--start) - var(--end));
   overflow-y: scroll;
   scroll-behavior: smooth;
-
-  isolation: isolate;
   position: relative;
+  border: 1rem solid green;
 }
 
 .posterContainer {
   position: fixed;
   top: 0;
   width: 100%;
+  z-index: 0;
 
   img {
     width: 100%;
@@ -38,11 +38,9 @@
   background-size: cover;
   background-position: center -56px;
   background-repeat: repeat-y;
-  z-index: 1;
   border-radius: 16rem 16rem 0 0;
-  
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  z-index: 1;
+  will-change: transform;
 }
 
 .contentBackground {
@@ -62,6 +60,7 @@
   --content-min-height: 100%;
   position: relative;
   z-index: 3;
+  transform: translateZ(0);
   min-height: var(--content-min-height);
   border-radius: 16rem;
   display: flex;

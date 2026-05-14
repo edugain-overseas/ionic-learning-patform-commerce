@@ -57,7 +57,7 @@ const AppleAuthBtn = () => {
       console.log(error);
       present({
         type: "error",
-        message: `Apple service is unvailable`,
+        message: `Apple service is unavailable`,
       });
     } finally {
       setIsLoading(false);
