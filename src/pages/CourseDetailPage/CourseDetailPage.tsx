@@ -7,6 +7,7 @@ import CourseIntroPage from "./CourseIntroPage/CourseIntroPage";
 import CourseTasksPage from "./CourseTasksPage/CourseTasksPage";
 import CourseExamPage from "./CourseExamPage/CourseExamPage";
 import TaskPage from "../TaskPage/TaskPage";
+import CourseExamBlockedPage from "./CourseExamBlockedPage/CourseExamBlockedPage";
 
 const CourseDetailPage: React.FC = () => {
   const { courseId } = useParams<{
@@ -35,6 +36,10 @@ const CourseDetailPage: React.FC = () => {
         />
         <Route path={`/course/:courseId/tasks/:taskId`} component={TaskPage} />
         <Route path={`/course/:courseId/exam`} component={CourseExamPage} />
+        <Route
+          path={`/course/:courseId/exam-blocked`}
+          component={CourseExamBlockedPage}
+        />
       </IonRouterOutlet>
     </IonPage>
   );

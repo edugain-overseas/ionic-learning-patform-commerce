@@ -1,0 +1,28 @@
+.container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.empty {
+  padding-bottom: 65rem;
+  color: var(--ion-color-medium);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16rem;
+
+  ion-icon {
+    font-size: 144rem;
+  }
+
+  .emptyMessage {
+    padding-inline: 64rem;
+    font-size: 14rem;
+    font-weight: 600;
+    text-align: center;
+  }
+}

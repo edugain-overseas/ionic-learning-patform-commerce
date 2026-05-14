@@ -9,7 +9,7 @@ import SegmentNavPanel, {
 const CourseNavPanel: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const course = useCourses()?.courses.find(
-    (course) => course.id === +courseId
+    (course) => course.id === +courseId,
   );
   const isCoursePurchased = course?.bought;
   const isExamAllowed =
@@ -21,9 +21,11 @@ const CourseNavPanel: React.FC = () => {
     : "You can not access this lesson becouse it is blocked";
 
   const examItem: SegmentItem = {
-    value: `/course/${courseId}/exam`,
+    value: !!(isCoursePurchased && isExamAllowed)
+      ? `/course/${courseId}/exam`
+      : `/course/${courseId}/exam-blocked`,
     label: "Exam | Certificate",
-    isAllowed: !!(isCoursePurchased && isExamAllowed),
+    isAllowed: true,
     denyMessage,
   };
 

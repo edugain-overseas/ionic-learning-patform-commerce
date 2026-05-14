@@ -72,13 +72,14 @@ const SegmentNavPanel: React.FC<SegmentNavPanelTypes> = ({
             key={label}
             mode="md"
             value={value}
-            disabled={!isAllowed}
+            // disabled={!isAllowed}
             className={styles.segmentBtn}
             onClick={
               routerNav
                 ? (e) => {
                     e.preventDefault();
                     e.stopPropagation();
+                    
                     protectedNavigate(isAllowed, value, denyMessage);
                   }
                 : undefined
