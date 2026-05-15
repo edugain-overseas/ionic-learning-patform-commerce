@@ -283,7 +283,7 @@ const StripeNativePaymentButton: FC = () => {
             )
           }
           width={72}
-          height="40px"
+          height="40rem"
           backgroundColor="#fcfcfc"
           color="#343434"
           onClick={handlePayWithGoogleBtnClick}
