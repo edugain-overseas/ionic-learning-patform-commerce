@@ -166,8 +166,8 @@
 }
 
 .landingScroller {
-  height: calc(100% - 56rem);
-  margin-top: 56rem;
+  height: calc(100% - 56rem - var(--ion-safe-area-top));
+  margin-top: calc(56rem + var(--ion-safe-area-top));
   padding-bottom: calc(var(--tabbar-offset) + 40rem);
   overflow: scroll;
 }
@@ -175,8 +175,8 @@
 .landingWrapper {
   padding-inline: 16rem;
   font-size: 14rem;
-    color: var(--ion-color-light);
-    text-align: center;
+  color: var(--ion-color-light);
+  text-align: center;
 
   h3 {
     font-size: 24rem;
