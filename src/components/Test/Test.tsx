@@ -297,10 +297,8 @@ const Test: React.FC<{
   };
 
   const bestAttempt = testAttempts.toSorted(
-    (a, b) => b.attempt_score - a.attempt_number,
+    (a, b) => b.attempt_score - a.attempt_score,
   )[0];
-
-  console.log(testAttempts, bestAttempt);
 
   const isBestAttemptPassed =
     bestAttempt?.attempt_score >= Math.round(testData?.score * 0.6);
@@ -344,6 +342,8 @@ const Test: React.FC<{
       }
     }
   };
+
+
 
   return (
     <>

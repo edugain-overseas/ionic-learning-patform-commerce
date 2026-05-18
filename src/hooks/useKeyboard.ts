@@ -5,6 +5,7 @@ import { Capacitor } from "@capacitor/core";
 export const useKeyboard = () => {
   useEffect(() => {
     if (Capacitor.getPlatform() === "android") {
+      Keyboard.setResizeMode({ mode: KeyboardResize.None });
       Keyboard.addListener("keyboardWillShow", (info) => {
         console.log("KEYBOARD: " + info.keyboardHeight);
 

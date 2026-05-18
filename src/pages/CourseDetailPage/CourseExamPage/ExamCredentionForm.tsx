@@ -33,6 +33,9 @@ const ExamCredentionForm = ({
   const [present] = useToast();
   const updateUserInfo = useUser()?.updateUserInfo;
 
+  console.log(defaultValues);
+  
+
   const { isDirty, dirtyFields } = formState;
 
   const isFieldDisabled = (name: keyof ValuesType) => {

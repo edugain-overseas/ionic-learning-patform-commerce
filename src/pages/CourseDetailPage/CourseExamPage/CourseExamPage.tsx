@@ -5,7 +5,7 @@ import {
   useIonRouter,
   useIonViewWillEnter,
 } from "@ionic/react";
-import { useLocation, useParams } from "react-router";
+import { useParams } from "react-router";
 import { motion } from "motion/react";
 import { useUser } from "../../../context/UserContext";
 import { useLessonTabbarLayout } from "../../../hooks/useTabbarLayout";
@@ -82,7 +82,6 @@ const CourseExamPage: FC = () => {
   const timerRef = useRef<number>(0);
   const [present] = useToast();
   const router = useIonRouter();
-  const location = useLocation();
 
   const {
     isOpen: isLeaveModalOpen,
