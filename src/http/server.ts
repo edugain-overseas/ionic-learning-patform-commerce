@@ -4,7 +4,7 @@
 // export const webSocketUrl = "wss://70b0-91-123-151-133.ngrok-free.app/api/v1/chat";
 
 // Production server
-const domain = "courses.ieuukraine.com";
+const domain = "courses.feu.com.ua";
 export const clientName = `https://${domain}`;
 export const serverName = `https://${domain}/api`;
 export const serverBaseUrl = `https://${domain}/api/v1`;
