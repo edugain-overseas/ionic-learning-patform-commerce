@@ -59,7 +59,7 @@ const CertificatePreviewBtn = ({
               height={32}
               backgroundColor="transparent"
               borderRadius={5}
-              border="1rem solid #7E8CA8"
+              border="1rem solid #5D6977"
               label="Certificate"
               icon={
                 <IonIcon

@@ -68,7 +68,7 @@ const PasswordRecoveryForm: React.FC = () => {
       <div className={styles.btnsWrapper}>
         <CommonButton
           label="Continue"
-          backgroundColor="#001C54"
+          backgroundColor="#404040"
           color="#fcfcfc"
           block={true}
           height={32}

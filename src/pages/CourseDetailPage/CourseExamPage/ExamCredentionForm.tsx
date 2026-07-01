@@ -110,7 +110,7 @@ const ExamCredentionForm = ({
             isLoading ? <Spinner color="#fcfcfc" /> : <IonIcon src={saveIcon} />
           }
           color="#fcfcfc"
-          backgroundColor="#001c54"
+          backgroundColor="#404040"
           height={32}
           block={true}
           disabled={!isDirty}

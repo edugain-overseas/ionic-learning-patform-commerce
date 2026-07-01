@@ -44,7 +44,7 @@ const Accordion: React.FC<AccordionTypes> = ({
             ripple={true}
             width="32rem"
             height="32rem"
-            backgroundColor={isOpen ? "#7E8CA8" : undefined}
+            backgroundColor={isOpen ? "#5D6977" : undefined}
             onClick={handleToggle}
           />
         </div>

@@ -148,7 +148,7 @@ const Menu = () => {
                   icon={<IonIcon src={Close} />}
                   width="32rem"
                   height="32rem"
-                  backgroundColor="#B80101"
+                  backgroundColor="#760000"
                 />
               </IonMenuToggle>
             </div>

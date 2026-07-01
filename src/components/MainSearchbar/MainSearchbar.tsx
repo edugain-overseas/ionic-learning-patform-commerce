@@ -56,7 +56,7 @@ const MainSearchbar = () => {
       <InsetBtn
         width="40rem"
         height="40rem"
-        backgroundColor={!value ? "#7E8CA8" : "#001c54"}
+        backgroundColor={!value ? "#5D6977" : "#404040"}
         icon={<IonIcon src={search} className={styles.searchbarIcon} />}
         type="submit"
         disabled={!value}

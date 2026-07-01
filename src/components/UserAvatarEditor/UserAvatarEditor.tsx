@@ -147,7 +147,7 @@ const UserAvatarEditor: FC<UserAvatarEditorPropsType> = ({ closeModal }) => {
           className={styles.button}
           backgroundColor="transparent"
           borderRadius={5}
-          border="1rem solid #7E8CA8"
+          border="1rem solid #5D6977"
         />
         <CommonButton
           label="Save"
@@ -162,7 +162,7 @@ const UserAvatarEditor: FC<UserAvatarEditorPropsType> = ({ closeModal }) => {
           height={32}
           backgroundColor="transparent"
           borderRadius={5}
-          border="1rem solid #7E8CA8"
+          border="1rem solid #5D6977"
           type="submit"
           disabled={isLoading}
           className={styles.button}

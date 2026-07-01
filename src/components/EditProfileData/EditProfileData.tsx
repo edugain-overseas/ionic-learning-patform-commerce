@@ -140,7 +140,7 @@ const EditProfileData: FC<{
               height={32}
               backgroundColor="transparent"
               borderRadius={5}
-              border="1rem solid #7E8CA8"
+              border="1rem solid #5D6977"
               label="Change avatar"
               icon={<IonIcon src={EditIcon} className={styles.editIcon} />}
               type="button"
@@ -234,7 +234,7 @@ const EditProfileData: FC<{
                   height={32}
                   backgroundColor="transparent"
                   borderRadius={5}
-                  border="1rem solid #7E8CA8"
+                  border="1rem solid #5D6977"
                   onClick={() => reset(defaultValues)}
                 />
               }
@@ -252,7 +252,7 @@ const EditProfileData: FC<{
                   height={32}
                   backgroundColor="transparent"
                   borderRadius={5}
-                  border="1rem solid #7E8CA8"
+                  border="1rem solid #5D6977"
                   type="submit"
                   disabled={isSubmitting}
                 />

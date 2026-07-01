@@ -34,7 +34,7 @@ const AboutIEU: React.FC = () => {
           <div className={styles.contentInner}>
             <div className={`${styles.contentHeader} ${styles.contentBlock}`}>
               <div className={`${styles.titleWrapper} ${styles.titlePrimary}`}>
-                <span className={styles.title}>About IEU</span>
+                <span className={styles.title}>About FEU</span>
               </div>
               <IonImg src={logo} className={styles.headerIcon} />
             </div>

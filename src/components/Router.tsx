@@ -32,7 +32,7 @@ const Router: React.FC = () => {
             <Route path="/my-education" component={MyStudy} exact />
             <Route path="/basket" component={Basket} exact />
 
-            <Route path="/aboutIEU" component={AboutIEU} exact />
+            <Route path="/about" component={AboutIEU} exact />
             <Route path="/instructions" component={Instructions} exact />
             <Route path="/search" component={Search} />
             <Route path="/support" component={Support} />

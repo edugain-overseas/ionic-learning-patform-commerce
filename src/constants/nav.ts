@@ -57,8 +57,8 @@ export const menuNav = [
     iconSrc: myProfileIcon,
   },
   {
-    label: "About IEU",
-    to: "/aboutIEU",
+    label: "About FEU",
+    to: "/about",
     iconSrc: aboutIEUIcon,
   },
   {

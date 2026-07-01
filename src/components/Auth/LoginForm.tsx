@@ -138,7 +138,7 @@ const LoginForm: React.FC<{
               <IonIcon src={SingIn} className={styles.formBtnIcon} />
             )
           }
-          backgroundColor="#001C54"
+          backgroundColor="#404040"
           color="#fcfcfc"
           block={true}
           height={32}
@@ -154,7 +154,7 @@ const LoginForm: React.FC<{
           <CommonButton
             label="Forgot your password?"
             backgroundColor="#ECECEC"
-            color="#7E8CA8"
+            color="#5D6977"
             block={true}
             height={32}
             borderRadius={5}

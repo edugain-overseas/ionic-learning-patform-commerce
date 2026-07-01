@@ -483,7 +483,7 @@ const CourseExamPage: FC = () => {
                     label="Continue exam"
                     width={138}
                     height={32}
-                    backgroundColor="#001c54"
+                    backgroundColor="#404040"
                     color="#fcfcfc"
                     onClick={cancel}
                   />
@@ -491,8 +491,8 @@ const CourseExamPage: FC = () => {
                     label="Leave the exam"
                     width={138}
                     height={32}
-                    border="1rem solid #7e8ca8"
-                    color="#7e8ca8"
+                    border="1rem solid #5D6977"
+                    color="#5D6977"
                     onClick={handleLeaveAttempt}
                   />
                 </div>

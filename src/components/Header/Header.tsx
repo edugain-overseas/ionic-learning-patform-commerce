@@ -17,7 +17,7 @@ import gridIcon from "../../assets/icons/header/list-style-grid.svg";
 import filterIcon from "../../assets/icons/header/filter.svg";
 import SettingsIcon from "../../assets/icons/menu/settings.svg";
 import SaveIcon from "../../assets/icons/save.svg";
-import logoIEU from "../../assets/icons/logoIEU.svg";
+import logoFEU from "../../assets/icons/logo_feu.webp";
 import detailsIcon from "../../assets/icons/header/details.svg";
 import HeaderTitle from "./HeaderTitle";
 import Spinner from "../Spinner/Spinner";
@@ -132,8 +132,8 @@ const renderBtn = (props: ButtonPropsTypes, handleNotification: () => void) => {
     case "logo":
       return (
         <IonImg
-          src={logoIEU}
-          alt="IEU logo"
+          src={logoFEU}
+          alt="FEU logo"
           className={`${styles.logo} ${props.className ? props.className : ""}`}
           key={props.name}
           onClick={props.onClick}

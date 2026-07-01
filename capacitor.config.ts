@@ -5,7 +5,7 @@ import { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
   appId: "io.ieucourses.app",
-  appName: "IEU courses",
+  appName: "FEU courses",
   webDir: "dist",
   server: {
     androidScheme: "https",
@@ -16,6 +16,11 @@ const config: CapacitorConfig = {
   plugins: {
     Keyboard: {
       // resizeOnFullScreen: true,
+    },
+    SplashScreen: {
+      launchShowDuration: 3000,
+      backgroundColor: "#760000",
+      androidScaleType: "CENTER_CROP",
     },
     GoogleAuth: {
       scopes: ["profile", "email"],

@@ -70,8 +70,8 @@ const AppleAuthBtn = () => {
       label="Using Apple"
       icon={icon}
       backgroundColor="transparent"
-      color="#001C54"
-      border="1rem solid #7E8CA8"
+      color="#404040"
+      border="1rem solid #5D6977"
       block={true}
       height={32}
       borderRadius={5}

@@ -76,7 +76,7 @@ const CheckoutForm = ({ onSuccess }: { onSuccess: () => Promise<void> }) => {
       <CommonButton
         label="Pay"
         icon={isLoading && <Spinner color="#fff" />}
-        backgroundColor={isLoading ? "#BDC4D2" : "#7E8CA8"}
+        backgroundColor={isLoading ? "#BDC4D2" : "#5D6977"}
         borderRadius={5}
         color="#FCFCFC"
         block={true}

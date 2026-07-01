@@ -38,7 +38,7 @@ const HomeFooter: FC = () => {
         <ul className={styles.contactLinks}>
           <li>
             <a
-              href="https://wa.me/+35677215496"
+              href="https://wa.me/+380964627777"
               target="_blank"
               rel="noreferrer noopener"
             >
@@ -49,12 +49,12 @@ const HomeFooter: FC = () => {
               />
               <div className={styles.linkText}>
                 <span className={styles.label}>Phone number:</span>
-                <span className={styles.value}>+356 7721 5496</span>
+                <span className={styles.value}>+380 96 462 77 77</span>
               </div>
             </a>
           </li>
           <li>
-            <a href="mailto:info@ieu.edu.ua">
+            <a href="mailto:courses@feu.com.ua">
               <InsetBtn
                 width="32rem"
                 height="32rem"
@@ -62,7 +62,7 @@ const HomeFooter: FC = () => {
               />
               <div className={styles.linkText}>
                 <span className={styles.label}>Email address:</span>
-                <span className={styles.value}>info@ieu.edu.ua</span>
+                <span className={styles.value}>courses@feu.com.ua</span>
               </div>
             </a>
           </li>
@@ -76,7 +76,7 @@ const HomeFooter: FC = () => {
               <div className={styles.linkText}>
                 <span className={styles.label}>Our office:</span>
                 <span className={styles.value}>
-                  151 triq Edgar Bernard, Malta
+                  Academician Glushkova Avenue.42, Kyiv 03187
                 </span>
               </div>
             </a>
@@ -134,7 +134,7 @@ const HomeFooter: FC = () => {
               Privacy policy
             </a>
           }
-          rightItem={<Link to="/aboutIEU">About IEU</Link>}
+          rightItem={<Link to="/about">About FEU</Link>}
         />
       </footer>
       <SheetModalAuto trigger="footer-open-contact-form">

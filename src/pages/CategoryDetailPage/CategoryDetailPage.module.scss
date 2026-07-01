@@ -1,6 +1,6 @@
 .papeWrapper {
   --ion-background-color: transparent;
-  background: linear-gradient(180deg, #b80101 0%, #920000 88.02%);
+  background-color: var(--custom-primary-lg)
 }
 
 .contentWrapper::part(scroll) {
@@ -18,8 +18,6 @@
   display: flex;
   flex-direction: column;
   gap: 18rem;
-  // padding-bottom: 16rem;
-  // bottom: calc(100% - 96rem);
   transform: scale(calc(1 - var(--hide-coefficient) * 0.3));
   opacity: calc(1 - var(--hide-coefficient));
 }
