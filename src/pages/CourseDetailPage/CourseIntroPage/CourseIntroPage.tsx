@@ -16,7 +16,7 @@ import schollOnline from "../../../assets/icons/introPage/school-online.svg";
 import clockBig from "../../../assets/icons/introPage/clock.svg";
 import certificate from "../../../assets/icons/introPage/certificate.svg";
 import devices from "../../../assets/images/devices.webp";
-import IntoHeader from "./IntroHeader";
+import IntroHeader from "./IntroHeader";
 import StickyScrollLayout from "../../../components/StickyScrollLayout/StickyScrollLayout";
 import CourseItem from "../../../components/CourseItem/CourseItem";
 import CardPrice from "../../../components/CardPrice/CardPrice";
@@ -47,7 +47,7 @@ const CourseIntroPage: React.FC = () => {
 
   return (
     <IonPage className="primaryPage">
-      <IntoHeader title={course?.title} scrollProgress={scrollProgress} />
+      <IntroHeader title={course?.title} scrollProgress={scrollProgress} />
       <IonContent className={styles.content} scrollY={false}>
         <motion.div
           className={styles.courseIntroNavWrapper}

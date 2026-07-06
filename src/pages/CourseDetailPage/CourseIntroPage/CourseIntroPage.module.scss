@@ -95,8 +95,9 @@
   left: 0;
   width: 100%;
   z-index: 4;
-  background-image: url("/src/assets/images/body-bg.webp");
-  background-size: cover;
+  // background-image: url("/src/assets/images/body-bg.webp");
+  // background-size: cover;
+  background-color: var(--ion-background-color);
   padding-top: calc(56rem + var(--ion-safe-area-top));
   transform: translateY(-100%);
   opacity: 0;

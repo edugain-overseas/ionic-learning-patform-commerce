@@ -223,15 +223,10 @@ public final class EmbeddedPaymentElement {
     }
 
     #if DEBUG
-    public func testGrow() {
+    public func testHeightChange() {
         verifyIntegration()
         stpAssert(configuration.embeddedViewDisplaysMandateText, "Before using this testing feature, ensure that embeddedViewDisplaysMandateText is set to true")
-        self.embeddedPaymentMethodsView.testGrow()
-    }
-    public func testShrink() {
-        verifyIntegration()
-        stpAssert(configuration.embeddedViewDisplaysMandateText, "Before using this testing feature, ensure that embeddedViewDisplaysMandateText is set to true")
-        self.embeddedPaymentMethodsView.testShrink()
+        self.embeddedPaymentMethodsView.testHeightChange()
     }
     #endif
     // MARK: - Internal
@@ -276,7 +271,10 @@ public final class EmbeddedPaymentElement {
             case .external(let type):
                 return .external(paymentMethod: type, billingDetails: params.paymentMethodParams.nonnil_billingDetails)
             case .instantDebits, .linkCardBrand:
-                return .new(confirmParams: params)
+                guard let paymentMethod = params.instantDebitsLinkedBank?.paymentMethod.decode() else {
+                    return nil
+                }
+                return .saved(paymentMethod: paymentMethod, confirmParams: params)
             }
         case .saved(paymentMethod: let paymentMethod):
             return .saved(paymentMethod: paymentMethod, confirmParams: nil)

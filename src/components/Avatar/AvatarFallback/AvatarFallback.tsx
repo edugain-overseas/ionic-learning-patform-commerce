@@ -1,4 +1,3 @@
-import React from "react";
 import UserIcon from "../../../assets/icons/user.svg";
 import styles from "./AvatarFallback.module.scss";
 import { IonIcon } from "@ionic/react";

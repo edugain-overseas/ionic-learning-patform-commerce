@@ -127,10 +127,7 @@ final class LinkCardEditElement: Element {
 
     private lazy var checkboxElement = CheckboxElement(
         theme: theme,
-        label: STPLocalizedString(
-            "Set as default payment method",
-            "Label of a checkbox that when checked makes a payment method as the default one."
-        ),
+        label: String.Localized.set_as_default_payment_method,
         isSelectedByDefault: paymentMethod.isDefault
     )
 
@@ -142,7 +139,8 @@ final class LinkCardEditElement: Element {
                 billingAddressSection,
                 checkboxElement,
             ],
-            theme: theme
+            theme: theme,
+            customSpacing: [(cardSection, LinkUI.largeContentSpacing)]
         )
         formElement.delegate = self
         return formElement
@@ -185,7 +183,9 @@ final class LinkCardEditElement: Element {
             self.expiryDateElement.setText(expiryDate.displayString)
         }
 
-        self.checkboxElement.checkboxButton.isHidden = paymentMethod.isDefault
+//        self.checkboxElement.checkboxButton.isHidden = paymentMethod.isDefault
+        // This checkbox is confusing, so we'll always hide it for now. We'll bring it back once we work out the design.
+        self.checkboxElement.checkboxButton.isHidden = true
     }
 
 }

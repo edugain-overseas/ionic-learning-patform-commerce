@@ -13,17 +13,25 @@ import Foundation
 import UIKit
 
 class UpdatePaymentMethodViewModel {
-    static let supportedPaymentMethods: [STPPaymentMethodType] = [.card, .USBankAccount, .SEPADebit]
-
     let paymentMethod: STPPaymentMethod
     let appearance: PaymentSheet.Appearance
     let hostedSurface: HostedSurface
     let cardBrandFilter: CardBrandFilter
-    let canEdit: Bool
     let canRemove: Bool
+    let canUpdateCardBrand: Bool
+    let allowsSetAsDefaultPM: Bool
+    let isDefault: Bool
 
     var selectedCardBrand: STPCardBrand?
     var errorState: Bool = false
+    var hasChangedCardBrand: Bool = false
+    var hasChangedDefaultPaymentMethodCheckbox: Bool = false
+    var canEdit: Bool {
+        return canUpdateCardBrand || allowsSetAsDefaultPM
+    }
+    var hasUpdates: Bool {
+        return hasChangedCardBrand || hasChangedDefaultPaymentMethodCheckbox
+    }
 
     lazy var header: String = {
         switch paymentMethod.type {
@@ -41,7 +49,7 @@ class UpdatePaymentMethodViewModel {
     lazy var footnote: String = {
         switch paymentMethod.type {
         case .card:
-            return canEdit ? .Localized.only_card_brand_can_be_changed : .Localized.card_details_cannot_be_changed
+            return canUpdateCardBrand ? .Localized.only_card_brand_can_be_changed : .Localized.card_details_cannot_be_changed
         case .USBankAccount:
             return .Localized.bank_account_details_cannot_be_changed
         case .SEPADebit:
@@ -51,15 +59,17 @@ class UpdatePaymentMethodViewModel {
         }
     }()
 
-    init(paymentMethod: STPPaymentMethod, appearance: PaymentSheet.Appearance, hostedSurface: HostedSurface, cardBrandFilter: CardBrandFilter = .default, canEdit: Bool, canRemove: Bool) {
-        guard UpdatePaymentMethodViewModel.supportedPaymentMethods.contains(paymentMethod.type) else {
+    init(paymentMethod: STPPaymentMethod, appearance: PaymentSheet.Appearance, hostedSurface: HostedSurface, cardBrandFilter: CardBrandFilter = .default, canRemove: Bool, canUpdateCardBrand: Bool, allowsSetAsDefaultPM: Bool = false, isDefault: Bool = false) {
+        guard PaymentSheet.supportedSavedPaymentMethods.contains(paymentMethod.type) else {
             fatalError("Unsupported payment type \(paymentMethod.type) in UpdatePaymentMethodViewModel")
         }
         self.paymentMethod = paymentMethod
         self.appearance = appearance
         self.hostedSurface = hostedSurface
         self.cardBrandFilter = cardBrandFilter
-        self.canEdit = canEdit
         self.canRemove = canRemove
+        self.canUpdateCardBrand = canUpdateCardBrand
+        self.allowsSetAsDefaultPM = allowsSetAsDefaultPM
+        self.isDefault = isDefault
     }
 }

@@ -17,7 +17,7 @@ import gridIcon from "../../assets/icons/header/list-style-grid.svg";
 import filterIcon from "../../assets/icons/header/filter.svg";
 import SettingsIcon from "../../assets/icons/menu/settings.svg";
 import SaveIcon from "../../assets/icons/save.svg";
-import logoFEU from "../../assets/icons/logo_feu.webp";
+import logoFEU from "../../assets/images/logo_feu.png";
 import detailsIcon from "../../assets/icons/header/details.svg";
 import HeaderTitle from "./HeaderTitle";
 import Spinner from "../Spinner/Spinner";

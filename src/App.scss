@@ -183,10 +183,7 @@ ion-modal::part(handle) {
 // global, elements
 
 .primaryPage {
-  background-image: url("./assets/images/body-bg.webp");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: var(--ion-background-color);
   overscroll-behavior: none;
 }
 

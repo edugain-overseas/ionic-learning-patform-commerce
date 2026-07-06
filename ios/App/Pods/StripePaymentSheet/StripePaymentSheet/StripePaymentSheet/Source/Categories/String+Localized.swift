@@ -40,6 +40,15 @@ extension String.Localized {
         )
     }
 
+    static var save_your_payment_information_with_link: String {
+        STPLocalizedString(
+                "Save your payment information with Link, and securely check out in 1-click on Link-supported sites.",
+                """
+                Label describing the benefit of signing up for Link.
+                """
+                )
+    }
+
     static var save_for_future_payments: String {
         STPLocalizedString(
             "Save for future payments",
@@ -95,6 +104,13 @@ extension String.Localized {
         STPLocalizedString(
             "Manage card",
             "Title shown above a view containing the customer's card that they can delete or update"
+        )
+    }
+
+    static var manage_cards: String {
+        STPLocalizedString(
+            "Manage cards",
+            "Title shown above a view containing a list of the customer's cards that they can delete or update"
         )
     }
 
@@ -435,6 +451,20 @@ extension String.Localized {
         STPLocalizedString(
             "Pay over time with Affirm",
             "Promotional text for Affirm, displayed in a button that lets the customer pay with Affirm"
+        )
+    }
+
+    static var default_text: String {
+        STPLocalizedString(
+            "Default",
+            "Label for identifying the default payment method."
+       )
+    }
+
+    @_spi(STP) public static var set_as_default_payment_method: String {
+        STPLocalizedString(
+            "Set as default payment method",
+            "Label of a checkbox that when checked makes a payment method as the default one."
         )
     }
 }

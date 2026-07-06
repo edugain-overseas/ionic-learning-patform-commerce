@@ -1,10 +1,13 @@
 .papeWrapper {
-  --ion-background-color: transparent;
-  background-color: var(--custom-primary-lg)
+  background-color: var(--custom-primary-lg);
 }
 
 .contentWrapper::part(scroll) {
   overscroll-behavior: none;
+}
+
+.contentWrapper::part(background) {
+  background: transparent;
 }
 
 .topContentWrapper {
@@ -127,7 +130,8 @@
 }
 
 .background {
-  background: url("../../assets/images/background.png");
+  // background: url("../../assets/images/background.png");
+  background-color: var(--ion-background-color);
   border-top-left-radius: 16rem;
   border-top-right-radius: 16rem;
   // max-height: 100%;

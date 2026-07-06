@@ -1,7 +1,5 @@
-import { Stripe } from "@capacitor-community/stripe";
-// import { StatusBar } from "@capacitor/status-bar";
+// import { Stripe } from "@capacitor-community/stripe";
 import { CapacitorConfig } from "@capacitor/cli";
-// import { KeyboardResize, KeyboardStyle } from '@capacitor/keyboard';
 
 const config: CapacitorConfig = {
   appId: "io.ieucourses.app",
@@ -9,18 +7,17 @@ const config: CapacitorConfig = {
   webDir: "dist",
   server: {
     androidScheme: "https",
+    iosScheme: "https",
   },
   ios: {
     scrollEnabled: false,
   },
   plugins: {
-    Keyboard: {
-      // resizeOnFullScreen: true,
-    },
     SplashScreen: {
-      launchShowDuration: 3000,
-      backgroundColor: "#760000",
+      launchAutoHide: false,
+      iosSplashWebviewFullScreen: true,
       androidScaleType: "CENTER_CROP",
+      backgroundColor: "#760000",
     },
     GoogleAuth: {
       scopes: ["profile", "email"],

@@ -18,6 +18,9 @@ protocol PayWithLinkSignUpViewModelDelegate: AnyObject {
         _ viewModel: PayWithLinkViewController.SignUpViewModel,
         didLookupAccount linkAccount: PaymentSheetLinkAccount?
     )
+    func viewModelDidEncounterAttestationError(
+        _ viewModel: PayWithLinkViewController.SignUpViewModel
+    )
 }
 
 extension PayWithLinkViewController {
@@ -165,8 +168,7 @@ extension PayWithLinkViewController {
             linkAccount.signUp(
                 with: phoneNumber,
                 legalName: requiresNameCollection ? legalName : nil,
-//                TODO(link): Was .button, add new consent action
-                consentAction: .checkbox_v0
+                consentAction: .clicked_button_mobile_v1
             ) { [weak self] result in
                 switch result {
                 case .success:
@@ -197,7 +199,7 @@ private extension PayWithLinkViewController.SignUpViewModel {
         accountLookupDebouncer.enqueue { [weak self] in
             self?.isLookingUpLinkAccount = true
 
-            self?.accountService.lookupAccount(withEmail: emailAddress) { result in
+            self?.accountService.lookupAccount(withEmail: emailAddress, emailSource: .userAction) { result in
                 guard let self = self else { return }
 
                 // Check the requested email address against the current one. Handle
@@ -216,6 +218,9 @@ private extension PayWithLinkViewController.SignUpViewModel {
                 case .failure(let error):
                     self.linkAccount = nil
                     self.errorMessage = error.nonGenericDescription
+                    if StripeAttest.isLinkAssertionError(error: error) {
+                        self.delegate?.viewModelDidEncounterAttestationError(self)
+                    }
                 }
             }
         }

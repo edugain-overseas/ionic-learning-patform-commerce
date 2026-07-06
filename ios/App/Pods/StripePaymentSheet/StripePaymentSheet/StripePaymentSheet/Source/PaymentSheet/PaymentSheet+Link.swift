@@ -5,6 +5,7 @@
 
 import Foundation
 @_spi(STP) import StripeCore
+@_spi(STP) import StripePayments
 import UIKit
 
 // MARK: - Webview Link
@@ -29,7 +30,7 @@ extension PaymentSheet: PayWithLinkWebControllerDelegate {
         }
     }
 
-    func payWithLinkWebControllerDidCancel(_ payWithLinkWebController: PayWithLinkWebController) {
+    func payWithLinkWebControllerDidCancel() {
     }
 }
 
@@ -151,7 +152,8 @@ extension PaymentSheet: PayWithLinkViewControllerDelegate {
 
     func payWithLinkViewControllerDidFinish(
         _ payWithLinkViewController: PayWithLinkViewController,
-        result: PaymentSheetResult
+        result: PaymentSheetResult,
+        deferredIntentConfirmationType: StripeCore.STPAnalyticsClient.DeferredIntentConfirmationType?
     ) {
         completion?(result)
     }
@@ -165,4 +167,21 @@ extension PaymentSheet: PayWithLinkViewControllerDelegate {
 
         return nil
     }
+}
+
+// MARK: - Native Link helpers
+
+/// Check if native Link is available on this device
+func deviceCanUseNativeLink(elementsSession: STPElementsSession, configuration: PaymentElementConfiguration) -> Bool {
+    let useAttestationEndpoints = elementsSession.linkSettings?.useAttestationEndpoints ?? false
+    guard useAttestationEndpoints else {
+        return false
+    }
+
+    // If we're in testmode, we don't need to attest for native Link
+    if configuration.apiClient.isTestmode {
+        return true
+    }
+
+    return configuration.apiClient.stripeAttest.isSupported
 }

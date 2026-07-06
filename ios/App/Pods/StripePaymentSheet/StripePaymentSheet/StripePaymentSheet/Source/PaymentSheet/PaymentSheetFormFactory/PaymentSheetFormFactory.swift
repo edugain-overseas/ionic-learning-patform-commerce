@@ -28,6 +28,7 @@ class PaymentSheetFormFactory {
     let addressSpecProvider: AddressSpecProvider
     let showLinkInlineCardSignup: Bool
     let linkAccount: PaymentSheetLinkAccount?
+    let accountService: LinkAccountServiceProtocol?
     let previousCustomerInput: IntentConfirmParams?
 
     let isPaymentIntent: Bool
@@ -39,6 +40,8 @@ class PaymentSheetFormFactory {
     let paymentMethodIncentive: PaymentMethodIncentive?
 
     var shouldDisplaySaveCheckbox: Bool {
+        // Don't show the save checkbox in Link
+        guard !configuration.linkPaymentMethodsOnly else { return false }
         switch savePaymentMethodConsentBehavior {
         case .legacy:
             return !isSettingUp && configuration.hasCustomer && paymentMethod.supportsSaveForFutureUseCheckbox()
@@ -68,6 +71,7 @@ class PaymentSheetFormFactory {
         previousCustomerInput: IntentConfirmParams? = nil,
         addressSpecProvider: AddressSpecProvider = .shared,
         linkAccount: PaymentSheetLinkAccount? = nil,
+        accountService: LinkAccountServiceProtocol,
         analyticsHelper: PaymentSheetAnalyticsHelper?
     ) {
 
@@ -82,6 +86,12 @@ class PaymentSheetFormFactory {
                 return false
             }
 
+            // If attestation is enabled for this app but the specific device doesn't support attestation, don't show inline signup: It's unlikely to provide a good experience. We'll only allow the web popup flow.
+            let useAttestationEndpoints = elementsSession.linkSettings?.useAttestationEndpoints ?? false
+            if useAttestationEndpoints && !deviceCanUseNativeLink(elementsSession: elementsSession, configuration: configuration) {
+                return false
+            }
+
             let isAccountNotRegisteredOrMissing = linkAccount.flatMap({ !$0.isRegistered }) ?? true
             return isAccountNotRegisteredOrMissing && !UserDefaults.standard.customerHasUsedLink
         }()
@@ -91,6 +101,7 @@ class PaymentSheetFormFactory {
                   addressSpecProvider: addressSpecProvider,
                   showLinkInlineCardSignup: showLinkInlineCardSignup,
                   linkAccount: linkAccount,
+                  accountService: accountService,
                   cardBrandChoiceEligible: elementsSession.isCardBrandChoiceEligible,
                   isPaymentIntent: intent.isPaymentIntent,
                   isSettingUp: intent.isSettingUp,
@@ -107,6 +118,7 @@ class PaymentSheetFormFactory {
         addressSpecProvider: AddressSpecProvider = .shared,
         showLinkInlineCardSignup: Bool = false,
         linkAccount: PaymentSheetLinkAccount? = nil,
+        accountService: LinkAccountServiceProtocol?,
         cardBrandChoiceEligible: Bool = false,
         isPaymentIntent: Bool,
         isSettingUp: Bool,
@@ -120,6 +132,7 @@ class PaymentSheetFormFactory {
         self.addressSpecProvider = addressSpecProvider
         self.showLinkInlineCardSignup = showLinkInlineCardSignup
         self.linkAccount = linkAccount
+        self.accountService = accountService
         // Restore the previous customer input if its the same type
         if previousCustomerInput?.paymentMethodType == paymentMethod {
             self.previousCustomerInput = previousCustomerInput
@@ -349,6 +362,20 @@ extension PaymentSheetFormFactory {
         }
     }
 
+    func makeDefaultCheckbox(
+        didToggle: ((Bool) -> Void)? = nil
+    ) -> PaymentMethodElementWrapper<CheckboxElement> {
+        let element = CheckboxElement(
+            theme: configuration.appearance.asElementsTheme,
+            label: String.Localized.set_as_default_payment_method,
+            isSelectedByDefault: false,
+            didToggle: didToggle
+        )
+        return PaymentMethodElementWrapper(element) { _, params in
+            return params
+        }
+    }
+
     func makeBillingAddressSection(
         collectionMode: AddressSectionElement.CollectionMode = .all(),
         countries: [String]? = nil,
@@ -500,6 +527,10 @@ extension PaymentSheetFormFactory {
 
     func makeUSBankAccount(merchantName: String) -> PaymentMethodElement {
         let isSaving = BoolReference()
+        var defaultCheckbox: PaymentMethodElementWrapper<CheckboxElement>?
+        if configuration.allowsSetAsDefaultPM {
+            defaultCheckbox = makeDefaultCheckbox()
+        }
         let saveCheckbox = makeSaveCheckbox(
             label: String(
                 format: STPLocalizedString(
@@ -510,6 +541,7 @@ extension PaymentSheetFormFactory {
             )
         ) { value in
             isSaving.value = value
+            defaultCheckbox?.view.isHidden = !value
         }
 
         isSaving.value =
@@ -532,11 +564,12 @@ extension PaymentSheetFormFactory {
             emailElement: configuration.billingDetailsCollectionConfiguration.email != .never ? makeEmail() : nil,
             phoneElement: phoneElement,
             addressElement: addressElement,
-            checkboxElement: shouldDisplaySaveCheckbox ? saveCheckbox : nil,
+            saveCheckboxElement: shouldDisplaySaveCheckbox ? saveCheckbox : nil,
+            defaultCheckboxElement: defaultCheckbox,
             savingAccount: isSaving,
             merchantName: merchantName,
             initialLinkedBank: previousCustomerInput?.financialConnectionsLinkedBank,
-            theme: theme
+            appearance: configuration.appearance
         )
     }
 
@@ -666,7 +699,7 @@ extension PaymentSheetFormFactory {
         let shouldHideEmailField = billingConfiguration.email == .never &&
             configuration.defaultBillingDetails.email?.isEmpty == false
         let emailElement = shouldHideEmailField ? nil : makeEmail()
-        
+
         let incentive = paymentMethodIncentive?.takeIfAppliesTo(paymentMethod)
 
         return InstantDebitsPaymentMethodElement(
@@ -678,7 +711,7 @@ extension PaymentSheetFormFactory {
             addressElement: addressElement,
             incentive: incentive,
             isPaymentIntent: isPaymentIntent,
-            theme: theme
+            appearance: configuration.appearance
         )
     }
 

@@ -3,17 +3,18 @@
 	"appName": "FEU courses",
 	"webDir": "dist",
 	"server": {
-		"androidScheme": "https"
+		"androidScheme": "https",
+		"iosScheme": "https"
 	},
 	"ios": {
 		"scrollEnabled": false
 	},
 	"plugins": {
-		"Keyboard": {},
 		"SplashScreen": {
-			"launchShowDuration": 3000,
-			"backgroundColor": "#760000",
-			"androidScaleType": "CENTER_CROP"
+			"launchAutoHide": false,
+			"iosSplashWebviewFullScreen": true,
+			"androidScaleType": "CENTER_CROP",
+			"backgroundColor": "#760000"
 		},
 		"GoogleAuth": {
 			"scopes": [
@@ -38,6 +39,7 @@
 		"HapticsPlugin",
 		"KeyboardPlugin",
 		"SharePlugin",
+		"SplashScreenPlugin",
 		"StatusBarPlugin",
 		"GoogleAuth"
 	]

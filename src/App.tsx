@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { IonApp, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
+import { SplashScreen } from "@capacitor/splash-screen";
 import { CoursesProvider } from "./context/CoursesContext";
 import { UserProvider } from "./context/UserContext";
 import { ListStyleProvider } from "./context/ListStyleContext";
@@ -35,9 +37,24 @@ import "./App.scss";
 /* Theme variables */
 import "./theme/variables.css";
 
+
 setupIonicReact();
 
 const App: React.FC = () => {
+
+  useEffect(() => {
+    const initializeApp = async () => {
+      try {
+      } catch (error) {
+        console.error("Помилка ініціалізації додатка:", error);
+      } finally {
+        await SplashScreen.hide({fadeOutDuration: 400});
+      }
+    };
+
+    initializeApp();
+  }, []);
+
   useDynamicFontSize();
   useStatusBar();
   useKeyboard();

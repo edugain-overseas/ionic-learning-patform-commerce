@@ -10,6 +10,7 @@ import SafariServices
 import UIKit
 
 @_spi(STP) import StripeCore
+@_exported @_spi(STP) import StripePayments
 @_spi(STP) import StripeUICore
 
 extension PayWithLinkViewController {
@@ -28,7 +29,7 @@ extension PayWithLinkViewController {
             label.numberOfLines = 0
             label.textAlignment = .center
             label.text = STPLocalizedString(
-                "Secure 1⁠-⁠click checkout",
+                "Fast, secure, 1⁠-⁠click checkout",
                 "Title for the Link signup screen"
             )
             return label
@@ -41,9 +42,7 @@ extension PayWithLinkViewController {
             label.adjustsFontForContentSizeCategory = true
             label.numberOfLines = 0
             label.textAlignment = .center
-            label.text = String.Localized.pay_faster_at_$merchant_and_thousands_of_merchants(
-                merchantDisplayName: context.configuration.merchantDisplayName
-            )
+            label.text = String.Localized.save_your_payment_information_with_link
             return label
         }()
 
@@ -70,7 +69,7 @@ extension PayWithLinkViewController {
         private lazy var nameSection = SectionElement(elements: [nameElement], theme: LinkUI.appearance.asElementsTheme)
 
         private lazy var legalTermsView: LinkLegalTermsView = {
-            let legalTermsView = LinkLegalTermsView(textAlignment: .center)
+            let legalTermsView = LinkLegalTermsView(textAlignment: .center, isStandalone: true)
             legalTermsView.tintColor = .linkBrandDark
             legalTermsView.delegate = self
             return legalTermsView
@@ -86,7 +85,7 @@ extension PayWithLinkViewController {
             let button = Button(
                 configuration: .linkPrimary(),
                 title: STPLocalizedString(
-                    "Join Link",
+                    "Agree and continue",
                     "Title for a button that when tapped creates a Link account for the user."
                 )
             )
@@ -125,7 +124,7 @@ extension PayWithLinkViewController {
         ) {
             self.viewModel = SignUpViewModel(
                 configuration: context.configuration,
-                accountService: LinkAccountService(apiClient: context.configuration.apiClient),
+                accountService: LinkAccountService(apiClient: context.configuration.apiClient, elementsSession: context.elementsSession),
                 linkAccount: linkAccount,
                 country: context.elementsSession.countryCode
             )
@@ -153,6 +152,11 @@ extension PayWithLinkViewController {
         override func viewDidAppear(_ animated: Bool) {
             super.viewDidAppear(animated)
             STPAnalyticsClient.sharedClient.logLinkSignupFlowPresented()
+
+            // If the email field is empty, select it
+            if emailElement.emailAddressString?.isEmpty ?? false {
+                emailElement.beginEditing()
+            }
         }
 
         private func setupBindings() {
@@ -235,6 +239,9 @@ extension PayWithLinkViewController {
 }
 
 extension PayWithLinkViewController.SignUpViewController: PayWithLinkSignUpViewModelDelegate {
+    func viewModelDidEncounterAttestationError(_ viewModel: PayWithLinkViewController.SignUpViewModel) {
+        self.coordinator?.bailToWebFlow()
+    }
 
     func viewModelDidChange(_ viewModel: PayWithLinkViewController.SignUpViewModel) {
         updateUI(animated: true)

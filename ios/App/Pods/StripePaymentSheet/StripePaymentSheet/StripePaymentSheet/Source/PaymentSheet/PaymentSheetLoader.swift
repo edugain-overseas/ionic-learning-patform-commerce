@@ -197,10 +197,10 @@ final class PaymentSheetLoader {
             return nil
         }
 
-        let linkAccountService = LinkAccountService(apiClient: configuration.apiClient)
-        func lookUpConsumerSession(email: String?) async throws -> PaymentSheetLinkAccount? {
+        let linkAccountService = LinkAccountService(apiClient: configuration.apiClient, elementsSession: elementsSession)
+        func lookUpConsumerSession(email: String?, emailSource: EmailSource) async throws -> PaymentSheetLinkAccount? {
             return try await withCheckedThrowingContinuation { continuation in
-                linkAccountService.lookupAccount(withEmail: email) { result in
+                linkAccountService.lookupAccount(withEmail: email, emailSource: emailSource) { result in
                     switch result {
                     case .success(let linkAccount):
                         continuation.resume(with: .success(linkAccount))
@@ -212,13 +212,13 @@ final class PaymentSheetLoader {
         }
 
         if let email = configuration.defaultBillingDetails.email {
-            return try await lookUpConsumerSession(email: email)
+            return try await lookUpConsumerSession(email: email, emailSource: .customerEmail)
         } else if let customerID = configuration.customer?.id,
                   let ephemeralKey = configuration.customer?.ephemeralKeySecretBasedOn(elementsSession: elementsSession)
         {
             let customer = try await configuration.apiClient.retrieveCustomer(customerID, using: ephemeralKey)
             // If there's an error in this call we can just ignore it
-            return try await lookUpConsumerSession(email: customer.email)
+            return try await lookUpConsumerSession(email: customer.email, emailSource: .customerObject)
         } else {
             return nil
         }
@@ -306,7 +306,6 @@ final class PaymentSheetLoader {
         return paymentMethodId
     }
 
-    static let savedPaymentMethodTypes: [STPPaymentMethodType] = [.card, .USBankAccount, .SEPADebit]
     static func fetchSavedPaymentMethods(elementsSession: STPElementsSession, configuration: PaymentElementConfiguration) async throws -> [STPPaymentMethod] {
         // Retrieve the payment methods from ElementsSession or by making direct API calls
         var savedPaymentMethods: [STPPaymentMethod]
@@ -324,8 +323,7 @@ final class PaymentSheetLoader {
                 guard let customer = elementsSession.customer,
                   let defaultPaymentMethod = customer.getDefaultOrFirstPaymentMethod() else { return [] }
                 defaultPaymentMethodOption = CustomerPaymentOption.stripeId(defaultPaymentMethod.stripeId)
-            }
-            else {
+            } else {
                 defaultPaymentMethodOption = CustomerPaymentOption.defaultPaymentMethod(for: customerID)
             }
             if let defaultPMIndex = savedPaymentMethods.firstIndex(where: {
@@ -353,7 +351,7 @@ final class PaymentSheetLoader {
             configuration.apiClient.listPaymentMethods(
                 forCustomer: customerID,
                 using: ephemeralKey,
-                types: savedPaymentMethodTypes,
+                types: PaymentSheet.supportedSavedPaymentMethods,
                 limit: 100
             ) { paymentMethods, error in
                 guard var paymentMethods, error == nil else {

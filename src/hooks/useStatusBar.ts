@@ -7,7 +7,9 @@ export const useStatusBar = () => {
   const setStatusBarStyleAndColor = async () => {
     if (Capacitor.isPluginAvailable("StatusBar")) {
       await StatusBar.setStyle({ style: Style.Light });
-      await StatusBar.setBackgroundColor({ color: "#00000000" }); // Set status bar background color to transparent
+      if (Capacitor.getPlatform() === "android") {
+        await StatusBar.setBackgroundColor({ color: "#00000000" }); // Set status bar background color to transparent
+      }
     }
   };
 
@@ -22,11 +24,11 @@ export const useStatusBar = () => {
           root.style.setProperty(
             "--ion-safe-area-top",
             // "env(safe-area-inset-top)"
-            "20px"
+            "20px",
           );
           root.style.setProperty(
             "--ion-safe-area-bottom",
-            "env(safe-area-inset-bottom)"
+            "env(safe-area-inset-bottom)",
           );
         }
       }

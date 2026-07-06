@@ -39,7 +39,7 @@
   width: 272rem;
   height: 272rem;
   border-radius: 50%;
-  border: 1.5rem solid rgba($color: #5D6977, $alpha: 0.1);
+  border: 1.5rem solid rgba($color: #5d6977, $alpha: 0.1);
   filter: drop-shadow(0px 0px 2.016px rgba(0, 0, 0, 0.12));
   position: absolute;
   top: 0;
@@ -199,30 +199,42 @@
   right: 0;
   border-radius: 0 0 100rem 100rem;
   overflow: hidden;
+
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .mediaObject {
   position: absolute;
   inset: 0;
-  background-image: url("../../assets//images/HomeHero/happy-student.webp");
+  background-image: url("../../assets/images/HomeHero/happy-student.png");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   opacity: 0.95;
   opacity: 1;
   z-index: 1;
+
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .mediaObjectShadow {
   position: absolute;
   inset: 0;
-  background-image: url("../../assets//images/HomeHero/happy-student.webp");
+  background-image: url("../../assets/images/HomeHero/happy-student.png");
   filter: blur(2rem);
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   z-index: 0;
   opacity: 0.8;
+
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 @keyframes fadeIn {

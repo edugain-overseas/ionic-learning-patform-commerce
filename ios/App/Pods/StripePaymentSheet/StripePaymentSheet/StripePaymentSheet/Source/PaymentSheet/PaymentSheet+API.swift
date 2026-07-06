@@ -315,7 +315,9 @@ extension PaymentSheet {
                         with: authenticationContext,
                         completion: { actionStatus, _, error in
                             paymentHandlerCompletion(actionStatus, error)
-                            linkAccount?.logout()
+                            if actionStatus == .succeeded {
+                                linkAccount?.logout()
+                            }
                         }
                     )
                 case .setupIntent(let setupIntent):
@@ -327,7 +329,9 @@ extension PaymentSheet {
                         with: authenticationContext,
                         completion: { actionStatus, _, error in
                             paymentHandlerCompletion(actionStatus, error)
-                            linkAccount?.logout()
+                            if actionStatus == .succeeded {
+                                linkAccount?.logout()
+                            }
                         }
                     )
                 case .deferredIntent(let intentConfig):
@@ -343,7 +347,9 @@ extension PaymentSheet {
                         paymentHandler: paymentHandler,
                         isFlowController: isFlowController,
                         completion: { psResult, confirmationType in
-                            linkAccount?.logout()
+                            if case .completed = psResult {
+                                linkAccount?.logout()
+                            }
                             completion(psResult, confirmationType)
                         }
                     )
@@ -371,7 +377,9 @@ extension PaymentSheet {
                         paymentIntentParams,
                         with: authenticationContext,
                         completion: { actionStatus, _, error in
-                            linkAccount?.logout()
+                            if actionStatus == .succeeded {
+                                linkAccount?.logout()
+                            }
                             paymentHandlerCompletion(actionStatus, error)
                         }
                     )
@@ -384,7 +392,9 @@ extension PaymentSheet {
                         setupIntentParams,
                         with: authenticationContext,
                         completion: { actionStatus, _, error in
-                            linkAccount?.logout()
+                            if actionStatus == .succeeded {
+                                linkAccount?.logout()
+                            }
                             paymentHandlerCompletion(actionStatus, error)
                         }
                     )
@@ -397,7 +407,9 @@ extension PaymentSheet {
                         paymentHandler: paymentHandler,
                         isFlowController: isFlowController,
                         completion: { psResult, confirmationType in
-                            linkAccount?.logout()
+                            if case .completed = psResult {
+                                linkAccount?.logout()
+                            }
                             completion(psResult, confirmationType)
                         }
                     )
@@ -465,7 +477,8 @@ extension PaymentSheet {
 
             switch confirmOption {
             case .wallet:
-                if configuration.forceNativeLinkEnabled {
+                let useNativeLink = deviceCanUseNativeLink(elementsSession: elementsSession, configuration: configuration)
+                if useNativeLink {
                     let linkController = PayWithNativeLinkController(intent: intent, elementsSession: elementsSession, configuration: configuration, analyticsHelper: analyticsHelper)
                     linkController.present(on: authenticationContext.authenticationPresentingViewController(), completion: completion)
                 } else {
@@ -504,9 +517,6 @@ extension PaymentSheet {
                 } else {
                     confirmWithPaymentDetails(linkAccount, paymentDetails, paymentDetails.cvc, shouldSave)
                 }
-            case .withPaymentMethodParams(let linkAccount, let paymentMethodParams):
-                // shouldSave is false, as we don't show a save checkbox in the Link VC
-                createPaymentDetailsAndConfirm(linkAccount, paymentMethodParams, false)
             }
         case let .external(paymentMethod, billingDetails):
             guard let confirmHandler = configuration.externalPaymentMethodConfiguration?.externalPaymentMethodConfirmHandler else {
@@ -560,7 +570,7 @@ extension PaymentSheet {
             intent.isSetupFutureUsageSet,
             let paymentMethod = intent.paymentMethod,
             // Can it appear in the list of saved PMs?
-            PaymentSheetLoader.savedPaymentMethodTypes.contains(paymentMethod.type)
+            PaymentSheet.supportedSavedPaymentMethods.contains(paymentMethod.type)
         else {
             return
         }

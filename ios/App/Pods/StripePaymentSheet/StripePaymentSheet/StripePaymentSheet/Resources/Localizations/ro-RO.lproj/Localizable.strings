@@ -58,8 +58,6 @@
 
 "By joining Link, you agree to the <terms>Terms</terms> and <privacy>Privacy Policy</privacy>." = "Prin accesarea link-ului de asociere, sunteți de acord cu <terms>Termenii</terms> și <privacy>Politica de confidențialitate</privacy>.";
 
-"By providing your bank account details and confirming this payment, you agree to this Direct Debit Request and the <terms>Direct Debit Request service agreement</terms>, and authorise Stripe Payments Australia Pty Ltd ACN 160 180 343 Direct Debit User ID number 507156 (“Stripe”) to debit your account through the Bulk Electronic Clearing System (BECS) on behalf of %@ (the \"Merchant\") for any amounts separately communicated to you by the Merchant. You certify that you are either an account holder or an authorised signatory on the account listed above." = "Prin furnizarea detaliilor contului dvs. bancar și confirmarea acestei plăți, sunteți de acord cu această Solicitare Direct Debit și cu <terms>Acordul de serviciu privind Solicitarea Direct Debit</terms> și autorizați Plățile Stripe Australia Pty Ltd ACN 160 180 343 număr ID utilizator Direct Debit 507156 („Stripe”) să vă debiteze contul prin intermediul Sistemului electronic de compensare colectivă (BECS) în numele %@ („Comerciantul”) pentru orice sume comunicate separat către dvs. de către Comerciant. Certificați faptul că sunteți fie un titular de cont, fie un semnatar autorizat în contul specificat mai sus.";
-
 "By providing your card information, you allow %@ to charge your card for future payments in accordance with their terms." = "Prin furnizarea informațiilor despre cardul dvs., permiteți %@ să vă taxeze cardul pentru plățile viitoare în conformitate cu termenii acesteia.";
 
 "By providing your email, you agree to create a Link account and save your payment info to Link, according to the Link <terms>Terms</terms> and <privacy>Privacy Policy</privacy>." = "Prin furnizarea adresei de e-mail, sunteți de acord să creați un cont Link și să vă salvați informațiile de plată în Link, în conformitate cu <terms>Termenii</terms> și <privacy>Politica de confidențialitate</privacy> Link.";
@@ -100,19 +98,17 @@
 
 "Enter address manually" = "Introduceți adresa manual";
 
-"Enter the code sent to %@ to use Link to pay by default." = "Introduceți codul trimis la %@ pentru a utiliza Link ca metodă de plată implicită";
-
-"Enter your verification code" = "Introduceți codul de verificare";
-
 "FPX Bank" = "FPX Bank";
 
 "For security, please re-enter your card’s security code." = "Din motive de securitate, vă rugăm să introduceți din nou codul de securitate al cardului dvs.";
 
+"Get %@ back when you pay for the first time with your bank. <terms>See terms</terms>" = "Primiți %@ înapoi atunci când plătiți pentru prima dată cu banca dvs. <terms>Consultați termenii</terms>";
+
+"Get %@ back when you pay with your bank. <terms>See terms</terms>" = "Primiți %@ înapoi atunci când plătiți cu banca dvs. <terms>Consultați termenii</terms>";
+
 "I understand that Stripe will be collecting Direct Debits on behalf of %@ and confirm that I am the account holder and the only person required to authorise debits from this account." = "Înțeleg că Stripe va colecta debite directe în numele %@ și confirm că sunt titularul contului și singura persoană necesară pentru a autoriza debite din acest cont.";
 
 "IBAN" = "IBAN";
-
-"Join Link" = "Înscrieți-vă în Link";
 
 "Log out of Link" = "Deconectare de la Link";
 
@@ -121,6 +117,8 @@
 "Manage US bank account" = "Gestionare cont bancar din SUA";
 
 "Manage card" = "Gestionare card";
+
+"Manage cards" = "Gestionare carduri";
 
 "Manage payment method" = "Gestionare metodă de plată";
 
@@ -133,6 +131,8 @@
 "New card" = "Card nou";
 
 "New payment method" = "Metodă de plată nouă";
+
+"No %@ promo" = "Fără promoție %@";
 
 "Not %@?" = "Nu este %@?";
 
@@ -204,8 +204,6 @@
 
 "Saved" = "Salvare efectuată";
 
-"Secure 1⁠-⁠click checkout" = "Finalizare securizată a comenzii cu un singur clic";
-
 "Select card" = "Selectare card";
 
 "Select payment method" = "Selectare metodă de plată";
@@ -222,11 +220,7 @@
 
 "Show menu" = "Afișare meniu";
 
-"Sign in to your Link account" = "Conectați-vă la contul dvs. Link";
-
 "Simple, secure one-click payments" = "Plăți simple și securizate cu un singur clic";
-
-"Something went wrong when linking your account.\nPlease try again later." = "Ceva nu a mers bine la asocierea contului dvs.\nVă rugăm să încercați din nou mai târziu.";
 
 "Stripe will deposit $0.01 to your account in 1-2 business days. Then you'll get an email with instructions to finish saving your bank account with %@." = "Stripe va depune 0,01 USD în contul dvs. în 1-2 zile lucrătoare. Apoi veți primi un e-mail cu instrucțiuni pentru a finaliza salvarea contului dvs. bancar cu %@.";
 
@@ -237,8 +231,6 @@
 "Tap to expand" = "Atingeți pentru a extinde";
 
 "The IBAN you entered is incomplete." = "Codul IBAN pe care l-ați introdus nu este complet.";
-
-"The IBAN you entered is invalid, \"%@\" is not a supported country code." = "Codul IBAN pe care l-ați introdus nu este valid, „%@” nu este un cod de țară acceptat.";
 
 "The provided verification code has expired." = "Codul de verificare furnizat a expirat.";
 

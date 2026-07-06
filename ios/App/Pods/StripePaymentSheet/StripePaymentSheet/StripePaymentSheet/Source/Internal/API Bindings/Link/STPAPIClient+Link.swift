@@ -12,36 +12,68 @@ import Foundation
 @_spi(STP) import StripePayments
 @_spi(STP) import StripePaymentsUI
 
+// Please do not attempt to modify the Stripe SDK or call private APIs directly.
+// See the Stripe Services Agreement (https://stripe.com/legal/ssa) for more details.
 extension STPAPIClient {
     func lookupConsumerSession(
         for email: String?,
+        emailSource: EmailSource?,
+        sessionID: String,
         cookieStore: LinkCookieStore,
+        useMobileEndpoints: Bool,
         completion: @escaping (Result<ConsumerSession.LookupResponse, Error>) -> Void
     ) {
-        let endpoint: String = "consumers/sessions/lookup"
-        var parameters: [String: Any] = [
-            "request_surface": "ios_payment_element",
-        ]
-        if let email = email {
-            parameters["email_address"] = email.lowercased()
-        }
+        Task {
+            let legacyEndpoint = "consumers/sessions/lookup"
+            let mobileEndpoint = "consumers/mobile/sessions/lookup"
 
-        guard parameters.keys.contains("email_address") else {
-            // no request to make if we don't have an email
-            DispatchQueue.main.async {
-                completion(.success(
-                    ConsumerSession.LookupResponse(.noAvailableLookupParams)
-                ))
+            var parameters: [String: Any] = [
+                "request_surface": "ios_payment_element",
+                "session_id": sessionID,
+            ]
+            if let email, let emailSource {
+                parameters["email_address"] = email.lowercased()
+                parameters["email_source"] = emailSource.rawValue
+            } else {
+                // no request to make if we don't have an email
+                DispatchQueue.main.async {
+                    completion(.success(
+                        ConsumerSession.LookupResponse(.noAvailableLookupParams)
+                    ))
+                }
+                return
             }
-            return
-        }
 
-        post(
-            resource: endpoint,
-            parameters: parameters,
-            ephemeralKeySecret: publishableKey
-        ) { (result: Result<ConsumerSession.LookupResponse, Error>) in
-            completion(result)
+            let requestAssertionHandle: StripeAttest.AssertionHandle? = await {
+                if useMobileEndpoints {
+                    do {
+                        let assertionHandle = try await stripeAttest.assert()
+                        parameters = parameters.merging(assertionHandle.assertion.requestFields) { (_, new) in new }
+                        return assertionHandle
+                    } catch {
+                        // If we can't get an assertion, we'll try the request anyway. It may fail.
+                    }
+                }
+                return nil
+            }()
+
+            post(
+                resource: useMobileEndpoints ? mobileEndpoint : legacyEndpoint,
+                parameters: parameters,
+                ephemeralKeySecret: publishableKey
+            ) { (result: Result<ConsumerSession.LookupResponse, Error>) in
+                Task { @MainActor in
+                    // If there's an assertion error, send it to StripeAttest
+                    if useMobileEndpoints,
+                       case .failure(let error) = result,
+                       StripeAttest.isLinkAssertionError(error: error) {
+                        await self.stripeAttest.receivedAssertionError(error)
+                    }
+                    // Mark the assertion handle as completed
+                    requestAssertionHandle?.complete()
+                    completion(result)
+                }
+            }
         }
     }
 
@@ -52,35 +84,62 @@ extension STPAPIClient {
         legalName: String?,
         countryCode: String?,
         consentAction: String?,
+        useMobileEndpoints: Bool,
         completion: @escaping (Result<ConsumerSession.SessionWithPublishableKey, Error>) -> Void
     ) {
-        let endpoint: String = "consumers/accounts/sign_up"
+        Task {
+            let legacyEndpoint = "consumers/accounts/sign_up"
+            let modernEndpoint = "consumers/mobile/sign_up"
 
-        var parameters: [String: Any] = [
-            "request_surface": "ios_payment_element",
-            "email_address": email.lowercased(),
-            "phone_number": phoneNumber,
-            "locale": locale.toLanguageTag(),
-            "country_inferring_method": "PHONE_NUMBER",
-        ]
+            var parameters: [String: Any] = [
+                "request_surface": "ios_payment_element",
+                "email_address": email.lowercased(),
+                "phone_number": phoneNumber,
+                "locale": locale.toLanguageTag(),
+                "country_inferring_method": "PHONE_NUMBER",
+            ]
 
-        if let legalName = legalName {
-            parameters["legal_name"] = legalName
-        }
+            if let legalName = legalName {
+                parameters["legal_name"] = legalName
+            }
 
-        if let countryCode = countryCode {
-            parameters["country"] = countryCode
-        }
+            if let countryCode = countryCode {
+                parameters["country"] = countryCode
+            }
 
-        if let consentAction = consentAction {
-            parameters["consent_action"] = consentAction
-        }
+            if let consentAction = consentAction {
+                parameters["consent_action"] = consentAction
+            }
 
-        post(
-            resource: endpoint,
-            parameters: parameters
-        ) { (result: Result<ConsumerSession.SessionWithPublishableKey, Error>) in
-            completion(result)
+            let requestAssertionHandle: StripeAttest.AssertionHandle? = await {
+                if useMobileEndpoints {
+                    do {
+                        let assertionHandle = try await stripeAttest.assert()
+                        parameters = parameters.merging(assertionHandle.assertion.requestFields) { (_, new) in new }
+                        return assertionHandle
+                    } catch {
+                        // If we can't get an assertion, we'll try the request anyway. It may fail.
+                    }
+                }
+                return nil
+            }()
+
+            post(
+                resource: useMobileEndpoints ? modernEndpoint : legacyEndpoint,
+                parameters: parameters
+            ) { (result: Result<ConsumerSession.SessionWithPublishableKey, Error>) in
+                Task { @MainActor in
+                    // If there's an assertion error, send it to StripeAttest
+                    if useMobileEndpoints,
+                       case .failure(let error) = result,
+                       StripeAttest.isLinkAssertionError(error: error) {
+                        await self.stripeAttest.receivedAssertionError(error)
+                    }
+                    // Mark the assertion handle as completed
+                    requestAssertionHandle?.complete()
+                    completion(result)
+                }
+            }
         }
     }
 
@@ -267,7 +326,7 @@ extension STPAPIClient {
         let parameters: [String: Any] = [
             "credentials": ["consumer_session_client_secret": consumerSessionClientSecret],
             "request_surface": "ios_payment_element",
-            "types": ["card", "bank_account"],
+            "types": ["card"],
         ]
 
         post(
@@ -555,4 +614,11 @@ extension STPPaymentMethodAddress {
         }
         return .init(uniqueKeysWithValues: tupleArray)
     }
+}
+
+enum EmailSource: String {
+    case prefilledEmail = "prefilled_email"
+    case userAction = "user_action"
+    case customerObject = "customer_object"
+    case customerEmail = "customer_email"
 }

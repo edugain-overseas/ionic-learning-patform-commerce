@@ -1,13 +1,13 @@
 {
   "name": "CapacitorCommunityStripe",
-  "version": "6.4.3",
+  "version": "6.5.1",
   "summary": "Stripe SDK bindings for Capacitor Applications",
   "license": "MIT",
   "homepage": "git+https://github.com/capacitor-community/stripe.git",
   "authors": "Masahiko Sakakibara <sakakibara@rdlabo.jp>",
   "source": {
     "git": "git+https://github.com/capacitor-community/stripe.git",
-    "tag": "6.4.3"
+    "tag": "6.5.1"
   },
   "source_files": "ios/Sources/**/*.{swift,h,m,c,cc,mm,cpp}",
   "platforms": {
@@ -16,10 +16,10 @@
   "dependencies": {
     "Capacitor": [],
     "StripePaymentSheet": [
-      "~> 24.1.0"
+      "~> 24.4.1"
     ],
     "StripeApplePay": [
-      "~> 24.1.0"
+      "~> 24.4.1"
     ]
   },
   "swift_versions": "5.1",

@@ -58,8 +58,6 @@
 
 "By joining Link, you agree to the <terms>Terms</terms> and <privacy>Privacy Policy</privacy>." = "Ved å bli med i Link, godtar du <terms>vilkårene</terms> og <privacy>personvernerklæringen</privacy>.";
 
-"By providing your bank account details and confirming this payment, you agree to this Direct Debit Request and the <terms>Direct Debit Request service agreement</terms>, and authorise Stripe Payments Australia Pty Ltd ACN 160 180 343 Direct Debit User ID number 507156 (“Stripe”) to debit your account through the Bulk Electronic Clearing System (BECS) on behalf of %@ (the \"Merchant\") for any amounts separately communicated to you by the Merchant. You certify that you are either an account holder or an authorised signatory on the account listed above." = "Ved å oppgi dine bankkontodetaljer og bekrefte denne innbetalingen samtykker du til denne forespørselen om direktedebitering og til <terms>serviceavtalen for direktedebitering</terms> og autoriserer Stripe Payments Australia Pty Ltd ACN 160 180 343 direktedebitering bruker-ID nummer 507156 (\"Stripe\") til å debitere din konto gjennom Bulk Electronic Clearing System (BECS) på vegne av %@ (\"forhandleren\") for beløp som kommuniseres til deg separat av forhandleren. Du bekrefter at du er enten en kontoinnehaver eller en som er autorisert til å signere for kontoen vist ovenfor.";
-
 "By providing your card information, you allow %@ to charge your card for future payments in accordance with their terms." = "Ved å oppgi kortinformasjonen din tillater du %@ å belaste kortet ditt for fremtidige betalinger i samsvar med vilkårene deres.";
 
 "By providing your email, you agree to create a Link account and save your payment info to Link, according to the Link <terms>Terms</terms> and <privacy>Privacy Policy</privacy>." = "Ved å oppgi e-postadressen din godtar du å opprette en Link-konto og lagre betalingsinformasjonen din hos Link i henhold til Links <terms>vilkår</terms> og <privacy>personvernerklæring</privacy>.";
@@ -100,19 +98,17 @@
 
 "Enter address manually" = "Skriv inn adresse manuelt";
 
-"Enter the code sent to %@ to use Link to pay by default." = "Skriv inn koden sendt til %@ for å bruke Link til å betale som standard.";
-
-"Enter your verification code" = "Skriv inn verifiseringskoden";
-
 "FPX Bank" = "FPX Bank";
 
 "For security, please re-enter your card’s security code." = "For sikkerhets skyld må du skrive inn sikkerhetskoden for kortet ditt på nytt.";
 
+"Get %@ back when you pay for the first time with your bank. <terms>See terms</terms>" = "Få %@ tilbake når du betaler for første gang med banken din.<terms>Se vilkår</terms>";
+
+"Get %@ back when you pay with your bank. <terms>See terms</terms>" = "Få %@ tilbake når du betaler med banken din. <terms>Se vilkår</terms>";
+
 "I understand that Stripe will be collecting Direct Debits on behalf of %@ and confirm that I am the account holder and the only person required to authorise debits from this account." = "Jeg forstår at Stripe vil direktedebitere på vegne av %@ og bekrefter at jeg er kontoinnehaver og den eneste personen som må godkjenne debiteringer fra denne kontoen.";
 
 "IBAN" = "IBAN";
-
-"Join Link" = "Bli med i Link";
 
 "Log out of Link" = "Logg ut av Link";
 
@@ -121,6 +117,8 @@
 "Manage US bank account" = "Administrer bankkonto i USA";
 
 "Manage card" = "Administrer kort";
+
+"Manage cards" = "Administrer kort";
 
 "Manage payment method" = "Administrer betalingsmetode";
 
@@ -133,6 +131,8 @@
 "New card" = "Nytt kort";
 
 "New payment method" = "Ny betalingsmetode";
+
+"No %@ promo" = "Ingen %@-kampanje";
 
 "Not %@?" = "Er du ikke %@?";
 
@@ -204,8 +204,6 @@
 
 "Saved" = "Lagret";
 
-"Secure 1⁠-⁠click checkout" = "Sikker 1-klikk-utsjekking";
-
 "Select card" = "Velg kort";
 
 "Select payment method" = "Velg betalingsmetode";
@@ -222,11 +220,7 @@
 
 "Show menu" = "Vis meny";
 
-"Sign in to your Link account" = "Logg inn på Link-kontoen din";
-
 "Simple, secure one-click payments" = "Enkle, trygge betalinger med ett klikk";
-
-"Something went wrong when linking your account.\nPlease try again later." = "Noe gikk galt under tilkobling av kontoen din.\nPrøv igjen senere.";
 
 "Stripe will deposit $0.01 to your account in 1-2 business days. Then you'll get an email with instructions to finish saving your bank account with %@." = "Stripe setter inn $0,01 på kontoen din i løpet av 1–2 virkedager. Deretter får du en e-post med instruksjoner for å fullføre lagringen av bankkontoen din med %@.";
 
@@ -237,8 +231,6 @@
 "Tap to expand" = "Trykk for å utvide";
 
 "The IBAN you entered is incomplete." = "IBAN-nummeret du la inn er ufullstendig.";
-
-"The IBAN you entered is invalid, \"%@\" is not a supported country code." = "IBAN-nummeret du la inn er ugyldig, «%@» er ikke en gyldig landskode.";
 
 "The provided verification code has expired." = "Den oppgitte verifiseringskoden er utløpt.";
 

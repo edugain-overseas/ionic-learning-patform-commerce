@@ -15,11 +15,18 @@ import UIKit
 extension PaymentSheetFormFactory {
     func makeCard(cardBrandChoiceEligible: Bool = false) -> PaymentMethodElement {
         let showLinkInlineSignup = showLinkInlineCardSignup
+        var defaultCheckbox: PaymentMethodElementWrapper<CheckboxElement>?
+        if configuration.allowsSetAsDefaultPM {
+            defaultCheckbox = makeDefaultCheckbox()
+        }
         let saveCheckbox = makeSaveCheckbox(
             label: String.Localized.save_payment_details_for_future_$merchant_payments(
                 merchantDisplayName: configuration.merchantDisplayName
             )
-        )
+        ) { selected in
+            defaultCheckbox?.view.isHidden = !selected
+        }
+        defaultCheckbox?.view.isHidden = !saveCheckbox.element.isSelected
 
         // Make section titled "Contact Information" w/ phone and email if merchant requires it.
         let optionalPhoneAndEmailInformationSection: SectionElement? = {
@@ -87,14 +94,16 @@ extension PaymentSheetFormFactory {
             cardSection,
             billingAddressSection,
             shouldDisplaySaveCheckbox ? saveCheckbox : nil,
+            defaultCheckbox,
         ]
 
-        if case .paymentSheet(let configuration) = configuration, showLinkInlineSignup {
+        if case .paymentSheet(let configuration) = configuration, let accountService, showLinkInlineSignup {
             let inlineSignupElement = LinkInlineSignupElement(
                 configuration: configuration,
                 linkAccount: linkAccount,
                 country: countryCode,
-                showCheckbox: !shouldDisplaySaveCheckbox
+                showCheckbox: !shouldDisplaySaveCheckbox,
+                accountService: accountService
             )
             elements.append(inlineSignupElement)
         }
@@ -108,8 +117,14 @@ extension PaymentSheetFormFactory {
         }()
         elements.append(mandate)
 
+        var customSpacing: [(Element, CGFloat)] = []
+        if configuration.linkPaymentMethodsOnly {
+            customSpacing.append((cardSection, LinkUI.largeContentSpacing))
+        }
+
         return FormElement(
             elements: elements,
-            theme: theme)
+            theme: theme,
+            customSpacing: customSpacing)
     }
 }

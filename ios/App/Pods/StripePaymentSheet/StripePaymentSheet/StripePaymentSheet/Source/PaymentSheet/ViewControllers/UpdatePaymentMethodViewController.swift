@@ -47,19 +47,24 @@ final class UpdatePaymentMethodViewController: UIViewController {
 
     // MARK: Views
     lazy var formStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [headerLabel, paymentMethodForm, updateButton, removeButton, errorLabel])
+        let stackView = UIStackView(arrangedSubviews: [headerLabel, paymentMethodForm])
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.axis = .vertical
-        stackView.setCustomSpacing(16, after: headerLabel) // custom spacing from figma
+        stackView.spacing = 16 // custom spacing from figma
         if let footnoteLabel = footnoteLabel {
-            stackView.insertArrangedSubview(footnoteLabel, at: 2)
+            stackView.addArrangedSubview(footnoteLabel)
             stackView.setCustomSpacing(8, after: paymentMethodForm) // custom spacing from figma
-            stackView.setCustomSpacing(32, after: footnoteLabel) // custom spacing from figma
         }
-        else {
-            stackView.setCustomSpacing(32, after: paymentMethodForm) // custom spacing from figma
+        if let setAsDefaultCheckbox = setAsDefaultCheckbox, let lastSubview = stackView.arrangedSubviews.last {
+            stackView.addArrangedSubview(setAsDefaultCheckbox.view)
+            stackView.setCustomSpacing(20, after: lastSubview) // custom spacing from figma
         }
-        stackView.setCustomSpacing(16, after: updateButton) // custom spacing from figma
+        if let lastSubview = stackView.arrangedSubviews.last {
+            stackView.setCustomSpacing(32, after: lastSubview) // custom spacing from figma
+        }
+        stackView.addArrangedSubview(updateButton)
+        stackView.addArrangedSubview(removeButton)
+        stackView.addArrangedSubview(errorLabel)
         return stackView
     }()
 
@@ -71,13 +76,14 @@ final class UpdatePaymentMethodViewController: UIViewController {
 
     private lazy var updateButton: ConfirmButton = {
         let button = ConfirmButton(state: .disabled, callToAction: .custom(title: .Localized.save), appearance: viewModel.appearance, didTap: {  [weak self] in
-            switch self?.viewModel.paymentMethod.type {
-            case .card:
+            guard let self = self else { return }
+            if self.viewModel.hasChangedCardBrand {
                 Task {
-                    await self?.updateCard()
+                    await self.updateCard()
                 }
-            default:
-                fatalError("Updating payment method has not been implemented for \(self?.viewModel.paymentMethod.type ?? .unknown)")
+            }
+            if self.viewModel.hasChangedDefaultPaymentMethodCheckbox {
+                // TODO: update default payment method in the back end
             }
         })
         button.isHidden = !viewModel.canEdit
@@ -86,42 +92,72 @@ final class UpdatePaymentMethodViewController: UIViewController {
 
     private lazy var removeButton: UIButton = {
         let button = UIButton(type: .custom)
+        let font = viewModel.appearance.primaryButton.font ?? viewModel.appearance.scaledFont(for: viewModel.appearance.font.base.medium, style: .callout, maximumPointSize: 25)
         if #available(iOS 15.0, *) {
             var configuration = UIButton.Configuration.bordered()
             configuration.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16)
             configuration.baseBackgroundColor = .clear
+            configuration.background.cornerRadius = viewModel.appearance.cornerRadius
+            configuration.background.strokeWidth = viewModel.appearance.selectedBorderWidth ?? viewModel.appearance.borderWidth * 1.5
+            configuration.background.strokeColor = viewModel.appearance.colors.danger
+            configuration.titleAlignment = .center
+            configuration.attributedTitle = AttributedString(.Localized.remove, attributes: AttributeContainer([.font: font, .foregroundColor: viewModel.appearance.colors.danger]))
             button.configuration = configuration
         } else {
             button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 16)
+            button.setTitleColor(viewModel.appearance.colors.danger, for: .normal)
+            button.setTitleColor(viewModel.appearance.colors.danger.disabledColor, for: .highlighted)
+            button.layer.borderColor = viewModel.appearance.colors.danger.cgColor
+            button.layer.borderWidth = viewModel.appearance.selectedBorderWidth ?? viewModel.appearance.borderWidth * 1.5
+            button.layer.cornerRadius = viewModel.appearance.cornerRadius
+            button.setTitle(.Localized.remove, for: .normal)
+            button.titleLabel?.textAlignment = .center
+            button.titleLabel?.font = font
+            button.titleLabel?.adjustsFontForContentSizeCategory = true
         }
-        button.setTitleColor(viewModel.appearance.colors.danger, for: .normal)
-        button.setTitleColor(viewModel.appearance.colors.danger.disabledColor, for: .highlighted)
         button.addTarget(self, action: #selector(buttonTouchDown(_:)), for: .touchDown)
         button.addTarget(self, action: #selector(buttonTouchUp(_:)), for: [.touchUpInside, .touchUpOutside])
-        button.layer.borderColor = viewModel.appearance.colors.danger.cgColor
-        button.layer.borderWidth = viewModel.appearance.primaryButton.borderWidth
-        button.layer.cornerRadius = viewModel.appearance.cornerRadius
-        button.setTitle(.Localized.remove, for: .normal)
-        button.titleLabel?.textAlignment = .center
-        button.titleLabel?.font = viewModel.appearance.scaledFont(for: viewModel.appearance.font.base.medium, style: .callout, maximumPointSize: 25)
-        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.addTarget(self, action: #selector(removePaymentMethod), for: .touchUpInside)
         button.isHidden = !viewModel.canRemove
         return button
     }()
 
     @objc private func buttonTouchDown(_ button: UIButton) {
-        button.layer.borderColor = viewModel.appearance.colors.danger.disabledColor.cgColor
+        if #available(iOS 15.0, *)  {
+            button.configuration?.attributedTitle?.foregroundColor = viewModel.appearance.colors.danger.disabledColor
+            button.configuration?.background.strokeColor = viewModel.appearance.colors.danger.disabledColor
+        }
+        else {
+            button.setTitleColor(viewModel.appearance.colors.danger.disabledColor, for: .normal)
+            button.layer.borderColor = viewModel.appearance.colors.danger.disabledColor.cgColor
+        }
     }
 
     @objc private func buttonTouchUp(_ button: UIButton) {
-        button.layer.borderColor = viewModel.appearance.colors.danger.cgColor
+        if #available(iOS 15.0, *)  {
+            button.configuration?.attributedTitle?.foregroundColor = viewModel.appearance.colors.danger
+            button.configuration?.background.strokeColor = viewModel.appearance.colors.danger
+        }
+        else {
+            button.setTitleColor(viewModel.appearance.colors.danger, for: .normal)
+            button.layer.borderColor = viewModel.appearance.colors.danger.cgColor
+        }
     }
 
     private lazy var paymentMethodForm: UIView = {
         let form = SavedPaymentMethodFormFactory(viewModel: viewModel)
         form.delegate = self
         return form.makePaymentMethodForm()
+    }()
+
+    private lazy var setAsDefaultCheckbox: CheckboxElement? = {
+        guard viewModel.allowsSetAsDefaultPM && PaymentSheet.supportedDefaultPaymentMethods.contains(where: {
+            viewModel.paymentMethod.type == $0
+        }) else { return nil }
+        return CheckboxElement(theme: viewModel.appearance.asElementsTheme, label: String.Localized.set_as_default_payment_method, isSelectedByDefault: viewModel.isDefault) { [weak self] isSelected in
+            self?.viewModel.hasChangedDefaultPaymentMethodCheckbox = self?.viewModel.isDefault != isSelected
+            self?.updateButton.update(state: self?.viewModel.hasUpdates ?? false ? .enabled : .disabled)
+        }
     }()
 
     private lazy var footnoteLabel: UITextView? = {
@@ -254,11 +290,12 @@ extension UpdatePaymentMethodViewController: SheetNavigationBarDelegate {
 
 // MARK: SavedPaymentMethodFormFactoryDelegate
 extension UpdatePaymentMethodViewController: SavedPaymentMethodFormFactoryDelegate {
-    func didUpdate(_: Element, shouldEnableSaveButton: Bool) {
+    func didUpdate(_: Element, didUpdateCardBrand: Bool) {
         latestError = nil // clear error on new input
         switch viewModel.paymentMethod.type {
         case .card:
-            updateButton.update(state: shouldEnableSaveButton ? .enabled : .disabled)
+            viewModel.hasChangedCardBrand = didUpdateCardBrand
+            updateButton.update(state: viewModel.hasUpdates ? .enabled : .disabled)
         default:
             break
         }

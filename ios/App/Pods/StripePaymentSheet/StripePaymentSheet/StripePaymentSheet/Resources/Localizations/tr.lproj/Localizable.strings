@@ -58,8 +58,6 @@
 
 "By joining Link, you agree to the <terms>Terms</terms> and <privacy>Privacy Policy</privacy>." = "Link'e katılarak <terms>Hükümleri</terms> ve <privacy>Gizlilik Politikasını</privacy> kabul etmiş olursunuz.";
 
-"By providing your bank account details and confirming this payment, you agree to this Direct Debit Request and the <terms>Direct Debit Request service agreement</terms>, and authorise Stripe Payments Australia Pty Ltd ACN 160 180 343 Direct Debit User ID number 507156 (“Stripe”) to debit your account through the Bulk Electronic Clearing System (BECS) on behalf of %@ (the \"Merchant\") for any amounts separately communicated to you by the Merchant. You certify that you are either an account holder or an authorised signatory on the account listed above." = "Banka hesap bilgilerinizi sağlayarak ve bu ödemeyi onaylayarak, bu Otomatik Ödeme Talebini ve <terms>Otomatik Ödeme Talebi hizmet sözleşmesini</terms> kabul etmiş olursunuz ve Otomatik Ödeme 507156 Kullanıcı Kimlikli Stripe Payments Australia Pty Ltd ACN 160 180 343 (\"Stripe\") şirketine %@ (\"Satıcı\") adına, Satıcı tarafından size iletilen herhangi bir tutarı Toplu Elektronik Takas Sistemi (BECS) aracılığıyla hesabınızı borçlandırması için yetki verirsiniz. Yukarıda listelenen hesabın sahibi veya yetkili imza sahibi olduğunuzu onaylarsınız.";
-
 "By providing your card information, you allow %@ to charge your card for future payments in accordance with their terms." = "Kart bilgilerinizi sağlayarak %@ işletmesinin gelecekteki ödemeler için kartınızı kendi şartlarına uygun olarak ücretlendirmesine izin vermiş olursunuz.";
 
 "By providing your email, you agree to create a Link account and save your payment info to Link, according to the Link <terms>Terms</terms> and <privacy>Privacy Policy</privacy>." = "E-postanızı vererek Link <terms>Şartları</terms> ve <privacy>Gizlilik Politikası</privacy> uyarınca bir Link hesabı oluşturmayı ve ödeme bilgilerinizi Link'e kaydetmeyi kabul edersiniz.";
@@ -100,19 +98,17 @@
 
 "Enter address manually" = "Adresi manuel olarak girin";
 
-"Enter the code sent to %@ to use Link to pay by default." = "Ödemenizde varsayılan olarak Link'i kullanmak için %@ numaralı telefona gönderilen kodu girin";
-
-"Enter your verification code" = "Doğrulama kodunuzu girin";
-
 "FPX Bank" = "FPX Bank";
 
 "For security, please re-enter your card’s security code." = "Güvenliğinizin sağlanması için lütfen kartınızın güvenlik kodunu tekrar girin.";
 
+"Get %@ back when you pay for the first time with your bank. <terms>See terms</terms>" = "Bankanızla ilk kez ödeme yaptığınızda %@ tutarını geri alın. <terms>Şartları görün</terms>";
+
+"Get %@ back when you pay with your bank. <terms>See terms</terms>" = "Bankanızla ödeme yaptığınızda %@ tutarını geri alın. <terms>Şartları görün</terms>";
+
 "I understand that Stripe will be collecting Direct Debits on behalf of %@ and confirm that I am the account holder and the only person required to authorise debits from this account." = "Stripe'ın %@ adına Otomatik Ödeme alacağını anlıyorum. Hesap sahibi ve bu hesaptan ödemeleri yetkilendirmek için gereken tek kişi olduğumu onaylıyorum.";
 
 "IBAN" = "IBAN";
-
-"Join Link" = "Link'e katıl";
 
 "Log out of Link" = "Link'ten çıkış yap";
 
@@ -121,6 +117,8 @@
 "Manage US bank account" = "ABD banka hesabını yönet";
 
 "Manage card" = "Kartı yönetin";
+
+"Manage cards" = "Kartları yönet";
 
 "Manage payment method" = "Ödeme yöntemini yönetin";
 
@@ -133,6 +131,8 @@
 "New card" = "Yeni kart";
 
 "New payment method" = "Yeni ödeme yöntemi";
+
+"No %@ promo" = "%@ promosyonu yok";
 
 "Not %@?" = "%@ doğru değil mi?";
 
@@ -204,8 +204,6 @@
 
 "Saved" = "Kaydedildi";
 
-"Secure 1⁠-⁠click checkout" = "Tek tıklamayla güvenli ödeme";
-
 "Select card" = "Kart seçin";
 
 "Select payment method" = "Ödeme yöntemini seçin";
@@ -222,11 +220,7 @@
 
 "Show menu" = "Menüyü göster";
 
-"Sign in to your Link account" = "Link hesabınızda oturum açın";
-
 "Simple, secure one-click payments" = "Tek tıkla basit ve güvenli ödemeler";
-
-"Something went wrong when linking your account.\nPlease try again later." = "Hesabınızı bağlarken bir şeyler ters gitti. Lütfen daha sonra tekrar deneyin.";
 
 "Stripe will deposit $0.01 to your account in 1-2 business days. Then you'll get an email with instructions to finish saving your bank account with %@." = "Stripe, 1-2 iş günü içerisinde hesabınıza 0,01 ABD doları yatıracaktır. Bunun ardından %@ işletmesinde banka hesabınızı kaydetme işlemini tamamlamak için yapmanız gerekenleri içeren bir e-posta alacaksınız.";
 
@@ -237,8 +231,6 @@
 "Tap to expand" = "Genişletmek için dokunun";
 
 "The IBAN you entered is incomplete." = "Girdiğiniz IBAN eksik.";
-
-"The IBAN you entered is invalid, \"%@\" is not a supported country code." = "Girdiğiniz IBAN geçersiz. \"%@\" desteklenen bir ülke kodu değil.";
 
 "The provided verification code has expired." = "Sağlanan doğrulama kodunun süresi dolmuş.";
 

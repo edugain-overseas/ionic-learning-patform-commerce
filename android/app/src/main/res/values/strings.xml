@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">IEU courses</string>
-    <string name="title_activity_main">IEU courses</string>
+    <string name="app_name">FEU courses</string>
+    <string name="title_activity_main">FEU courses</string>
     <string name="package_name">io.ieucourses.app</string>
     <string name="custom_url_scheme">io.ieucourses.app</string>
     <string name="server_client_id">492800368725-r5392545k9sp6tuh7c1fmmtlmvedng0s.apps.googleusercontent.com</string>

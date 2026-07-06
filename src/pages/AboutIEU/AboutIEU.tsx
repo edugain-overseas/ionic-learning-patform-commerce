@@ -1,42 +1,32 @@
-import {
-  IonBackButton,
-  IonContent,
-  IonHeader,
-  IonImg,
-  IonPage,
-} from "@ionic/react";
-import React from "react";
-import back from "../../assets/icons/header/back.svg";
-import logo from "../../assets/icons/logoIEU-short.svg";
+import { IonContent, IonImg, IonPage } from "@ionic/react";
+import React, { useState } from "react";
 import poster from "../../assets/images/about-ieu.png";
 import textIcon from "../../assets/images/TextIcon.png";
 import styles from "./AboutIEU.module.scss";
 import StickyScrollLayout from "../../components/StickyScrollLayout/StickyScrollLayout";
+import IntroHeader from "../CourseDetailPage/CourseIntroPage/IntroHeader";
+
+const threshold = 0.9;
 
 const AboutIEU: React.FC = () => {
+  const [scrollProgress, setScrollProgress] = useState(0);
+
   return (
     <IonPage className="primaryPage">
-      <IonHeader className={styles.header} mode="ios">
-        <IonBackButton
-          defaultHref="/"
-          text={""}
-          icon={back}
-          className={styles.bakcBtn}
-        />
-      </IonHeader>
+      <IntroHeader title="About FEU" scrollProgress={scrollProgress} />
       <IonContent className={styles.content} scrollY={false}>
         <StickyScrollLayout
           topLabel="About University"
           posterSrc={poster}
           topScrollStartPosition={190}
           topScrollEndPosition={0}
+          onProgressChange={(value) => setScrollProgress(value)}
         >
           <div className={styles.contentInner}>
             <div className={`${styles.contentHeader} ${styles.contentBlock}`}>
               <div className={`${styles.titleWrapper} ${styles.titlePrimary}`}>
                 <span className={styles.title}>About FEU</span>
               </div>
-              <IonImg src={logo} className={styles.headerIcon} />
             </div>
             <div className={styles.textBlock}>
               <IonImg src={textIcon} className={styles.floatIcon} />
