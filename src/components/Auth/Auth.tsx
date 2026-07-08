@@ -34,7 +34,7 @@ const Auth: FC<AuthPropsType> = ({ containerClassname = "", hidden }) => {
                 height={32}
                 borderRadius={5}
                 color="#fcfcfc"
-                backgroundColor="#760000"
+                backgroundColor="#5F1314"
                 label="Sing up"
                 icon={<IonIcon src={userIcon} className={styles.btnIcon} />}
                 onClick={() => authUiInterface?.openAuthUI("sing-up")}
@@ -46,7 +46,7 @@ const Auth: FC<AuthPropsType> = ({ containerClassname = "", hidden }) => {
                 height={32}
                 borderRadius={5}
                 color="#fcfcfc"
-                backgroundColor="#404040"
+                backgroundColor="#37384B"
                 label="Sing in"
                 icon={<IonIcon src={singInIcon} className={styles.btnIcon} />}
                 onClick={() => authUiInterface?.openAuthUI("sing-in")}

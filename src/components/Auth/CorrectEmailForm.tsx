@@ -96,7 +96,7 @@ const CorrectEmailForm = ({
       <div className={styles.btnsWrapper}>
         <CommonButton
           label="Continue"
-          backgroundColor="#404040"
+          backgroundColor="#37384B"
           color="#fcfcfc"
           block={true}
           height={32}

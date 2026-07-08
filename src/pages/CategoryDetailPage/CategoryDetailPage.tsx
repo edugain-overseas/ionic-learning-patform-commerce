@@ -250,7 +250,7 @@ const CategoryDetailPage: React.FC = () => {
           className={`${styles.bottomOuter} ${styles.background}`}
           style={{
             paddingBottom: `calc(var(--tabbar-offset) + ${
-              accessToken ? 0 : "65rem"
+              accessToken ? '0px' : "65rem"
             })`,
           }}
         >

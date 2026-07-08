@@ -23,7 +23,7 @@
 
 .empty {
   height: calc(100% - 56rem);
-  padding-bottom: 100rem;
+  padding-bottom: calc(65rem + var(--tabbar-offset));
   color: var(--ion-color-medium);
 
   display: flex;

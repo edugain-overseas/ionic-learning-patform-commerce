@@ -32,13 +32,13 @@ const AboutIEU: React.FC = () => {
               <IonImg src={textIcon} className={styles.floatIcon} />
               <p>
                 Welcome to the website of the{" "}
-                <b>International European University</b>. We are the most modern
+                <b>First European University</b>. We are the most modern
                 multidisciplinary University in Malta and the European Union. We
                 offer English-taught medical programs, professional degrees in
                 Malta, and affordable medical internships <b>in Europe</b>.
               </p>
               <p>
-                <b>International European University</b>, is excited to welcome{" "}
+                <b>First European University</b>, is excited to welcome{" "}
                 <b>
                   new international students and foreign exchange students from
                   Europe
@@ -63,7 +63,7 @@ const AboutIEU: React.FC = () => {
             <div className={styles.textBlock}>
               <p>
                 Provide international students of the{" "}
-                <b>International European University</b> in Malta with the best
+                <b>First European University</b> in Malta with the best
                 facilities, knowledge, technologies, and internships in Malta to
                 make the world a better place for everyone. IEU, Malta Campus's
                 student community is an active participant. Student community is
@@ -74,7 +74,7 @@ const AboutIEU: React.FC = () => {
             <div className={styles.textBlock}>
               <p>
                 Provide international students of the{" "}
-                <b>International European University</b> in Malta with the best
+                <b>First European University</b> in Malta with the best
                 facilities, knowledge, technologies, and internships in Malta to
                 make the world a better place for everyone. IEU, Malta Campus's
                 student community is an active participant. Student community is

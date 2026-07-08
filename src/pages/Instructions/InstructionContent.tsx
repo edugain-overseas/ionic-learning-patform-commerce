@@ -22,7 +22,7 @@ const InstructionContent: FC<{ instruction: InstructionType }> = ({
         <span>
           Category:{" "}
           {instruction.type === "general"
-            ? "Administration IEU"
+            ? "Administration FEU"
             : category?.title}
         </span>
       </div>

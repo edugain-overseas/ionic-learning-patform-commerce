@@ -138,7 +138,7 @@ const LoginForm: React.FC<{
               <IonIcon src={SingIn} className={styles.formBtnIcon} />
             )
           }
-          backgroundColor="#404040"
+          backgroundColor="#37384B"
           color="#fcfcfc"
           block={true}
           height={32}

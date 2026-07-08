@@ -129,7 +129,7 @@ const Menu = () => {
                   </button>
                 </li>
               )}
-              <li>
+              <li style={{marginLeft: isUserLoggedIn ? 0 : '-4.5rem'}}>
                 <IonMenuToggle>
                   <button
                     className="ion-activatable"
@@ -148,7 +148,7 @@ const Menu = () => {
                   icon={<IonIcon src={Close} />}
                   width="32rem"
                   height="32rem"
-                  backgroundColor="#760000"
+                  backgroundColor="#5F1314"
                 />
               </IonMenuToggle>
             </div>

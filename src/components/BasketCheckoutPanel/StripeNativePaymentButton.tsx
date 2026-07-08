@@ -65,7 +65,7 @@ const StripeNativePaymentButton: FC = () => {
 
       await Stripe.createPaymentSheet({
         paymentIntentClientSecret: paymentIntent,
-        merchantDisplayName: "IEU courses",
+        merchantDisplayName: "FEU courses",
         withZipCode: false,
         enableApplePay: true,
         applePayMerchantId: import.meta.env.VITE_APPLE_MERCHANT_ID,
@@ -132,7 +132,7 @@ const StripeNativePaymentButton: FC = () => {
         merchantIdentifier: import.meta.env.VITE_APPLE_MERCHANT_ID,
         paymentSummaryItems: [
           {
-            label: "IEU courses",
+            label: "FEU courses",
             amount,
           },
         ],
@@ -185,7 +185,7 @@ const StripeNativePaymentButton: FC = () => {
         merchantIdentifier: import.meta.env.VITE_APPLE_MERCHANT_ID, //change to google merchant id???
         paymentSummaryItems: [
           {
-            label: "IEU courses",
+            label: "FEU courses",
             amount,
           },
         ],

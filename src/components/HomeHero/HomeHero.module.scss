@@ -28,9 +28,11 @@
   }
 
   .mediaObjectShadow {
-    animation: fadeIn var(--animation-duration) ease-in forwards,
-      slideIn calc(var(--animation-duration) - var(--animation-delay)) ease-in
-        forwards;
+    // animation: fadeIn var(--animation-duration) ease-in forwards,
+    //   slideIn calc(var(--animation-duration) - var(--animation-delay)) ease-in
+    //     forwards;
+    animation: slideIn calc(var(--animation-duration) - var(--animation-delay))
+      ease-in forwards;
   }
 }
 
@@ -230,7 +232,7 @@
   background-position: center;
   background-repeat: no-repeat;
   z-index: 0;
-  opacity: 0.8;
+  opacity: 0;
 
   -webkit-mask-image: -webkit-radial-gradient(white, black);
   transform: translateZ(0);

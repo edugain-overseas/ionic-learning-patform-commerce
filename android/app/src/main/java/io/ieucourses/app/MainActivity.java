@@ -16,7 +16,7 @@ public class MainActivity extends BridgeActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // EdgeToEdge.enable(this);
-        getWindow().setNavigationBarColor(Color.parseColor("#760000"));
+        getWindow().setNavigationBarColor(Color.parseColor("#5F1314"));
 
 
         // Set up google auth plugin

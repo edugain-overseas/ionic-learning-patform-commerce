@@ -25,7 +25,7 @@ const HomeFooter: FC = () => {
         <p>
           <b>If you have any additional questions</b> and want to get additional
           advice, our specialists will be able to provide you with the necessary
-          support when working or starting to work on the IEU educational
+          support when working or starting to work on the FEU educational
           platform. We are always happy to help you.
         </p>
         <button

@@ -17,7 +17,7 @@ const config: CapacitorConfig = {
       launchAutoHide: false,
       iosSplashWebviewFullScreen: true,
       androidScaleType: "CENTER_CROP",
-      backgroundColor: "#760000",
+      backgroundColor: "#5F1314",
     },
     GoogleAuth: {
       scopes: ["profile", "email"],
