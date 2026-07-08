@@ -137,7 +137,7 @@ const StripeNativePaymentButton: FC = () => {
           },
         ],
         countryCode: "US",
-        currency: "USD",
+        currency: "EUR",
       });
 
       const result = await Stripe.presentApplePay();
@@ -190,7 +190,7 @@ const StripeNativePaymentButton: FC = () => {
           },
         ],
         countryCode: "US",
-        currency: "USD",
+        currency: "EUR",
       });
 
       const result = await Stripe.presentGooglePay();

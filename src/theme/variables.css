@@ -110,7 +110,8 @@ http://ionicframework.com/docs/theming/ */
 }
 
 .ios body {
-  --ion-toolbar-background: rgba(255, 255, 255, 0.9);
+  /* --ion-toolbar-background: rgba(255, 255, 255, 0.9); */
+  --ion-toolbar-background: var(--ion-background-color);
 }
 
 @media (prefers-color-scheme: dark) {

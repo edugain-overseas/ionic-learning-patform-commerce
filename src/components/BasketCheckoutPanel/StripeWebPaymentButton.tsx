@@ -174,7 +174,7 @@ const StripeWebPaymentButton: FC = () => {
 
       const pr = stripe.paymentRequest({
         country: "US",
-        currency: "usd",
+        currency: "EUR",
         total: { label: "Test", amount: 1 },
       });
 

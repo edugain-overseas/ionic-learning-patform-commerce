@@ -63,18 +63,18 @@ const BasketCourseCard: FC<BasketCourseCardType> = ({
             <div className={styles.secondaryInfoWrapper}>
               <span>Old price:</span>
               <span className={styles.oldPrice}>
-                {priceFormatter(course.old_price)} USD
+                {priceFormatter(course.old_price)} EUR
               </span>
             </div>
             <div className={styles.secondaryInfoWrapper}>
               <span>New price:</span>
-              <span>{priceFormatter(course.price)} USD</span>
+              <span>{priceFormatter(course.price)} EUR</span>
             </div>
           </div>
         ) : (
           <div className={styles.secondaryInfoWrapper}>
             <span>Price:</span>
-            <span>{priceFormatter(course.price)} USD</span>
+            <span>{priceFormatter(course.price)} EUR</span>
           </div>
         )}
       </div>

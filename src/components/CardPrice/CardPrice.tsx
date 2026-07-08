@@ -23,7 +23,7 @@ const CardPrice: React.FC<CardPriceTypes> = ({
   return (
     <div className={styles.wrapper} onClick={handleClick}>
       <div className={styles.priceWrapper}>
-        <span className={styles.dollarSign}>$</span>
+        <span className={styles.dollarSign}>€</span>
         <div className={styles.info}>
           <span className={styles.label}>
             {oldPrice ? "New price" : "Price"}
