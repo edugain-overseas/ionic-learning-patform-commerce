@@ -7,6 +7,7 @@
 
 body {
   font-weight: 400;
+  font-family: var(--ion-font-family, "Noto serif");
 }
 
 a {
@@ -117,9 +118,11 @@ a {
 
     border-top-left-radius: 16rem;
     border-bottom-left-radius: 16rem;
-    background: var(--custom-bg-rgba-secondary);
+    background: rgba(255, 255, 255, 0.65);
+    box-shadow: 0 0 34.528px 0 rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(46px);
 
-    box-shadow: var(--custom-box-shadow-primary);
+    // box-shadow: var(--custom-box-shadow-primary);
     opacity: 0;
     z-index: -1;
 
@@ -243,6 +246,7 @@ ion-modal::part(handle) {
 //keyboard
 
 // pwa-camera //
-pwa-camera-modal, pwa-camera-modal-instance {
+pwa-camera-modal,
+pwa-camera-modal-instance {
   font-size: 10rem;
 }

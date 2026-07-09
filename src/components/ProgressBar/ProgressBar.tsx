@@ -8,6 +8,7 @@ interface ProgressBarTypes {
   disabled?: boolean | undefined;
   showValue?: boolean | undefined;
   wrapperStyles?: React.CSSProperties;
+  monochromatism?: boolean;
 }
 
 const colors = {
@@ -40,7 +41,12 @@ const ProgressBar: React.FC<ProgressBarTypes> = ({
   disabled = false,
   showValue = true,
   wrapperStyles = {},
+  monochromatism = false,
 }) => {
+  const progressColor = monochromatism
+    ? "#fff"
+    : handleProgressColor(value || 0);
+
   return (
     <div
       className={styles.outerWrapper}
@@ -57,11 +63,13 @@ const ProgressBar: React.FC<ProgressBarTypes> = ({
         style={{ borderRadius: `${width * 0.023}rem` }}
       >
         <div
-          className={`${styles.progress} ${disabled ? styles.disabled : ""}`}
+          className={`${styles.progress} ${disabled ? styles.disabled : ""} ${
+            monochromatism ? styles.monochrome : ""
+          }`}
           style={{
             width: value !== undefined && value <= 100 ? `${value}%` : "100%",
             borderRadius: `${width * 0.023}rem`,
-            backgroundColor: value ? `${handleProgressColor(value)}` : "none",
+            backgroundColor: value ? progressColor : "none",
           }}
         ></div>
         {showValue && (

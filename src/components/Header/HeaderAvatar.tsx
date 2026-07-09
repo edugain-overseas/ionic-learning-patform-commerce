@@ -10,7 +10,9 @@ const HeaderAvatar = () => {
   const alt = user?.username;
 
   return (
-    <div className={styles.headerUserWrapper}>
+    <div
+      className={`${styles.headerUserWrapper} ${src ? styles.userAvatar : ""}`}
+    >
       {src ? (
         <img src={isValidUrl(src) ? src : `${serverName}/${src}`} alt={alt} />
       ) : (

@@ -22,8 +22,8 @@ const UserInfo = () => {
 
   const certificatesAmount = userData?.certificates?.flatMap((catCert) =>
     catCert.course_certificate_data.filter(
-      (course) => course.course_status === "completed"
-    )
+      (course) => course.course_status === "completed",
+    ),
   ).length;
 
   return (
@@ -37,7 +37,11 @@ const UserInfo = () => {
           </span>
           <div className={styles.studyInfo}>
             <TextOverrflowEllipsis
-              text={`${userData?.courses?.length} course`}
+              text={`${userData?.courses?.length} course${
+                userData?.courses?.length && userData?.courses?.length > 1
+                  ? "s"
+                  : ""
+              }`}
             />
             <TextOverrflowEllipsis text={`${certificatesAmount} certificate`} />
           </div>

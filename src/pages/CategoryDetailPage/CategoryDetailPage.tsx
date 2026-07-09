@@ -52,11 +52,11 @@ const CategoryDetailPage: React.FC = () => {
   const coursesInterface = useCourses();
 
   const category = coursesInterface?.categories.find(
-    ({ id }) => id === +categoryId
+    ({ id }) => id === +categoryId,
   );
 
   const courses = coursesInterface?.courses.filter(
-    (course) => course.category_id === +categoryId
+    (course) => course.category_id === +categoryId,
   );
 
   const userCourses = useUser()?.user.courses;
@@ -74,8 +74,8 @@ const CategoryDetailPage: React.FC = () => {
         purchasedCoursesData?.reduce(
           (total, course) =>
             course.progress ? total + course.progress : total,
-          0
-        ) / (courses.length ? courses.length : 1)
+          0,
+        ) / (courses.length ? courses.length : 1),
       );
     }
   }, [userCourses, categoryId]);
@@ -95,7 +95,7 @@ const CategoryDetailPage: React.FC = () => {
       remToPx(isMyStudyTab ? MY_STUDY_MAX_SCROLL_VALUE : MAX_SCROLL_VALUE);
     topContentRef.current?.style.setProperty(
       "--hide-coefficient",
-      `${hideCoef}`
+      `${hideCoef}`,
     );
 
     toggleHeaderTitleVisibility(hideCoef > 0.3);
@@ -134,21 +134,21 @@ const CategoryDetailPage: React.FC = () => {
   const handleFilterCourses = () => {
     let userCoursesIds: number[] = [];
     courses?.forEach(
-      (course) => course.bought && userCoursesIds.push(course.id)
+      (course) => course.bought && userCoursesIds.push(course.id),
     );
 
     switch (filter) {
       case "In process":
         return courses?.filter(
           (course) =>
-            userCoursesIds.includes(course.id) && course.progress !== 100
+            userCoursesIds.includes(course.id) && course.progress !== 100,
         );
       case "Available":
         return courses?.filter((course) => !userCoursesIds.includes(course.id));
       case "Completed":
         return courses?.filter(
           (course) =>
-            userCoursesIds.includes(course.id) && course.progress === 100
+            userCoursesIds.includes(course.id) && course.progress === 100,
         );
       default:
         return [];
@@ -220,6 +220,11 @@ const CategoryDetailPage: React.FC = () => {
                   disabled={false}
                   height={10}
                   showValue={false}
+                  wrapperStyles={{
+                    backgroundColor: "var(--ion-color-secondary)",
+                    boxShadow: "0 0 11.233px 0 rgba(0, 0, 0, 0.16) inset",
+                  }}
+                  monochromatism={true}
                 />
               </div>
             )}
@@ -250,7 +255,7 @@ const CategoryDetailPage: React.FC = () => {
           className={`${styles.bottomOuter} ${styles.background}`}
           style={{
             paddingBottom: `calc(var(--tabbar-offset) + ${
-              accessToken ? '0px' : "65rem"
+              accessToken ? "0px" : "65rem"
             })`,
           }}
         >

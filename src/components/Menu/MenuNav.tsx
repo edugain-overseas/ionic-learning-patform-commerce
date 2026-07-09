@@ -19,7 +19,9 @@ const MenuNav = () => {
               routerDirection="none"
             >
               <div className={styles.linkWrapper}>
-                <IonIcon src={link.iconSrc} className={styles.navItemIcon} />
+                <div className={styles.iconWrapper}>
+                  <IonIcon src={link.iconSrc} className={styles.navItemIcon} />
+                </div>
                 <span className={styles.navItemLabel}>{link.label}</span>
               </div>
               <IonRippleEffect type="unbounded"></IonRippleEffect>

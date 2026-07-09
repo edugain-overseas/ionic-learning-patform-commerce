@@ -19,7 +19,13 @@ const MenuBottomTools = () => {
             className={`${styles.menuNavLink} ion-activatable`}
           >
             <div className={styles.linkWrapper}>
-              <IonIcon src={SearchIcon} className={styles.navItemIcon} />
+              <div className={styles.iconWrapper}>
+                <IonIcon
+                  src={SearchIcon}
+                  className={styles.navItemIcon}
+                  style={{ fontSize: "30rem" }}
+                />
+              </div>
               <span className={styles.navItemLabel}>Search</span>
             </div>
             <IonRippleEffect type="unbounded"></IonRippleEffect>

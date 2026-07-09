@@ -6,9 +6,9 @@ import EmailIcon from "../../assets/icons/social/email.svg";
 import LocationIcon from "../../assets/icons/social/location.svg";
 import FacebookIcon from "../../assets/icons/social/facebook.svg";
 import InstagramIcon from "../../assets/icons/social/instagram.svg";
-import LinkedinIcon from "../../assets/icons/social/linkedin.svg";
-import YoutubeIcon from "../../assets/icons/social/youtube.svg";
-import TiktokIcon from "../../assets/icons/social/tiktok.svg";
+// import LinkedinIcon from "../../assets/icons/social/linkedin.svg";
+// import YoutubeIcon from "../../assets/icons/social/youtube.svg";
+// import TiktokIcon from "../../assets/icons/social/tiktok.svg";
 import styles from "./HomeFooter.module.scss";
 import EqualSpaceContainer from "../EqualSpaceContainer/EqualSpaceContainer";
 import SheetModalAuto from "../SheetModalAuto/SheetModalAuto";
@@ -85,22 +85,20 @@ const HomeFooter: FC = () => {
         <div className={styles.social}>
           <span className={styles.followText}>Follow us:</span>
           <a
-            href="/"
+            href="https://www.facebook.com/profile.php?id=61591024424081"
             target="_blank"
             rel="noreferrer noopener"
-            onClick={(e) => e.preventDefault()}
           >
             <IonIcon src={FacebookIcon} />
           </a>
           <a
-            href="/"
+            href="https://www.instagram.com/feu.courses/"
             target="_blank"
             rel="noreferrer noopener"
-            onClick={(e) => e.preventDefault()}
           >
             <IonIcon src={InstagramIcon} />
           </a>
-          <a
+          {/* <a
             href="/"
             target="_blank"
             rel="noreferrer noopener"
@@ -123,7 +121,7 @@ const HomeFooter: FC = () => {
             onClick={(e) => e.preventDefault()}
           >
             <IonIcon src={TiktokIcon} />
-          </a>
+          </a> */}
         </div>
         <EqualSpaceContainer
           containerClassname={`${styles.hepfulLinks} ${

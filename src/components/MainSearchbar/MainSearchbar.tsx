@@ -29,7 +29,7 @@ const MainSearchbar = () => {
     router.push(
       newSearch ? `${location.pathname}?${newSearch}` : location.pathname,
       "forward",
-      "replace"
+      "replace",
     );
   };
 
@@ -56,7 +56,7 @@ const MainSearchbar = () => {
       <InsetBtn
         width="40rem"
         height="40rem"
-        backgroundColor={!value ? "#5D6977" : "#37384B"}
+        backgroundColor="#37384B"
         icon={<IonIcon src={search} className={styles.searchbarIcon} />}
         type="submit"
         disabled={!value}

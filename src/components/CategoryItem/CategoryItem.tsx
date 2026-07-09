@@ -45,11 +45,14 @@ const CategoryItem: React.FC<CategoryItemTypes> = ({ category }) => {
           </div>
           <div>
             <IonText>
-              <h3>{category.title}</h3>
+              <h3>
+                <span>{category.title}</span>
+              </h3>
             </IonText>
             <IonText>
               <p>
-                (Complete all 4 courses to receive a <b>MBA Certificate</b>)
+                {/* (Complete all 4 courses to receive a <b>MBA Certificate</b>) */}
+                {category.certificate_info && category.certificate_info}
               </p>
             </IonText>
           </div>

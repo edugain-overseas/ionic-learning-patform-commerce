@@ -129,7 +129,7 @@ const Menu = () => {
                   </button>
                 </li>
               )}
-              <li style={{marginLeft: isUserLoggedIn ? 0 : '-4.5rem'}}>
+              <li>
                 <IonMenuToggle>
                   <button
                     className="ion-activatable"

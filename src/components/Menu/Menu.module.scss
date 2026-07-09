@@ -45,6 +45,14 @@
       align-items: center;
       gap: 10rem;
     }
+    
+    .iconWrapper {
+      width: 32rem;
+      height: 32rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
     .navItemIcon {
       font-size: 23rem;
@@ -148,8 +156,8 @@
 
     border-top-left-radius: 14rem;
     border-bottom-left-radius: 14rem;
-    background: var(--custom-bg-rgba-secondary);
-    box-shadow: var(--custom-box-shadow-primary);
+    background: rgba(255, 255, 255, 0.65);
+    box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.08);
     backdrop-filter: blur(16rem);
 
     ion-menu-toggle {

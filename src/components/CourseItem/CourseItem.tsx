@@ -34,7 +34,7 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
             className={styles.courseAvatarWrapper}
             style={{
               backgroundImage: `url(${encodeURI(
-                `${serverName}/${course.image_path}`
+                `${serverName}/${course.image_path}`,
               )})`,
             }}
           >
@@ -42,7 +42,7 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
               <div
                 style={{
                   backgroundImage: `url(${encodeURI(
-                    `${serverName}/${course.image_path}`
+                    `${serverName}/${course.image_path}`,
                   )})`,
                 }}
               ></div>
@@ -50,7 +50,9 @@ const CourseItem: React.FC<CourseItemTypes> = ({ course }) => {
           </div>
         )}
         <div className={styles.courseInfo}>
-          <h3 className={styles.courseTitle}>{course.title}</h3>
+          <h3 className={styles.courseTitle}>
+            <span>{course.title}</span>
+          </h3>
           <div className={styles.btnsWrapper}>
             {course.bought ? (
               <>

@@ -12,6 +12,7 @@ interface AvatarTypes {
   handleUpload?: (file: File) => void;
   editable?: boolean;
   alt?: string;
+  iconFull?: boolean;
 }
 
 const Avatar: React.FC<AvatarTypes> = ({
@@ -20,6 +21,7 @@ const Avatar: React.FC<AvatarTypes> = ({
   handleUpload = () => {},
   editable = true,
   alt,
+  iconFull = false,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -44,7 +46,7 @@ const Avatar: React.FC<AvatarTypes> = ({
       {src ? (
         <img src={isValidUrl(src) ? src : `${serverName}/${src}`} alt={alt} />
       ) : (
-        <AvatarFallback size={size} />
+        <AvatarFallback size={size} iconFull={true} />
       )}
       <button
         className={styles.editBtn}

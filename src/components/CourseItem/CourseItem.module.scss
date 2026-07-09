@@ -82,15 +82,24 @@
   margin: 0;
   margin-bottom: 8rem;
   font-size: 14rem;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.2;
+
+  display: flex;
+  align-items: center;
+
+  height: calc(2em * 1.2);
+  min-height: calc(2em * 1.2);
+  max-height: calc(2em * 1.2);
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  max-height: 2.4em;
-  min-height: 2.4em;
-  vertical-align: middle;
+
+  span {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    width: 100%;
+  }
 }
 
 .btnsWrapper {

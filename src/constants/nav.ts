@@ -4,6 +4,7 @@ import myStudyIcon from "../assets/icons/nav/my-education.svg";
 import myProfileIcon from "../assets/icons/nav/my-profile.svg";
 import aboutIEUIcon from "../assets/icons/nav/aboutIEU.svg";
 import instructionsIcon from "../assets/icons/nav/instruction.svg";
+import contactsIcon from "../assets/icons/nav/contacts.svg";
 
 export type TabNameType = "Home" | "All Courses" | "My Study" | "Basket";
 export type TabHrefType = "/home" | "/courses" | "/my-education" | "/basket";
@@ -65,6 +66,11 @@ export const menuNav = [
     label: "Instructions",
     to: "/instructions",
     iconSrc: instructionsIcon,
+  },
+  {
+    label: "Contacts",
+    to: "/contacts",
+    iconSrc: contactsIcon,
   },
 ];
 
