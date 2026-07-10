@@ -15,7 +15,7 @@ import access from "../../../assets/icons/access.svg";
 import schollOnline from "../../../assets/icons/introPage/school-online.svg";
 import clockBig from "../../../assets/icons/introPage/clock.svg";
 import certificate from "../../../assets/icons/introPage/certificate.svg";
-import devices from "../../../assets/images/devices.webp";
+import devices from "../../../assets/images/devices.png";
 import IntroHeader from "./IntroHeader";
 import StickyScrollLayout from "../../../components/StickyScrollLayout/StickyScrollLayout";
 import CourseItem from "../../../components/CourseItem/CourseItem";
