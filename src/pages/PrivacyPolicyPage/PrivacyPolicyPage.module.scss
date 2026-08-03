@@ -1,6 +1,7 @@
 .privacyPolicyContent {
   --padding-start: 18rem;
   --padding-end: 18rem;
+  --padding-bottom: calc(16rem + var(--tabbar-offset));
 
   color: var(--ion-color-dark);
 
