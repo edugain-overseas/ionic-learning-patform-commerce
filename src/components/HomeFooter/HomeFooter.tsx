@@ -127,11 +127,7 @@ const HomeFooter: FC = () => {
           containerClassname={`${styles.hepfulLinks} ${
             isAuthorized ? "" : styles.notAuthorized
           }`}
-          leftItem={
-            <a href="/" onClick={(e) => e.preventDefault()}>
-              Privacy policy
-            </a>
-          }
+          leftItem={<Link to="/privacy-policy">Privacy policy</Link>}
           rightItem={<Link to="/about">About FEU</Link>}
         />
       </footer>

@@ -19,6 +19,7 @@ import MyStudy from "../pages/MyStudy/MyStudy";
 import Notifications from "../pages/Notifications/Notifications";
 import Settings from "../pages/Settings/Settings";
 import Contacts from "../pages/Contacts/Contacts";
+import PrivacyPolicyPage from "../pages/PrivacyPolicyPage/PrivacyPolicyPage";
 
 const Router: React.FC = () => {
   return (
@@ -36,6 +37,7 @@ const Router: React.FC = () => {
             <Route path="/about" component={AboutIEU} exact />
             <Route path="/instructions" component={Instructions} exact />
             <Route path="/contacts" component={Contacts} exact />
+            <Route path="/privacy-policy" component={PrivacyPolicyPage} exact />
             <Route path="/search" component={Search} />
             <Route path="/support" component={Support} />
             <Route path="/settings" component={Settings} />
