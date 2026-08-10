@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
-import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
+// import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
+import { SocialLogin } from "@capgo/capacitor-social-login";
 import { IonIcon } from "@ionic/react";
 import { useUser } from "../../context/UserContext";
 import { useToast } from "../../hooks/useToast";
@@ -16,21 +17,34 @@ const GoogleAuthButton: FC = () => {
   const handleGoogleSingIn = async () => {
     try {
       setIsLoading(true);
-      const googleUser = await GoogleAuth.signIn();
 
+      const googleUser = await SocialLogin.login({
+        provider: "google",
+        options: {
+          scopes: ["profile", "email"],
+        },
+      });
       console.log(googleUser);
 
-      const googleToken = googleUser?.authentication?.idToken;
-      if (googleToken) {
-        const user = await userInterface?.loginWithGoogle(googleToken);
-        present({
-          type: "success",
-          message: `Hello ${user?.username}!`,
-        });
+      if (googleUser.result && "idToken" in googleUser.result) {
+        const googleToken = googleUser.result.idToken;
+
+        if (googleToken) {
+          const user = await userInterface?.loginWithGoogle(googleToken);
+          present({
+            type: "success",
+            message: `Hello ${user?.username}!`,
+          });
+        } else {
+          present({
+            type: "error",
+            message: `Google service is unavailable (Token is empty)`,
+          });
+        }
       } else {
         present({
           type: "error",
-          message: `Google service is unavailable`,
+          message: `Google returned an offline code instead of ID Token`,
         });
       }
     } catch (error) {
