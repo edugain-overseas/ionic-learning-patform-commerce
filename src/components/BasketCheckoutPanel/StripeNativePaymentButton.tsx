@@ -137,7 +137,7 @@ const StripeNativePaymentButton: FC = () => {
           },
         ],
         countryCode: "US",
-        currency: "EUR",
+        currency: "eur",
       });
 
       const result = await Stripe.presentApplePay();
@@ -182,7 +182,7 @@ const StripeNativePaymentButton: FC = () => {
 
       await Stripe.createGooglePay({
         paymentIntentClientSecret: paymentIntent,
-        merchantIdentifier: import.meta.env.VITE_APPLE_MERCHANT_ID, //change to google merchant id???
+        merchantIdentifier: import.meta.env.VITE_APPLE_MERCHANT_ID,
         paymentSummaryItems: [
           {
             label: "FEU courses",
@@ -190,7 +190,7 @@ const StripeNativePaymentButton: FC = () => {
           },
         ],
         countryCode: "US",
-        currency: "EUR",
+        currency: "eur",
       });
 
       const result = await Stripe.presentGooglePay();

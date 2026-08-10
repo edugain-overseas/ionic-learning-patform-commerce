@@ -79,4 +79,8 @@
   &::part(content) {
     backdrop-filter: blur(28px);
   }
+
+  & > div {
+    overflow: auto;
+  }
 }

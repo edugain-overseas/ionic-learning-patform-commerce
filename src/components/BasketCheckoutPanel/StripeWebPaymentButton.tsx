@@ -90,7 +90,7 @@ const CheckoutForm = ({ onSuccess }: { onSuccess: () => Promise<void> }) => {
 };
 
 const StripeWebPaymentButton: FC = () => {
-  const [clientSecret, setClientSecret] = useState("");
+  const [clientSecret, setClientSecret] = useState(null);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [canMakePayment, setCanMakePayment] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -162,7 +162,7 @@ const StripeWebPaymentButton: FC = () => {
     if (items?.length !== 0 && studentId) {
       getClientSecret();
     } else {
-      setClientSecret("");
+      setClientSecret(null);
       setIsOpenModal(false);
     }
   }, [items?.length, studentId]);
@@ -174,7 +174,7 @@ const StripeWebPaymentButton: FC = () => {
 
       const pr = stripe.paymentRequest({
         country: "US",
-        currency: "EUR",
+        currency: "eur",
         total: { label: "Test", amount: 1 },
       });
 
