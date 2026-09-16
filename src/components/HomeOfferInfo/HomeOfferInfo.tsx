@@ -4,6 +4,8 @@ import { useObserver } from "../../hooks/useObserver";
 import WebIcon from "../../assets/icons/social/web.svg";
 import AppstoreIcon from "../../assets/icons/social/app-store.svg";
 import Playmarketcon from "../../assets/icons/social/play-market.svg";
+import desktopImg from "../../assets/images/home_device_desktop.png";
+import mobileImg from "../../assets/images/home_device_mobile.png";
 import styles from "./HomeOfferInfo.module.scss";
 
 type PlatformType = "web" | "ios" | "android";
@@ -74,13 +76,29 @@ const HomeOfferInfo: FC = () => {
   const containerRef = useObserver<HTMLDivElement>(
     true,
     observerCallback,
-    observerOptions
+    observerOptions,
   );
   return (
     <div className={styles.container}>
       <div className={styles.visualContentContainer} ref={containerRef}>
-        <div className={styles.desktop}></div>
-        <div className={styles.mobile}></div>
+        <div className={styles.desktop}>
+          <img
+            src={desktopImg}
+            className={styles.deviceImg}
+            alt="Desktop Device"
+            fetchPriority="high"
+            loading="eager"
+          />
+        </div>
+        <div className={styles.mobile}>
+          <img
+            src={mobileImg}
+            className={styles.deviceImg}
+            alt="Mobile Device"
+            fetchPriority="high"
+            loading="eager"
+          />
+        </div>
       </div>
       <div className={styles.textContainer}>
         <h3>Categories of Courses</h3>

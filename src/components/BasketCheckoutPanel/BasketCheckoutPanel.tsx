@@ -1,10 +1,23 @@
 import { FC, useEffect, useRef } from "react";
+import { Capacitor } from "@capacitor/core";
 import { useBasket } from "../../context/BasketContext";
 import { priceFormatter } from "../../utils/priceFormatter";
 import StripeNativePaymentButton from "./StripeNativePaymentButton";
-import styles from "./BasketCheckoutPanel.module.scss";
-import { Capacitor } from "@capacitor/core";
 import StripeWebPaymentButton from "./StripeWebPaymentButton";
+import InAppPurchaseButton from "./InAppPurchaseButton";
+import styles from "./BasketCheckoutPanel.module.scss";
+
+const CheckoutButton: FC = () => {
+  const platform = Capacitor.getPlatform();
+
+  if (platform === "ios") {
+    return <InAppPurchaseButton />;
+  }
+  if (platform === "android") {
+    return <StripeNativePaymentButton />;
+  }
+  return <StripeWebPaymentButton />;
+};
 
 const BasketCheckoutPanel: FC = () => {
   const basketService = useBasket();
@@ -22,7 +35,6 @@ const BasketCheckoutPanel: FC = () => {
     }
   }, [checkout?.discount]);
 
-  const isNative = Capacitor.isNativePlatform();
 
   return (
     <div className={styles.checkoutWrapper}>
@@ -50,7 +62,7 @@ const BasketCheckoutPanel: FC = () => {
           </span>
         </div>
       </div>
-      {isNative ? <StripeNativePaymentButton /> : <StripeWebPaymentButton />}
+      <CheckoutButton />
     </div>
   );
 };

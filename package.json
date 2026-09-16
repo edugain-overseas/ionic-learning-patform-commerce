@@ -27,6 +27,7 @@
     "@capacitor/splash-screen": "^6.0.4",
     "@capacitor/status-bar": "^6.0.2",
     "@capgo/capacitor-social-login": "^6.0.1",
+    "@capgo/native-purchases": "^6.0.42",
     "@ionic/core": "^8.1.0",
     "@ionic/pwa-elements": "^3.2.2",
     "@ionic/react": "^7.0.0",

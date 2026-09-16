@@ -24,7 +24,6 @@ const GoogleAuthButton: FC = () => {
           scopes: ["profile", "email"],
         },
       });
-      console.log(googleUser);
 
       if (googleUser.result && "idToken" in googleUser.result) {
         const googleToken = googleUser.result.idToken;

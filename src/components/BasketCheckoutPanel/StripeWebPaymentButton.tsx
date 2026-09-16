@@ -72,7 +72,9 @@ const CheckoutForm = ({ onSuccess }: { onSuccess: () => Promise<void> }) => {
 
   return (
     <form onSubmit={handleSubmit} className={styles.checkoutForm}>
-      <PaymentElement />
+      <PaymentElement
+        options={{ layout: { type: 'accordion', defaultCollapsed: false } }}
+      />
       <CommonButton
         label="Pay"
         icon={isLoading && <Spinner color="#fff" />}
@@ -106,6 +108,7 @@ const StripeWebPaymentButton: FC = () => {
   const authUiInterface = useAuthUi();
 
   const accessToken = useUser()?.user.accessToken;
+  console.log(stripePromise);
 
   const handleSuccessPayment = async () => {
     setIsLoading(true);

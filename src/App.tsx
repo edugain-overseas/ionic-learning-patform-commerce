@@ -12,7 +12,7 @@ import { BasketProvider } from "./context/BasketContext";
 // import { useAxios } from "./hooks/useAxios";
 import { useGoogleAuthInit } from "./hooks/useGoogleAuthInit";
 import { AuthUIProvider } from "./context/AuthUIContext";
-import { useSetupStripe } from "./hooks/useSetupStripe";
+import { useSetupPayment } from "./hooks/useSetupPayment";
 import Router from "./components/Router";
 
 /* Core CSS required for Ionic components to work properly */
@@ -58,9 +58,8 @@ const App: React.FC = () => {
   useDynamicFontSize();
   useStatusBar();
   useKeyboard();
-  // useAxios();
   useGoogleAuthInit();
-  useSetupStripe();
+  useSetupPayment();
 
   return (
     <IonApp className="App">

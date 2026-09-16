@@ -207,3 +207,13 @@ div.contentFallbackContainer {
 .refresher {
   --color: var(--ion-color-dark-contrast);
 }
+
+.buyAllBtn {
+  font-size: 16rem;
+  font-weight: 500;
+  color: var(--ion-color-dark);
+
+  ion-icon {
+    font-size: 20rem;
+  }
+}

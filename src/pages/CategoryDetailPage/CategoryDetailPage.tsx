@@ -1,5 +1,7 @@
+import React, { useMemo, useRef, useState } from "react";
 import {
   IonContent,
+  IonIcon,
   IonPage,
   IonSegment,
   IonSegmentButton,
@@ -9,21 +11,23 @@ import {
   useIonViewDidLeave,
   useIonViewWillEnter,
 } from "@ionic/react";
-import React, { useMemo, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
 import { useUser } from "../../context/UserContext";
+import { useBasket } from "../../context/BasketContext";
 import { useFilter } from "../../hooks/useCategoryDetailPageFilter";
 import { remToPx } from "../../utils/pxToRem";
 import { changeStausBarTheme } from "../../hooks/useStatusBar";
+import { serverName } from "../../http/server";
 import categoryContrastIcon from "../../assets/icons/category-contrast.svg";
+import basketIcon from "../../assets/icons/nav/basket.svg";
 import Header from "../../components/Header/Header";
 import CourseItem from "../../components/CourseItem/CourseItem";
 import PageRefresher from "../../components/PageRefresher/PageRefresher";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import Auth from "../../components/Auth/Auth";
+import CommonButton from "../../components/CommonButton/CommonButton";
 import styles from "./CategoryDetailPage.module.scss";
-import { serverName } from "../../http/server";
 
 const MAX_SCROLL_VALUE = 91;
 const MY_STUDY_MAX_SCROLL_VALUE = 162;
@@ -36,6 +40,7 @@ const CategoryDetailPage: React.FC = () => {
   const router = useIonRouter();
   const [isScrolling, setIsScrolling] = useState(false);
   const accessToken = useUser()?.user.accessToken;
+  const basketInterface = useBasket();
 
   const tab = router.routeInfo.tab;
   const isMyStudyTab = tab === "my study";
@@ -137,6 +142,10 @@ const CategoryDetailPage: React.FC = () => {
       (course) => course.bought && userCoursesIds.push(course.id),
     );
 
+    if (!isMyStudyTab) {
+      return courses?.filter((course) => !userCoursesIds.includes(course.id));
+    }
+
     switch (filter) {
       case "In process":
         return courses?.filter(
@@ -154,6 +163,28 @@ const CategoryDetailPage: React.FC = () => {
         return [];
     }
   };
+
+  const buyAllCourses = () => {
+    courses?.forEach((course) => {
+      if (!course.bought) {
+        basketInterface?.toggleItemToBasket(course.id);
+      }
+    });
+  };
+
+  const handleOpenNavigateToBasket = () => {
+    router.push("/basket");
+  };
+
+  const isAllCoursesInBasket = useMemo(() => {
+    if (!courses) return false;
+
+    const availableCourses = courses.filter((course) => !course.bought);
+
+    return availableCourses.every((course) =>
+      basketInterface?.items.some((item) => item.id === course.id),
+    );
+  }, [courses, basketInterface]);
 
   const onRefresh = coursesInterface?.getAllCourses;
 
@@ -210,7 +241,7 @@ const CategoryDetailPage: React.FC = () => {
                 ></p>
               </div>
             </div>
-            {isMyStudyTab && (
+            {isMyStudyTab ? (
               <div className={styles.progressWrapper}>
                 <span className={styles.progressValue}>
                   Progress: {handleProgress} / 100%
@@ -227,6 +258,21 @@ const CategoryDetailPage: React.FC = () => {
                   monochromatism={true}
                 />
               </div>
+            ) : (
+              <>
+                <CommonButton
+                  label={isAllCoursesInBasket ? "Open" : "Buy all"}
+                  icon={<IonIcon src={basketIcon} />}
+                  block={true}
+                  height={32}
+                  className={styles.buyAllBtn}
+                  onClick={
+                    isAllCoursesInBasket
+                      ? handleOpenNavigateToBasket
+                      : buyAllCourses
+                  }
+                />
+              </>
             )}
           </div>
           {isMyStudyTab && (

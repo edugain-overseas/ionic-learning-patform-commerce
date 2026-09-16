@@ -43,6 +43,8 @@ PODS:
     - FBSDKCoreKit (= 17.4.0)
     - FBSDKLoginKit (= 17.4.0)
     - GoogleSignIn (~> 8.0.0)
+  - CapgoNativePurchases (6.0.42):
+    - Capacitor
   - FBAEMKit (17.4.0):
     - FBSDKCoreKit_Basics (= 17.4.0)
   - FBSDKCoreKit (17.4.0):
@@ -107,6 +109,7 @@ DEPENDENCIES:
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
   - "CapgoCapacitorSocialLogin (from `../../node_modules/@capgo/capacitor-social-login`)"
+  - "CapgoNativePurchases (from `../../node_modules/@capgo/native-purchases`)"
 
 SPEC REPOS:
   trunk:
@@ -158,6 +161,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/status-bar"
   CapgoCapacitorSocialLogin:
     :path: "../../node_modules/@capgo/capacitor-social-login"
+  CapgoNativePurchases:
+    :path: "../../node_modules/@capgo/native-purchases"
 
 SPEC CHECKSUMS:
   Alamofire: 7193b3b92c74a07f85569e1a6c4f4237291e7496
@@ -176,6 +181,7 @@ SPEC CHECKSUMS:
   CapacitorSplashScreen: ef140a8b1ea7244e0c245ce2dd4ce5251e7ab86a
   CapacitorStatusBar: b16799a26320ffa52f6c8b01737d5a95bbb8f3eb
   CapgoCapacitorSocialLogin: 4fa119e5de63ae6599d5e8bcc2698e340731da7b
+  CapgoNativePurchases: 260513c14dadae1e5b32e885adb63e8cb19f9d7a
   FBAEMKit: 58cb5f302cdd715a56d4c1d0dfdd2e423ac1421a
   FBSDKCoreKit: 94d7461d0cecf441b1ba7c41acfff41daa8ccd41
   FBSDKCoreKit_Basics: 151b43db8b834d3f0e02f95d36a44ffd36265e45
@@ -194,6 +200,6 @@ SPEC CHECKSUMS:
   StripePaymentsUI: 70414581d3d14089831e370008b705ef03c7cce0
   StripeUICore: f11561a53f81e210398b4f1bd75f1e87b101197d
 
-PODFILE CHECKSUM: d9650946831aa2cee83d4154b7f6c4be4d2fc8d3
+PODFILE CHECKSUM: b4b48f8987214663eeef8ebe48afc43d36628be8
 
 COCOAPODS: 1.16.2
