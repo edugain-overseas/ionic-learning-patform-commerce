@@ -14,13 +14,15 @@ import LoginForm from "../components/Auth/LoginForm";
 import PasswordRecoveryForm from "../components/Auth/PasswordRecoveryForm";
 import UserActivationForm from "../components/Auth/UserActivationForm";
 import CorrectEmailForm from "../components/Auth/CorrectEmailForm";
+import NewPasswordForm from "../components/Auth/NewPasswordForm";
 
 type modalName =
   | "sing-up"
   | "sing-in"
   | "password-recovery"
   | "user-activation"
-  | "correct-email";
+  | "correct-email"
+  | "new-password";
 
 type ModalType = {
   name: modalName;
@@ -41,6 +43,7 @@ export const useAuthUi = () => useContext(AuthUIContext);
 export const AuthUIProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const accessToken = useUser()?.user.accessToken;
   const studentId = useUser()?.user.studentId;
+  const [tempEmail, setTempEmail] = useState<string>('');
 
   const [modals, setModals] = useState<ModalType[]>([]);
   const callbackRef = useRef<CallbackType | null>(null);
@@ -101,7 +104,17 @@ export const AuthUIProvider: FC<{ children: ReactNode }> = ({ children }) => {
             ])
           }
         >
-          <PasswordRecoveryForm />
+          <PasswordRecoveryForm modals={modals} setTempEmail={setTempEmail} />
+        </SheetModalAuto>
+        <SheetModalAuto
+          setModal={(modalRef) =>
+            setModals((prev) => [
+              ...prev.filter((modal) => modal.name !== "new-password"),
+              { name: "new-password", ref: modalRef },
+            ])
+          }
+        >
+          <NewPasswordForm modals={modals} tempEmail={tempEmail} />
         </SheetModalAuto>
         <SheetModalAuto
           setModal={(modalRef) =>

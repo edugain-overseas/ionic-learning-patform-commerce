@@ -27,6 +27,7 @@ const stripePromise = loadStripe(
 );
 
 const expressCheckoutElementOptions: StripeExpressCheckoutElementOptions = {
+  // paymentMethods: { googlePay: "auto", applePay: "auto", link: 'never', paypal: 'never', amazonPay: 'never' },
   buttonType: { applePay: "plain", googlePay: "plain" },
   buttonTheme: {
     applePay: "black",
@@ -73,7 +74,7 @@ const CheckoutForm = ({ onSuccess }: { onSuccess: () => Promise<void> }) => {
   return (
     <form onSubmit={handleSubmit} className={styles.checkoutForm}>
       <PaymentElement
-        options={{ layout: { type: 'accordion', defaultCollapsed: false } }}
+        options={{ layout: { type: "accordion", defaultCollapsed: false } }}
       />
       <CommonButton
         label="Pay"

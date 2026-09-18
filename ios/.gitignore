@@ -1,13 +1,25 @@
-# App/build
-# App/Pods
-# App/output
-# App/App/public
-# DerivedData
-# xcuserdata
+# Xcode / Локальний кеш та налаштування розробника
+# =========================================================================
+DerivedData/
+.build/
+App/build/
+App/build_stderr.log
 
-# # Cordova plugins for Capacitor
-# capacitor-cordova-ios-plugins
+# Особисті налаштування Xcode (не заважають іншим розробникам)
+App/*.xcuserdata/
+App/*.xcworkspace/xcuserdata/
+App/*.xcodeproj/xcuserdata/
+App/*.xcodeproj/project.xcworkspace/xcuserdata/
 
-# # Generated Config files
-# App/App/capacitor.config.json
-# App/App/config.xml
+# Залежності (генеруються автоматично через 'npx cap sync')
+# =========================================================================
+App/Pods/
+
+# Автогенеровані плагіни Capacitor/Cordova
+# =========================================================================
+capacitor-cordova-ios-plugins/
+
+# Логи та системні файли
+# =========================================================================
+.DS_Store
+*.log

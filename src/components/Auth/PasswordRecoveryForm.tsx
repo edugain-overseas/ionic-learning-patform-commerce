@@ -10,7 +10,10 @@ type FormValues = {
   email: string;
 };
 
-const PasswordRecoveryForm: React.FC = () => {
+const PasswordRecoveryForm: React.FC<{
+  modals: { name: string; ref: React.RefObject<HTMLIonModalElement> | null }[];
+  setTempEmail: (email: string) => void;
+}> = ({ modals, setTempEmail }) => {
   const user = useUser();
 
   const {
@@ -20,7 +23,7 @@ const PasswordRecoveryForm: React.FC = () => {
     formState: { errors, isSubmitted },
   } = useForm<FormValues>({
     defaultValues: {
-      email: "",
+      email: user?.user?.email || "",
     },
   });
 
@@ -29,6 +32,13 @@ const PasswordRecoveryForm: React.FC = () => {
 
     try {
       await user?.resetPassword(data.email);
+      setTempEmail(data.email);
+      modals
+        .find((modal) => modal.name === "password-recovery")
+        ?.ref?.current?.dismiss();
+      modals
+        .find((modal) => modal.name === "new-password")
+        ?.ref?.current?.present();
     } catch (error: any) {
       if (error.response.data.detail === "email not found") {
         setError("email", {

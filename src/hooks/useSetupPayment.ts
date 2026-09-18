@@ -31,15 +31,22 @@ export const useSetupPayment = () => {
         //prod version
         // const productIds = await instance.getProductIds();
 
-        const productIds = ["courses.feu.com.bundle.cognitive_psychology", "feu.course.57"];
+        const productIds = [
+          "courses.feu.com.bundle.cognitive_psychology",
+          "feu.course.57",
+        ];
 
         const products = await NativePurchases.getProducts({
           productIdentifiers: productIds,
-          productType: PURCHASE_TYPE.INAPP
+          productType: PURCHASE_TYPE.INAPP,
         });
 
         console.log(
-          "[Тест] Зв'язок з Apple StoreKit встановлено. Знайдено продуктів:",
+          `[Тест] Зв'язок з ${
+            Capacitor.getPlatform() === "ios"
+              ? "Apple StoreKit"
+              : "Google Play Billing"
+          } встановлено. Знайдено продуктів:`,
           products.products,
         );
       } catch (error) {
@@ -47,7 +54,7 @@ export const useSetupPayment = () => {
       }
     };
 
-    if (Capacitor.getPlatform() === "ios") {
+    if (Capacitor.isNativePlatform()) {
       setupIAP();
     } else {
       setupStripe();
