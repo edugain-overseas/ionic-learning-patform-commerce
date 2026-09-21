@@ -66,11 +66,13 @@
 .value {
   color: var(--ion-color-dark);
   font-weight: 500;
+  min-width: 1em;
 }
 
 .placeholder {
   color: var(--ion-color-light);
   font-size: 14rem;
+  min-width: 1em;
 }
 
 .openBtn,
@@ -99,7 +101,7 @@
 
 .openBtn {
   .chevron {
-    font-size: 24rem;
+    font-size: 16rem;
     transform-origin: center center;
     transition: transform var(--custom-tr-time-min) ease;
   }

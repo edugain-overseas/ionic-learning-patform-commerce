@@ -67,7 +67,7 @@ export interface TestContentType {
       }[]
     | {
         left?: { value: string; id: number }[];
-        right?: { value: string; id: number }[];
+        right?: { value: string; uuid: string }[];
       }[];
 }
 

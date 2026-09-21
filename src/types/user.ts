@@ -89,6 +89,7 @@ export interface UserContextType {
     platform: string,
   ) => Promise<{ access_token: string; username: string }>;
   resetPassword: (email: string) => Promise<void>;
+  resendResetCode: (email: string) => Promise<void>;
   setNewPassword: (credentials: {
     code: string;
     new_pass: string;

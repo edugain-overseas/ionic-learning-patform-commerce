@@ -3,39 +3,37 @@ apply plugin: 'com.android.application'
 android {
     namespace "io.ieucourses.app"
     compileSdkVersion rootProject.ext.compileSdkVersion
+
     defaultConfig {
         applicationId "io.ieucourses.app"
         minSdkVersion rootProject.ext.minSdkVersion
-        // targetSdkVersion rootProject.ext.targetSdkVersion
         targetSdkVersion 36
-        versionCode 29
-        versionName "1.29"
+
+        versionCode 31
+        versionName "1.31"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
-             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
-             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
+            // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
+            // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    packaging {
+
+    packagingOptions {
         resources {
             excludes += [
-                "org/bouncycastle/x509/CertPathReviewerMessages_de.properties",
-                "org/bouncycastle/x509/CertPathReviewerMessages.properties"
+                    "org/bouncycastle/x509/CertPathReviewerMessages_de.properties",
+                    "org/bouncycastle/x509/CertPathReviewerMessages.properties"
             ]
         }
-    }
-}
-
-repositories {
-    flatDir{
-        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
     }
 }
 
@@ -61,3 +59,4 @@ try {
 } catch(Exception e) {
     logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
 }
+

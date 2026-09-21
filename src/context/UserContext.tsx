@@ -6,9 +6,9 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import { SignInWithAppleResponse } from "@capacitor-community/apple-sign-in";
 import { instance } from "../http/instance";
 import useStorage from "../hooks/useStorage";
-import { SignInWithAppleResponse } from "@capacitor-community/apple-sign-in";
 
 // Types
 import { UserType, UserInfoToUpdateType, UserContextType } from "../types/user";
@@ -166,6 +166,10 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
     await instance.post("/user/reset-pass", { email });
   };
 
+  const resendResetCode = async (email: string) => {
+    await instance.get(`/user/resend-password-reset-code?email=${email}`);
+  };
+
   const setNewPassword = async (credentials: {
     code: string;
     new_pass: string;
@@ -269,6 +273,7 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
       loginWithGoogle,
       loginWithApple,
       resetPassword,
+      resendResetCode,
       setNewPassword,
       logout,
       getUser,

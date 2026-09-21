@@ -6,10 +6,10 @@ import Select from "../../../Select/Select";
 interface QuestionMatchingType {
   answers: {
     left?: { value: string; id: number }[];
-    right?: { value: string; id: number }[];
+    right?: { value: string; uuid: string }[];
   };
-  state: { left_id: number; right_id: number }[];
-  setState: (id: number, value: number, leftOptionId: number) => void;
+  state: { left_id: number; right_uuid: string }[];
+  setState: (id: number, leftOptionId: number, value: string) => void;
   id: number;
 }
 
@@ -22,9 +22,9 @@ const QuestionMatching: React.FC<QuestionMatchingType> = ({
   const leftOptions = answers?.left || [];
   const rightOptions = answers?.right || [];
 
-  const options = rightOptions.map(({ id }, index) => ({
+  const options = rightOptions.map(({ uuid }, index) => ({
     label: getLetterVatiantsByIndex(index) || "",
-    value: `${id}`,
+    value: `${uuid}`,
   }));
   return (
     <div className={styles.matchWrapper}>
@@ -39,8 +39,8 @@ const QuestionMatching: React.FC<QuestionMatchingType> = ({
           ))}
         </ul>
         <ul className={styles.right}>
-          {rightOptions.map(({ id, value }, index) => (
-            <li key={id}>
+          {rightOptions.map(({ uuid, value }, index) => (
+            <li key={uuid}>
               <p>
                 {getLetterVatiantsByIndex(index)} {value}
               </p>
@@ -54,14 +54,14 @@ const QuestionMatching: React.FC<QuestionMatchingType> = ({
           {leftOptions.map(({ id: leftOptionId }, index) => {
             const currentValue = state?.find(
               (answer) => answer.left_id === leftOptionId
-            )?.right_id;
+            )?.right_uuid;
             return (
               <li key={leftOptionId} className={styles.answerOption}>
                 <span>{`${index + 1}) = `}</span>
                 <Select
                   options={options}
                   value={currentValue ? `${currentValue}` : ""}
-                  onChange={(value) => setState(id, leftOptionId, +value)}
+                  onChange={(value) => setState(id, leftOptionId, value)}
                   placeholder=""
                   borderless={true}
                   allowClear={false}
@@ -69,8 +69,9 @@ const QuestionMatching: React.FC<QuestionMatchingType> = ({
                     backgroundColor: "transparent",
                     width: "100%",
                     paddingInline: "4rem",
-                    gap: "4rem",
+                    gap: "0rem",
                     fontSize: "12rem",
+                    maxWidth: 'max-content',
                   }}
                   dropDownWrapperStyles={{
                     boxShadow: 'var(--custom-box-shadow-primary)'

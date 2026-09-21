@@ -33,8 +33,11 @@
   }
 
   & > ul {
-    display: flex;
-    align-items: center;
+    // display: flex;
+    // align-items: center;
+    // flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
     gap: 16rem;
   }
 

@@ -73,7 +73,7 @@ const NewPasswordForm: React.FC<{
 
   const handleResendCode = async () => {
     try {
-      await user?.resetPassword(tempEmail || "");
+      await user?.resendResetCode(tempEmail || "");
       messageApi({
         type: "success",
         message: `We send you a new code to your email: ${tempEmail}`,

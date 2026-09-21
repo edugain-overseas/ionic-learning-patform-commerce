@@ -74,7 +74,7 @@ const TestContent: React.FC<{
   const setMatchingState = (
     id: number,
     leftOptionId: number,
-    value: number
+    value: string
   ) => {
     if (setStudentAnswers) {
       setStudentAnswers((prev) => {
@@ -87,9 +87,9 @@ const TestContent: React.FC<{
               )
             ) {
               question.matching.map(
-                (i: { left_id: number; right_id: number }) => {
+                (i: { left_id: number; right_uuid: string }) => {
                   if (i.left_id === leftOptionId) {
-                    i.right_id = value;
+                    i.right_uuid = value;
                   }
                   return i;
                 }
@@ -97,7 +97,7 @@ const TestContent: React.FC<{
             } else {
               question.matching.push({
                 left_id: leftOptionId,
-                right_id: value,
+                right_uuid: value,
               });
             }
           }
@@ -261,13 +261,13 @@ const TestContent: React.FC<{
                   left: (
                     answers[0] as {
                       left: { value: string; id: number }[];
-                      right: { value: string; id: number }[];
+                      right: { value: string; uuid: string }[];
                     }
                   ).left,
                   right: (
                     answers[0] as {
                       left: { value: string; id: number }[];
-                      right: { value: string; id: number }[];
+                      right: { value: string; uuid: string }[];
                     }
                   ).right,
                 }}
