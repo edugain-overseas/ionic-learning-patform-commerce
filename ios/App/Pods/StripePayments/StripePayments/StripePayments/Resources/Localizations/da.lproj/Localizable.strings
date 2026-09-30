@@ -42,13 +42,9 @@
 
 "SEPA Debit" = "SEPA Debit";
 
-"Sofort" = "Sofort";
-
 "Swish" = "Swish";
 
 "Timed out authenticating your payment method -- try again" = "Bekræftelsen af din betalingsmetode udløb -- prøv igen.";
-
-"UPI" = "UPI";
 
 "US bank account" = "Bankkonto i USA";
 
@@ -58,6 +54,4 @@
 
 "WeChat Pay" = "WeChat Pay";
 
-"giropay" = "giropay";
-
-"iDEAL" = "iDEAL";
+"iDEAL | Wero" = "iDEAL | Wero";

@@ -1,4 +1,8 @@
+"%1$@ •••• %2$@" = "%1$@ •••• %2$@";
+
 "%@ (optional)" = "%@ (opcional)";
+
+"(not accepted)" = "(no s'accepta)";
 
 "Account number" = "Número de Compte";
 
@@ -36,7 +40,7 @@
 
 "County" = "Comtat";
 
-"Date is empty." = "La data és buida.";
+"Date of Birth" = "Data de naixement";
 
 "Department" = "Departament";
 
@@ -66,8 +70,6 @@
 
 "Incomplete phone number" = "Número de telèfon incomplet";
 
-"Invalid UPI ID" = "ID d'UPI no vàlid";
-
 "Island" = "Illa";
 
 "Last" = "Cognom";
@@ -90,6 +92,8 @@
 
 "Prefecture" = "Prefectura";
 
+"Processing..." = "Processant...";
+
 "Province" = "Província";
 
 "Remove" = "Eliminar";
@@ -102,9 +106,15 @@
 
 "Select card brand (optional)" = "Seleccioneu la marca de la targeta (opcional)";
 
+"Selection is empty." = "La selecció és buida.";
+
+"Something went wrong" = "Alguna cosa ha anat malament";
+
 "Sort code" = "Codi de classificació";
 
 "State" = "País";
+
+"Submit" = "Envia";
 
 "Suburb" = "Suburbi";
 
@@ -120,8 +130,6 @@
 
 "Town or city" = "Municipi o ciutat";
 
-"UPI ID" = "ID d'UPI";
-
 "Unable to parse phone number" = "No s'ha pogut analitzar el número de telèfon";
 
 "Use rotor to access links" = "Empreu el rotor per accedir als enllaços";
@@ -130,12 +138,16 @@
 
 "Your BLIK code is invalid." = "El codi BLIK no és vàlid.";
 
-"Your ZIP is incomplete." = "El teu ZIP no està complet.";
+"Your ZIP code is incomplete." = "El teu codi postal està incomplet.";
+
+"Your ZIP code is invalid." = "El codi ZIP no és vàlid.";
 
 "Your email is invalid." = "L'adreça electrònica no és vàlida.";
 
 "Your payment information will not be saved." = "La informació de pagament no es desarà.";
 
 "Your postal code is incomplete." = "El teu codi postal no està complet.";
+
+"Your postal code is invalid." = "El teu codi postal no és vàlid.";
 
 "ZIP" = "ZIP";

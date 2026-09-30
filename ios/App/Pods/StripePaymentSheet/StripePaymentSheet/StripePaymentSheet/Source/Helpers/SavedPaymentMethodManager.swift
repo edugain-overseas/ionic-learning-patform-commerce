@@ -10,17 +10,20 @@ import Foundation
 @_spi(STP) import StripePayments
 
 /// Provides shared implementations of common operations for managing saved payment methods in PaymentSheet
+@MainActor
 final class SavedPaymentMethodManager {
 
     enum Error: Swift.Error {
         case missingEphemeralKey
+        case missingUpdatedPaymentMethod
     }
 
     let configuration: PaymentElementConfiguration
     let elementsSession: STPElementsSession
+    let intent: Intent
 
     private lazy var ephemeralKey: String? = {
-        guard let ephemeralKey = configuration.customer?.ephemeralKeySecretBasedOn(elementsSession: elementsSession) else {
+        guard let ephemeralKey = configuration.customer?.ephemeralKeySecret(basedOn: elementsSession) else {
             stpAssert(true, "Failed to read ephemeral key.")
             let errorAnalytic = ErrorAnalytic(event: .unexpectedPaymentSheetError,
                                               error: Error.missingEphemeralKey,
@@ -31,54 +34,100 @@ final class SavedPaymentMethodManager {
         return ephemeralKey
     }()
 
-    init(configuration: PaymentElementConfiguration, elementsSession: STPElementsSession) {
+    init(configuration: PaymentElementConfiguration, elementsSession: STPElementsSession, intent: Intent) {
         self.configuration = configuration
         self.elementsSession = elementsSession
+        self.intent = intent
     }
 
     func update(paymentMethod: STPPaymentMethod,
                 with updateParams: STPPaymentMethodUpdateParams) async throws -> STPPaymentMethod {
-        guard let ephemeralKey else {
-            throw PaymentSheetError.unknown(debugDescription: "Failed to read ephemeral key while updating a payment method.")
+        switch intent {
+        case .checkout(let session):
+            let billing = CheckoutController.PaymentMethodBillingDetails(updateParams.billingDetails)
+            let expiry = CheckoutController.PaymentMethodExpiryDetails(updateParams.card)
+            guard billing != nil || expiry != nil else {
+                throw PaymentSheetError.unknown(debugDescription: "Tried to update a payment method without billing details or expiry details.")
+            }
+            let updatedSession = try await configuration.apiClient.updatePaymentMethod(
+                paymentMethod.stripeId,
+                inCheckoutSession: session.id,
+                billingDetails: billing,
+                expiryDetails: expiry
+            )
+            guard let updatedPaymentMethod = updatedSession.customer?.paymentMethods.first(where: { $0.stripeId == paymentMethod.stripeId }) else {
+                let errorAnalytic = ErrorAnalytic(event: .unexpectedPaymentSheetError,
+                                                  error: Error.missingUpdatedPaymentMethod,
+                                                  additionalNonPIIParams: ["payment_method_id": paymentMethod.stripeId])
+                STPAnalyticsClient.sharedClient.log(analytic: errorAnalytic)
+                throw PaymentSheetError.unknown(debugDescription: "Checkout session response didn't include the updated payment method.")
+            }
+            updatedPaymentMethod.updateLocalFields(from: paymentMethod)
+            return updatedPaymentMethod
+        case .paymentIntent, .setupIntent, .deferredIntent:
+            guard let ephemeralKey else {
+                throw PaymentSheetError.unknown(debugDescription: "Failed to read ephemeral key while updating a payment method.")
+            }
+            let updatedPaymentMethod = try await configuration.apiClient.updatePaymentMethod(with: paymentMethod.stripeId,
+                                                                                             paymentMethodUpdateParams: updateParams,
+                                                                                             ephemeralKeySecret: ephemeralKey)
+            updatedPaymentMethod.updateLocalFields(from: paymentMethod)
+            return updatedPaymentMethod
         }
-
-        return try await configuration.apiClient.updatePaymentMethod(with: paymentMethod.stripeId,
-                                                                     paymentMethodUpdateParams: updateParams,
-                                                                     ephemeralKeySecret: ephemeralKey)
     }
 
     func detach(paymentMethod: STPPaymentMethod) {
-        guard let ephemeralKey else {
-            return
-        }
-
-        if let customerAccessProvider = configuration.customer?.customerAccessProvider,
-           case .customerSession(let customerSessionClientSecret) = customerAccessProvider,
-           let customerId = configuration.customer?.id {
-            if paymentMethod.type == .card {
-                configuration.apiClient.detachPaymentMethodRemoveDuplicates(
+        switch intent {
+        case .checkout(let session):
+            Task {
+                try? await configuration.apiClient.detachPaymentMethod(
                     paymentMethod.stripeId,
-                    customerId: customerId,
-                    fromCustomerUsing: ephemeralKey,
-                    withCustomerSessionClientSecret: customerSessionClientSecret
-                ) { (_) in
-                    // no-op
+                    fromCheckoutSession: session.id
+                )
+            }
+        case .paymentIntent, .setupIntent, .deferredIntent:
+            guard let ephemeralKey else {
+                return
+            }
+
+            if let customerAccessProvider = configuration.customer?.customerAccessProvider,
+               case .customerSession(let customerSessionClientSecret) = customerAccessProvider,
+               let customerId = configuration.customer?.id {
+                if paymentMethod.type == .card {
+                    configuration.apiClient.detachPaymentMethodRemoveDuplicates(
+                        paymentMethod.stripeId,
+                        customerId: customerId,
+                        fromCustomerUsing: ephemeralKey,
+                        withCustomerSessionClientSecret: customerSessionClientSecret
+                    ) { (_) in
+                        // no-op
+                    }
+                } else {
+                    configuration.apiClient.detachPaymentMethod(
+                        paymentMethod.stripeId,
+                        fromCustomerUsing: ephemeralKey,
+                        withCustomerSessionClientSecret: customerSessionClientSecret) { (_) in
+                            // no-op
+                        }
                 }
             } else {
                 configuration.apiClient.detachPaymentMethod(
                     paymentMethod.stripeId,
-                    fromCustomerUsing: ephemeralKey,
-                    withCustomerSessionClientSecret: customerSessionClientSecret) { (_) in
+                    fromCustomerUsing: ephemeralKey
+                ) { (_) in
                     // no-op
                 }
             }
-        } else {
-            configuration.apiClient.detachPaymentMethod(
-                paymentMethod.stripeId,
-                fromCustomerUsing: ephemeralKey
-            ) { (_) in
-                // no-op
-            }
         }
+    }
+
+    func setAsDefaultPaymentMethod(defaultPaymentMethodId: String) async throws -> STPCustomer {
+        guard let ephemeralKey else {
+            throw PaymentSheetError.unknown(debugDescription: "Failed to read ephemeral key while setting a payment method as default.")
+        }
+        guard let customerId = configuration.customer?.id else {
+            throw PaymentSheetError.unknown(debugDescription: "Failed to read customerId while setting a payment method as default.")
+        }
+        return try await configuration.apiClient.setAsDefaultPaymentMethod(defaultPaymentMethodId, for: customerId, using: ephemeralKey)
     }
 }

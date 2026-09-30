@@ -17,6 +17,8 @@ const CheckoutButton: FC = () => {
 };
 
 const BasketCheckoutPanel: FC = () => {
+  const isNative = Capacitor.isNativePlatform();
+
   const basketService = useBasket();
 
   const discountRef = useRef<HTMLDivElement>(null);
@@ -34,22 +36,24 @@ const BasketCheckoutPanel: FC = () => {
 
   return (
     <div className={styles.checkoutWrapper}>
-      <div className={styles.discount} ref={discountRef}>
-        <div className={styles.subWrapper}>
-          <div className={styles.info}>
-            <span>Subtotal:</span>
-            <span>
-              {checkout?.subTotal && priceFormatter(checkout.subTotal)} EUR
-            </span>
-          </div>
-          <div className={styles.info}>
-            <span>Discount:</span>
-            <span>
-              {checkout?.discount && priceFormatter(checkout.discount)} EUR
-            </span>
+      {!isNative && (
+        <div className={styles.discount} ref={discountRef}>
+          <div className={styles.subWrapper}>
+            <div className={styles.info}>
+              <span>Subtotal:</span>
+              <span>
+                {checkout?.subTotal && priceFormatter(checkout.subTotal)} EUR
+              </span>
+            </div>
+            <div className={styles.info}>
+              <span>Discount:</span>
+              <span>
+                {checkout?.discount && priceFormatter(checkout.discount)} EUR
+              </span>
+            </div>
           </div>
         </div>
-      </div>
+      )}
       <div className={styles.subWrapper}>
         <div className={styles.info}>
           <span>Total payment:</span>

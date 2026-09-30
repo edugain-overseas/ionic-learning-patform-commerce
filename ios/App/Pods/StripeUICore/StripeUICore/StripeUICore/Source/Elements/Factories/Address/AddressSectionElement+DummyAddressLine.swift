@@ -13,7 +13,7 @@ extension AddressSectionElement {
     @_spi(STP) public class DummyAddressLine: NSObject, Element, TextFieldViewDelegate, UIGestureRecognizerDelegate {
         public let collectsUserInput: Bool = false
 
-        public var delegate: ElementDelegate?
+        public weak var delegate: ElementDelegate?
         public lazy var view: UIView = {
             let configuration = TextFieldElement.Address.LineConfiguration(lineType: .autoComplete, defaultValue: nil)
             let text = ""
@@ -25,8 +25,9 @@ extension AddressSectionElement {
                 validationState: configuration.validate(text: text, isOptional: configuration.isOptional),
                 accessoryView: configuration.accessoryView(for: text, theme: theme),
                 shouldShowClearButton: configuration.shouldShowClearButton,
-                isEditable: configuration.isEditable,
-                theme: theme
+                editConfiguration: configuration.editConfiguration,
+                theme: theme,
+                displayEmptyFields: false
             )
             let textFieldView = TextFieldView(viewModel: viewModel, delegate: self)
             textFieldView.isUserInteractionEnabled = false
@@ -36,7 +37,7 @@ extension AddressSectionElement {
             return view
         }()
         public var validationState: ElementValidationState {
-            return .invalid(error: TextFieldElement.Error.empty, shouldDisplay: false)
+            return .invalid(error: TextFieldElement.Error.empty(localizedDescription: ""), shouldDisplay: false)
         }
         let didTap: () -> Void
         public let theme: ElementsAppearance

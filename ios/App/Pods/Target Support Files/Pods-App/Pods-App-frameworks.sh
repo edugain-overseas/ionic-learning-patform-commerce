@@ -197,11 +197,13 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/GoogleSignIn/GoogleSignIn.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/IONCameraLib/IONCameraLib.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/PromisesObjC/FBLPromises.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/PromisesSwift/Promises.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/RecaptchaInterop/RecaptchaInterop.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/StripeApplePay/StripeApplePay.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/StripeCore/StripeCore.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/StripeFinancialConnectionsLite/StripeFinancialConnectionsLite.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/StripePaymentSheet/StripePaymentSheet.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/StripePayments/StripePayments.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/StripePaymentsUI/StripePaymentsUI.framework"
@@ -210,6 +212,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework"
   install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKCoreKit_Basics/FBSDKCoreKit_Basics.framework"
   install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/IONFilesystemLib/IONFilesystemLib.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework"
@@ -233,11 +236,13 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/GoogleSignIn/GoogleSignIn.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/IONCameraLib/IONCameraLib.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/PromisesObjC/FBLPromises.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/PromisesSwift/Promises.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/RecaptchaInterop/RecaptchaInterop.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/StripeApplePay/StripeApplePay.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/StripeCore/StripeCore.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/StripeFinancialConnectionsLite/StripeFinancialConnectionsLite.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/StripePaymentSheet/StripePaymentSheet.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/StripePayments/StripePayments.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/StripePaymentsUI/StripePaymentsUI.framework"
@@ -246,6 +251,7 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework"
   install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKCoreKit_Basics/FBSDKCoreKit_Basics.framework"
   install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/IONFilesystemLib/IONFilesystemLib.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait

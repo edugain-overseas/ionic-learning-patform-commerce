@@ -12,9 +12,10 @@ import Foundation
 import UIKit
 
 /// A delegate for `AddressViewController`
+@MainActor @preconcurrency
 public protocol AddressViewControllerDelegate: AnyObject {
-    /// Called when the customer finishes entering their address or cancels. Your implemententation should dismiss the view controller.
-    /// - Parameter address: A valid address or nil if the customer cancels the flow.
+    /// Called when the customer finishes entering their address or dismisses the view controller. Your implementation should dismiss the view controller.
+    /// - Parameter address: A valid address or nil if the address information is incomplete or invalid.
     func addressViewControllerDidFinish(_ addressViewController: AddressViewController, with address: AddressViewController.AddressDetails?)
 }
 
@@ -26,6 +27,9 @@ public class AddressViewController: UIViewController {
     // MARK: - Public properties
     /// Configuration containing e.g. appearance styling properties, default values, etc.
     public let configuration: Configuration
+    /// Whether to use the Stripe autocomplete endpoints for address autocomplete instead of Apple MapKit.
+    /// This is decided internally by the SDK (e.g. from the elements session) and defaults to `true` when there's no session to consult (e.g. the standalone Address Element).
+    let useAutocompleteEndpoints: Bool
     /// A valid address or nil.
     private var addressDetails: AddressDetails? {
         guard let addressSection = addressSection else { return nil }
@@ -54,8 +58,44 @@ public class AddressViewController: UIViewController {
     public weak var delegate: AddressViewControllerDelegate?
     private var selectedAutoCompleteResult: PaymentSheet.Address?
     private var didLogAddressShow = false
+    private var addressShowStart: Date = Date()
+
+    /// The address as of the last open or save. Returned to the delegate when the customer
+    /// cancels (taps 'X' with no changes, or discards changes) so we never hand back
+    /// edited-but-abandoned data.
+    private var initialAddressDetails: AddressDetails?
+    /// A snapshot of the form's raw values as of the last open or save, used to detect unsaved changes.
+    private var initialFormSnapshot: AddressSectionElement.AddressDetails?
+    /// The autocomplete result associated with the address as of the last open or save.
+    private var initialSelectedAutoCompleteResult: PaymentSheet.Address?
+    /// The phone field's country as of the last open or save.
+    private var initialPhoneCountryCode: String?
+    /// The additional-fields checkbox state as of the last open or save.
+    private var initialCheckboxSelected: Bool?
+
+    /// Whether the customer has changed any form value since the sheet was presented.
+    var hasChanges: Bool {
+        guard let addressSection = addressSection else { return false }
+        if addressSection.addressDetails != initialFormSnapshot { return true }
+        if addressSection.phone?.selectedCountryCode != initialPhoneCountryCode { return true }
+        if checkboxElement?.checkboxButton.isSelected != initialCheckboxSelected { return true }
+        return false
+    }
 
     // MARK: - Internal properties
+
+    /// Delegate provided by the integration entry point (legacy Address Element or Checkout Sessions Shipping Address Element) that handles address saving and analytics
+    @MainActor
+    protocol IntegrationDelegate: AnyObject {
+        /// Handles the address form being shown.
+        func didShow()
+        /// Handles cancellation without saving the address.
+        func didCancel()
+        /// Handles completion with the customer's collected address details.
+        func save(addressDetails: AddressDetails) async throws
+    }
+
+    weak var integrationDelegate: IntegrationDelegate?
     let addressSpecProvider: AddressSpecProvider
     private var latestError: Error? {
         didSet {
@@ -70,7 +110,7 @@ public class AddressViewController: UIViewController {
     // MARK: - Views
     lazy var button: ConfirmButton = {
         let button = ConfirmButton(
-            state: (addressSection?.validationState.isValid ?? false) ? .enabled : .disabled,
+            status: (addressSection?.validationState.isValid ?? false) ? .enabled : .disabled,
             callToAction: .custom(title: configuration.buttonTitle),
             appearance: configuration.appearance
         ) { [weak self] in
@@ -81,10 +121,15 @@ public class AddressViewController: UIViewController {
     private lazy var headerLabel: UILabel = {
         let header = PaymentSheetUI.makeHeaderLabel(appearance: configuration.appearance)
         header.text = configuration.title
+        header.isHidden = configuration.useNavigationBarTitle
         return header
     }()
     lazy var scrollView: UIScrollView = {
-        return UIScrollView()
+        let scrollView = UIScrollView()
+        #if !os(visionOS)
+        scrollView.keyboardDismissMode = .onDrag
+        #endif
+        return scrollView
     }()
     lazy var errorLabel: UILabel = {
         let label = ElementsUI.makeErrorLabel(theme: configuration.appearance.asElementsTheme)
@@ -94,7 +139,19 @@ public class AddressViewController: UIViewController {
 
     // MARK: - Elements
     lazy var formElement: FormElement = {
-        let formElement = FormElement(elements: [addressSection, checkboxElement], theme: configuration.appearance.asElementsTheme)
+        var customSpacing: [(Element, CGFloat)] = []
+
+        // Add padding under the shipping equals billing checkbox if it exists
+        if let shippingCheckbox = shippingEqualsBillingCheckbox {
+            // Default spacing is a bit too tight for what we want, scale the appearance value a bit
+            customSpacing.append((shippingCheckbox, configuration.appearance.sectionSpacing * 1.6))
+        }
+
+        let formElement = FormElement(
+            elements: [shippingEqualsBillingCheckbox, addressSection, checkboxElement],
+            theme: configuration.appearance.asElementsTheme,
+            customSpacing: customSpacing
+        )
         formElement.delegate = self
         return formElement
     }()
@@ -110,6 +167,77 @@ public class AddressViewController: UIViewController {
 
         return element
     }()
+
+    /// Returns the shipping address if it is compatible with allowed countries, otherwise returns the billing address if compatible.
+    private var compatibleDefaultValues: AddressViewController.Configuration.DefaultAddressDetails? {
+        // Try shipping address (defaultValues) first
+        if !configuration.defaultValues.address.isEmpty {
+            if isAddressCompatible(configuration.defaultValues) {
+                return configuration.defaultValues
+            }
+        } else if configuration.defaultValues.name?.isEmpty == false {
+            return configuration.defaultValues
+        }
+
+        // Fall back to billing address
+        if let billingAddress = configuration.billingAddress {
+            if isAddressCompatible(billingAddress) {
+                return billingAddress
+            }
+        }
+
+        return nil
+    }
+
+    /// Checks if an address is compatible with the allowed countries configuration.
+    private func isAddressCompatible(_ addressDetails: AddressViewController.Configuration.DefaultAddressDetails) -> Bool {
+        // No default address provided, early exit
+        guard !addressDetails.address.isEmpty else { return false }
+
+        // No blocked countries, allow all default addresses
+        guard !configuration.allowedCountries.isEmpty else { return true }
+
+        // Default address has no country specified, allow it
+        guard let defaultCountry = addressDetails.address.country else { return true }
+
+        // Only allow default addresses with allowed countries
+        return configuration.allowedCountries.contains(defaultCountry)
+    }
+
+    private lazy var shippingEqualsBillingCheckbox: CheckboxElement? = {
+        // Show checkbox when billing address is provided and is compatible with allowed countries
+        guard let billingAddress = configuration.billingAddress else { return nil }
+
+        // Check if billing address is compatible with allowed countries
+        let isCompatible: Bool = {
+            // No blocked countries, allow all billing addresses
+            guard !configuration.allowedCountries.isEmpty else { return true }
+
+            // Billing address has no country specified, allow it
+            guard let billingCountry = billingAddress.address.country else { return true }
+
+            // Only show checkbox for billing addresses with allowed countries
+            return configuration.allowedCountries.contains(billingCountry)
+        }()
+
+        guard isCompatible else { return nil }
+
+        // Only show checkbox if billing address has at least line1
+        guard billingAddress.address.line1?.nonEmpty != nil else { return nil }
+
+        // Default to checked if shipping address (defaultValues) is empty
+        let isSelectedByDefault = configuration.defaultValues.address.isEmpty
+
+        return CheckboxElement(
+            theme: configuration.appearance.asElementsTheme,
+            label: String.Localized.use_billing_address_for_shipping,
+            isSelectedByDefault: isSelectedByDefault,
+            didToggle: { [weak self] isSelected in
+                self?.handleShippingEqualsBillingToggle(isSelected: isSelected)
+            }
+        )
+    }()
+
     fileprivate lazy var closeButton: UIButton = {
         let button = SheetNavigationButton.makeCloseButton(appearance: configuration.appearance)
         button.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
@@ -129,19 +257,33 @@ public class AddressViewController: UIViewController {
         configuration: Configuration,
         delegate: AddressViewControllerDelegate
     ) {
-        self.init(addressSpecProvider: .shared, configuration: configuration, delegate: delegate)
+        self.init(
+            addressSpecProvider: .shared,
+            configuration: configuration,
+            delegate: delegate,
+            integrationDelegate: nil
+        )
     }
 
     init(
         addressSpecProvider: AddressSpecProvider,
         configuration: Configuration,
-        delegate: AddressViewControllerDelegate
+        delegate: AddressViewControllerDelegate,
+        integrationDelegate: IntegrationDelegate? = nil,
+        useAutocompleteEndpoints: Bool = true
     ) {
         self.addressSpecProvider = addressSpecProvider
         self.configuration = configuration
         self.delegate = delegate
+        self.useAutocompleteEndpoints = useAutocompleteEndpoints
         super.init(nibName: nil, bundle: nil)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: closeButton)
+        if configuration.useNavigationBarTitle {
+            title = configuration.title
+        }
+
+        // Set the integration delegate if provided. Otherwise use the default legacy one
+        self.integrationDelegate = integrationDelegate ?? self
     }
 
     required init?(coder: NSCoder) {
@@ -178,15 +320,10 @@ public class AddressViewController: UIViewController {
 
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        if !didLogAddressShow {
-            STPAnalyticsClient.sharedClient.logAddressShow(defaultCountryCode: addressSection?.selectedCountryCode ?? "", apiClient: configuration.apiClient)
-            didLogAddressShow = true
-        }
+        integrationDelegate?.didShow()
+        // Ensure we receive dismissal callbacks even when presented modally inside a UINavigationController
+        navigationController?.presentationController?.delegate = self
         addressSection?.beginEditing()
-    }
-
-    public override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
     }
 }
 
@@ -205,10 +342,16 @@ extension AddressViewController {
         }
 
         let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
-        let keyboardInViewHeight = view.safeAreaLayoutGuide.layoutFrame.intersection(keyboardViewEndFrame).height
+        var keyboardInViewHeight = view.safeAreaLayoutGuide.layoutFrame.intersection(keyboardViewEndFrame).height
         if notification.name == UIResponder.keyboardWillHideNotification {
             scrollViewBottomConstraint.constant = 0
         } else {
+            #if !os(visionOS)
+            if #available(iOS 26.0, visionOS 26.0, *), let inputAccessoryView = self.view.firstResponder()?.inputAccessoryView {
+                // On iOS 26, the input accessory view is transparent, so we don't want shift the content above it.
+               keyboardInViewHeight -= inputAccessoryView.frame.height
+            }
+            #endif
             scrollViewBottomConstraint.constant = -keyboardInViewHeight
         }
 
@@ -223,9 +366,55 @@ extension AddressViewController {
 // MARK: - Internal methods
 extension AddressViewController {
 
+    func initialAddressDetails() async -> AddressDetails? {
+        await addressSpecProvider.loadAddressSpecs()
+        loadViewIfNeeded()
+        return addressDetails
+    }
+
     func didContinue() {
-        logAddressCompleted()
-        delegate?.addressViewControllerDidFinish(self, with: addressDetails)
+        Task { @MainActor in
+            guard let addressDetails else {
+                stpAssertionFailure("AddressViewController attempted to continue with an invalid address.")
+                return
+            }
+            setLoading(true)
+            do {
+                try await self.integrationDelegate?.save(addressDetails: addressDetails)
+                // Re-baseline change tracking only after the save succeeds. If it fails, the
+                // customer can still retry or discard the unsaved values.
+                captureInitialSnapshot()
+                delegate?.addressViewControllerDidFinish(self, with: addressDetails)
+                selectedAutoCompleteResult = nil
+            } catch {
+                self.latestError = error
+            }
+            setLoading(false)
+        }
+    }
+
+    private func setLoading(_ isLoading: Bool) {
+        if isLoading {
+            view.endEditing(true)
+            latestError = nil
+        }
+
+        let isUserInteractionEnabled = !isLoading
+        sendEventToSubviews(
+            isUserInteractionEnabled ? .shouldEnableUserInteraction : .shouldDisableUserInteraction,
+            from: view
+        )
+        view.isUserInteractionEnabled = isUserInteractionEnabled
+        navigationController?.navigationBar.isUserInteractionEnabled = isUserInteractionEnabled
+        closeButton.isEnabled = isUserInteractionEnabled
+
+        let buttonStatus: ConfirmButton.Status
+        if isLoading {
+            buttonStatus = .processing
+        } else {
+            buttonStatus = addressSection?.validationState.isValid == true ? .enabled : .disabled
+        }
+        button.update(status: buttonStatus, animated: true)
     }
 
     @objc func didTapBackground() {
@@ -234,39 +423,138 @@ extension AddressViewController {
 
     @objc func presentAutocomplete() {
         assert(navigationController != nil)
-        let autoCompleteViewController = AutoCompleteViewController(configuration: configuration, initialLine1Text: addressSection?.line1?.text, addressSpecProvider: addressSpecProvider)
+        let keyboardShowing = view.firstResponder() != nil
+        let autoCompleteViewController = AutoCompleteViewController(configuration: configuration, initialLine1Text: addressSection?.line1?.text, selectedCountry: addressSection?.selectedCountryCode ?? "", addressSpecProvider: addressSpecProvider, keyboardAlreadyShowing: keyboardShowing, useAutocompleteEndpoints: useAutocompleteEndpoints)
         autoCompleteViewController.delegate = self
         navigationController?.pushViewController(autoCompleteViewController, animated: true)
     }
 
     @objc func didTapCloseButton() {
-        delegate?.addressViewControllerDidFinish(self, with: nil)
+        // Tapping 'X' is a cancel: if the customer changed nothing, dismiss and return the
+        // as-presented address; otherwise confirm before discarding their changes.
+        if hasChanges {
+            presentDiscardChangesAlert()
+        } else {
+            integrationDelegate?.didCancel()
+            delegate?.addressViewControllerDidFinish(self, with: initialAddressDetails)
+        }
+    }
+
+    private func presentDiscardChangesAlert() {
+        let alertController = UIAlertController(
+            title: String.Localized.discard_changes_title,
+            message: String.Localized.discard_changes_message,
+            preferredStyle: .alert
+        )
+        alertController.addAction(UIAlertAction(title: String.Localized.keep_editing, style: .cancel))
+        alertController.addAction(
+            UIAlertAction(title: String.Localized.discard_changes, style: .destructive) { [weak self] _ in
+                self?.discardChanges()
+            }
+        )
+        present(alertController, animated: true)
+    }
+
+    func discardChanges() {
+        // Revert the form to its as-opened state so a reused instance doesn't keep the discarded
+        // edits, then finish with the as-opened address (never the edited-but-abandoned values).
+        resetFormToInitialSnapshot()
+        integrationDelegate?.didCancel()
+        delegate?.addressViewControllerDidFinish(self, with: initialAddressDetails)
+    }
+
+    private func resetFormToInitialSnapshot() {
+        guard let initialFormSnapshot else { return }
+        // clear-then-populate (as in handleShippingEqualsBillingToggle) restores the as-opened
+        // values AND clears fields like phone that populate alone would leave stale when the
+        // baseline had none. setAddress rebuilds every address subfield, so line1/city/state/
+        // postal/line2 revert too, and the (always-present) snapshot country is reselected.
+        clearAddressSection()
+        populateAddressSection(with: initialFormSnapshot)
+        if let phoneCountryCode = initialPhoneCountryCode {
+            addressSection?.phone?.setSelectedCountryCode(phoneCountryCode)
+        }
+        // Additional-fields checkbox — set after repopulation (CheckboxElement.isSelected has no
+        // side effects, so this won't retrigger form population).
+        checkboxElement?.isSelected = initialCheckboxSelected ?? false
+        // Drop autocomplete analytics captured during the discarded edits.
+        selectedAutoCompleteResult = initialSelectedAutoCompleteResult
+    }
+
+    func handleShippingEqualsBillingToggle(isSelected: Bool) {
+        if isSelected {
+            // Populate with billing address when checked
+            if let billingAddress = configuration.billingAddress, isAddressCompatible(billingAddress) {
+                populateAddressSection(with: .init(from: billingAddress))
+            }
+        } else {
+            // Always clear when unchecked first
+            clearAddressSection()
+
+            // Then optionally populate with shipping address (defaultValues) if they exist and are different from billing
+            if !configuration.defaultValues.address.isEmpty && isAddressCompatible(configuration.defaultValues) {
+                // Only populate with default values if they're different from billing address
+                if let billingAddress = configuration.billingAddress,
+                   configuration.defaultValues.address != billingAddress.address {
+                    populateAddressSection(with: .init(from: configuration.defaultValues))
+                }
+            }
+        }
+    }
+
+    private func populateAddressSection(with addressDetails: AddressSectionElement.AddressDetails) {
+        guard let addressSection = addressSection else { return }
+
+        addressSection.setAddress(addressDetails.address)
+
+        // Populate name and phone if available
+        addressSection.name?.setText(addressDetails.name ?? "")
+        if let phone = addressDetails.phone {
+            // Check if phone number is in E.164 format and parse it properly
+            if let parsedPhone = PhoneNumber.fromE164(phone) {
+                // Use parsed country code and local number for E.164 format
+                addressSection.phone?.setSelectedCountryCode(parsedPhone.countryCode, shouldUpdateDefaultNumber: false)
+                addressSection.phone?.setPhoneNumber(parsedPhone.number)
+            } else {
+                // Fall back to original logic for non-E.164 numbers
+                addressSection.phone?.setPhoneNumber(phone)
+                if let phoneCountry = addressDetails.address.country {
+                    addressSection.phone?.setSelectedCountryCode(phoneCountry, shouldUpdateDefaultNumber: false)
+                }
+            }
+        }
+    }
+
+    private func clearAddressSection() {
+        guard let addressSection = addressSection else { return }
+
+        // Clear all fields
+        addressSection.setAddress(.init())
+        addressSection.name?.setText("")
+        addressSection.phone?.clearPhoneNumber()
+
+        // Reset to default country if needed (first in allowed countries or US)
+        let defaultCountryCode = configuration.allowedCountries.first ?? "US"
+        if let defaultCountryIndex = addressSection.countryCodes.firstIndex(where: { $0 == defaultCountryCode }) {
+            addressSection.country.select(index: defaultCountryIndex)
+        }
     }
 }
 
 // MARK: - Private methods
 extension AddressViewController {
-    /// Expands the address section element and begin editing if the current country selection does not support auto copmlete
-    private func expandAddressSectionIfNeeded() {
-        // If we're in autocomplete mode and the country is not supported by autocomplete, switch to normal address collection
-        if let addressSection = addressSection, addressSection.collectionMode == .autoCompletable,
-           !configuration.autocompleteCountries.caseInsensitiveContains(addressSection.selectedCountryCode) {
-            addressSection.collectionMode = .all(autocompletableCountries: configuration.autocompleteCountries)
-        }
-    }
+    private func makeDefaultAddressSection() -> AddressSectionElement? {
+        guard hasLoadedSpecs else { return nil }
 
-    private func initAddressSection() {
-        guard hasLoadedSpecs else { return }
+        let defaultValues = compatibleDefaultValues ?? .init()
 
-        let additionalFields = configuration.additionalFields
-        let defaultValues = configuration.defaultValues
-        let allowedCountries = configuration.allowedCountries
-        addressSection = AddressSectionElement(
-            countries: allowedCountries.isEmpty ? nil : allowedCountries,
+        return AddressSectionElement(
+            countries: configuration.allowedCountries.isEmpty ? nil : configuration.allowedCountries,
             addressSpecProvider: addressSpecProvider,
             defaults: .init(from: defaultValues),
-            collectionMode: configuration.defaultValues.address != .init() ? .all(autocompletableCountries: configuration.autocompleteCountries) : .autoCompletable,
-            additionalFields: .init(from: additionalFields),
+            defaultFieldsToCollect: .all,
+            countriesSupportingAutocomplete: configuration.autocompleteCountries,
+            additionalFields: .init(from: configuration.additionalFields),
             theme: configuration.appearance.asElementsTheme,
             presentAutoComplete: { [weak self] in
                 self?.presentAutocomplete()
@@ -274,11 +562,23 @@ extension AddressViewController {
         )
     }
 
+    private func captureInitialSnapshot() {
+        // The baseline for change detection: the form as of the last open or save. Also the
+        // value returned to the delegate if the customer cancels, so we never hand back
+        // edited-but-abandoned data.
+        self.initialAddressDetails = addressDetails
+        self.initialFormSnapshot = addressSection?.addressDetails
+        self.initialSelectedAutoCompleteResult = selectedAutoCompleteResult
+        self.initialPhoneCountryCode = addressSection?.phone?.selectedCountryCode
+        self.initialCheckboxSelected = checkboxElement?.checkboxButton.isSelected
+    }
+
     private func loadUI() {
-        initAddressSection()
+        self.addressSection = makeDefaultAddressSection()
+        captureInitialSnapshot()
 
         let stackView = UIStackView(arrangedSubviews: [headerLabel, formElement.view, errorLabel])
-        stackView.directionalLayoutMargins = PaymentSheetUI.defaultMargins
+        stackView.directionalLayoutMargins = configuration.appearance.topFormInsets
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.spacing = PaymentSheetUI.defaultPadding
         stackView.axis = .vertical
@@ -302,10 +602,9 @@ extension AddressViewController {
             stackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: button.topAnchor, constant: -PaymentSheetUI.defaultPadding),
 
-            button.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor, constant: PaymentSheetUI.defaultSheetMargins.leading),
-            button.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor, constant: -PaymentSheetUI.defaultSheetMargins.leading),
-            button.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -PaymentSheetUI.defaultSheetMargins.bottom),
-            button.heightAnchor.constraint(equalToConstant: 44),
+            button.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor, constant: configuration.appearance.formInsets.leading),
+            button.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor, constant: -configuration.appearance.formInsets.trailing),
+            button.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -configuration.appearance.formInsets.bottom),
         ])
     }
 
@@ -327,19 +626,75 @@ extension AddressViewController {
         }
     }
 
-    private func logAddressCompleted() {
+    var addressShowAnalyticData: AddressAnalyticData {
+        return AddressAnalyticData(
+            addressCountryCode: addressSection?.selectedCountryCode.nonEmpty
+                ?? configuration.defaultValues.address.country?.nonEmpty
+                ?? "",
+            autoCompleteResultedSelected: nil,
+            editDistance: nil
+        )
+    }
+
+    var currentAddressAnalyticData: AddressAnalyticData {
+        return makeAddressAnalyticData(address: addressDetails?.address)
+    }
+
+    func addressAnalyticData(for addressDetails: AddressDetails) -> AddressAnalyticData {
+        return makeAddressAnalyticData(address: addressDetails.address)
+    }
+
+    private func makeAddressAnalyticData(address: AddressDetails.Address?) -> AddressAnalyticData {
         var editDistance: Int?
-        if let selectedAddress = addressDetails?.address, let autoCompleteAddress = selectedAutoCompleteResult {
-            editDistance = PaymentSheet.Address(from: selectedAddress).editDistance(from: autoCompleteAddress)
+        if let address, let autoCompleteAddress = selectedAutoCompleteResult {
+            editDistance = PaymentSheet.Address(from: address).editDistance(from: autoCompleteAddress)
         }
 
-        STPAnalyticsClient.sharedClient.logAddressCompleted(
-            addressCountyCode: addressSection?.selectedCountryCode ?? "",
+        return AddressAnalyticData(
+            addressCountryCode: address?.country.nonEmpty
+                ?? addressSection?.selectedCountryCode.nonEmpty
+                ?? configuration.defaultValues.address.country?.nonEmpty
+                ?? "",
             autoCompleteResultedSelected: selectedAutoCompleteResult != nil,
-            editDistance: editDistance,
+            editDistance: editDistance
+        )
+    }
+}
+
+// MARK: - IntegrationDelegate
+// Default implementation that logs completion and forwards address details to the merchant delegate
+extension AddressViewController: AddressViewController.IntegrationDelegate {
+
+    func didShow() {
+        guard !didLogAddressShow else { return }
+        STPAnalyticsClient.sharedClient.logAddressShow(defaultCountryCode: addressSection?.selectedCountryCode ?? "", apiClient: configuration.apiClient)
+        didLogAddressShow = true
+        addressShowStart = Date()
+    }
+
+    func didCancel() {
+    }
+
+    func save(addressDetails: AddressDetails) async throws {
+        logAddressCompleted()
+    }
+
+    private func logAddressCompleted() {
+        let analyticData = currentAddressAnalyticData
+        let msToComplete = Date().timeIntervalSince(addressShowStart)
+        STPAnalyticsClient.sharedClient.logAddressCompleted(
+            addressCountyCode: analyticData.addressCountryCode,
+            autoCompleteResultedSelected: analyticData.autoCompleteResultedSelected ?? false,
+            editDistance: analyticData.editDistance,
+            msToComplete: msToComplete,
             apiClient: configuration.apiClient
         )
     }
+}
+
+extension AddressViewController.IntegrationDelegate {
+    func didShow() {}
+    func didCancel() {}
 }
 
 // MARK: - ElementDelegate
@@ -348,8 +703,10 @@ extension AddressViewController {
          guard let addressSection = addressSection else { assertionFailure(); return }
          self.latestError = nil // clear error on new input
          let enabled = addressSection.validationState.isValid
-         button.update(state: enabled ? .enabled : .disabled, animated: true)
-         expandAddressSectionIfNeeded()
+         button.update(status: enabled ? .enabled : .disabled, animated: true)
+
+         // Automatically update the "shipping equals billing" checkbox based on current form state
+         updateShippingEqualsBillingCheckboxState()
      }
 
      @_spi(STP) public func continueToNextField(element: Element) {
@@ -363,15 +720,12 @@ extension AddressViewController: AutoCompleteViewControllerDelegate {
     func didSelectManualEntry(_ line1: String) {
         guard let addressSection = addressSection else { assertionFailure(); return }
         navigationController?.popViewController(animated: true)
-        addressSection.collectionMode = .all(autocompletableCountries: configuration.autocompleteCountries)
-        addressSection.line1?.setText(line1)
+        addressSection.beginManualEntry(with: line1)
     }
 
     func didSelectAddress(_ address: PaymentSheet.Address?) {
         guard let addressSection = addressSection else { assertionFailure(); return }
         navigationController?.popViewController(animated: true)
-        // Disable auto complete after address is selected
-        addressSection.collectionMode = .all(autocompletableCountries: configuration.autocompleteCountries)
         guard let address = address else {
             return
         }
@@ -385,16 +739,14 @@ extension AddressViewController: AutoCompleteViewControllerDelegate {
             return
         }
 
-        if let autocompleteCountryIndex = autocompleteCountryIndex {
-            addressSection.country.select(index: autocompleteCountryIndex)
-        }
-        addressSection.line1?.setText(address.line1 ?? "")
-        addressSection.city?.setText(address.city ?? "")
-        addressSection.postalCode?.setText(address.postalCode ?? "")
-        addressSection.state?.setRawData(address.state ?? "")
-        addressSection.state?.view.resignFirstResponder()
+        addressSection.setAddress(address.addressSectionAddress)
 
-        self.selectedAutoCompleteResult = address
+        // Read back from the element so field processing (e.g. postal code truncation) is reflected
+        let normalized = addressSection.addressDetails.address
+        self.selectedAutoCompleteResult = PaymentSheet.Address(
+            city: normalized.city, country: normalized.country, line1: normalized.line1,
+            line2: normalized.line2, postalCode: normalized.postalCode, state: normalized.state
+        )
     }
 }
 
@@ -445,4 +797,62 @@ extension AddressSectionElement.AdditionalFields {
 
 @_spi(STP) extension AddressViewController: STPAnalyticsProtocol {
     @_spi(STP) public static var stp_analyticsIdentifier = "PaymentSheet.AddressController"
+}
+
+extension AddressViewController {
+    /// Updates the checkbox state based on whether the current form matches the billing address
+    private func updateShippingEqualsBillingCheckboxState() {
+        guard let checkbox = shippingEqualsBillingCheckbox,
+              let currentAddressSection = addressSection,
+              let billingAddress = configuration.billingAddress else { return }
+
+        // Create a temporary AddressSection with the billing address to get normalized data
+        let billingAddressSection = AddressSectionElement(
+            countries: configuration.allowedCountries.isEmpty ? nil : configuration.allowedCountries,
+            addressSpecProvider: addressSpecProvider,
+            defaults: .init(from: billingAddress),
+            defaultFieldsToCollect: .all,
+            additionalFields: .init(from: configuration.additionalFields),
+            theme: configuration.appearance.asElementsTheme,
+            presentAutoComplete: { /* no-op for comparison */ }
+        )
+
+        let currentAddressDetails = currentAddressSection.addressDetails
+        let normalizedBillingAddressDetails = billingAddressSection.addressDetails
+
+        // Check the checkbox if current form matches normalized billing address, uncheck otherwise
+        checkbox.isSelected = (currentAddressDetails == normalizedBillingAddressDetails)
+    }
+}
+
+extension PaymentSheet.Address {
+    var addressSectionAddress: AddressSectionElement.AddressDetails.Address {
+        return .init(
+            city: city,
+            country: country,
+            line1: line1,
+            line2: line2,
+            postalCode: postalCode,
+            state: state
+        )
+    }
+
+    var isEmpty: Bool {
+        return self == .init()
+    }
+}
+
+// MARK: - UIAdaptivePresentationControllerDelegate
+extension AddressViewController: UIAdaptivePresentationControllerDelegate {
+
+    public func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
+        // no-op. This isn't actually reachable since we always return false for ShouldDismiss,
+        //  but we don't want to make public API changes by removing this function.
+    }
+
+    public func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        // Disallow swipe-to-dismiss so an accidental gesture can't discard entered address data.
+        // Customers exit via the 'X' button (which confirms if there are unsaved changes) or Continue.
+        return false
+    }
 }

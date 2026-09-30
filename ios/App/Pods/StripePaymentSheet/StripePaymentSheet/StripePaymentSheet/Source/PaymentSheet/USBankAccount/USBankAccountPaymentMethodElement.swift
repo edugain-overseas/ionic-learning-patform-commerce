@@ -18,7 +18,7 @@ final class USBankAccountPaymentMethodElement: ContainerElement {
 
     var presentingViewControllerDelegate: PresentingViewControllerDelegate?
 
-    var delegate: ElementDelegate?
+    weak var delegate: ElementDelegate?
 
     var view: UIView {
         return formElement.view
@@ -38,7 +38,7 @@ final class USBankAccountPaymentMethodElement: ContainerElement {
     private let bankInfoSectionElement: SectionElement
     private let bankInfoView: BankAccountInfoView
     private let saveCheckboxElement: PaymentMethodElementWrapper<CheckboxElement>?
-    private let defaultCheckboxElement: PaymentMethodElement?
+    private let defaultCheckboxElement: Element?
     private var savingAccount: BoolReference
     private let theme: ElementsAppearance
 
@@ -83,14 +83,15 @@ final class USBankAccountPaymentMethodElement: ContainerElement {
 
     init(
         configuration: PaymentSheetFormFactoryConfig,
-        titleElement: StaticElement,
+        subtitleElement: SubtitleElement,
         nameElement: PaymentMethodElementWrapper<TextFieldElement>?,
         emailElement: PaymentMethodElementWrapper<TextFieldElement>?,
         phoneElement: PaymentMethodElementWrapper<PhoneNumberElement>?,
         addressElement: PaymentMethodElementWrapper<AddressSectionElement>?,
         saveCheckboxElement: PaymentMethodElementWrapper<CheckboxElement>?,
-        defaultCheckboxElement: PaymentMethodElement?,
+        defaultCheckboxElement: Element?,
         savingAccount: BoolReference,
+        isSettingUp: Bool,
         merchantName: String,
         initialLinkedBank: FinancialConnectionsLinkedBank?,
         appearance: PaymentSheet.Appearance = .default
@@ -125,14 +126,14 @@ final class USBankAccountPaymentMethodElement: ContainerElement {
         self.savingAccount = savingAccount
         self.theme = theme
         let allElements: [Element?] = [
-            titleElement,
+            subtitleElement,
             nameElement,
             emailElement,
             phoneElement,
             addressElement,
             bankInfoSectionElement,
             saveCheckboxElement,
-            defaultCheckboxElement
+            defaultCheckboxElement,
         ]
         let autoSectioningElements = allElements.compactMap { $0 }
         self.formElement = FormElement(autoSectioningElements: autoSectioningElements, theme: theme)
@@ -143,7 +144,7 @@ final class USBankAccountPaymentMethodElement: ContainerElement {
             guard let self = self else {
                 return
             }
-            self.mandateString = Self.attributedMandateText(for: self.linkedBank, merchantName: merchantName, isSaving: value, configuration: configuration, theme: theme)
+            self.mandateString = Self.attributedMandateText(for: self.linkedBank, merchantName: merchantName, isSaving: value || isSettingUp, configuration: configuration, theme: theme)
             self.delegate?.didUpdate(element: self)
         }
         updateLinkedBankUI(animated: false)
@@ -182,7 +183,7 @@ final class USBankAccountPaymentMethodElement: ContainerElement {
         var mandateText = isSaving ? String(format: Self.SaveAccountMandateText, merchantName) : String.Localized.bank_continue_mandate_text
         if case .customerSheet = configuration, !linkedBank.instantlyVerified {
             mandateText =  String.init(format: Self.MicrodepositCopy_CustomerSheet, merchantName) + "\n" + mandateText
-        } else if case .paymentSheet = configuration, !linkedBank.instantlyVerified {
+        } else if case .paymentElement = configuration, !linkedBank.instantlyVerified {
             mandateText =  String.init(format: Self.MicrodepositCopy, merchantName) + "\n" + mandateText
         }
         let formattedString = STPStringUtils.applyLinksToString(template: mandateText, links: links)
@@ -201,7 +202,7 @@ final class USBankAccountPaymentMethodElement: ContainerElement {
         let style = NSMutableParagraphStyle()
         style.alignment = alignment
         formattedString.addAttributes([.paragraphStyle: style,
-                                       .font: UIFont.preferredFont(forTextStyle: .footnote),
+                                       .font: theme.fonts.footnote,
                                        .foregroundColor: theme.colors.secondaryText,
                                       ],
                                       range: NSRange(location: 0, length: formattedString.length))

@@ -19,8 +19,18 @@ extension NSDecimalNumber {
         "RSD": 2,
         "IDR": 2,
         "ISK": 2,
+        "HUF": 2,
     ]
 
+    /// Converts an amount from a currency's minor units to its major units.
+    ///
+    /// For example, `92_123` USD minor units becomes `921.23`, while
+    /// `92_123` JPY minor units remains `92_123`.
+    ///
+    /// - Parameters:
+    ///   - amount: The amount in minor units.
+    ///   - currency: The three-letter ISO 4217 currency code.
+    /// - Returns: The amount expressed in major units.
     @objc @_spi(STP) public class func stp_decimalNumber(
         withAmount amount: Int,
         currency: String?
@@ -28,13 +38,6 @@ extension NSDecimalNumber {
         let number = self.init(mantissa: UInt64(amount), exponent: 0, isNegative: false)
         let decimalCount = decimalCount(for: currency)
         return number.multiplying(byPowerOf10: -Int16(decimalCount))
-    }
-
-    @objc @_spi(STP) public func stp_amount(withCurrency currency: String?) -> Int {
-        var ourNumber = self
-        let decimalCount = NSDecimalNumber.decimalCount(for: currency)
-        ourNumber = multiplying(byPowerOf10: Int16(decimalCount))
-        return Int(ourNumber.doubleValue)
     }
 
     private class func decimalCount(for currency: String?) -> Int {

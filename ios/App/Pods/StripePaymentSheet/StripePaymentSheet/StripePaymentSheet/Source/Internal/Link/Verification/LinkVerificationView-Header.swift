@@ -18,29 +18,30 @@ extension LinkVerificationView {
             static let logoHeight: CGFloat = 24
         }
 
-        private let logoView: UIImageView = {
-            let logoView = UIImageView(image: Image.link_logo.makeImage(template: false))
+        private let brand: LinkBrand
+
+        private lazy var logoView: UIImageView = {
+            let logoView = UIImageView(image: brand.paymentSheetLogoImage)
             logoView.translatesAutoresizingMaskIntoConstraints = false
             logoView.isAccessibilityElement = true
             logoView.accessibilityTraits = .header
-            logoView.accessibilityLabel = STPPaymentMethodType.link.displayName
+            logoView.accessibilityLabel = brand.accessibilityDisplayName
             return logoView
         }()
 
         let closeButton: UIButton = {
-            let button = UIButton(type: .system)
-            button.setImage(Image.icon_cancel.makeImage(template: true), for: .normal)
-            button.translatesAutoresizingMaskIntoConstraints = false
-            button.accessibilityLabel = String.Localized.close
-            button.accessibilityIdentifier = "LinkVerificationCloseButton"
-            return button
+            LinkSheetNavigationBar.createCloseButton(
+                accessibilityIdentifier: "LinkVerificationCloseButton",
+                appearance: LinkUI.appearance
+            )
         }()
 
         override var intrinsicContentSize: CGSize {
-            return CGSize(width: 72, height: 24)
+            return CGSize(width: 72, height: 32)
         }
 
-        init() {
+        init(brand: LinkBrand = .link) {
+            self.brand = brand
             super.init(frame: .zero)
 
             addSubview(logoView)
@@ -48,18 +49,18 @@ extension LinkVerificationView {
 
             NSLayoutConstraint.activate([
                 // Logo
-                logoView.centerXAnchor.constraint(equalTo: centerXAnchor),
+                logoView.leadingAnchor.constraint(equalTo: leadingAnchor),
                 logoView.centerYAnchor.constraint(equalTo: centerYAnchor),
                 logoView.heightAnchor.constraint(equalToConstant: Constants.logoHeight),
 
                 // Button
                 closeButton.topAnchor.constraint(equalTo: topAnchor),
-                closeButton.rightAnchor.constraint(equalTo: rightAnchor),
+                closeButton.trailingAnchor.constraint(equalTo: trailingAnchor),
                 closeButton.bottomAnchor.constraint(equalTo: bottomAnchor),
             ])
 
-            tintColor = .linkNavTint
-            logoView.tintColor = .linkNavLogo
+            tintColor = .linkSurfacePrimary
+            logoView.tintColor = .linkTextPrimary
         }
 
         required init?(coder: NSCoder) {

@@ -51,10 +51,7 @@ public enum CustomerPaymentOption: Equatable {
         UserDefaults.standard.customerToLastSelectedPaymentMethod = customerToDefaultPaymentMethodID
     }
 
-    /// Returns the identifier of the default payment method for a customer.
-    /// - Parameter customerID: ID of the customer. Pass `nil` for anonymous users.
-    /// - Returns: Default payment method.
-    @_spi(STP) public static func defaultPaymentMethod(for customerID: String?) -> CustomerPaymentOption? {
+    @_spi(STP) public static func localDefaultPaymentMethod(for customerID: String?) -> CustomerPaymentOption? {
         let key = customerID ?? ""
 
         guard let value = UserDefaults.standard.customerToLastSelectedPaymentMethod?[key] else {
@@ -62,5 +59,84 @@ public enum CustomerPaymentOption: Equatable {
         }
 
         return CustomerPaymentOption(value: value)
+    }
+
+    /// Returns the identifier of the selected by default payment method for a customer.
+    /// - Parameter customerID: ID of the customer. Pass `nil` for anonymous users.
+    /// - Parameter elementsSession: the ElementsSession.
+    /// - Parameter surface: `.paymentSheet` or `.customerSheet`
+    /// - Returns: Selected payment method.
+    @_spi(STP) public static func selectedPaymentMethod(for customerID: String?, elementsSession: STPElementsSession, surface: HostedSurface) -> CustomerPaymentOption? {
+        switch surface {
+        case .paymentSheet:
+            // if opted in to the "set as default" feature, read from elementsSession
+            if elementsSession.paymentMethodSetAsDefaultForPaymentSheet {
+                if let defaultPaymentMethod = elementsSession.customer?.getDefaultOrFirstPaymentMethod() {
+                    return CustomerPaymentOption.stripeId(defaultPaymentMethod.stripeId)
+                }
+            }
+            // otherwise, get default payment method from local storage
+            else {
+                return localDefaultPaymentMethod(for: customerID)
+            }
+        case .customerSheet:
+            if elementsSession.paymentMethodSyncDefaultForCustomerSheet {
+                if let defaultPaymentMethod = elementsSession.customer?.getDefaultPaymentMethod() {
+                    return CustomerPaymentOption.stripeId(defaultPaymentMethod.stripeId)
+                }
+            } else {
+                return localDefaultPaymentMethod(for: customerID)
+            }
+        }
+        return nil
+    }
+}
+
+extension CustomerPaymentOption {
+    /// Captures the locally persisted selected payment option and the saved payment methods
+    /// available immediately before a payment surface is presented.
+    ///
+    /// On cancellation, use this snapshot to revert the persisted selection. A method that was
+    /// available before presentation but is missing at cancellation was deleted and is not restored.
+    /// A method missing at both points may be hidden or temporarily unavailable, so its selection is
+    /// restored.
+    struct PersistedSelectionSnapshot {
+        private let customerID: String?
+        private let selectedPaymentOptionBeforePresentation: CustomerPaymentOption?
+        private let availableSavedPaymentMethodIDsBeforePresentation: Set<String>
+
+        init(customerID: String?, availableSavedPaymentMethods: [STPPaymentMethod]) {
+            self.customerID = customerID
+            self.selectedPaymentOptionBeforePresentation = CustomerPaymentOption.localDefaultPaymentMethod(for: customerID)
+            self.availableSavedPaymentMethodIDsBeforePresentation = Set(availableSavedPaymentMethods.map(\.stripeId))
+        }
+
+        /// Reverts to the captured selection unless its saved payment method was deleted.
+        func revertPersistedSelection(using currentlyAvailableSavedPaymentMethods: [STPPaymentMethod]) {
+            if selectedPaymentMethodWasDeleted(from: currentlyAvailableSavedPaymentMethods) {
+                clearDeletedSelectionIfNeeded()
+            } else {
+                CustomerPaymentOption.setDefaultPaymentMethod(selectedPaymentOptionBeforePresentation, forCustomer: customerID)
+            }
+        }
+
+        private func selectedPaymentMethodWasDeleted(
+            from currentlyAvailableSavedPaymentMethods: [STPPaymentMethod]
+        ) -> Bool {
+            if case .stripeId(let selectedPaymentMethodID) = selectedPaymentOptionBeforePresentation,
+               availableSavedPaymentMethodIDsBeforePresentation.contains(selectedPaymentMethodID),
+               !currentlyAvailableSavedPaymentMethods.contains(where: { $0.stripeId == selectedPaymentMethodID }) {
+                return true
+            }
+            return false
+        }
+
+        private func clearDeletedSelectionIfNeeded() {
+            // Deletion may persist a fallback selection. Keep it, or clear the deleted selection
+            // if no fallback was persisted.
+            if CustomerPaymentOption.localDefaultPaymentMethod(for: customerID) == selectedPaymentOptionBeforePresentation {
+                CustomerPaymentOption.setDefaultPaymentMethod(nil, forCustomer: customerID)
+            }
+        }
     }
 }

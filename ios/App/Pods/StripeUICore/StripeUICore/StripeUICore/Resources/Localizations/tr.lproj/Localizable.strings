@@ -1,4 +1,8 @@
+"%1$@ •••• %2$@" = "%1$@ •••• %2$@";
+
 "%@ (optional)" = "%@ (isteğe bağlı)";
+
+"(not accepted)" = "(kabul edilmedi)";
 
 "Account number" = "Hesap numarası";
 
@@ -36,7 +40,7 @@
 
 "County" = "Ülke";
 
-"Date is empty." = "Tarih boş.";
+"Date of Birth" = "Doğum Tarihi";
 
 "Department" = "İdari Bölüm";
 
@@ -66,8 +70,6 @@
 
 "Incomplete phone number" = "Eksik telefon numarası";
 
-"Invalid UPI ID" = "Geçersiz UPI Numarası";
-
 "Island" = "Ada";
 
 "Last" = "Soyadı";
@@ -90,6 +92,8 @@
 
 "Prefecture" = "İdari bölge";
 
+"Processing..." = "İşleniyor...";
+
 "Province" = "İlçe";
 
 "Remove" = "Kaldır";
@@ -102,9 +106,15 @@
 
 "Select card brand (optional)" = "Kart markasını seçin (isteğe bağlı)";
 
+"Selection is empty." = "Seçim boş.";
+
+"Something went wrong" = "Bir sorun oluştu";
+
 "Sort code" = "Şube kodu";
 
 "State" = "Eyalet";
+
+"Submit" = "Gönder";
 
 "Suburb" = "Banliyö";
 
@@ -120,8 +130,6 @@
 
 "Town or city" = "Kasaba veya şehir";
 
-"UPI ID" = "UPI Numarası";
-
 "Unable to parse phone number" = "Telefon numaranızı ayrıştırılamadı";
 
 "Use rotor to access links" = "Linklere erişmek için rotoru kullanın.";
@@ -130,12 +138,16 @@
 
 "Your BLIK code is invalid." = "BLIK kodunuz geçersiz.";
 
-"Your ZIP is incomplete." = "Posta kodunuz eksik.";
+"Your ZIP code is incomplete." = "Posta kodunuz eksik.";
+
+"Your ZIP code is invalid." = "Posta kodunuz geçersiz.";
 
 "Your email is invalid." = "E-postanız geçersiz.";
 
 "Your payment information will not be saved." = "Ödeme bilgileriniz kaydedilmeyecek.";
 
 "Your postal code is incomplete." = "Posta kodunuz eksik.";
+
+"Your postal code is invalid." = "Posta kodunuz geçersiz.";
 
 "ZIP" = "Posta Kodu";

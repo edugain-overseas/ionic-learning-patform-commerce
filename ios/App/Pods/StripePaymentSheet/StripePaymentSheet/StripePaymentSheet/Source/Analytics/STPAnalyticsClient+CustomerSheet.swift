@@ -4,7 +4,7 @@
 //
 
 @_spi(STP) import StripeCore
-
+@_spi(STP) import StripePayments
 extension STPAnalyticsClient {
     // Screen presentation
     func logCSAddPaymentMethodScreenPresented() {
@@ -15,15 +15,30 @@ extension STPAnalyticsClient {
     }
 
     // PM selection & Confirmation
-    func logCSSelectPaymentMethodScreenConfirmedSavedPMSuccess(type: String?) {
-        let paymentMethodType = type ?? "unknown"
+    func logCSSelectPaymentMethodScreenConfirmedSavedPMSuccess(paymentOptionSelection: CustomerSheet.PaymentOptionSelection, syncDefaultEnabled: Bool? = nil) {
+        let params = csConfirmedSavedPMParams(paymentOptionSelection: paymentOptionSelection, syncDefaultEnabled: syncDefaultEnabled)
         self.logPaymentSheetEvent(event: .cs_select_payment_method_screen_confirmed_savedpm_success,
-                                  params: ["payment_method_type": paymentMethodType])
+                                  params: params)
     }
-    func logCSSelectPaymentMethodScreenConfirmedSavedPMFailure(type: String?) {
-        let paymentMethodType = type ?? "unknown"
+    func logCSSelectPaymentMethodScreenConfirmedSavedPMFailure(paymentOptionSelection: CustomerSheet.PaymentOptionSelection, syncDefaultEnabled: Bool? = nil) {
+        let params = csConfirmedSavedPMParams(paymentOptionSelection: paymentOptionSelection, syncDefaultEnabled: syncDefaultEnabled)
         self.logPaymentSheetEvent(event: .cs_select_payment_method_screen_confirmed_savedpm_failure,
-                                  params: ["payment_method_type": paymentMethodType])
+                                  params: params)
+    }
+
+    private func csConfirmedSavedPMParams(paymentOptionSelection: CustomerSheet.PaymentOptionSelection, syncDefaultEnabled: Bool?) -> [String: Any] {
+        var params: [String: Any] = [:]
+        switch paymentOptionSelection {
+        case .applePay:
+            params["payment_method_type"] = "apple_pay"
+        case .paymentMethod(let paymentMethod, _):
+            params["payment_method_type"] = STPPaymentMethod.string(from: paymentMethod.type) ?? "unknown"
+            params["has_card_art"] = paymentMethod.card?.cardArt?.artImage?.url != nil
+        }
+        if let syncDefaultEnabled {
+            params["sync_default_enabled"] = syncDefaultEnabled
+        }
+        return params
     }
 
     // Remove pm success/failure

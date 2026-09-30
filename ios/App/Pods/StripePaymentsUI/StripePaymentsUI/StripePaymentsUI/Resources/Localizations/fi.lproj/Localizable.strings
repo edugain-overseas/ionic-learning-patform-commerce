@@ -1,3 +1,11 @@
+"%1$@ Card" = "%1$@-kortti";
+
+"%1$@ Credit" = "%1$@-luottokortti";
+
+"%1$@ Debit" = "%1$@-pankkikortti";
+
+"%1$@ Prepaid" = "%1$@ Prepaid";
+
 "%1$@ account ending in %2$@" = "%1$@ -tili päättyy numeroihin %2$@";
 
 "%1$@ ending in %2$@" = "%1$@ päättyy numeroihin %2$@";
@@ -28,6 +36,18 @@
 
 "MM/YY" = "KK/VV";
 
+"Only credit and prepaid cards are accepted" = "Vain luotto- ja prepaid-kortit hyväksytään";
+
+"Only credit cards are accepted" = "Vain luottokortit hyväksytään";
+
+"Only debit and credit cards are accepted" = "Vain pankki- ja luottokortit hyväksytään";
+
+"Only debit and prepaid cards are accepted" = "Vain pankki- ja prepaid-kortit hyväksytään";
+
+"Only debit cards are accepted" = "Vain pankkikortit hyväksytään";
+
+"Only prepaid cards are accepted" = "Vain prepaid-kortit hyväksytään";
+
 "Postal Code" = "Postinumero";
 
 "Shipping Address" = "Lähetysosoite";
@@ -39,8 +59,6 @@
 "The selected brand is not allowed" = "Valittu merkki ei ole sallittu";
 
 "To scan your card, allow camera access in Settings." = "Anna kameralle käyttöoikeus, jotta voit skannata kortin.";
-
-"Your ZIP is invalid." = "Postinumero on virheellinen.";
 
 "Your card has expired." = "Korttisi on vanhentunut.";
 
@@ -59,8 +77,6 @@
 "Your card's security code is incomplete." = "Kortin turvakoodi on puutteellinen.";
 
 "Your card's security code is invalid." = "Kortin turvakoodi on virheellinen.";
-
-"Your postal code is invalid." = "Postinumeroon virheellinen.";
 
 "card number" = "kortin numero";
 

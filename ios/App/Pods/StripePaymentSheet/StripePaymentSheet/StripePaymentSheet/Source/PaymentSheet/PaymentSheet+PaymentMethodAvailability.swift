@@ -21,28 +21,44 @@ extension PaymentSheet {
     @_spi(STP) public static var supportedPaymentMethods: [STPPaymentMethodType] = [
         .card, .payPal,
         .klarna, .afterpayClearpay, .affirm,
-        .iDEAL, .bancontact, .sofort, .SEPADebit, .EPS, .giropay, .przelewy24,
+        .iDEAL, .bancontact, .SEPADebit, .EPS, .przelewy24,
         .USBankAccount,
         .AUBECSDebit,
-        .UPI,
         .cashApp,
         .blik,
         .grabPay,
         .FPX,
         .bacsDebit,
         .alipay,
-        .OXXO, .zip, .revolutPay, .amazonPay, .alma, .mobilePay, .konbini, .paynow, .promptPay,
+        .OXXO, .zip, .revolutPay, .amazonPay, .alma, .mobilePay, .vipps, .konbini, .paynow, .promptPay,
         .sunbit,
         .billie,
         .satispay,
+        .crypto,
         .boleto,
         .swish,
         .twint,
         .multibanco,
+        .payPay,
+        .wero,
+        .payByBank,
+        .mbWay,
+        .bizum,
+        .kakaoPay,
+        .naverPay,
+        .krCard,
+        .payco,
+        .sequra,
+        .scalapay,
     ]
 
     /// A list of `STPPaymentMethodType` that can be saved in PaymentSheet
-    static let supportedSavedPaymentMethods: [STPPaymentMethodType] = [.card, .USBankAccount, .SEPADebit]
+    static let supportedSavedPaymentMethods: [STPPaymentMethodType] = [
+        .card,
+        .USBankAccount,
+        .SEPADebit,
+        .link, /* note: not supported by ephemeral key*/
+    ]
 
     /// A list of `STPPaymentMethodType` that can be set as default in PaymentSheet when opted in to the "set as default" feature
     static let supportedDefaultPaymentMethods: [STPPaymentMethodType] = [.card, .USBankAccount]
@@ -54,12 +70,108 @@ extension PaymentSheet {
             && elementsSession.isApplePayEnabled
     }
 
-    /// Canonical source of truth for whether Link is enabled
-    static func isLinkEnabled(elementsSession: STPElementsSession, configuration: PaymentElementConfiguration) -> Bool {
-        guard elementsSession.supportsLink else {
+    // MARK: - Link
+
+    /// Determines if Link is disabled due to a holdback experiment, either `link_global_holdback` or `link_ab_test`
+    /// - Parameter elementsSession: The elements session containing experiment data
+    /// - Returns: true if Link is disabled due to holdback experiment, false otherwise
+    static func isLinkInHoldbackExperiment(elementsSession: STPElementsSession) -> Bool {
+        guard let experimentsData = elementsSession.experimentsData else {
             return false
         }
-        return !configuration.requiresBillingDetailCollection()
+        let linkGlobalHoldback = experimentsData.experimentAssignments[LinkGlobalHoldback.experimentName]
+        let linkABTest = experimentsData.experimentAssignments[LinkABTest.experimentName]
+        return linkGlobalHoldback == .holdback || linkABTest == .holdback
+    }
+
+    /// Canonical source of truth for whether Link is enabled
+    static func isLinkEnabled(elementsSession: STPElementsSession, configuration: PaymentElementConfiguration) -> Bool {
+        return linkDisabledReasons(elementsSession: elementsSession, configuration: configuration).isEmpty
+    }
+
+    /// Canonical source of truth for whether the Link button/row should be rendered in the payment element UI.
+    /// Link may remain functionally enabled (see `isLinkEnabled`) even when its button is hidden, e.g. to support automatic Link verification without a visible entry point.
+    /// When `.walletButtonHidden` is configured, the button is still shown if the load-time lookup found an existing Link user.
+    static func shouldShowLinkButton(elementsSession: STPElementsSession, configuration: PaymentElementConfiguration) -> Bool {
+        guard isLinkEnabled(elementsSession: elementsSession, configuration: configuration) else {
+            return false
+        }
+
+        switch configuration.link.display {
+        case .automatic:
+            return true
+        case .walletButtonHidden:
+            return LinkAccountContext.shared.account?.isRegistered == true
+        case .never:
+            return false
+        }
+    }
+
+    /// Canonical source of truth for reasons why Link is disabled
+    static func linkDisabledReasons(elementsSession: STPElementsSession, configuration: PaymentElementConfiguration) -> [LinkDisabledReason] {
+        var reasons = [LinkDisabledReason]()
+
+        if !elementsSession.supportsLink {
+            reasons.append(.notSupportedInElementsSession)
+        }
+
+        if !configuration.link.shouldDisplay {
+            reasons.append(.linkConfiguration)
+        }
+
+        // Disable Link web if the merchant is using card brand filtering
+        if configuration.cardBrandAcceptance != .all && !deviceCanUseNativeLink(elementsSession: elementsSession, configuration: configuration) {
+            reasons.append(.cardBrandFiltering)
+        }
+
+        if !elementsSession.isCompatibleWithBillingDetailsCollection(in: configuration) {
+            reasons.append(.billingDetailsCollection)
+        }
+
+        if elementsSession.disableLinkForAutomaticTaxBilling {
+            reasons.append(.automaticTaxBillingAddress)
+        }
+
+        return reasons
+    }
+
+    static func isLinkSignupEnabled(elementsSession: STPElementsSession, configuration: PaymentElementConfiguration) -> Bool {
+        return linkSignupDisabledReasons(elementsSession: elementsSession, configuration: configuration).isEmpty
+    }
+
+    static func linkSignupDisabledReasons(elementsSession: STPElementsSession, configuration: PaymentElementConfiguration) -> [LinkSignupDisabledReason] {
+        var reasons = [LinkSignupDisabledReason]()
+
+        if !isLinkEnabled(elementsSession: elementsSession, configuration: configuration) {
+            reasons.append(.linkNotEnabled)
+        }
+
+        if !elementsSession.supportsLinkCard {
+            reasons.append(.linkCardNotSupported)
+        }
+
+        if elementsSession.disableLinkSignup && !elementsSession.linkSignupOptInFeatureEnabled {
+            reasons.append(.disabledInElementsSession)
+        }
+
+        if elementsSession.linkSignupOptInFeatureEnabled && LinkAccountContext.shared.account == nil {
+            reasons.append(.signupOptInFeatureNoEmailProvided)
+        }
+
+        // If attestation is enabled for this app but the specific device doesn't support attestation,
+        // don't show inline signup: It's unlikely to provide a good experience. We'll only allow the web popup flow.
+        let useAttestationEndpoints = elementsSession.linkSettings?.useAttestationEndpoints ?? false
+        if useAttestationEndpoints && !deviceCanUseNativeLink(elementsSession: elementsSession, configuration: configuration) {
+            reasons.append(.attestationIssues)
+        }
+
+        // In live mode, we only show signup if the customer hasn't used Link in the merchant app before.
+        // In test mode, we continue to show it to make testing easier.
+        if UserDefaults.standard.customerHasUsedLink && !configuration.apiClient.isTestmode {
+            reasons.append(.linkUsedBefore)
+        }
+
+        return reasons
     }
 
     /// An unordered list of paymentMethodTypes that can be used with Link in PaymentSheet
@@ -69,9 +181,18 @@ extension PaymentSheet {
     internal static var supportedLinkPaymentMethods: [STPPaymentMethodType] = []
 }
 
+private extension STPElementsSession {
+    func isCompatibleWithBillingDetailsCollection(in configuration: PaymentElementConfiguration) -> Bool {
+        // We can't collect billing details if we're in the web flow, so turn Link off for those cases.
+        let nativeLink = deviceCanUseNativeLink(elementsSession: self, configuration: configuration)
+        return nativeLink || !configuration.requiresBillingDetailCollection()
+    }
+}
+
 // MARK: - PaymentMethodRequirementProvider
 
 /// Defines an instance type who provides a set of `PaymentMethodTypeRequirement` it satisfies
+@MainActor
 protocol PaymentMethodRequirementProvider {
 
     /// The set of payment requirements provided by this instance
@@ -79,6 +200,7 @@ protocol PaymentMethodRequirementProvider {
 }
 
 extension Intent: PaymentMethodRequirementProvider {
+    @MainActor
     var fulfilledRequirements: [PaymentMethodTypeRequirement] {
         switch self {
         case let .paymentIntent(paymentIntent):
@@ -115,6 +237,23 @@ extension Intent: PaymentMethodRequirementProvider {
         case .deferredIntent:
             // Verification method is always 'automatic'
             return [.validUSBankVerificationMethod]
+        case let .checkout(session):
+            var reqs = [PaymentMethodTypeRequirement]()
+
+            // The session is configured to collect a shipping address, so payment methods
+            // that require one can be offered.
+            if session.requiresShippingAddress {
+                reqs.append(.shippingAddress)
+            }
+
+            // Mirror PaymentIntent/SetupIntent: valid us bank verification method
+            if let usBankOptions = session.paymentMethodOptions?.usBankAccount,
+               usBankOptions.verificationMethod.isValidForPaymentSheet
+            {
+                reqs.append(.validUSBankVerificationMethod)
+            }
+
+            return reqs
         }
     }
 }
@@ -159,14 +298,11 @@ extension PaymentSheet {
         /// Requires a valid us bank verification method
         case validUSBankVerificationMethod
 
-        /// The `us_bank_account` payment method is preventing this payment method from being shown.
-        case unexpectedUsBankAccount
-
         /// The email collection configuration is invalid for this payment method.
         case invalidEmailCollectionConfiguration
 
-        /// The Stripe account is not configured for bank payments.
-        case linkFundingSourcesMissingBankAccount
+        /// The Bank payment method is disabled.
+        case instantDebitsDisabledForOnboarding
 
         /// A helpful description for developers to better understand requirements so they can debug why payment methods are not present
         var debugDescription: String {
@@ -187,12 +323,10 @@ extension PaymentSheet {
                 return "financialConnectionsSDK: The FinancialConnections SDK must be linked. See https://stripe.com/docs/payments/accept-a-payment?platform=ios&ui=payment-sheet#ios-ach"
             case .validUSBankVerificationMethod:
                 return "Requires a valid US bank verification method."
-            case .unexpectedUsBankAccount:
-                return "The list of payment method types includes 'us_bank_account', which prevents the 'Bank' tab from being displayed."
             case .invalidEmailCollectionConfiguration:
                 return "The provided configuration must either collect an email, or a default email must be provided. See https://docs.stripe.com/payments/payment-element/control-billing-details-collection"
-            case .linkFundingSourcesMissingBankAccount:
-                return "Your account isn't set up to process Instant Bank Payments. Reach out to Stripe support."
+            case .instantDebitsDisabledForOnboarding:
+                return "The Bank tab is configured to be hidden for your account."
             }
         }
     }
@@ -221,7 +355,7 @@ extension PaymentSheet {
             }
         }
 
-        static func ==(lhs: PaymentMethodAvailabilityStatus, rhs: PaymentMethodAvailabilityStatus) -> Bool {
+        static func == (lhs: PaymentMethodAvailabilityStatus, rhs: PaymentMethodAvailabilityStatus) -> Bool {
             switch (lhs, rhs) {
             case (.notSupported, .notSupported),
                  (.supported, .supported),
@@ -234,5 +368,20 @@ extension PaymentSheet {
                 return false
             }
         }
+    }
+}
+
+// MARK: - STPPaymentMethodType Mandate Data Helpers
+
+@_spi(STP) extension STPPaymentMethodType {
+
+    /// Payment method types that require mandate data for PaymentIntents when `setup_future_usage` is set
+    static var requiresMandateDataForPaymentIntent: Set<STPPaymentMethodType> {
+        [.alipay, .payPal, .cashApp, .revolutPay, .amazonPay, .klarna, .satispay, .twint, .kakaoPay, .naverPay, .krCard]
+    }
+
+    /// Payment method types that require mandate data for SetupIntents
+    static var requiresMandateDataForSetupIntent: Set<STPPaymentMethodType> {
+        [.alipay, .payPal, .revolutPay, .satispay, .twint, .kakaoPay, .naverPay, .krCard]
     }
 }

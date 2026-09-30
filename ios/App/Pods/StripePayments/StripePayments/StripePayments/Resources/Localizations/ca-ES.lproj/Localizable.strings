@@ -42,13 +42,9 @@
 
 "SEPA Debit" = "Domiciliació SEPA";
 
-"Sofort" = "Sofort";
-
 "Swish" = "Swish";
 
 "Timed out authenticating your payment method -- try again" = "S'ha esgotat el temps d'autenticació del teu mètode de pagament - intenta-ho un altre cop";
-
-"UPI" = "UPI";
 
 "US bank account" = "Compte bancari dels EUA";
 
@@ -58,6 +54,4 @@
 
 "WeChat Pay" = "WeChat Pay";
 
-"giropay" = "giropay";
-
-"iDEAL" = "iDEAL";
+"iDEAL | Wero" = "iDEAL | Wero";

@@ -13,16 +13,13 @@ extension STPAnalyticsClient {
 
     func logAddressControllerEvent(
         event: STPAnalyticEvent,
-        addressAnalyticData: AddressAnalyticData?,
+        addressAnalyticData: AddressAnalyticData,
+        additionalParams: [String: Any] = [:],
         apiClient: STPAPIClient
     ) {
-        var additionalParams = [:] as [String: Any]
-        additionalParams["address_data_blob"] = addressAnalyticData?.analyticsPayload
-
-        let analytic = AddressAnalytic(event: event,
-                                       params: additionalParams)
-
-        log(analytic: analytic, apiClient: apiClient)
+        var params = additionalParams
+        params["address_data_blob"] = addressAnalyticData.analyticsPayload
+        log(analytic: AddressAnalytic(event: event, params: params), apiClient: apiClient)
     }
 
     // MARK: - Address
@@ -36,13 +33,109 @@ extension STPAnalyticsClient {
         self.logAddressControllerEvent(event: .addressShow, addressAnalyticData: analyticData, apiClient: apiClient)
     }
 
-    func logAddressCompleted(addressCountyCode: String, autoCompleteResultedSelected: Bool, editDistance: Int?, apiClient: STPAPIClient) {
+    func logAddressCompleted(addressCountyCode: String, autoCompleteResultedSelected: Bool, editDistance: Int?, msToComplete: TimeInterval, apiClient: STPAPIClient) {
         assert(apiClient.publishableKey?.nonEmpty != nil) // A publishable key is required to be set at this point so we can send it in our analytics payload
         let analyticData = AddressAnalyticData(addressCountryCode: addressCountyCode,
                                                autoCompleteResultedSelected: autoCompleteResultedSelected,
                                                editDistance: editDistance)
+        logAddressControllerEvent(event: .addressCompleted,
+                                  addressAnalyticData: analyticData,
+                                  additionalParams: ["ms_to_complete": msToComplete],
+                                  apiClient: apiClient)
+    }
 
-        self.logAddressControllerEvent(event: .addressCompleted, addressAnalyticData: analyticData, apiClient: apiClient)
+    func logBillingAddressCompleted(addressCountryCode: String, autoCompleteResultedSelected: Bool, editDistance: Int?, apiClient: STPAPIClient) {
+        assert(apiClient.publishableKey?.nonEmpty != nil) // A publishable key is required to be set at this point so we can send it in our analytics payload
+        let analyticData = AddressAnalyticData(addressCountryCode: addressCountryCode,
+                                               autoCompleteResultedSelected: autoCompleteResultedSelected,
+                                               editDistance: editDistance)
+
+        self.logAddressControllerEvent(event: .mcbillingAddressCompleted, addressAnalyticData: analyticData, apiClient: apiClient)
+    }
+
+    func logCustomerSheetBillingAddressCompleted(addressCountryCode: String, autoCompleteResultedSelected: Bool, editDistance: Int?, apiClient: STPAPIClient) {
+        assert(apiClient.publishableKey?.nonEmpty != nil) // A publishable key is required to be set at this point so we can send it in our analytics payload
+        let analyticData = AddressAnalyticData(addressCountryCode: addressCountryCode,
+                                               autoCompleteResultedSelected: autoCompleteResultedSelected,
+                                               editDistance: editDistance)
+
+        self.logAddressControllerEvent(event: .csbillingAddressCompleted, addressAnalyticData: analyticData, apiClient: apiClient)
+    }
+
+    func logShippingAddressElementEvent(
+        event: STPAnalyticEvent,
+        addressAnalyticData: AddressAnalyticData,
+        checkoutSessionId: String,
+        error: Error? = nil,
+        apiClient: STPAPIClient
+    ) {
+        assert(apiClient.publishableKey?.nonEmpty != nil) // A publishable key is required to be set at this point so we can send it in our analytics payload
+        var additionalParams: [String: Any] = ["checkout_session_id": checkoutSessionId]
+        if let error {
+            additionalParams.mergeAssertingOnOverwrites(error.serializeForV1Analytics())
+        }
+        logAddressControllerEvent(
+            event: event,
+            addressAnalyticData: addressAnalyticData,
+            additionalParams: additionalParams,
+            apiClient: apiClient
+        )
+    }
+
+    // MARK: - Autocomplete
+
+    func logAddressAutocompleteStart(addressCountryCode: String, sessionToken: String, apiClient: STPAPIClient) {
+        assert(apiClient.publishableKey?.nonEmpty != nil) // A publishable key is required to be set at this point so we can send it in our analytics payload
+        let analyticData = AddressAnalyticData(addressCountryCode: addressCountryCode, autoCompleteResultedSelected: nil, editDistance: nil)
+        logAddressControllerEvent(event: .addressAutocompleteStart,
+                                  addressAnalyticData: analyticData,
+                                  additionalParams: ["autocomplete_session_token": sessionToken],
+                                  apiClient: apiClient)
+    }
+
+    func logAddressAutocompleteSuggestions(addressCountryCode: String, resultCount: Int, sessionToken: String, source: String, sessionElapsed: TimeInterval, msToFetch: TimeInterval?, apiClient: STPAPIClient) {
+        assert(apiClient.publishableKey?.nonEmpty != nil) // A publishable key is required to be set at this point so we can send it in our analytics payload
+        let analyticData = AddressAnalyticData(addressCountryCode: addressCountryCode, autoCompleteResultedSelected: nil, editDistance: nil)
+        var params: [String: Any] = [
+            "result_count": resultCount,
+            "autocomplete_session_token": sessionToken,
+            "source": source,
+            "ms_session_elapsed": sessionElapsed,
+        ]
+        if let msToFetch { params["ms_to_fetch"] = msToFetch }
+        logAddressControllerEvent(event: .addressAutocompleteSuggestions,
+                                  addressAnalyticData: analyticData,
+                                  additionalParams: params,
+                                  apiClient: apiClient)
+    }
+
+    func logAddressAutocompleteSelected(addressCountryCode: String, queryLength: Int, sessionToken: String, source: String, sessionElapsed: TimeInterval, placeId: String?, msToFetch: TimeInterval?, apiClient: STPAPIClient) {
+        assert(apiClient.publishableKey?.nonEmpty != nil) // A publishable key is required to be set at this point so we can send it in our analytics payload
+        let analyticData = AddressAnalyticData(addressCountryCode: addressCountryCode, autoCompleteResultedSelected: nil, editDistance: nil)
+        var params: [String: Any] = [
+            "query_length": queryLength,
+            "autocomplete_session_token": sessionToken,
+            "source": source,
+            "ms_session_elapsed": sessionElapsed,
+        ]
+        if let placeId { params["place_id"] = placeId }
+        if let msToFetch { params["ms_to_fetch"] = msToFetch }
+        logAddressControllerEvent(event: .addressAutocompleteSelected,
+                                  addressAnalyticData: analyticData,
+                                  additionalParams: params,
+                                  apiClient: apiClient)
+    }
+
+    func logAddressAutocompleteError(addressCountryCode: String, error: Error, sessionToken: String, sessionElapsed: TimeInterval, apiClient: STPAPIClient) {
+        assert(apiClient.publishableKey?.nonEmpty != nil) // A publishable key is required to be set at this point so we can send it in our analytics payload
+        let analyticData = AddressAnalyticData(addressCountryCode: addressCountryCode, autoCompleteResultedSelected: nil, editDistance: nil)
+        var params = error.serializeForV1Analytics()
+        params["autocomplete_session_token"] = sessionToken
+        params["ms_session_elapsed"] = sessionElapsed
+        logAddressControllerEvent(event: .addressAutocompleteError,
+                                  addressAnalyticData: analyticData,
+                                  additionalParams: params,
+                                  apiClient: apiClient)
     }
 }
 

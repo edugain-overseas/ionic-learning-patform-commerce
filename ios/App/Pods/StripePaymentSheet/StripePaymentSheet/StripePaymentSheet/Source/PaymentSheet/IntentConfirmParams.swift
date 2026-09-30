@@ -11,7 +11,7 @@ import UIKit
 @_spi(STP) import StripePayments
 @_spi(STP) import StripePaymentsUI
 
-/// An internal type representing both `STPPaymentIntentParams` and `STPSetupIntentParams`
+/// An internal type representing both `STPPaymentIntentConfirmParams` and `STPSetupIntentConfirmParams`
 /// - Note: Assumes you're confirming with a new payment method, unless a payment method ID is provided
 final class IntentConfirmParams {
     /// An enum for the three possible states of the e.g. "Save this card for future payments" checkbox
@@ -38,18 +38,49 @@ final class IntentConfirmParams {
     var instantDebitsLinkedBank: InstantDebitsLinkedBank?
 
     var paymentSheetLabel: String {
+        return paymentSheetLabel(brand: .link)
+    }
+
+    func paymentSheetLabel(brand: LinkBrand) -> String {
         if let last4 = (financialConnectionsLinkedBank?.last4 ?? instantDebitsLinkedBank?.last4) {
             return "••••\(last4)"
+        } else if paymentMethodType == .instantDebits || paymentMethodType == .linkCardBrand {
+            return brand.displayName
         } else {
             return paymentMethodParams.paymentSheetLabel
         }
     }
 
-    func makeIcon(updateImageHandler: DownloadManager.UpdateImageHandler?) -> UIImage {
+    var paymentSheetSublabel: String? {
+        switch paymentMethodType {
+        case .stripe(let stpPaymentMethodType):
+            switch stpPaymentMethodType {
+            case .card:
+                return paymentSheetLabel
+            case .USBankAccount:
+                return paymentSheetLabel
+            default:
+                return nil
+            }
+        case .external:
+            return nil
+        case .instantDebits, .linkCardBrand:
+            if let linkedBank = instantDebitsLinkedBank {
+                let last4 = "••••\(linkedBank.last4 ?? "")"
+                return "\(linkedBank.bankName ?? String.Localized.bank) \(last4)"
+            }
+            return nil
+        }
+    }
+
+    /// True if the customer opts to save their payment method as their default payment method.
+    var setAsDefaultPM: Bool?
+
+    func makeIcon(forDarkBackground: Bool, currency: String?, iconStyle: PaymentSheet.Appearance.IconStyle) -> UIImage {
         if let bankName = (financialConnectionsLinkedBank?.bankName ?? instantDebitsLinkedBank?.bankName) {
-            return PaymentSheetImageLibrary.bankIcon(for: PaymentSheetImageLibrary.bankIconCode(for: bankName))
+            return PaymentSheetImageLibrary.bankIcon(for: PaymentSheetImageLibrary.bankIconCode(for: bankName), iconStyle: iconStyle)
         } else {
-            return paymentMethodParams.makeIcon(updateHandler: updateImageHandler)
+            return paymentMethodParams.makeIcon(forDarkBackground: forDarkBackground, currency: currency, iconStyle: iconStyle, updateHandler: nil)
         }
     }
 
@@ -146,6 +177,36 @@ final class IntentConfirmParams {
         }
     }
 
+    func expandedPaymentSheetLabel(brand: LinkBrand) -> String {
+        switch paymentMethodType {
+        case .stripe(let stpPaymentMethodType):
+            switch stpPaymentMethodType {
+            case .card:
+                let cardBrand = STPCardValidator.brand(for: paymentMethodParams.card)
+                return STPCardBrandUtilities.stringFrom(cardBrand) ?? STPPaymentMethodType.card.displayName
+            case .USBankAccount:
+                // Use linked bank name if available, otherwise fallback to generic display name for bank
+                return financialConnectionsLinkedBank?.displayName ?? STPPaymentMethodType.USBankAccount.displayName
+            default:
+                // For all other payment method types just use the default label
+                return paymentSheetLabel
+            }
+        case .external:
+            return paymentSheetLabel
+        case .instantDebits, .linkCardBrand:
+            return brand.displayName
+        }
+    }
+
+    func setAllowRedisplayForCheckoutSession(merchantWillSavePaymentMethod: Bool) {
+        switch saveForFutureUseCheckboxState {
+        case .selected:
+            paymentMethodParams.allowRedisplay = .always
+        case .deselected, .hidden:
+            paymentMethodParams.allowRedisplay = merchantWillSavePaymentMethod ? .limited : .unspecified
+        }
+    }
+
     func setAllowRedisplayForCustomerSheet(_ savePaymentMethodConsentBehavior: PaymentSheetFormFactory.SavePaymentMethodConsentBehavior) {
         if savePaymentMethodConsentBehavior == .legacy {
             paymentMethodParams.allowRedisplay = .unspecified
@@ -177,19 +238,24 @@ extension STPConfirmPaymentMethodOptions {
      */
     func setSetupFutureUsageIfNecessary(
         _ shouldSave: Bool,
+        currentSetupFutureUsage: String? = nil,
         paymentMethodType: STPPaymentMethodType,
         customer: PaymentSheet.CustomerConfiguration?
     ) {
         // Something went wrong if we're trying to save and there's no Customer!
         assert(!(shouldSave && customer == nil))
 
-        guard customer != nil && paymentMethodType == .card || paymentMethodType == .USBankAccount else {
+        var allowedPaymentMethodTypes: [STPPaymentMethodType] = [.card, .USBankAccount]
+
+        if let customer, case .customerSession = customer.customerAccessProvider {
+            allowedPaymentMethodTypes.append(.link)
+        }
+
+        guard customer != nil && allowedPaymentMethodTypes.contains(paymentMethodType) else {
             return
         }
-        // Note: The API officially only allows the values "off_session", "on_session", and "none".
-        // Passing "none" *overrides* the top-level setup_future_usage and is not what we want, b/c this code is called even when we don't display the "save" checkbox (e.g. when the PI top-level setup_future_usage is already set).
-        // Instead, we pass an empty string to 'unset' this value. This makes the PaymentIntent *inherit* the top-level setup_future_usage.
-        let sfuValue = shouldSave ? "off_session" : ""
+
+        let sfuValue = shouldSave ? "off_session" : currentSetupFutureUsage ?? ""
         switch paymentMethodType {
         case .card:
             cardOptions = cardOptions ?? STPConfirmCardOptions()
@@ -198,6 +264,9 @@ extension STPConfirmPaymentMethodOptions {
             // Note: the SFU value passed in the STPConfirmUSBankAccountOptions init will be overwritten by `additionalAPIParameters`. See https://jira.corp.stripe.com/browse/RUN_MOBILESDK-1737
             usBankAccountOptions = usBankAccountOptions ?? STPConfirmUSBankAccountOptions(setupFutureUsage: .none)
             usBankAccountOptions?.additionalAPIParameters["setup_future_usage"] = sfuValue
+        case .link:
+            linkOptions = linkOptions ?? STPConfirmLinkOptions()
+            linkOptions?.additionalAPIParameters["setup_future_usage"] = sfuValue
         default:
             return
         }

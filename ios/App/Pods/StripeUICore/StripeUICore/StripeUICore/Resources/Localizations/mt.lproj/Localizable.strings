@@ -1,4 +1,8 @@
+"%1$@ •••• %2$@" = "%1$@ •••• %2$@";
+
 "%@ (optional)" = "%@ (mhux obbligatorja)";
+
+"(not accepted)" = "(ma tistax tintuża)";
 
 "Account number" = "In-numru tal-kont";
 
@@ -36,7 +40,7 @@
 
 "County" = "Kontea";
 
-"Date is empty." = "Id-data hija battala.";
+"Date of Birth" = "Data tat-Twelid";
 
 "Department" = "Dipartiment";
 
@@ -66,8 +70,6 @@
 
 "Incomplete phone number" = "In-numru tat-telefon mhuwiex komplut";
 
-"Invalid UPI ID" = "L-ID UPI mhix tajba";
-
 "Island" = "Gżira";
 
 "Last" = "L-aħħar";
@@ -90,6 +92,8 @@
 
 "Prefecture" = "Prefettura";
 
+"Processing..." = "Qed jipproċessa...";
+
 "Province" = "Provinċja";
 
 "Remove" = "Neħħi";
@@ -102,9 +106,15 @@
 
 "Select card brand (optional)" = "Agħżel id-ditta tal-karta (mhux obbligatorja)";
 
+"Selection is empty." = "L-għażla hija vojta.";
+
+"Something went wrong" = "Xi ħaġa marret ħażin";
+
 "Sort code" = "Il-kodiċi Sort";
 
 "State" = "Stat";
+
+"Submit" = "Issottometti";
 
 "Suburb" = "Subborg";
 
@@ -120,8 +130,6 @@
 
 "Town or city" = "Belt";
 
-"UPI ID" = "ID UPI";
-
 "Unable to parse phone number" = "Ma jistax jaqra n-numru tat-telefown";
 
 "Use rotor to access links" = "Uża r-rotor biex tiftaħ il-ħoloq";
@@ -130,12 +138,16 @@
 
 "Your BLIK code is invalid." = "Il-kodiċi BLIK li ktibt mhux tajjeb.";
 
-"Your ZIP is incomplete." = "Il-kodiċi postali tiegħek mhux komplut.";
+"Your ZIP code is incomplete." = "Il-kodiċi postali tiegħek mhux komplut.";
+
+"Your ZIP code is invalid." = "Il-kodiċi ZIP tiegħek huwa invalidu.";
 
 "Your email is invalid." = "L-indirizz tal-email li daħħalt mhux tajjeb.";
 
 "Your payment information will not be saved." = "L-informazzjoni tal-pagament tiegħek mhux se tiġi merfugħa.";
 
 "Your postal code is incomplete." = "Il-kodiċi postali tiegħek mhux komplut.";
+
+"Your postal code is invalid." = "Il-kodiċi postali tiegħek mhux validu.";
 
 "ZIP" = "Kodiċi Postali";

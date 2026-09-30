@@ -1,4 +1,8 @@
+"%1$@ •••• %2$@" = "%1$@ •••• %2$@";
+
 "%@ (optional)" = "%@ (valikuline)";
+
+"(not accepted)" = "(pole aktsepteeritud)";
 
 "Account number" = "Kontonumber";
 
@@ -36,7 +40,7 @@
 
 "County" = "Maakond";
 
-"Date is empty." = "Kuupäev on tühi.";
+"Date of Birth" = "Sünnikuupäev";
 
 "Department" = "Departemang";
 
@@ -66,8 +70,6 @@
 
 "Incomplete phone number" = "Telefoninumber puudulik";
 
-"Invalid UPI ID" = "Kehtetu UPI ID";
-
 "Island" = "Saar";
 
 "Last" = "Viimane";
@@ -90,6 +92,8 @@
 
 "Prefecture" = "Prefektuur";
 
+"Processing..." = "Töötlemine...";
+
 "Province" = "Maakond";
 
 "Remove" = "Eemalda";
@@ -102,9 +106,15 @@
 
 "Select card brand (optional)" = "Valige kaardi kaubamärk (valikuline)";
 
+"Selection is empty." = "Valik on tühi.";
+
+"Something went wrong" = "Midagi läks valesti";
+
 "Sort code" = "Sorteerimiskood";
 
 "State" = "Osariik";
+
+"Submit" = "Esita";
 
 "Suburb" = "Eeslinn";
 
@@ -120,8 +130,6 @@
 
 "Town or city" = "Linn";
 
-"UPI ID" = "UPI ID";
-
 "Unable to parse phone number" = "Telefoninumbri parsimine ebaõnnestus";
 
 "Use rotor to access links" = "Kasutage linkidele juurdepääsuks rootorit";
@@ -130,12 +138,16 @@
 
 "Your BLIK code is invalid." = "Teie BLIK-kood on kehtetu.";
 
-"Your ZIP is incomplete." = "Teie sihtnumber on puudulik.";
+"Your ZIP code is incomplete." = "Teie postiindeks on puudulik.";
+
+"Your ZIP code is invalid." = "Teie postiindeks on vigane.";
 
 "Your email is invalid." = "Teie meiliaadress on kehtetu.";
 
 "Your payment information will not be saved." = "Teie makseteavet ei salvestata.";
 
 "Your postal code is incomplete." = "Sihtnumber on puudulik.";
+
+"Your postal code is invalid." = "Teie sihtnumber on kehtetu.";
 
 "ZIP" = "Sihtnr";

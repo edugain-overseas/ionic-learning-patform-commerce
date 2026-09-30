@@ -52,9 +52,6 @@ import Foundation
     /// Contains details describing the microdeposits verification flow for US Bank Account payments
     case verifyWithMicrodeposits
 
-    /// The action type for UPI payment methods. The customer must complete the transaction in their banking app within 5 minutes.
-    case upiAwaitNotification
-
     /// Contains instructions for authenticating a payment by redirecting your customer to Cash App.
     case cashAppRedirectToApp
 
@@ -72,6 +69,12 @@ import Foundation
 
     /// The action type is Multibanco payment. We provide `STPPaymentHandler` to display the Multibanco voucher.
     case multibancoDisplayDetails
+
+    /// The action type for MB WAY. The customer must authorize the payment in the MB WAY app.
+    case mbWayAwaitAuthorization
+
+    /// The customer must authorize the payment out of band, such as in their mobile banking app.
+    case awaitAuthorization
 
     /// Parse the string and return the correct `STPIntentActionType`,
     /// or `STPIntentActionTypeUnknown` if it's unrecognized by this version of the SDK.
@@ -96,8 +99,6 @@ import Foundation
             self = .BLIKAuthorize
         case "verify_with_microdeposits":
             self = .verifyWithMicrodeposits
-        case "upi_await_notification":
-            self = .upiAwaitNotification
         case "cashapp_handle_redirect_or_display_qr_code":
             self = .cashAppRedirectToApp
         case "paynow_display_qr_code":
@@ -110,6 +111,10 @@ import Foundation
             self = .swishHandleRedirect
         case "multibanco_display_details":
             self = .multibancoDisplayDetails
+        case "mb_way_await_authorization":
+            self = .mbWayAwaitAuthorization
+        case "await_authorization":
+            self = .awaitAuthorization
         default:
             self = .unknown
         }
@@ -136,8 +141,6 @@ import Foundation
             return "boleto_display_details"
         case .verifyWithMicrodeposits:
             return "verify_with_microdeposits"
-        case .upiAwaitNotification:
-            return "upi_await_notification"
         case .cashAppRedirectToApp:
             return "cashapp_handle_redirect_or_display_qr_code"
         case .konbiniDisplayDetails:
@@ -150,6 +153,10 @@ import Foundation
             return "swish_handle_redirect_or_display_qr_code"
         case .multibancoDisplayDetails:
             return "multibanco_display_details"
+        case .mbWayAwaitAuthorization:
+            return "mb_way_await_authorization"
+        case .awaitAuthorization:
+            return "await_authorization"
         case .unknown:
             break
         }
@@ -248,12 +255,14 @@ public class STPIntentAction: NSObject {
             }
         case .BLIKAuthorize:
             break  // no additional details
+        case .mbWayAwaitAuthorization:
+            break  // no additional details
+        case .awaitAuthorization:
+            break  // no additional details
         case .verifyWithMicrodeposits:
             if let verifyWithMicrodeposits = verifyWithMicrodeposits {
                 props.append("verifyWithMicrodeposits = \(verifyWithMicrodeposits)")
             }
-        case .upiAwaitNotification:
-            props.append("upiAwaitNotification != nil")
         case .cashAppRedirectToApp:
             if let cashAppRedirectToApp = cashAppRedirectToApp {
                 props.append("cashAppRedirectToApp = \(cashAppRedirectToApp)")
@@ -398,6 +407,10 @@ extension STPIntentAction: STPAPIResponseDecodable {
             }
         case .BLIKAuthorize:
             break  // no additional details
+        case .mbWayAwaitAuthorization:
+            break  // no additional details
+        case .awaitAuthorization:
+            break  // no additional details
         case .verifyWithMicrodeposits:
             verifyWithMicrodeposits = STPIntentActionVerifyWithMicrodeposits.decodedObject(
                 fromAPIResponse: dict["verify_with_microdeposits"] as? [AnyHashable: Any]
@@ -405,8 +418,6 @@ extension STPIntentAction: STPAPIResponseDecodable {
             if verifyWithMicrodeposits == nil {
                 type = .unknown
             }
-        case .upiAwaitNotification:
-            break  // no additional details
         case .cashAppRedirectToApp:
             cashAppRedirectToApp = STPIntentActionCashAppRedirectToApp.decodedObject(
                 fromAPIResponse: dict["cashapp_handle_redirect_or_display_qr_code"] as? [AnyHashable: Any]

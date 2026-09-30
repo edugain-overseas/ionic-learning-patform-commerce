@@ -1,4 +1,8 @@
+"%1$@ •••• %2$@" = "%1$@ •••• %2$@";
+
 "%@ (optional)" = "%@ (opcional)";
+
+"(not accepted)" = "(não aceito)";
 
 "Account number" = "Número da conta";
 
@@ -36,7 +40,7 @@
 
 "County" = "Condado";
 
-"Date is empty." = "A data está vazia.";
+"Date of Birth" = "Data de nascimento";
 
 "Department" = "Departamento";
 
@@ -66,8 +70,6 @@
 
 "Incomplete phone number" = "Número de telefone incompleto";
 
-"Invalid UPI ID" = "ID UPI inválido";
-
 "Island" = "Ilha";
 
 "Last" = "Sobrenome";
@@ -90,6 +92,8 @@
 
 "Prefecture" = "Prefeitura";
 
+"Processing..." = "Processando...";
+
 "Province" = "Província";
 
 "Remove" = "Remover";
@@ -102,9 +106,15 @@
 
 "Select card brand (optional)" = "Selecionar bandeira de cartão (opcional)";
 
+"Selection is empty." = "A seleção está vazia.";
+
+"Something went wrong" = "Ocorreu um erro";
+
 "Sort code" = "Sort code";
 
 "State" = "Estado";
+
+"Submit" = "Enviar";
 
 "Suburb" = "Subúrbio";
 
@@ -120,8 +130,6 @@
 
 "Town or city" = "Cidade ou município";
 
-"UPI ID" = "ID UPI";
-
 "Unable to parse phone number" = "Não foi possível analisar o número de telefone";
 
 "Use rotor to access links" = "Use o rotor para acessar os links";
@@ -130,12 +138,16 @@
 
 "Your BLIK code is invalid." = "Seu código BLIK é inválido.";
 
-"Your ZIP is incomplete." = "Código postal incompleto.";
+"Your ZIP code is incomplete." = "Seu código postal está incompleto.";
+
+"Your ZIP code is invalid." = "CEP inválido.";
 
 "Your email is invalid." = "Seu e-mail é inválido.";
 
 "Your payment information will not be saved." = "Seus dados de pagamento não serão salvos.";
 
 "Your postal code is incomplete." = "Código postal incompleto.";
+
+"Your postal code is invalid." = "Código postal inválido.";
 
 "ZIP" = "CEP";

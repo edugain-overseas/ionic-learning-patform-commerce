@@ -17,7 +17,7 @@ extension ConsumerSession {
             // errorMessage can be used internally to differentiate between
             // a not found because of an unrecognized email or a not found
             // due to an invalid cookie
-            case notFound(errorMessage: String)
+            case notFound(errorMessage: String, suggestedEmail: String?)
 
             /// Lookup call was not provided an email and no cookies stored
             case noAvailableLookupParams
@@ -36,19 +36,25 @@ extension ConsumerSession {
         }
 
         let responseType: ResponseType
+        let linkBrand: LinkBrand?
 
-        init(_ responseType: ResponseType) {
+        init(_ responseType: ResponseType, linkBrand: LinkBrand? = nil) {
             self.responseType = responseType
+            self.linkBrand = linkBrand
         }
 
         private enum CodingKeys: String, CodingKey {
             case exists
             case errorMessage
+            case suggestedEmail
+            case linkBrand
         }
 
         convenience init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             let exists = try container.decode(Bool.self, forKey: .exists)
+            let rawLinkBrand = try container.decodeIfPresent(String.self, forKey: .linkBrand)
+            let linkBrand = rawLinkBrand.map { LinkBrand(rawValue: $0) ?? .unparsable }
             let responseType: ResponseType
 
             if exists {
@@ -56,9 +62,10 @@ extension ConsumerSession {
                 responseType = .found(consumerSession: session)
             } else {
                 let errorMessage = try container.decodeIfPresent(String.self, forKey: .errorMessage) ?? NSError.stp_unexpectedErrorMessage()
-                responseType = .notFound(errorMessage: errorMessage)
+                let suggestedEmail = try container.decodeIfPresent(String.self, forKey: .suggestedEmail)
+                responseType = .notFound(errorMessage: errorMessage, suggestedEmail: suggestedEmail)
             }
-            self.init(responseType)
+            self.init(responseType, linkBrand: linkBrand)
         }
     }
 }

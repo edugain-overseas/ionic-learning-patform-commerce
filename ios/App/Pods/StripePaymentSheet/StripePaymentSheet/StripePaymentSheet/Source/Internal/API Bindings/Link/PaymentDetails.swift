@@ -23,17 +23,23 @@ final class ConsumerPaymentDetails: Decodable {
     let details: Details
     let billingAddress: BillingAddress?
     let billingEmailAddress: String?
+    let nickname: String?
+    let display: DisplayMetadata?
     var isDefault: Bool
 
     init(stripeID: String,
          details: Details,
          billingAddress: BillingAddress?,
          billingEmailAddress: String?,
+         nickname: String?,
+         display: DisplayMetadata? = nil,
          isDefault: Bool) {
         self.stripeID = stripeID
         self.details = details
         self.billingAddress = billingAddress
         self.billingEmailAddress = billingEmailAddress
+        self.nickname = nickname
+        self.display = display
         self.isDefault = isDefault
     }
 
@@ -41,6 +47,8 @@ final class ConsumerPaymentDetails: Decodable {
         case stripeID = "id"
         case billingAddress = "billing_address"
         case billingEmailAddress = "billing_email_address"
+        case nickname
+        case display
         case isDefault
     }
 
@@ -49,25 +57,104 @@ final class ConsumerPaymentDetails: Decodable {
         self.stripeID = try container.decode(String.self, forKey: .stripeID)
         self.billingAddress = try? container.decode(BillingAddress.self, forKey: .billingAddress)
         self.billingEmailAddress = try? container.decode(String.self, forKey: .billingEmailAddress)
+        let decodedNickname = try? container.decode(String.self, forKey: .nickname)
+        if let decodedNickname, !decodedNickname.isEmpty {
+            self.nickname = decodedNickname
+        } else {
+            self.nickname = nil
+        }
+        self.display = try? container.decode(DisplayMetadata.self, forKey: .display)
         // The payment details are included in the dictionary, so we pass the whole dict to Details
         self.details = try decoder.singleValueContainer().decode(Details.self)
         self.isDefault = try container.decode(Bool.self, forKey: .isDefault)
     }
 }
 
+extension ConsumerPaymentDetails {
+    func isSupported(linkAccount: PaymentSheetLinkAccount,
+                     elementsSession: STPElementsSession,
+                     configuration: PaymentElementConfiguration,
+                     cardBrandFilter: CardBrandFilter,
+                     cardFundingFilter: CardFundingFilter) -> Bool {
+        guard linkAccount.supportedPaymentDetailsTypes(for: elementsSession).contains(type) else {
+            return false
+        }
+
+        if case let .card(details) = details,
+           !cardBrandFilter.isAccepted(cardBrand: details.stpBrand),
+           elementsSession.linkCardBrandFilteringEnabled {
+            return false
+        }
+
+        // Check if card funding type is accepted
+        if case let .card(details) = details,
+           !cardFundingFilter.isAccepted(cardFundingType: details.funding.stpFundingType) {
+            return false
+        }
+
+        if !isSupportedForAllowedCountries(configuration.billingDetailsCollectionConfiguration.allowedCountries) {
+            return false
+        }
+
+        return true
+    }
+
+    private func isSupportedForAllowedCountries(_ allowedCountries: Set<String>) -> Bool {
+        guard !allowedCountries.isEmpty else {
+            // No filtering required
+            return true
+        }
+
+        switch details {
+        case .card, .generic:
+            // If the merchant is filtering, only allow cards with a billing country
+            if let country = billingAddress?.countryCode {
+                return allowedCountries.contains(country)
+            } else {
+                return false
+            }
+        case .bankAccount:
+            // These are US bank accounts, so only check for US country code
+            return allowedCountries.contains("US")
+        }
+    }
+
+    var isValidCard: Bool {
+        guard case let .card(cardDetails) = details else {
+            return false
+        }
+        return !cardDetails.hasExpired && !cardDetails.shouldRecollectCardCVC
+    }
+}
+
 // MARK: - Details
 /// :nodoc:
 extension ConsumerPaymentDetails {
-    enum DetailsType: String, CaseIterable, SafeEnumCodable {
+
+    // swiftlint:disable:next enum_safe_decodable
+    enum DetailsType: String, SafeParsedEnumCodable {
         case card = "CARD"
         case bankAccount = "BANK_ACCOUNT"
-        case unparsable = ""
     }
 
-    enum Details: SafeEnumDecodable {
+    struct DisplayMetadata: Decodable {
+        let label: String
+        let sublabel: String?
+
+        let icon: Icon?
+        struct Icon: Decodable {
+            let main: URL?
+            enum CodingKeys: String, CodingKey {
+                case main = "default"
+            }
+        }
+    }
+
+    // swiftlint:disable:next enum_safe_decodable
+    enum Details: Decodable {
         case card(card: Card)
         case bankAccount(bankAccount: BankAccount)
-        case unparsable
+        case generic(rawValue: String)
 
         private enum CodingKeys: String, CodingKey {
             case type
@@ -78,26 +165,26 @@ extension ConsumerPaymentDetails {
         // Our JSON structure doesn't align with Swift's expected structure for enums with associated values, so we do custom decoding.
         init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-            let type = try container.decode(DetailsType.self, forKey: CodingKeys.type)
-            switch type {
+            let parsedType = try container.decode(ParsedEnum<DetailsType>.self, forKey: CodingKeys.type)
+            switch parsedType.value {
             case .card:
                 self = .card(card: try container.decode(Card.self, forKey: CodingKeys.card))
             case .bankAccount:
                 self = .bankAccount(bankAccount: try container.decode(BankAccount.self, forKey: CodingKeys.bankAccount))
-            case .unparsable:
-                self = .unparsable
+            case nil:
+                self = .generic(rawValue: parsedType.rawValue)
             }
         }
     }
 
-    var type: DetailsType {
+    var type: ParsedEnum<DetailsType> {
         switch details {
         case .card:
-            return .card
+            return ParsedEnum(.card)
         case .bankAccount:
-            return .bankAccount
-        case .unparsable:
-            return .unparsable
+            return ParsedEnum(.bankAccount)
+        case .generic(let rawValue):
+            return ParsedEnum(rawValue: rawValue)
         }
     }
 }
@@ -131,14 +218,18 @@ extension ConsumerPaymentDetails.Details {
         let expiryYear: Int
         let expiryMonth: Int
         let brand: String
+        let networks: [String]
         let last4: String
+        let funding: Funding
         let checks: CardChecks?
 
         private enum CodingKeys: String, CodingKey {
             case expiryYear = "expYear"
             case expiryMonth = "expMonth"
             case brand
+            case networks
             case last4
+            case funding
             case checks
         }
 
@@ -149,12 +240,17 @@ extension ConsumerPaymentDetails.Details {
         init(expiryYear: Int,
              expiryMonth: Int,
              brand: String,
+             networks: [String],
              last4: String,
-             checks: CardChecks?) {
+             funding: Funding,
+             checks: CardChecks?
+        ) {
             self.expiryYear = expiryYear
             self.expiryMonth = expiryMonth
             self.brand = brand
+            self.networks = networks
             self.last4 = last4
+            self.funding = funding
             self.checks = checks
         }
     }
@@ -162,6 +258,31 @@ extension ConsumerPaymentDetails.Details {
 
 // MARK: - Details.Card - Helpers
 extension ConsumerPaymentDetails.Details.Card {
+    enum Funding: String, SafeEnumCodable {
+        case credit = "CREDIT"
+        case debit = "DEBIT"
+        case prepaid = "PREPAID"
+        // Catch all
+        case unparsable = ""
+
+        var displayNameWithBrand: String {
+            switch self {
+            case .credit: String.Localized.Funding.credit
+            case .debit: String.Localized.Funding.debit
+            case .prepaid: String.Localized.Funding.prepaid
+            case .unparsable: String.Localized.Funding.default
+            }
+        }
+
+        var stpFundingType: STPCardFundingType {
+            switch self {
+            case .credit: return .credit
+            case .debit: return .debit
+            case .prepaid: return .prepaid
+            case .unparsable: return .other
+            }
+        }
+    }
 
     var shouldRecollectCardCVC: Bool {
         switch checks?.cvcCheck {
@@ -184,6 +305,24 @@ extension ConsumerPaymentDetails.Details.Card {
         return STPCard.brand(from: brand)
     }
 
+    var secondaryName: String {
+        "•••• \(last4)"
+    }
+
+    func displayName(with nickname: String?) -> String? {
+        if let nickname {
+            return nickname
+        }
+
+        guard let formattedBrandName = STPCardBrandUtilities.stringFrom(stpBrand) else {
+            return nil
+        }
+
+        return String(
+            format: funding.displayNameWithBrand,
+            formattedBrandName
+        )
+    }
 }
 
 // MARK: - Details.BankAccount
@@ -192,20 +331,41 @@ extension ConsumerPaymentDetails.Details {
         let iconCode: String?
         let name: String
         let last4: String
+        let country: String
 
         private enum CodingKeys: String, CodingKey {
             case iconCode = "bankIconCode"
-            case name = "bankName"
+            case name = "bankAccountName"
             case last4
+            case country
         }
 
-        init(iconCode: String?,
-             name: String,
-             last4: String) {
+        init(
+            iconCode: String?,
+            name: String,
+            last4: String,
+            country: String
+        ) {
             self.iconCode = iconCode
             self.name = name
             self.last4 = last4
+            self.country = country
         }
+
+        func displayName(with nickname: String?) -> String {
+            if let nickname {
+                return nickname
+            }
+            return name
+        }
+    }
+}
+
+// MARK: - Details.BankAccount - Helpers
+extension ConsumerPaymentDetails.Details.BankAccount {
+    var asPassthroughPaymentMethodType: STPPaymentMethodType? {
+        // We don't support non-US bank accounts today.
+        country == "COUNTRY_US" ? .USBankAccount : nil
     }
 }
 
@@ -213,11 +373,29 @@ extension ConsumerPaymentDetails {
     var paymentSheetLabel: String {
         switch details {
         case .card(let card):
-            return "••••\(card.last4)"
+            return card.displayName(with: nickname) ?? card.secondaryName
         case .bankAccount(let bank):
-            return "••••\(bank.last4)"
-        case .unparsable:
-            return ""
+            return bank.displayName(with: nickname)
+        case .generic:
+            return display?.label ?? ""
+        }
+    }
+
+    var linkPaymentDetailsFormattedString: String? {
+        switch details {
+        case .card(let card):
+            let label = card.displayName(with: nickname) ?? card.secondaryName
+            let sublabel = card.secondaryName
+            let components = [label, sublabel].compactMap { $0 }
+            return components.joined(separator: " ")
+        case .bankAccount(let bankAccount):
+            let label = bankAccount.displayName(with: nickname)
+            let sublabel = "•••• \(bankAccount.last4)"
+            return [label, sublabel].joined(separator: " ")
+        case .generic:
+            guard let display else { return nil }
+            let components = [display.label, display.sublabel].compactMap { $0 }
+            return components.joined(separator: " ")
         }
     }
 
@@ -227,7 +405,7 @@ extension ConsumerPaymentDetails {
             return card.cvc
         case .bankAccount:
             return nil
-        case .unparsable:
+        case .generic:
             return nil
         }
     }
@@ -250,8 +428,10 @@ extension ConsumerPaymentDetails {
                 bank.name,
                 digits
             )
-        case .unparsable:
-            return ""
+        case .generic:
+            guard let display else { return "" }
+            let components = [display.label, display.sublabel].compactMap { $0 }
+            return components.joined(separator: " ")
         }
     }
 

@@ -1,7 +1,7 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 6.0 effective-5.10 (swiftlang-6.0.0.9.10 clang-1600.0.26.2)
-// swift-module-flags: -target arm64-apple-ios12.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-bare-slash-regex -module-name FBSDKCoreKit
-// swift-module-flags-ignorable: -no-verify-emitted-module-interface
+// swift-compiler-version: Apple Swift version 6.3.3 effective-5.10 (swiftlang-6.3.3.1.3 clang-2100.1.1.101)
+// swift-module-flags: -target arm64-apple-ios12.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -O -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -module-name FBSDKCoreKit
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface -formal-cxx-interoperability-mode=off -interface-compiler-version 6.3.3
 import AdSupport
 import AppTrackingTransparency
 import AuthenticationServices
@@ -126,6 +126,7 @@ extension FBSDKCoreKit.AccessToken {
   final public let userLocation: [Swift.String : Swift.String]?
   final public let userGender: Swift.String?
   final public let userLink: Swift.String?
+  final public let cnfJkt: Swift.String?
   @objc(initWithEncodedClaims:nonce:) convenience public init?(encodedClaims: Swift.String, nonce expectedNonce: Swift.String)
   @objc deinit
 }
@@ -248,11 +249,11 @@ public enum Permission : Swift.Hashable, Swift.ExpressibleByStringLiteral {
   public var name: Swift.String {
     get
   }
-  public func hash(into hasher: inout Swift.Hasher)
   public static func == (a: FBSDKCoreKit.Permission, b: FBSDKCoreKit.Permission) -> Swift.Bool
   public typealias ExtendedGraphemeClusterLiteralType = Swift.String
   public typealias StringLiteralType = Swift.String
   public typealias UnicodeScalarLiteralType = Swift.String
+  public func hash(into hasher: inout Swift.Hasher)
   public var hashValue: Swift.Int {
     get
   }
@@ -306,6 +307,7 @@ extension FBSDKCoreKit.Profile : Foundation.NSSecureCoding {
   @objc final public let location: FBSDKCoreKit.Location?
   @objc final public let gender: Swift.String?
   @objc final public let permissions: Swift.Set<Swift.String>?
+  @objc final public let isLimited: Swift.Bool
   @objc public static var isUpdatedWithAccessTokenChange: Swift.Bool {
     @objc get
     @objc set
@@ -348,7 +350,6 @@ public enum LoginTooltipError : Swift.Error {
 }
 extension FBSDKCoreKit.Settings {
   @objc final public func recordInstall()
-  @objc final public func logWarnings()
   @objc final public func logIfSDKSettingsChanged()
 }
 @_inheritsConvenienceInitializers @objcMembers @objc(FBSDKSettings) final public class Settings : ObjectiveC.NSObject, FBSDKCoreKit.SettingsProtocol, FBSDKCoreKit.SettingsLogging, FBSDKCoreKit._ClientTokenProviding {
@@ -440,7 +441,7 @@ extension FBSDKCoreKit.Settings {
   }
   @objc final public var isAdvertiserTrackingEnabled: Swift.Bool {
     @objc get
-    @available(*, deprecated, message: "The setAdvertiserTrackingEnabled flag is not used for FBSDK v17+ on iOS 17+ as the FBSDK v17+ now relies on ATTrackingManager.trackingAuthorizationStatus.")
+    @available(iOS, deprecated: 17.0, message: "The setAdvertiserTrackingEnabled flag is not used for FBSDK v17+ on iOS 17+ as the FBSDK v17+ now relies on ATTrackingManager.trackingAuthorizationStatus.")
     @objc set(isNewlyAllowed)
   }
   @objc final public var advertisingTrackingStatus: FBSDKCoreKit.AdvertisingTrackingStatus {
@@ -461,6 +462,7 @@ extension FBSDKCoreKit.Settings {
   }
   @objc final public func enableLoggingBehavior(_ loggingBehavior: FBSDKCoreKit.LoggingBehavior)
   @objc final public func disableLoggingBehavior(_ loggingBehavior: FBSDKCoreKit.LoggingBehavior)
+  @objc final public func isLoggingBehaviorEnabled(_ loggingBehavior: FBSDKCoreKit.LoggingBehavior) -> Swift.Bool
   @objc final public var shouldUseTokenOptimizations: Swift.Bool {
     @objc get
     @objc set
@@ -485,7 +487,12 @@ extension FBSDKCoreKit.Settings {
   @objc final public var graphAPIDebugParameterValue: Swift.String? {
     @objc get
   }
+  @objc final public var limitedLoginAutoRefreshInterval: Swift.Double
   @objc final public var isDomainErrorEnabled: Swift.Bool
+  @objc final public var addToMessagingCustomerBaseForWhatsApp: Foundation.NSNumber? {
+    @objc get
+    @objc set
+  }
   @objc override dynamic public init()
   @objc deinit
 }
@@ -526,8 +533,10 @@ extension FBSDKCoreKit.Settings {
   @objc var shouldUseCachedValuesForExpensiveMetadata: Swift.Bool { get set }
   @objc var persistableDataProcessingOptions: [FBSDKCoreKit.DataProcessingOptionKey.RawValue : Any]? { get }
   @objc var isDomainErrorEnabled: Swift.Bool { get set }
+  @objc var limitedLoginAutoRefreshInterval: Foundation.TimeInterval { get set }
   @objc func setDataProcessingOptions(_ options: [Swift.String]?)
   @objc func setDataProcessingOptions(_ options: [Swift.String]?, country: Swift.Int32, state: Swift.Int32)
+  @objc func isLoggingBehaviorEnabled(_ loggingBehavior: FBSDKCoreKit.LoggingBehavior) -> Swift.Bool
 }
 public enum DialogConfigurationName {
   public static let message: Swift.String
@@ -644,16 +653,19 @@ extension FBSDKCoreKit._BridgeAPI : AuthenticationServices.ASWebAuthenticationPr
   @objc override dynamic public init()
   @objc deinit
 }
+@available(iOS, deprecated: 18.0)
 @objc(FBSDKPaymentObserver) final public class _PaymentObserver : ObjectiveC.NSObject, FBSDKCoreKit._PaymentObserving {
   @objc(initWithPaymentQueue:paymentProductRequestorFactory:) public init(paymentQueue: StoreKit.SKPaymentQueue, paymentProductRequestorFactory: any FBSDKCoreKit._PaymentProductRequestorCreating)
   @objc(startObservingTransactions) final public func startObservingTransactions()
   @objc(stopObservingTransactions) final public func stopObservingTransactions()
   @objc deinit
 }
+@available(iOS, deprecated: 18.0)
 extension FBSDKCoreKit._PaymentObserver : StoreKit.SKPaymentTransactionObserver {
   @objc final public func paymentQueue(_ queue: StoreKit.SKPaymentQueue, updatedTransactions transactions: [StoreKit.SKPaymentTransaction])
 }
-@_inheritsConvenienceInitializers @objc(FBSDKPaymentProductRequestorFactory) final public class _PaymentProductRequestorFactory : ObjectiveC.NSObject, FBSDKCoreKit._PaymentProductRequestorCreating {
+@_inheritsConvenienceInitializers @available(iOS, deprecated: 18.0)
+@objc(FBSDKPaymentProductRequestorFactory) final public class _PaymentProductRequestorFactory : ObjectiveC.NSObject, FBSDKCoreKit._PaymentProductRequestorCreating {
   @objc final public func createRequestor(transaction: StoreKit.SKPaymentTransaction) -> FBSDKCoreKit.PaymentProductRequestor
   @objc override dynamic public init()
   @objc deinit

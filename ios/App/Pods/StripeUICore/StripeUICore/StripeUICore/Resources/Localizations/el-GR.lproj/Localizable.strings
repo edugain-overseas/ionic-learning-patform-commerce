@@ -1,4 +1,8 @@
+"%1$@ •••• %2$@" = "%1$@ •••• %2$@";
+
 "%@ (optional)" = "%@ (προαιρετικό)";
+
+"(not accepted)" = "(μη αποδεκτή)";
 
 "Account number" = "Αριθμός λογαριασμού";
 
@@ -36,7 +40,7 @@
 
 "County" = "Κομητεία";
 
-"Date is empty." = "Η ημερομηνία είναι κενή.";
+"Date of Birth" = "Ημερομηνία γέννησης";
 
 "Department" = "Τμήμα";
 
@@ -66,8 +70,6 @@
 
 "Incomplete phone number" = "Ελλιπής αριθμός τηλεφώνου";
 
-"Invalid UPI ID" = "Μη έγκυρο αναγνωριστικό UPI";
-
 "Island" = "Νησί";
 
 "Last" = "Επώνυμο";
@@ -90,6 +92,8 @@
 
 "Prefecture" = "Νομός";
 
+"Processing..." = "Επεξεργασία...";
+
 "Province" = "Επαρχία";
 
 "Remove" = "Αφαίρεση";
@@ -102,9 +106,15 @@
 
 "Select card brand (optional)" = "Επιλέξτε επωνυμία κάρτας (προαιρετικό)";
 
+"Selection is empty." = "Η επιλογή είναι κενή.";
+
+"Something went wrong" = "Κάτι πήγε στραβά";
+
 "Sort code" = "Κωδικός sort";
 
 "State" = "Πολιτεία";
+
+"Submit" = "Υποβολή";
 
 "Suburb" = "Προάστιο";
 
@@ -120,8 +130,6 @@
 
 "Town or city" = "Κωμόπολη ή πόλη";
 
-"UPI ID" = "Αναγνωριστικό UPI";
-
 "Unable to parse phone number" = "Δεν ήταν δυνατή η ανάλυση του αριθμού τηλεφώνου";
 
 "Use rotor to access links" = "Χρησιμοποιήστε τον ρότορα για να προσπελάσετε τους συνδέσμους";
@@ -130,12 +138,16 @@
 
 "Your BLIK code is invalid." = "Ο κωδικός σας BLIK δεν είναι έγκυρος.";
 
-"Your ZIP is incomplete." = "Ο ταχυδρομικός σας κώδικας είναι ελλιπής.";
+"Your ZIP code is incomplete." = "Ο ταχυδρομικός κώδικας είναι ελλιπής.";
+
+"Your ZIP code is invalid." = "Ο ταχυδρομικός κώδικας δεν είναι έγκυρος.";
 
 "Your email is invalid." = "Η διεύθυνση email σας δεν είναι έγκυρη.";
 
 "Your payment information will not be saved." = "Τα στοιχεία πληρωμής δε θα αποθηκευτούν.";
 
 "Your postal code is incomplete." = "Ο ταχυδρομικός κώδικάς σας είναι ελλιπής.";
+
+"Your postal code is invalid." = "Ο ταχυδρομικός κώδικάς σας δεν είναι έγκυρος.";
 
 "ZIP" = "Τ.Κ.";

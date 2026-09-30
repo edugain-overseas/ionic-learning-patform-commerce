@@ -75,6 +75,10 @@ import Foundation
         STPLocalizedString("Billing address is same as shipping", "Label for a checkbox that makes customers billing address same as their shipping address")
     }
 
+    static var date_of_birth: String {
+        STPLocalizedString("Date of Birth", "Label for Date of birth field")
+    }
+
     // MARK: - Phone number
 
     static var phoneNumber: String {
@@ -154,11 +158,19 @@ import Foundation
     }
 
     static var your_zip_is_incomplete: String {
-        STPLocalizedString("Your ZIP is incomplete.", "Error message for when ZIP code in form is incomplete (US only)")
+        STPLocalizedString("Your ZIP code is incomplete.", "Error message for when ZIP code in form is incomplete (US only)")
     }
 
     static var your_postal_code_is_incomplete: String {
         STPLocalizedString("Your postal code is incomplete.", "Error message for when postal code in form is incomplete")
+    }
+
+    static var your_zip_is_invalid: String {
+        STPLocalizedString("Your ZIP code is invalid.", "Error message for when ZIP code in form is invalid (US only)")
+    }
+
+    static var your_postal_code_is_invalid: String {
+        STPLocalizedString("Your postal code is invalid.", "Error message for when postal code in form is invalid")
     }
 
     // MARK: State field labels
@@ -285,6 +297,18 @@ import Foundation
         STPLocalizedString("OK", "ok button")
     }
 
+    static var submit: String {
+        STPLocalizedString("Submit", "Button that submits the information entered on a screen")
+    }
+
+    static var something_went_wrong: String {
+        STPLocalizedString("Something went wrong", "Heading for a generic error when an operation fails")
+    }
+
+    static var processing: String {
+        STPLocalizedString("Processing...", "Label of a disabled button while its action is processing")
+    }
+
     static var `continue`: String {
         STPLocalizedString("Continue", "Text for continue button")
     }
@@ -309,16 +333,6 @@ import Foundation
             "Edit",
             "Button title to enter editing mode"
         )
-    }
-
-    // MARK: - UPI
-
-    static var upi_id: String {
-        STPLocalizedString("UPI ID", "Label for UPI ID number field on form")
-    }
-
-    static var invalid_upi_id: String {
-        STPLocalizedString("Invalid UPI ID", "Error message when UPI ID is invalid")
     }
 
     // MARK: - Blik
@@ -347,5 +361,21 @@ import Foundation
 
     static var remove_card: String {
         STPLocalizedString("Remove card", "Label on a button for removing a card")
+    }
+
+    static var brand_not_accepted: String {
+        STPLocalizedString(
+            "(not accepted)",
+            "Shown in a dropdown picker next to a card brand that is not accepted by a merchant. E.g. \"Visa (not accepted)\""
+       )
+    }
+
+    // MARK: - Payment preview
+
+    static var card_details_xxxx: String {
+        STPLocalizedString(
+            "%1$@ •••• %2$@",
+            "Card preview details displaying the last four digits: {card brand} •••• {last 4} e.g. 'Visa •••• 3155'"
+        )
     }
 }

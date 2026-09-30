@@ -31,16 +31,28 @@ public class STPBankAccountCollector: NSObject {
     /// By default `sharedHandler` initializes with STPAPIClient.shared.
     public var apiClient: STPAPIClient
 
+    /// Style options for the bank account collector.
+    /// By default, the bank account collector will automatically switch between light and dark mode compatible colors based on device settings.
+    public let style: STPBankAccountCollectorUserInterfaceStyle
+
     @objc(`init`)
     @available(swift, deprecated: 0.0.1, obsoleted: 0.0.1, renamed: "init()")
     public convenience override init() {
         self.init(apiClient: STPAPIClient.shared)
     }
 
+    @objc(initWithStyle:)
+    @available(swift, deprecated: 0.0.1, obsoleted: 0.0.1, renamed: "init()")
+    public convenience init(style: STPBankAccountCollectorUserInterfaceStyle) {
+        self.init(style: style)
+    }
+
     public init(
-        apiClient: STPAPIClient = .shared
+        apiClient: STPAPIClient = .shared,
+        style: STPBankAccountCollectorUserInterfaceStyle = .automatic
     ) {
         self.apiClient = apiClient
+        self.style = style
     }
 
     // MARK: Collect Bank Account - Payment Intent
@@ -183,12 +195,46 @@ public class STPBankAccountCollector: NSObject {
         )
     }
 
+    /// Presents a modal from the viewController to collect bank account
+    /// and if completed successfully, link your bank account to a PaymentIntent
+    /// - Parameters:
+    ///   - clientSecret:      Client secret of the payment intent
+    ///   - returnURL:         A URL that redirects back to your app to be used to return after completing authentication in another app (such as bank app or Safari).
+    ///   - params:            Parameters for this call
+    ///   - viewController:    Presenting view controller that will present the modal
+    ///   - onEvent:           The `onEvent` closure is triggered upon the occurrence of specific events during the process of a user connecting their financial accounts.
+    /// - Returns: An `STPPaymentIntent` instance with an expanded `paymentMethod` containing detailed payment method information
+    public func collectBankAccountForPayment(
+        clientSecret: String,
+        returnURL: String? = nil,
+        params: STPCollectBankAccountParams,
+        from viewController: UIViewController,
+        onEvent: ((FinancialConnectionsEvent) -> Void)? = nil
+    ) async throws -> STPPaymentIntent {
+        return try await withCheckedThrowingContinuation { continuation in
+            collectBankAccountForPayment(
+                clientSecret: clientSecret,
+                returnURL: returnURL,
+                params: params,
+                from: viewController,
+                onEvent: onEvent
+            ) { result, error in
+                guard let result else {
+                    continuation.resume(throwing: error ?? NSError.stp_genericErrorOccurredError())
+                    return
+                }
+                continuation.resume(returning: result)
+            }
+        }
+    }
+
     @_spi(STP) public typealias CollectBankAccountCompletionBlock = (FinancialConnectionsSDKResult?, LinkAccountSession?, NSError?) -> Void
     @_spi(STP) public func collectBankAccountForPayment(
         clientSecret: String,
         returnURL: String?,
         additionalParameters: [String: Any] = [:],
         elementsSessionContext: ElementsSessionContext?,
+        linkBrand: LinkBrand? = nil,
         onEvent: ((FinancialConnectionsEvent) -> Void)?,
         params: STPCollectBankAccountParams,
         from viewController: UIViewController,
@@ -208,6 +254,7 @@ public class STPBankAccountCollector: NSObject {
             returnURL: returnURL,
             additionalParameters: additionalParameters,
             elementsSessionContext: elementsSessionContext,
+            linkBrand: linkBrand,
             onEvent: onEvent,
             params: params,
             from: viewController,
@@ -220,6 +267,7 @@ public class STPBankAccountCollector: NSObject {
         returnURL: String?,
         additionalParameters: [String: Any] = [:],
         elementsSessionContext: ElementsSessionContext? = nil,
+        linkBrand: LinkBrand? = nil,
         onEvent: ((FinancialConnectionsEvent) -> Void)?,
         params: STPCollectBankAccountParams,
         from viewController: UIViewController,
@@ -257,7 +305,11 @@ public class STPBankAccountCollector: NSObject {
                 apiClient: self.apiClient,
                 clientSecret: linkAccountSession.clientSecret,
                 returnURL: returnURL,
+                existingConsumer: nil,
+                hasRequestedDataPermissions: false,
+                style: self.style.asFinancialConnectionsConfigurationStyle,
                 elementsSessionContext: elementsSessionContext,
+                linkBrand: linkBrand,
                 onEvent: onEvent,
                 from: viewController
             ) { result in
@@ -443,11 +495,45 @@ public class STPBankAccountCollector: NSObject {
         )
     }
 
+    /// Presents a modal from the viewController to collect bank account
+    /// and if completed successfully, link your bank account to a SetupIntent
+    /// - Parameters:
+    ///   - clientSecret:      Client secret of the setup intent
+    ///   - returnURL:         A URL that redirects back to your app to be used to return after completing authentication in another app (such as bank app or Safari).
+    ///   - params:            Parameters for this call
+    ///   - viewController:    Presenting view controller that will present the modal
+    ///   - onEvent:           The `onEvent` closure is triggered upon the occurrence of specific events during the process of a user connecting their financial accounts.
+    /// - Returns: An `STPSetupIntent` instance with an expanded `paymentMethod` containing detailed payment method information
+    public func collectBankAccountForSetup(
+        clientSecret: String,
+        returnURL: String? = nil,
+        params: STPCollectBankAccountParams,
+        from viewController: UIViewController,
+        onEvent: ((FinancialConnectionsEvent) -> Void)? = nil
+    ) async throws -> STPSetupIntent {
+        return try await withCheckedThrowingContinuation { continuation in
+            collectBankAccountForSetup(
+                clientSecret: clientSecret,
+                returnURL: returnURL,
+                params: params,
+                from: viewController,
+                onEvent: onEvent
+            ) { result, error in
+                guard let result else {
+                    continuation.resume(throwing: error ?? NSError.stp_genericErrorOccurredError())
+                    return
+                }
+                continuation.resume(returning: result)
+            }
+        }
+    }
+
     @_spi(STP) public func collectBankAccountForSetup(
         clientSecret: String,
         returnURL: String?,
         additionalParameters: [String: Any] = [:],
         elementsSessionContext: ElementsSessionContext? = nil,
+        linkBrand: LinkBrand? = nil,
         onEvent: ((FinancialConnectionsEvent) -> Void)?,
         params: STPCollectBankAccountParams,
         from viewController: UIViewController,
@@ -467,6 +553,7 @@ public class STPBankAccountCollector: NSObject {
             returnURL: returnURL,
             additionalParameters: additionalParameters,
             elementsSessionContext: elementsSessionContext,
+            linkBrand: linkBrand,
             onEvent: onEvent,
             params: params,
             from: viewController,
@@ -479,6 +566,7 @@ public class STPBankAccountCollector: NSObject {
         returnURL: String?,
         additionalParameters: [String: Any] = [:],
         elementsSessionContext: ElementsSessionContext?,
+        linkBrand: LinkBrand? = nil,
         onEvent: ((FinancialConnectionsEvent) -> Void)?,
         params: STPCollectBankAccountParams,
         from viewController: UIViewController,
@@ -515,7 +603,11 @@ public class STPBankAccountCollector: NSObject {
                 apiClient: self.apiClient,
                 clientSecret: linkAccountSession.clientSecret,
                 returnURL: returnURL,
+                existingConsumer: nil,
+                hasRequestedDataPermissions: false,
+                style: self.style.asFinancialConnectionsConfigurationStyle,
                 elementsSessionContext: elementsSessionContext,
+                linkBrand: linkBrand,
                 onEvent: onEvent,
                 from: viewController
             ) { result in
@@ -559,7 +651,7 @@ public class STPBankAccountCollector: NSObject {
     }
 
     // MARK: - Collect Bank Account - Deferred Intent
-    @_spi(STP) public func collectBankAccountForDeferredIntent(
+    @_spi(STP) public func collectBankAccountForDeferredIntentOrCheckoutSession(
         sessionId: String,
         returnURL: String?,
         onEvent: ((FinancialConnectionsEvent) -> Void)?,
@@ -568,15 +660,17 @@ public class STPBankAccountCollector: NSObject {
         onBehalfOf: String?,
         additionalParameters: [String: Any] = [:],
         elementsSessionContext: ElementsSessionContext?,
+        linkBrand: LinkBrand? = nil,
         from viewController: UIViewController,
+        intentType: IntentType,
         financialConnectionsCompletion: @escaping (
             FinancialConnectionsSDKResult?, LinkAccountSession?, NSError?
         ) -> Void
     ) {
-        logCollectBankAccountStarted(type: .deferred, intentID: nil)
+        logCollectBankAccountStarted(type: intentType, intentID: nil)
         // Overwrite completion to send an analytic before calling the caller-supplied completion
         let financialConnectionsCompletion: (FinancialConnectionsSDKResult?, LinkAccountSession?, NSError?) -> Void = { result, linkAccountSession, error in
-            self.logCollectBankAccountFinished(type: .deferred, intentID: nil, linkAccountSessionID: linkAccountSession?.stripeID, financialConnectionsSDKResult: result, error: error)
+            self.logCollectBankAccountFinished(type: intentType, intentID: nil, linkAccountSessionID: linkAccountSession?.stripeID, financialConnectionsSDKResult: result, error: error)
             financialConnectionsCompletion(result, linkAccountSession, error)
         }
 
@@ -608,7 +702,11 @@ public class STPBankAccountCollector: NSObject {
                 apiClient: self.apiClient,
                 clientSecret: linkAccountSession.clientSecret,
                 returnURL: returnURL,
+                existingConsumer: nil,
+                hasRequestedDataPermissions: false,
+                style: self.style.asFinancialConnectionsConfigurationStyle,
                 elementsSessionContext: elementsSessionContext,
+                linkBrand: linkBrand,
                 onEvent: onEvent,
                 from: viewController
             ) { result in
@@ -691,10 +789,12 @@ extension STPBankAccountCollector {
         }
 
     }
-    enum IntentType: String {
+
+    @_spi(STP) public enum IntentType: String {
         case payment
         case setup
         case deferred
+        case checkoutSession = "checkout_session"
     }
 
     func logCollectBankAccountStarted(type: IntentType, intentID: String?) {

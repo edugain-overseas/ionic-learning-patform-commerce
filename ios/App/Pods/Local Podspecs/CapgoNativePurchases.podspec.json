@@ -1,21 +1,28 @@
 {
   "name": "CapgoNativePurchases",
-  "version": "6.0.42",
+  "version": "8.7.0",
   "summary": "In-app Subscriptions Made Easy",
-  "license": "MIT",
-  "homepage": "git+https://github.com/Cap-go/native-purchases.git",
-  "authors": "Martin donadieu",
+  "license": "MPL-2.0",
+  "homepage": "git+https://github.com/Cap-go/capacitor-native-purchases.git",
+  "authors": "Martin Donadieu <martin@capgo.app>",
   "source": {
-    "git": "git+https://github.com/Cap-go/native-purchases.git",
-    "tag": "6.0.42"
+    "git": "git+https://github.com/Cap-go/capacitor-native-purchases.git",
+    "tag": "8.7.0"
   },
-  "source_files": "ios/Plugin/**/*.{swift,h,m,c,cc,mm,cpp}",
+  "source_files": "ios/Sources/**/*.{swift,h,m,c,cc,mm,cpp}",
+  "exclude_files": [
+    "**/node_modules/**/*",
+    "**/examples/**/*"
+  ],
   "platforms": {
-    "ios": "13.0"
+    "ios": "15.0"
   },
   "dependencies": {
     "Capacitor": []
   },
   "swift_versions": "5.1",
+  "pod_target_xcconfig": {
+    "OTHER_SWIFT_FLAGS": "$(inherited) -D STOREKIT_26_5"
+  },
   "swift_version": "5.1"
 }

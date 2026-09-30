@@ -8,15 +8,18 @@
 
 import Foundation
 @_spi(STP) import StripeCore
+@_spi(STP) import StripePayments
 @_spi(STP) import StripePaymentsUI
 @_spi(STP) import StripeUICore
 
+@MainActor
 protocol PayWithLinkWalletViewModelDelegate: AnyObject {
     func viewModelDidChange(_ viewModel: PayWithLinkViewController.WalletViewModel)
 }
 
 extension PayWithLinkViewController {
 
+    @MainActor
     final class WalletViewModel {
         let context: Context
         let linkAccount: PaymentSheetLinkAccount
@@ -33,8 +36,8 @@ extension PayWithLinkViewController {
             }
         }
 
-        var supportedPaymentMethodTypes: Set<ConsumerPaymentDetails.DetailsType> {
-            return linkAccount.supportedPaymentDetailsTypes(for: context.elementsSession)
+        var supportedPaymentMethodTypes: Set<ParsedEnum<ConsumerPaymentDetails.DetailsType>> {
+            return context.getSupportedPaymentDetailsTypes(linkAccount: linkAccount)
         }
 
         var cvc: String? {
@@ -62,40 +65,81 @@ extension PayWithLinkViewController {
             return paymentMethods[selectedPaymentMethodIndex]
         }
 
-        /// Whether or not the view should show the instant debit mandate text.
-        var shouldShowInstantDebitMandate: Bool {
+        /// The mandate text to show.
+        var mandate: NSAttributedString? {
+            let isSettingUp = context.intent.isSetupFutureUsageSet(for: context.elementsSession.linkPassthroughModeEnabled ? .card : .link)
+
             switch selectedPaymentMethod?.details {
+            case .card:
+                if context.elementsSession.forceSaveFutureUseBehaviorAndNewMandateText {
+                    // Use the updated mandate text that can mention both payment method reuse and Link signup.
+                    // Since the user is already signed up for Link, we don't need to save to Link.
+                    return PaymentSheetFormFactory.makeMandateText(
+                        variant: .updated(shouldSignUpToLink: false),
+                        merchantName: context.configuration.merchantDisplayName
+                    )
+                } else if isSettingUp {
+                    let string = String(format: .Localized.by_providing_your_card_information_text, context.configuration.merchantDisplayName)
+                    return NSMutableAttributedString(string: string)
+                } else {
+                    return nil
+                }
             case .bankAccount:
                 // Instant debit mandate should be shown when paying with bank account.
-                return true
+                return PaymentSheetFormFactory.makeBankMandateText(
+                    isSettingUp: isSettingUp || context.elementsSession.forceSaveFutureUseBehaviorAndNewMandateText,
+                    merchantName: context.configuration.merchantDisplayName,
+                    sellerName: context.intent.sellerDetails?.businessName,
+                    brand: context.linkBrand
+                )
             default:
-                return false
+                return nil
             }
         }
 
-        var noticeText: String? {
-            if shouldRecollectCardExpiryDate {
-                return STPLocalizedString(
-                    "This card has expired. Update your card info or choose a different payment method.",
-                    "A text notice shown when the user selects an expired card."
-                )
-            }
-
-            if shouldRecollectCardCVC {
-                return STPLocalizedString(
-                    "For security, please re-enter your card’s security code.",
-                    """
-                    A text notice shown when the user selects a card that requires
-                    re-entering the security code (CVV/CVC).
-                    """
-                )
-            }
-
-            return nil
+        /// Whether or not the view should show the mandate text.
+        var shouldShowMandate: Bool {
+            mandate != nil
         }
 
-        var shouldShowNotice: Bool {
-            return noticeText != nil
+        /// The data-sharing consent message to show when a linked bank account is selected.
+        var bankAccountDataConsent: NSAttributedString? {
+            guard case .bankAccount = selectedPaymentMethod?.details,
+                  let consentText = context.elementsSession.linkPaymentMethodBankAccountDataConsent,
+                  !consentText.isEmpty
+            else {
+                return nil
+            }
+
+            return STPStringUtils.attributedStringFromMarkdownLinks(in: consentText)
+        }
+
+        /// Whether or not the view should show the data-sharing consent message.
+        var shouldShowBankAccountDataConsent: Bool {
+            bankAccountDataConsent != nil
+        }
+
+        /// Client attribution metadata for analytics
+        var clientAttributionMetadata: STPClientAttributionMetadata? {
+            STPClientAttributionMetadata.makeClientAttributionMetadataIfNecessary(analyticsHelper: context.analyticsHelper, intent: context.intent, elementsSession: context.elementsSession)
+        }
+
+        /// Returns a hint message, if it is supported.
+        /// - The `link_show_prefer_debit_card_hint` flag must be enabled.
+        /// - A non-empty hint message must exist in the `LinkConfiguration`.
+        /// - Cards are a supported payment types.
+        func debitCardHintIfSupported(for linkAccount: PaymentSheetLinkAccount) -> String? {
+            let flagEnabled = context.elementsSession.shouldShowPreferDebitCardHint
+            let hintMessage = context.linkConfiguration?.hintMessage
+            let hasHintMessage = hintMessage?.isEmpty == false
+            let supportedPaymentDetailTypes = context.getSupportedPaymentDetailsTypes(linkAccount: linkAccount)
+            let supportsCards = supportedPaymentDetailTypes.contains(.card)
+
+            if flagEnabled && hasHintMessage && supportsCards {
+                return hintMessage
+            } else {
+                return nil
+            }
         }
 
         var shouldShowRecollectionSection: Bool {
@@ -114,8 +158,12 @@ extension PayWithLinkViewController {
             return shouldShowApplePayButton
         }
 
-        var cancelButtonConfiguration: Button.Configuration {
-            return shouldShowApplePayButton ? .linkPlain() : .linkSecondary()
+        var linkAppearance: LinkAppearance? {
+            return context.linkAppearance
+        }
+
+        var cancelButtonConfiguration: Button.Configuration? {
+            context.canContinueWithoutLink ? .linkPlain(foregroundColor: linkAppearance?.colors?.primary ?? .linkTextBrand) : nil
         }
 
         /// Whether or not we must re-collect the card CVC.
@@ -133,7 +181,7 @@ extension PayWithLinkViewController {
             switch selectedPaymentMethod?.details {
             case .card(let card):
                 return card.hasExpired
-            case .bankAccount, .unparsable, .none:
+            case .bankAccount, .generic, .none:
                 // Only cards have expiry date.
                 return false
             }
@@ -145,10 +193,6 @@ extension PayWithLinkViewController {
         }
 
         var confirmButtonStatus: ConfirmButton.Status {
-            if selectedPaymentMethod == nil {
-                return .disabled
-            }
-
             if !selectedPaymentMethodIsSupported {
                 // Selected payment method not supported
                 return .disabled
@@ -175,11 +219,7 @@ extension PayWithLinkViewController {
         }
 
         var selectedPaymentMethodIsSupported: Bool {
-            guard let selectedPaymentMethod = selectedPaymentMethod else {
-                return false
-            }
-
-            return supportedPaymentMethodTypes.contains(selectedPaymentMethod.type)
+            isPaymentMethodSupported(paymentMethod: selectedPaymentMethod)
         }
 
         init(
@@ -202,7 +242,22 @@ extension PayWithLinkViewController {
             linkAccount.deletePaymentDetails(id: paymentMethod.stripeID) { [self] result in
                 switch result {
                 case .success:
+                    let previouslySelectedPaymentMethod = self.selectedPaymentMethod
                     paymentMethods.remove(at: index)
+
+                    var defaultPaymentMethodIndex: Int {
+                        Self.determineInitiallySelectedPaymentMethod(
+                            context: context,
+                            paymentMethods: paymentMethods)
+                    }
+
+                    var updatedPaymentMethodIndex: Int? {
+                        paymentMethods.firstIndex(where: {
+                            $0.stripeID == previouslySelectedPaymentMethod?.stripeID
+                        })
+                    }
+
+                    selectedPaymentMethodIndex = updatedPaymentMethodIndex ?? defaultPaymentMethodIndex
                     delegate?.viewModelDidChange(self)
                 case .failure:
                     break
@@ -220,7 +275,8 @@ extension PayWithLinkViewController {
 
             linkAccount.updatePaymentDetails(
                 id: paymentMethod.stripeID,
-                updateParams: UpdatePaymentDetailsParams(isDefault: true, details: nil)
+                updateParams: UpdatePaymentDetailsParams(isDefault: true),
+                clientAttributionMetadata: clientAttributionMetadata
             ) { [self] result in
                 if case let .success(updatedPaymentDetails) = result {
                     paymentMethods.forEach({ $0.isDefault = false })
@@ -231,9 +287,24 @@ extension PayWithLinkViewController {
             }
         }
 
-        func updatePaymentMethod(_ paymentMethod: ConsumerPaymentDetails) -> Int? {
+        // Updates the list of payment methods, and selects the newly added payment method, if supported.
+        func updatePaymentMethods(_ paymentMethods: [ConsumerPaymentDetails]) {
+            let existingIDs = Set(self.paymentMethods.map { $0.stripeID })
+            let newPaymentMethod = paymentMethods.first { !existingIDs.contains($0.stripeID) }
+
+            self.paymentMethods = paymentMethods
+
+            if let newPaymentMethod, isPaymentMethodSupported(paymentMethod: newPaymentMethod),
+               let newIndex = paymentMethods.firstIndex(where: { $0.stripeID == newPaymentMethod.stripeID }) {
+                selectedPaymentMethodIndex = newIndex
+            }
+
+            delegate?.viewModelDidChange(self)
+        }
+
+        func updatePaymentMethod(_ paymentMethod: ConsumerPaymentDetails) {
             guard let index = paymentMethods.firstIndex(where: { $0.stripeID == paymentMethod.stripeID }) else {
-                return nil
+                return
             }
 
             if paymentMethod.isDefault {
@@ -242,9 +313,11 @@ extension PayWithLinkViewController {
 
             paymentMethods[index] = paymentMethod
 
-            delegate?.viewModelDidChange(self)
+            if isPaymentMethodSupported(paymentMethod: paymentMethod) {
+                selectedPaymentMethodIndex = index
+            }
 
-            return index
+            delegate?.viewModelDidChange(self)
         }
 
         func updateExpiryDate(completion: @escaping (Result<ConsumerPaymentDetails, Error>) -> Void) {
@@ -258,12 +331,16 @@ extension PayWithLinkViewController {
 
             linkAccount.updatePaymentDetails(
                 id: id,
-                updateParams: UpdatePaymentDetailsParams(details: .card(expiryDate: expiryDate)),
+                updateParams: UpdatePaymentDetailsParams(metadata: .card(expiryDate: expiryDate)),
+                clientAttributionMetadata: clientAttributionMetadata,
                 completion: completion
             )
         }
-    }
 
+        func isPaymentMethodSupported(paymentMethod: ConsumerPaymentDetails?) -> Bool {
+            paymentMethod?.isSupported(linkAccount: linkAccount, elementsSession: context.elementsSession, configuration: context.configuration, cardBrandFilter: context.configuration.cardBrandFilter, cardFundingFilter: context.configuration.cardFundingFilter(for: context.elementsSession)) ?? false
+        }
+    }
 }
 
 private extension PayWithLinkViewController.WalletViewModel {
@@ -284,6 +361,14 @@ private extension PayWithLinkViewController.WalletViewModel {
             return paymentMethods.firstIndex(where: { $0.isDefault })
         }
 
-        return indexOfLastAddedPaymentMethod ?? indexOfDefaultPaymentMethod ?? 0
+        var indexOfPreviouslySelectedPaymentMethod: Int? {
+            guard let previouslySelectedID = context.initiallySelectedPaymentDetailsID else {
+                return nil
+            }
+
+            return paymentMethods.firstIndex(where: { $0.stripeID == previouslySelectedID })
+        }
+
+        return indexOfLastAddedPaymentMethod ?? indexOfPreviouslySelectedPaymentMethod ?? indexOfDefaultPaymentMethod ?? 0
     }
 }

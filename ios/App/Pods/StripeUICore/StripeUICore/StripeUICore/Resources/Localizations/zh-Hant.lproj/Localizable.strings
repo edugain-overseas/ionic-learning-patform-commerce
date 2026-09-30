@@ -1,4 +1,8 @@
+"%1$@ •••• %2$@" = "%1$@ •••• %2$@";
+
 "%@ (optional)" = "%@（可選）";
+
+"(not accepted)" = "（未接受）";
 
 "Account number" = "帳號";
 
@@ -36,15 +40,13 @@
 
 "County" = "縣";
 
-"Date is empty." = "日期為空值。";
-
 "Department" = "部門";
 
 "District" = "地區";
 
 "Do Si" = "道/縣";
 
-"Do you want to close this form?" = "您確定要保存此表單嗎？";
+"Do you want to close this form?" = "您確定要儲存此表單嗎？";
 
 "Done" = "完成";
 
@@ -65,8 +67,6 @@
 "Full name" = "全名";
 
 "Incomplete phone number" = "電話號碼不完整";
-
-"Invalid UPI ID" = "UPI ID 無效";
 
 "Island" = "島";
 
@@ -90,6 +90,8 @@
 
 "Prefecture" = "轄區";
 
+"Processing..." = "處理中…";
+
 "Province" = "省";
 
 "Remove" = "移除";
@@ -102,9 +104,15 @@
 
 "Select card brand (optional)" = "選擇金融卡品牌（可選）";
 
+"Selection is empty." = "選擇為空。";
+
+"Something went wrong" = "出現問題";
+
 "Sort code" = "分類代碼";
 
 "State" = "州";
+
+"Submit" = "提交";
 
 "Suburb" = "郊區";
 
@@ -120,8 +128,6 @@
 
 "Town or city" = "城鎮或城市";
 
-"UPI ID" = "UPI ID";
-
 "Unable to parse phone number" = "無法粘貼手機號碼";
 
 "Use rotor to access links" = "用轉子訪問連結";
@@ -130,12 +136,14 @@
 
 "Your BLIK code is invalid." = "您的 BLIK 驗證碼無效。";
 
-"Your ZIP is incomplete." = "您的郵遞區號不完整。";
+"Your ZIP code is incomplete." = "您的郵遞區號不完整。";
 
 "Your email is invalid." = "您的電郵地址無效。";
 
-"Your payment information will not be saved." = "不會保存您的付款資訊。";
+"Your payment information will not be saved." = "不會儲存您的付款資訊。";
 
 "Your postal code is incomplete." = "您的郵遞區號不完整。";
+
+"Your postal code is invalid." = "您的郵遞區號無效。";
 
 "ZIP" = "郵遞區號";

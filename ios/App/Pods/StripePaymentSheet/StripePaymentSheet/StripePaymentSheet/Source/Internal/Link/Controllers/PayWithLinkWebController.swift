@@ -13,6 +13,7 @@ import AuthenticationServices
 @_spi(STP) import StripePayments
 @_spi(STP) import StripeUICore
 
+@MainActor
 protocol PayWithLinkWebControllerDelegate: AnyObject {
 
     func payWithLinkWebControllerDidComplete(
@@ -32,6 +33,7 @@ protocol PayWithLinkWebControllerDelegate: AnyObject {
 /// For internal SDK use only
 
 @objc(STP_Internal_PayWithLinkWebController)
+@MainActor
 final class PayWithLinkWebController: NSObject, ASWebAuthenticationPresentationContextProviding, STPAuthenticationContext {
     func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
         return bestWindowForPresentation
@@ -58,18 +60,12 @@ final class PayWithLinkWebController: NSObject, ASWebAuthenticationPresentationC
     }
     var presentationVC: UIViewController?
 
-    enum LinkAccountError: Error {
-        case noLinkAccount
-
-        var localizedDescription: String {
-            "No Link account is set"
-        }
-    }
-
+    @MainActor
     final class Context {
         let intent: Intent
         let elementsSession: STPElementsSession
         let configuration: PaymentElementConfiguration
+        let linkBrand: LinkBrand
         let callToAction: ConfirmButton.CallToActionType
         var lastAddedPaymentDetails: ConsumerPaymentDetails?
         let alwaysUseEphemeralSession: Bool
@@ -85,13 +81,15 @@ final class PayWithLinkWebController: NSObject, ASWebAuthenticationPresentationC
             intent: Intent,
             elementsSession: STPElementsSession,
             configuration: PaymentElementConfiguration,
+            linkBrand: LinkBrand,
             callToAction: ConfirmButton.CallToActionType?,
             alwaysUseEphemeralSession: Bool
         ) {
             self.intent = intent
             self.elementsSession = elementsSession
             self.configuration = configuration
-            self.callToAction = callToAction ?? intent.callToAction
+            self.linkBrand = linkBrand
+            self.callToAction = callToAction ?? .makeDefaultType(intent: intent)
             self.alwaysUseEphemeralSession = alwaysUseEphemeralSession
         }
     }
@@ -104,6 +102,7 @@ final class PayWithLinkWebController: NSObject, ASWebAuthenticationPresentationC
         intent: Intent,
         elementsSession: STPElementsSession,
         configuration: PaymentElementConfiguration,
+        linkAccount: PaymentSheetLinkAccount? = nil,
         callToAction: ConfirmButton.CallToActionType? = nil,
         alwaysUseEphemeralSession: Bool = false
     ) {
@@ -112,6 +111,7 @@ final class PayWithLinkWebController: NSObject, ASWebAuthenticationPresentationC
                 intent: intent,
                 elementsSession: elementsSession,
                 configuration: configuration,
+                linkBrand: configuration.resolvedLinkBrand(elementsSession: elementsSession, linkAccount: linkAccount),
                 callToAction: callToAction,
                 alwaysUseEphemeralSession: alwaysUseEphemeralSession
             )
@@ -185,7 +185,12 @@ final class PayWithLinkWebController: NSObject, ASWebAuthenticationPresentationC
             let result = try LinkPopupURLParser.result(with: returnURL)
             switch result {
             case .complete(let pm):
-                let paymentOption = PaymentOption.link(option: PaymentSheet.LinkConfirmOption.withPaymentMethod(paymentMethod: pm))
+                let paymentOption = PaymentOption.link(
+                    option: PaymentSheet.LinkConfirmOption.withPaymentMethod(
+                        brand: context.linkBrand,
+                        paymentMethod: pm
+                    )
+                )
 
                 STPAnalyticsClient.sharedClient.logLinkPopupSuccess(sessionType: self.context.elementsSession.linkPopupWebviewOption)
                 UserDefaults.standard.markLinkAsUsed()

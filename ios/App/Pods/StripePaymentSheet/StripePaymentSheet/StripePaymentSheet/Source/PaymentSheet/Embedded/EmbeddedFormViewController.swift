@@ -21,6 +21,7 @@ import UIKit
     ///   - completion: A completion handler to call with the `PaymentSheetResult` from the confirmation attempt.
     func embeddedFormViewControllerShouldConfirm(
         _ embeddedFormViewController: EmbeddedFormViewController,
+        with paymentOption: PaymentOption,
         completion: @escaping (PaymentSheetResult, STPAnalyticsClient.DeferredIntentConfirmationType?) -> Void
     )
 
@@ -38,10 +39,10 @@ import UIKit
     /// - Parameter embeddedFormViewController: The view controller that was canceled.
     func embeddedFormViewControllerDidCancel(_ embeddedFormViewController: EmbeddedFormViewController)
 
-    /// Notifies the delegate that the embedded form view controller should close.
+    /// Notifies the delegate that the user completed the form and tapped the primary button..
     /// This method is called when a payment option that can be confirmed later has been provided.
     /// - Parameter embeddedFormViewController: The view controller requesting to close.
-    func embeddedFormViewControllerShouldClose(_ embeddedFormViewController: EmbeddedFormViewController)
+    func embeddedFormViewControllerDidContinue(_ embeddedFormViewController: EmbeddedFormViewController)
 }
 
 class EmbeddedFormViewController: UIViewController {
@@ -68,9 +69,9 @@ class EmbeddedFormViewController: UIViewController {
             navigationBar.isUserInteractionEnabled = isUserInteractionEnabled
         }
     }
-    
-    var collectsUserInput: Bool {
-        return paymentMethodFormViewController.form.collectsUserInput
+
+    var form: PaymentMethodElement {
+        return paymentMethodFormViewController.form
     }
 
     enum Error: Swift.Error {
@@ -79,7 +80,7 @@ class EmbeddedFormViewController: UIViewController {
     var selectedPaymentOption: PaymentSheet.PaymentOption? {
         return paymentMethodFormViewController.paymentOption
     }
-    
+
     private let paymentMethodType: PaymentSheet.PaymentMethodType
     private let configuration: EmbeddedPaymentElement.Configuration
     private let intent: Intent
@@ -87,10 +88,12 @@ class EmbeddedFormViewController: UIViewController {
     private let shouldUseNewCardNewCardHeader: Bool
     private let formCache: PaymentMethodFormCache
     private let analyticsHelper: PaymentSheetAnalyticsHelper
+    private let paymentMethodMessagingPromotionsHelper: PaymentMethodMessagingPromotionsHelper?
+    private weak var checkoutBillingAddressUpdater: CheckoutSessionBillingAddressUpdater?
     private var error: Swift.Error?
     private var isPaymentInFlight: Bool = false
-    /// Previous customer input - in the `update` flow, this is the customer input prior to `update`, used so we can restore their state in this VC.
-    private(set) var previousPaymentOption: PaymentOption?
+    /// The payment option to restore if the customer cancels this form.
+    private(set) var paymentOptionToRestoreOnCancellation: PaymentOption?
 
     // MARK: - UI properties
 
@@ -110,28 +113,25 @@ class EmbeddedFormViewController: UIViewController {
     private lazy var primaryButton: ConfirmButton = {
         ConfirmButton(
             callToAction: .setup, // Dummy value; real value is set after init
-            applePayButtonType: configuration.applePay?.buttonType ?? .plain,
             appearance: configuration.appearance,
             didTap: { [weak self] in
                 self?.didTapPrimaryButton()
+            },
+            didTapWhenDisabled: { [weak self] in
+                self?.didTapPrimaryButtonWhenDisabled()
             }
         )
     }()
 
     private lazy var paymentMethodFormViewController: PaymentMethodFormViewController = {
-        let previousCustomerInput: IntentConfirmParams? = {
-            if case let .new(confirmParams: confirmParams) = previousPaymentOption {
-                return confirmParams
-            } else {
-                return nil
-            }
-        }()
+        let previousCustomerInput = paymentOptionToRestoreOnCancellation?.formConfirmParamsForCancellationRestoration
 
         let headerView = FormHeaderView(
             paymentMethodType: paymentMethodType,
             // Special case: use "New Card" instead of "Card" if the displayed saved PM is a card
             shouldUseNewCardHeader: shouldUseNewCardNewCardHeader,
             appearance: configuration.appearance,
+            currency: intent.currency,
             incentive: elementsSession.incentive?.takeIfAppliesTo(paymentMethodType)
         )
 
@@ -142,8 +142,11 @@ class EmbeddedFormViewController: UIViewController {
             previousCustomerInput: previousCustomerInput,
             formCache: formCache,
             configuration: configuration,
+            paymentMethodOrientation: .vertical,
             headerView: headerView,
             analyticsHelper: analyticsHelper,
+            paymentMethodMessagingPromotionsHelper: paymentMethodMessagingPromotionsHelper,
+            isLinkUI: false,
             delegate: self
         )
     }()
@@ -154,8 +157,6 @@ class EmbeddedFormViewController: UIViewController {
 
     weak var delegate: EmbeddedFormViewControllerDelegate?
 
-    // MARK: - Initializers
-
     init(configuration: EmbeddedPaymentElement.Configuration,
          intent: Intent,
          elementsSession: STPElementsSession,
@@ -163,15 +164,22 @@ class EmbeddedFormViewController: UIViewController {
          paymentMethodType: PaymentSheet.PaymentMethodType,
          previousPaymentOption: PaymentOption? = nil,
          analyticsHelper: PaymentSheetAnalyticsHelper,
-         formCache: PaymentMethodFormCache = .init()) {
+         paymentMethodMessagingPromotionsHelper: PaymentMethodMessagingPromotionsHelper? = nil,
+         checkoutBillingAddressUpdater: CheckoutSessionBillingAddressUpdater? = nil,
+         formCache: PaymentMethodFormCache = .init(),
+         delegate: EmbeddedFormViewControllerDelegate
+    ) {
         self.intent = intent
         self.elementsSession = elementsSession
         self.shouldUseNewCardNewCardHeader = shouldUseNewCardNewCardHeader
         self.configuration = configuration
-        self.previousPaymentOption = previousPaymentOption
+        self.paymentOptionToRestoreOnCancellation = previousPaymentOption
         self.analyticsHelper = analyticsHelper
+        self.paymentMethodMessagingPromotionsHelper = paymentMethodMessagingPromotionsHelper
+        self.checkoutBillingAddressUpdater = checkoutBillingAddressUpdater
         self.paymentMethodType = paymentMethodType
         self.formCache = formCache
+        self.delegate = delegate
 
         super.init(nibName: nil, bundle: nil)
 
@@ -198,9 +206,9 @@ class EmbeddedFormViewController: UIViewController {
             if shouldDeferConfirmation {
                 return .continue
             }
-            return .makeDefaultTypeForPaymentSheet(intent: intent)
+            return .makeDefaultType(intent: intent)
         }()
-        let state: ConfirmButton.Status = {
+        let status: ConfirmButton.Status = {
             if isPaymentInFlight {
                 return .processing
             }
@@ -210,8 +218,7 @@ class EmbeddedFormViewController: UIViewController {
             return selectedPaymentOption == nil ? .disabled : .enabled
         }()
         primaryButton.update(
-            state: state,
-            style: .stripe,
+            status: status,
             callToAction: callToAction,
             animated: true
         )
@@ -249,7 +256,17 @@ class EmbeddedFormViewController: UIViewController {
     }
 
     private func didCancel() {
-        delegate?.embeddedFormViewControllerDidCancel(self)
+        if let delegate {
+            delegate.embeddedFormViewControllerDidCancel(self)
+        } else {
+            stpAssertionFailure()
+            dismiss(animated: true)
+        }
+    }
+
+    /// Captures the valid form state accepted by Continue so later canceled edits can restore it.
+    func capturePaymentOptionForCancellationRestoration() {
+        paymentOptionToRestoreOnCancellation = selectedPaymentOption
     }
 
     required init?(coder: NSCoder) {
@@ -269,7 +286,7 @@ class EmbeddedFormViewController: UIViewController {
             stackView.addArrangedSubview(view)
         }
         stackView.spacing = 20
-        stackView.directionalLayoutMargins = PaymentSheetUI.defaultMargins
+        stackView.directionalLayoutMargins = configuration.appearance.topFormInsets
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.axis = .vertical
         stackView.sendSubviewToBack(mandateView)
@@ -281,18 +298,18 @@ class EmbeddedFormViewController: UIViewController {
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            primaryButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: PaymentSheetUI.defaultSheetMargins.leading),
-            primaryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -PaymentSheetUI.defaultSheetMargins.trailing),
+            primaryButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: configuration.appearance.formInsets.leading),
+            primaryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -configuration.appearance.formInsets.trailing),
 
             stackView.topAnchor.constraint(equalTo: view.topAnchor),
             stackView.bottomAnchor.constraint(equalTo: primaryButton.topAnchor, constant: -32),
-            primaryButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -PaymentSheetUI.defaultSheetMargins.bottom),
+            primaryButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -configuration.appearance.formInsets.bottom),
         ])
     }
 
     // MARK: - Confirmation handling
 
-    private func pay(with _: PaymentOption) {
+    private func pay(with paymentOption: PaymentOption) {
         view.endEditing(true)
         isPaymentInFlight = true
         error = nil
@@ -302,7 +319,7 @@ class EmbeddedFormViewController: UIViewController {
 
         // Confirm the payment with the payment option
         let startTime = NSDate.timeIntervalSinceReferenceDate
-        delegate?.embeddedFormViewControllerShouldConfirm(self) { result, _ in
+        delegate?.embeddedFormViewControllerShouldConfirm(self, with: paymentOption) { result, _ in
             let elapsedTime = NSDate.timeIntervalSinceReferenceDate - startTime
             DispatchQueue.main.asyncAfter(
                 deadline: .now() + max(PaymentSheetUI.minimumFlightTime - elapsedTime, 0)
@@ -314,7 +331,7 @@ class EmbeddedFormViewController: UIViewController {
                     self.updatePrimaryButton()
                     self.isUserInteractionEnabled = true
                 case .failed(let error):
-#if !canImport(CompositorServices)
+#if !os(visionOS)
                     UINotificationFeedbackGenerator().notificationOccurred(.error)
 #endif
                     // Update state
@@ -329,10 +346,10 @@ class EmbeddedFormViewController: UIViewController {
                     self.presentedViewController?.isBeingDismissed == true ? 1 : 0
                     // Hack: PaymentHandler calls the completion block while SafariVC is still being dismissed - "wait" until it's finished before updating UI
                     DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-#if !canImport(CompositorServices)
+#if !os(visionOS)
                         UINotificationFeedbackGenerator().notificationOccurred(.success)
 #endif
-                        self.primaryButton.update(state: .succeeded, animated: true) {
+                        self.primaryButton.update(status: .succeeded, animated: true) {
                             self.delegate?.embeddedFormViewControllerDidCompleteConfirmation(self, result: result)
                         }
                     }
@@ -362,13 +379,55 @@ class EmbeddedFormViewController: UIViewController {
         // Send analytic when primary button is tapped
         analyticsHelper.logConfirmButtonTapped(paymentOption: selectedPaymentOption)
 
-        // If we defer confirmation, simply close the sheet
+        // If we defer confirmation, sync billing then close the sheet
         if shouldDeferConfirmation {
-            self.delegate?.embeddedFormViewControllerShouldClose(self)
+            syncCheckoutBillingThenContinue()
             return
         }
 
         pay(with: selectedPaymentOption)
+    }
+
+    /// Syncs billing address to the checkout session, then tells the delegate to continue.
+    /// If the sync fails, stays on the sheet and shows the error instead.
+    private func syncCheckoutBillingThenContinue() {
+        guard let checkoutBillingAddressUpdater,
+              let paymentOption = selectedPaymentOption else {
+            delegate?.embeddedFormViewControllerDidContinue(self)
+            return
+        }
+
+        view.endEditing(true)
+        error = nil
+        isPaymentInFlight = true
+        updateError()
+        updatePrimaryButton()
+        isUserInteractionEnabled = false
+
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                try await checkoutBillingAddressUpdater.syncBillingAddress(from: paymentOption.checkoutBillingDetails)
+            } catch {
+                self.error = error
+            }
+            self.isPaymentInFlight = false
+            self.isUserInteractionEnabled = true
+            self.updateError()
+            self.updatePrimaryButton()
+
+            if self.error == nil {
+                self.delegate?.embeddedFormViewControllerDidContinue(self)
+            }
+        }
+    }
+
+    @objc func didTapPrimaryButtonWhenDisabled() {
+        // When the disabled button is tapped, show validation errors on all form fields
+#if !os(visionOS)
+        UINotificationFeedbackGenerator().notificationOccurred(.error)
+#endif
+        paymentMethodFormViewController.form.showAllValidationErrors()
     }
 }
 

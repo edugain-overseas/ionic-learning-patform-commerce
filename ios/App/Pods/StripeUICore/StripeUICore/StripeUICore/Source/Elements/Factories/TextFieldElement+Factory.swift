@@ -22,7 +22,7 @@ import UIKit
         public let defaultValue: String?
         public let label: String
         public let isOptional: Bool
-        public let isEditable: Bool
+        public let editConfiguration: EditConfiguration
         private var textContentType: UITextContentType {
             switch type {
             case .given:
@@ -35,7 +35,7 @@ import UIKit
         }
 
         /// - Parameter label: If `nil`, defaults to a string on the `type` e.g. "Name"
-        public init(type: NameType = .full, defaultValue: String?, label: String? = nil, isOptional: Bool = false, isEditable: Bool = true) {
+        public init(type: NameType = .full, defaultValue: String?, label: String? = nil, isOptional: Bool = false, editConfiguration: EditConfiguration = .editable) {
             self.type = type
             self.defaultValue = defaultValue
             if let label = label {
@@ -44,7 +44,7 @@ import UIKit
                 self.label = Self.label(for: type)
             }
             self.isOptional = isOptional
-            self.isEditable = isEditable
+            self.editConfiguration = editConfiguration
         }
 
         public func keyboardProperties(for text: String) -> TextFieldElement.KeyboardProperties {
@@ -75,21 +75,21 @@ import UIKit
         public let label = String.Localized.email
         public let defaultValue: String?
         public let isOptional: Bool
-        public let isEditable: Bool
+        public let editConfiguration: EditConfiguration
         public let disallowedCharacters: CharacterSet = .whitespacesAndNewlines
         let invalidError = Error.invalid(
             localizedDescription: String.Localized.invalid_email
         )
 
-        public init(defaultValue: String? = nil, isOptional: Bool = false, isEditable: Bool = true) {
+        public init(defaultValue: String? = nil, isOptional: Bool = false, editConfiguration: EditConfiguration = .editable) {
             self.defaultValue = defaultValue
             self.isOptional = isOptional
-            self.isEditable = isEditable
+            self.editConfiguration = editConfiguration
         }
 
         public func validate(text: String, isOptional: Bool) -> ValidationState {
             if text.isEmpty {
-                return isOptional ? .valid : .invalid(Error.empty)
+                return isOptional ? .valid : .invalid(Error.empty(localizedDescription: String.Localized.invalid_email))
             }
             if STPEmailAddressValidator.stringIsValidEmailAddress(text) {
                 return .valid
@@ -108,33 +108,6 @@ import UIKit
                                                                   isOptional: isOptional), theme: theme)
     }
 
-    // MARK: VPA
-
-    struct VPAConfiguration: TextFieldElementConfiguration {
-        public let label = String.Localized.upi_id
-        public let disallowedCharacters: CharacterSet = .whitespacesAndNewlines
-        let invalidError = Error.invalid(
-            localizedDescription: .Localized.invalid_upi_id
-        )
-
-        public func validate(text: String, isOptional: Bool) -> ValidationState {
-            guard !text.isEmpty else {
-                return isOptional ? .valid : .invalid(Error.empty)
-            }
-
-            return STPVPANumberValidator.stringIsValidVPANumber(text) ? .valid : .invalid(invalidError)
-        }
-
-        public func keyboardProperties(for text: String) -> TextFieldElement.KeyboardProperties {
-            return .init(type: .emailAddress, textContentType: .emailAddress, autocapitalization: .none)
-        }
-
-    }
-
-    static func makeVPA(theme: ElementsAppearance = .default) -> TextFieldElement {
-        return TextFieldElement(configuration: VPAConfiguration(), theme: theme)
-    }
-
     // MARK: - Blik code
     struct BlikCodeConfiguration: TextFieldElementConfiguration {
         public let label = String.Localized.blik_code
@@ -146,7 +119,7 @@ import UIKit
 
         public func validate(text: String, isOptional: Bool) -> ValidationState {
             guard !text.isEmpty else {
-                return isOptional ? .valid : .invalid(Error.empty)
+                return isOptional ? .valid : .invalid(Error.empty(localizedDescription: String.Localized.invalid_blik_code))
             }
             return STPBlikCodeValidator.stringIsValidBlikCode(text) ?.valid: .invalid(invalidError)
         }
@@ -175,7 +148,7 @@ import UIKit
 
         public func validate(text: String, isOptional: Bool) -> ValidationState {
             guard !text.isEmpty else {
-                return isOptional ? .valid : .invalid(Error.empty)
+                return isOptional ? .valid : .invalid(Error.empty(localizedDescription: String.Localized.incomplete_phone_number))
             }
             guard text.count > 9 else {
                 return .invalid(incompleteError)
@@ -214,7 +187,7 @@ import UIKit
 
         public func validate(text: String, isOptional: Bool) -> TextFieldElement.ValidationState {
             if text.isEmpty {
-                return isOptional ? .valid : .invalid(Error.empty)
+                return isOptional ? .valid : .invalid(Error.empty(localizedDescription: String.Localized.incomplete_phone_number))
             }
 
             if let phoneNumber = PhoneNumber(number: text, countryCode: countryCodeProvider()) {

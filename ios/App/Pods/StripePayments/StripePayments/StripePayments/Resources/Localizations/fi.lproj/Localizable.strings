@@ -42,13 +42,9 @@
 
 "SEPA Debit" = "SEPA Debit";
 
-"Sofort" = "Sofort";
-
 "Swish" = "Swish";
 
 "Timed out authenticating your payment method -- try again" = "Maksutapasi todennus aikakatkaistiin – yritä uudelleen.";
-
-"UPI" = "UPI";
 
 "US bank account" = "Yhdysvaltalainen pankkitili";
 
@@ -58,6 +54,4 @@
 
 "WeChat Pay" = "WeChat Pay";
 
-"giropay" = "giropay";
-
-"iDEAL" = "iDEAL";
+"iDEAL | Wero" = "iDEAL | Wero";

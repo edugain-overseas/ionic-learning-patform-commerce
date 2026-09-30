@@ -1,14 +1,37 @@
+<!--<resources>-->
+<!--    &lt;!&ndash; Base App Theme &ndash;&gt;-->
+<!--    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
+<!--        <item name="colorPrimary">@color/colorPrimary</item>-->
+<!--        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+<!--        <item name="colorAccent">@color/colorAccent</item>-->
+
+<!--    </style>-->
+
+<!--    &lt;!&ndash; Transparent System Bars Theme &ndash;&gt;-->
+<!--    <style name="TransparentSystemBarsTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
+
+<!--    </style>-->
+<!--</resources>-->
+
 <resources>
     <!-- Base App Theme -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
 
+    <!-- Splash Screen Theme -->
+    <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="windowSplashScreenBackground">#5F1314</item>
+        <item name="postSplashScreenTheme">@style/TransparentSystemBarsTheme</item>
+        <item name="android:navigationBarColor">#5F1314</item>
     </style>
 
     <!-- Transparent System Bars Theme -->
     <style name="TransparentSystemBarsTheme" parent="Theme.AppCompat.Light.NoActionBar">
-
+        <item name="android:navigationBarColor">#5F1314</item>
     </style>
 </resources>
+

@@ -21,6 +21,7 @@
 #import <FBSDKCoreKit/FBSDKAppEventParameterProduct.h>
 #import <FBSDKCoreKit/FBSDKAppEventParameterValue.h>
 #import <FBSDKCoreKit/FBSDKAppEvents.h>
+#import <FBSDKCoreKit/FBSDKAppOperationalDataType.h>
 #import <FBSDKCoreKit/FBSDKAppEventsConfiguration.h>
 #import <FBSDKCoreKit/FBSDKAppEventsConfigurationManager.h>
 #import <FBSDKCoreKit/FBSDKAppEventsConfigurationProtocol.h>
@@ -212,3 +213,8 @@
 #import <FBSDKCoreKit/UIPasteboard+Pasteboard.h>
 #import <FBSDKCoreKit/WKWebView+WebViewProtocol.h>
 #import <FBSDKCoreKit/FBSDKGraphRequestQueue.h>
+#import <FBSDKCoreKit/FBSDKTransactionObserving.h>
+#import <FBSDKCoreKit/FBSDKIAPFailedTransactionLogging.h>
+#import <FBSDKCoreKit/FBSDKIAPFailedTransactionLoggingCreating.h>
+#import <FBSDKCoreKit/FBSDKIAPDedupeProcessing.h>
+#import <FBSDKCoreKit/FBSDKIAPTransactionCaching.h>

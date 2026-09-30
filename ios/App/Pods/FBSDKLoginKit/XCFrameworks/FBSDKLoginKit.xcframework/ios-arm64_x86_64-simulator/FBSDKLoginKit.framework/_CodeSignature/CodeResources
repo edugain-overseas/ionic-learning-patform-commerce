@@ -18,7 +18,7 @@
 		</data>
 		<key>Headers/FBSDKLoginKit-Swift.h</key>
 		<data>
-		lqiKpJRCue2V4MH+lRxbYjn+apo=
+		CikCO+ZF1cLCGGQeVVmcVR1V4z0=
 		</data>
 		<key>Headers/FBSDKLoginKit.h</key>
 		<data>
@@ -30,43 +30,43 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		XDPCKVS0IXCUj9QQKnWLNBzgOzg=
+		OW812P5peRnivDY4AMd/KjmZOls=
 		</data>
 		<key>Modules/FBSDKLoginKit.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		l0uNoQ0eeTUEOttlNk1ZozzuHVU=
+		wOLNbSHg/IIcAdHXpzZs1+j6QQU=
 		</data>
 		<key>Modules/FBSDKLoginKit.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
-		OdzgwqDm45iohH/hYvxFum0fU0I=
+		NBtslsw/W9QnKlruis3B1S209Gg=
 		</data>
 		<key>Modules/FBSDKLoginKit.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		B3WyN8dCP3wOGxTsxc+GEvg43kk=
+		s2gZySdnGyrNxgLdkFVk+zsLGqY=
 		</data>
 		<key>Modules/FBSDKLoginKit.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		OdzgwqDm45iohH/hYvxFum0fU0I=
+		NBtslsw/W9QnKlruis3B1S209Gg=
 		</data>
 		<key>Modules/FBSDKLoginKit.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		l0uNoQ0eeTUEOttlNk1ZozzuHVU=
+		wOLNbSHg/IIcAdHXpzZs1+j6QQU=
 		</data>
 		<key>Modules/FBSDKLoginKit.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
-		skJNsZSomx0MJ7FyyAWRVdz3fHY=
+		mRQCdW+8FfvDmeGd/hgS2JnQOM0=
 		</data>
 		<key>Modules/FBSDKLoginKit.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		uqJAomZsy5QONfUfDwE9BgT79ds=
+		Y3UKvoOsVjyDXuKiYW6n4rKXasI=
 		</data>
 		<key>Modules/FBSDKLoginKit.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		skJNsZSomx0MJ7FyyAWRVdz3fHY=
+		mRQCdW+8FfvDmeGd/hgS2JnQOM0=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
-		KrDKcg24trXz/SqZuZkQjJYkUsc=
+		lOhcbLRzBQKD+fVy5l0suDMLXvI=
 		</data>
 		<key>PrivacyInfo.xcprivacy</key>
 		<data>
@@ -100,7 +100,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			YREpiuiz7EWSbG7wUjtXLra9vwk+c+NoV1A3QAKE10Q=
+			7ojPe10f8dLrd42ul/hI5vKu1l27Z1mErlrfhYCnC+E=
 			</data>
 		</dict>
 		<key>Headers/FBSDKLoginKit.h</key>
@@ -121,63 +121,63 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			DdCEWwjnUVyauuBIFLXVbuKMRRKFotxaCMuYbzhxOOY=
+			bz1M8Zb2vvKAOCsz91HxASVpEqulj6r82HGgrx3SyvY=
 			</data>
 		</dict>
 		<key>Modules/FBSDKLoginKit.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			BzXCfi7d+qlY4GfHrfz+1snYHR/lQp9nSXjkqaGk4WE=
+			FoJxqtDufL4AunV8Blh/0i+4AE82BeMthW8u+FVtru0=
 			</data>
 		</dict>
 		<key>Modules/FBSDKLoginKit.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			io1GKpBZeFkr4ckxuzyYCtezbcYWv7Mdkxq8/qbNsak=
+			Lq7lYQzQiNlviKD5j6AQoYj/4URHk+EEo+cGog/iUuo=
 			</data>
 		</dict>
 		<key>Modules/FBSDKLoginKit.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			BzXCfi7d+qlY4GfHrfz+1snYHR/lQp9nSXjkqaGk4WE=
+			FoJxqtDufL4AunV8Blh/0i+4AE82BeMthW8u+FVtru0=
 			</data>
 		</dict>
 		<key>Modules/FBSDKLoginKit.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			DdCEWwjnUVyauuBIFLXVbuKMRRKFotxaCMuYbzhxOOY=
+			bz1M8Zb2vvKAOCsz91HxASVpEqulj6r82HGgrx3SyvY=
 			</data>
 		</dict>
 		<key>Modules/FBSDKLoginKit.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			55PqMsGSHEolxzHD7uyT2iFZxpyJY5NAMS4QtfGPfHc=
+			czwMTbFRWQTlKX3KrJs9zNUuY+yNh8wf3MYT0l4BJGg=
 			</data>
 		</dict>
 		<key>Modules/FBSDKLoginKit.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			K/Zvo3mJvsBpp0AUR4DG6voSHlC7yZK4Vt/OzR1Hd6o=
+			WTvdagjU6ba2vtmFuH0ZTMuU219hprBU59Zmhuv86eg=
 			</data>
 		</dict>
 		<key>Modules/FBSDKLoginKit.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			55PqMsGSHEolxzHD7uyT2iFZxpyJY5NAMS4QtfGPfHc=
+			czwMTbFRWQTlKX3KrJs9zNUuY+yNh8wf3MYT0l4BJGg=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			/LNPo6mK3Ap58ptMqxKbx/hlGBOSkSGDoDN3+CL3VlA=
+			n0hu3q/2nzuIxEGDClQtNR4JYKDDSc4nbAGeDDbw2Gk=
 			</data>
 		</dict>
 		<key>PrivacyInfo.xcprivacy</key>

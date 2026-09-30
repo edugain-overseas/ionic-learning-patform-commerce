@@ -14,7 +14,11 @@ import UIKit
         apiClient: STPAPIClient,
         clientSecret: String,
         returnURL: String?,
+        existingConsumer: FinancialConnectionsConsumer?,
+        hasRequestedDataPermissions: Bool,
+        style: FinancialConnectionsStyle,
         elementsSessionContext: ElementsSessionContext?,
+        linkBrand: LinkBrand?,
         onEvent: ((FinancialConnectionsEvent) -> Void)?,
         from presentingViewController: UIViewController,
         completion: @escaping (FinancialConnectionsSDKResult) -> Void

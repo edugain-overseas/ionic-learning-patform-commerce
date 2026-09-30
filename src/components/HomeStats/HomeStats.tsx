@@ -1,14 +1,14 @@
 import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { IonIcon } from "@ionic/react";
+import { useCountUp } from "react-countup";
 import { platformStats, PlatformStatType } from "../../constants";
+import { letterGrade } from "../../utils/letterGrade";
+import { useObserver } from "../../hooks/useObserver";
 import CoursesIcon from "../../assets/icons/homeStats/courses.svg";
 import StudentsIcon from "../../assets/icons/homeStats/students.svg";
 import ScoreIcon from "../../assets/icons/homeStats/score.svg";
 import CertificatesIcon from "../../assets/icons/homeStats/certificates.svg";
-import { IonIcon } from "@ionic/react";
 import styles from "./HomeStats.module.scss";
-import { useCountUp } from "react-countup";
-import { letterGrade } from "../../utils/letterGrade";
-import { useObserver } from "../../hooks/useObserver";
 
 const renderIcon = (name: string) => {
   switch (name) {
@@ -31,10 +31,17 @@ const Stat: FC<{ stat: PlatformStatType; startCount: boolean }> = ({
 }) => {
   const valueRef = useRef(null);
 
-  const scoreFormatting = useCallback((value: number) => {
-    const valuePostfix = letterGrade(value);
-    return `${value} (${valuePostfix})`;
-  }, []);
+  const formattingFn: Record<string, ((value: number) => string) | undefined> =
+    {
+      score: useCallback((value: number) => {
+        const valuePostfix = letterGrade(value);
+        return `${value} (${valuePostfix})`;
+      }, []),
+      courses: useCallback(
+        (value: number) => `${value} ${value === 100 ? "+" : ""}`,
+        [],
+      ),
+    };
 
   const { start } = useCountUp({
     ref: valueRef,
@@ -42,7 +49,7 @@ const Stat: FC<{ stat: PlatformStatType; startCount: boolean }> = ({
     end: stat.value,
     duration: 3,
     startOnMount: false,
-    formattingFn: stat.name === "score" ? scoreFormatting : undefined,
+    formattingFn: formattingFn[stat.name],
     separator: " ",
   });
 
@@ -82,7 +89,7 @@ const HomeStats = () => {
   const sectionRef = useObserver<HTMLUListElement>(
     true,
     observerCallback,
-    observerOptions
+    observerOptions,
   );
 
   return (

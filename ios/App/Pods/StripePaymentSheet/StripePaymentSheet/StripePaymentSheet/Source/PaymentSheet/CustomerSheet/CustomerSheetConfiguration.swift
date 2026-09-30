@@ -79,12 +79,11 @@ extension CustomerSheet {
         /// Note: For Apple Pay, the list of supported card brands is determined by combining `StripeAPI.supportedPKPaymentNetworks()` with `StripeAPI.additionalEnabledApplePayNetworks` and then applying the `cardBrandAcceptance` filter. This filtered list is then assigned to `PKPaymentRequest.supportedNetworks`, ensuring that only the allowed card brands are available for Apple Pay transactions. Any `PKPaymentNetwork` that does not correspond to a `BrandCategory` will be blocked if you have specified an allow list, or will not be blocked if you have specified a disallow list.
         /// Note: This is only a client-side solution.
         /// Note: Card brand filtering is not currently supported by Link.
-        @_spi(CardBrandFilteringBeta) public var cardBrandAcceptance: PaymentSheet.CardBrandAcceptance = .all
+        public var cardBrandAcceptance: PaymentSheet.CardBrandAcceptance = .all
 
-        /// This is an experimental feature that may be removed at any time.
-        /// If true, users can set a payment method as default and sync their default payment method across web and mobile
-        /// If false (default), users cannot set default payment methods.
-        @_spi(AllowsSetAsDefaultPM) public var allowsSetAsDefaultPM = false
+        /// By default, the card form will provide a button to open the card scanner.
+        /// If true, the card form will instead initialize with the card scanner already open.
+        public var opensCardScannerAutomatically: Bool = false
 
         public init () {
         }
@@ -108,7 +107,9 @@ extension CustomerSheet {
 
         /// Create a PaymentOptionSelection for a saved payment method.
         public static func paymentMethod(_ paymentMethod: STPPaymentMethod) -> PaymentOptionSelection {
-            let data = PaymentOptionDisplayData(image: paymentMethod.makeIcon(), label: paymentMethod.paymentSheetLabel)
+            let paymentMethodIcon = paymentMethod.makeIcon()
+            let image = paymentMethod.cachedCardArtImage() ?? paymentMethodIcon
+            let data = PaymentOptionDisplayData(image: image, label: paymentMethod.paymentSheetLabel)
             return .paymentMethod(paymentMethod: paymentMethod, paymentOptionDisplayData: data)
         }
 

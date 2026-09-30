@@ -118,12 +118,12 @@ export type PlatformStatType = {
 export const platformStats = [
   {
     name: "courses",
-    value: 325,
+    value: 100,
     label: "<b>Courses</b> on our platform",
   },
   {
     name: "students",
-    value: 8065,
+    value: 4465,
     label: "<b>Students</b> for today",
   },
   {
@@ -133,7 +133,7 @@ export const platformStats = [
   },
   {
     name: "certificates",
-    value: 12678,
+    value: 3208,
     label: "<b>Certificates</b> issued",
   },
 ];

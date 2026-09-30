@@ -29,6 +29,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Capacitor-Capacitor.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Capacitor.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -50,6 +55,11 @@
 			<false/>
 		</dict>
 		<key>CapacitorCommunityStripe.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>CapacitorCordova-CapacitorCordova.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -159,6 +169,21 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>IONCameraLib-IONCameraLibResources.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>IONCameraLib.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>IONFilesystemLib.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-App.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -200,6 +225,11 @@
 			<false/>
 		</dict>
 		<key>StripeCore.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>StripeFinancialConnectionsLite.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>

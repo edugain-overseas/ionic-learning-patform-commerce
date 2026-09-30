@@ -94,6 +94,8 @@ import UIKit
         // Prefer using a white foreground as long as a minimum contrast threshold is met.
         // Factor the container color to compensate for "local adaptation".
         // https://github.com/w3c/wcag/issues/695
+        // Note: Pre-iOS 26, .systemBlue has a contrastToWhite of >3.6 but after iOS 26 it is <3.6.
+        //      This means that on iOS 26 and later, .systemBlue will switch to black text in dark mode.
         let threshold: CGFloat = isDarkMode ? 3.6 : 2.2
         if contrastRatioToWhite > threshold {
             return .white
@@ -101,6 +103,13 @@ import UIKit
 
         // Pick the foreground color that offers the best contrast ratio
         return contrastRatioToWhite > contrastRatioToBlack ? .white : .black
+    }
+
+    /// Returns either black or white based on which color this color is closest to
+    var roundToBlackOrWhite: UIColor {
+        // contrastingColor returns the opposite color (white if this is dark, black if this is light)
+        // so we need to invert that logic to get the closest color
+        return contrastingColor == .white ? .black : .white
     }
 
     /// Adjust color for minimum contrast with a given background color
@@ -137,19 +146,6 @@ import UIKit
     var disabledColor: UIColor {
         let (_, _, _, alpha) = rgba
         return self.withAlphaComponent(alpha * 0.4)
-    }
-
-    /// Returns a translucent mask based on the brightness of the color
-    var translucentMaskColor: UIColor {
-        let alpha: CGFloat = 0.075
-        let colorMaskForLight = UIColor.black.withAlphaComponent(alpha)
-        let colorMaskForDark = UIColor.white.withAlphaComponent(alpha)
-
-        return isBright
-            ? UIColor.dynamic(light: colorMaskForLight,
-                              dark: colorMaskForDark)
-            : UIColor.dynamic(light: colorMaskForDark,
-                              dark: colorMaskForLight)
     }
 
     /// Returns this color in a "disabled" state by reducing the alpha by 40% if `isDisabled` is `true`,

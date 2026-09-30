@@ -86,7 +86,6 @@ const HomeOfferInfo: FC = () => {
             src={desktopImg}
             className={styles.deviceImg}
             alt="Desktop Device"
-            fetchPriority="high"
             loading="eager"
           />
         </div>
@@ -95,7 +94,6 @@ const HomeOfferInfo: FC = () => {
             src={mobileImg}
             className={styles.deviceImg}
             alt="Mobile Device"
-            fetchPriority="high"
             loading="eager"
           />
         </div>

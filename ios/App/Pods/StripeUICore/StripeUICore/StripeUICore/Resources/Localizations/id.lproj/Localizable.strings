@@ -1,4 +1,8 @@
+"%1$@ •••• %2$@" = "%1$@ •••• %2$@";
+
 "%@ (optional)" = "%@ (opsional)";
+
+"(not accepted)" = "(tidak diterima)";
 
 "Account number" = "Nomor rekening";
 
@@ -36,7 +40,7 @@
 
 "County" = "County";
 
-"Date is empty." = "Data kosong.";
+"Date of Birth" = "Tanggal Lahir";
 
 "Department" = "Departemen";
 
@@ -66,8 +70,6 @@
 
 "Incomplete phone number" = "Nomor telepon tidak lengkap";
 
-"Invalid UPI ID" = "Identifikasi UPI tidak valid";
-
 "Island" = "Pulau";
 
 "Last" = "Belakang";
@@ -90,6 +92,8 @@
 
 "Prefecture" = "Prefektur";
 
+"Processing..." = "Memproses...";
+
 "Province" = "Provinsi";
 
 "Remove" = "Hapus";
@@ -102,9 +106,15 @@
 
 "Select card brand (optional)" = "Pilih brand kartu (opsional)";
 
+"Selection is empty." = "Pilihannya kosong.";
+
+"Something went wrong" = "Terjadi kesalahan";
+
 "Sort code" = "Kode sort";
 
 "State" = "Negara Bagian";
+
+"Submit" = "Kirim";
 
 "Suburb" = "Suburb";
 
@@ -120,8 +130,6 @@
 
 "Town or city" = "Kabupaten atau kota";
 
-"UPI ID" = "Identifikasi UPI";
-
 "Unable to parse phone number" = "Tidak dapat menguraikan nomor telepon";
 
 "Use rotor to access links" = "Gunakan rotor untuk mengakses tautan";
@@ -130,12 +138,16 @@
 
 "Your BLIK code is invalid." = "Kode BLIK Anda tidak valid.";
 
-"Your ZIP is incomplete." = "ZIP Anda tidak lengkap.";
+"Your ZIP code is incomplete." = "Kode pos Anda tidak lengkap.";
+
+"Your ZIP code is invalid." = "Kode pos Anda tidak valid.";
 
 "Your email is invalid." = "Email Anda tidak valid.";
 
 "Your payment information will not be saved." = "Informasi pembayaran Anda tidak akan disimpan.";
 
 "Your postal code is incomplete." = "Kode pos Anda tidak lengkap.";
+
+"Your postal code is invalid." = "Kode pos Anda tidak valid.";
 
 "ZIP" = "ZIP";

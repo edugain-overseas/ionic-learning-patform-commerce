@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { IonApp, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { SplashScreen } from "@capacitor/splash-screen";
@@ -12,6 +12,7 @@ import { BasketProvider } from "./context/BasketContext";
 // import { useAxios } from "./hooks/useAxios";
 import { useGoogleAuthInit } from "./hooks/useGoogleAuthInit";
 import { AuthUIProvider } from "./context/AuthUIContext";
+import { BillingProvider } from "./context/BillingContext";
 import { useSetupPayment } from "./hooks/useSetupPayment";
 import Router from "./components/Router";
 
@@ -37,29 +38,44 @@ import "./App.scss";
 /* Theme variables */
 import "./theme/variables.css";
 
-
 setupIonicReact();
 
-const App: React.FC = () => {
+const AppContent: React.FC = () => {
+  const { initPayments } = useSetupPayment();
 
   useEffect(() => {
     const initializeApp = async () => {
       try {
+        initPayments();
       } catch (error) {
         console.error("Помилка ініціалізації додатка:", error);
       } finally {
-        await SplashScreen.hide({fadeOutDuration: 400});
+        // await SplashScreen.hide({ fadeOutDuration: 400 });
+        setTimeout(async () => {
+          try {
+            await SplashScreen.hide({ fadeOutDuration: 500 });
+          } catch (e) {
+            console.warn("Сплеш-скрін вже приховано або виникла помилка:", e);
+          }
+        }, 350);
       }
     };
 
     initializeApp();
   }, []);
 
+  return (
+    <IonReactRouter>
+      <Router />
+    </IonReactRouter>
+  );
+};
+
+const App: React.FC = () => {
   useDynamicFontSize();
   useStatusBar();
   useKeyboard();
   useGoogleAuthInit();
-  useSetupPayment();
 
   return (
     <IonApp className="App">
@@ -68,9 +84,9 @@ const App: React.FC = () => {
           <BasketProvider>
             <ListStyleProvider>
               <AuthUIProvider>
-                <IonReactRouter>
-                  <Router />
-                </IonReactRouter>
+                <BillingProvider>
+                  <AppContent />
+                </BillingProvider>
               </AuthUIProvider>
             </ListStyleProvider>
           </BasketProvider>

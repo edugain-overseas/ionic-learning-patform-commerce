@@ -7,6 +7,7 @@
 //
 
 import Foundation
+@_spi(STP) import StripeCore
 import UIKit
 
 /// An object representing parameters used to create a PaymentMethod object.
@@ -52,8 +53,6 @@ public class STPPaymentMethodParams: NSObject, STPFormEncodable {
     @objc public var bacsDebit: STPPaymentMethodBacsDebitParams?
     /// If this is an AU BECS Debit PaymentMethod, this contains details about the bank to debit.
     @objc public var auBECSDebit: STPPaymentMethodAUBECSDebitParams?
-    /// If this is a giropay PaymentMethod, this contains additional details.
-    @objc public var giropay: STPPaymentMethodGiropayParams?
     /// If this is a PayPal PaymentMethod, this contains additional details. :nodoc:
     @objc public var payPal: STPPaymentMethodPayPalParams?
     /// If this is a Przelewy24 PaymentMethod, this contains additional details.
@@ -66,10 +65,6 @@ public class STPPaymentMethodParams: NSObject, STPFormEncodable {
     @objc public var netBanking: STPPaymentMethodNetBankingParams?
     /// If this is an OXXO PaymentMethod, this contains additional details.
     @objc public var oxxo: STPPaymentMethodOXXOParams?
-    /// If this is a Sofort PaymentMethod, this contains additional details.
-    @objc public var sofort: STPPaymentMethodSofortParams?
-    /// If this is a UPI PaymentMethod, this contains additional details.
-    @objc public var upi: STPPaymentMethodUPIParams?
     /// If this is a GrabPay PaymentMethod, this contains additional details.
     @objc public var grabPay: STPPaymentMethodGrabPayParams?
     /// If this is a Afterpay PaymentMethod, this contains additional details.
@@ -96,6 +91,8 @@ public class STPPaymentMethodParams: NSObject, STPFormEncodable {
     @objc public var swish: STPPaymentMethodSwishParams?
     /// If this is a MobilePay PaymentMethod, this contains additional details.
     @objc public var mobilePay: STPPaymentMethodMobilePayParams?
+    /// If this is a Vipps PaymentMethod, this contains additional details.
+    @objc public var vipps: STPPaymentMethodVippsParams?
     /// If this is a AmazonPay PaymentMethod, this contains additional details.
     @objc public var amazonPay: STPPaymentMethodAmazonPayParams?
     /// If this is a Alma PaymentMethod, this contains additional details.
@@ -110,9 +107,35 @@ public class STPPaymentMethodParams: NSObject, STPFormEncodable {
     @objc public var crypto: STPPaymentMethodCryptoParams?
     /// If this is a Multibanco PaymentMethod, this contains additional details.
     @objc public var multibanco: STPPaymentMethodMultibancoParams?
+    /// If this is a PayPay PaymentMethod, this contains additional details.
+    @objc public var payPay: STPPaymentMethodPayPayParams?
+    /// If this is a TWINT PaymentMethod, this contains additional details.
+    @objc public var twint: STPPaymentMethodTwintParams?
+    /// If this is a Wero PaymentMethod, this contains additional details.
+    @objc public var wero: STPPaymentMethodWeroParams?
+    /// If this is a Pay by Bank PaymentMethod, this contains additional details.
+    @objc public var payByBank: STPPaymentMethodPayByBankParams?
+    /// If this is a Kakao Pay PaymentMethod, this contains additional details.
+    @objc public var kakaoPay: STPPaymentMethodKakaoPayParams?
+    /// If this is a Korean cards PaymentMethod, this contains additional details.
+    @objc public var krCard: STPPaymentMethodKrCardParams?
+    /// If this is a Naver Pay PaymentMethod, this contains additional details.
+    @objc public var naverPay: STPPaymentMethodNaverPayParams?
+    /// If this is a PAYCO PaymentMethod, this contains additional details.
+    @objc public var payco: STPPaymentMethodPaycoParams?
+    /// If this is a SeQura PaymentMethod, this contains additional details.
+    @objc public var sequra: STPPaymentMethodSequraParams?
+    /// If this is a Scalapay PaymentMethod, this contains additional details.
+    @objc public var scalapay: STPPaymentMethodScalapayParams?
+
+    /// Radar options that may contain HCaptcha token
+    @objc @_spi(STP) public var radarOptions: STPRadarOptions?
 
     /// Set of key-value pairs that you can attach to the PaymentMethod. This can be useful for storing additional information about the PaymentMethod in a structured format.
     @objc public var metadata: [String: String]?
+
+    /// Contains metadata with identifiers for the session and information about the integration
+    @objc @_spi(STP) public var clientAttributionMetadata: STPClientAttributionMetadata?
 
     /// Creates params for a card PaymentMethod.
     /// - Parameters:
@@ -225,24 +248,6 @@ public class STPPaymentMethodParams: NSObject, STPFormEncodable {
         self.metadata = metadata
     }
 
-    /// Creates params for a giropay PaymentMethod;
-    /// - Parameters:
-    ///   - giropay:   An object containing additional giropay details.
-    ///   - billingDetails:  An object containing the user's billing details. Note that `billingDetails.name` is required for giropay PaymentMethods.
-    ///   - metadata:     Additional information to attach to the PaymentMethod.
-    @objc
-    public convenience init(
-        giropay: STPPaymentMethodGiropayParams,
-        billingDetails: STPPaymentMethodBillingDetails,
-        metadata: [String: String]?
-    ) {
-        self.init()
-        self.type = .giropay
-        self.giropay = giropay
-        self.billingDetails = billingDetails
-        self.metadata = metadata
-    }
-
     /// Creates params for an EPS PaymentMethod;
     /// - Parameters:
     ///   - eps:   An object containing additional EPS details.
@@ -347,42 +352,6 @@ public class STPPaymentMethodParams: NSObject, STPFormEncodable {
         self.type = .OXXO
         self.oxxo = oxxo
         self.billingDetails = billingDetails
-    }
-
-    /// Creates params for a Sofort PaymentMethod;
-    /// - Parameters:
-    ///   - sofort:   An object containing additional Sofort details.
-    ///   - billingDetails:  An object containing the user's billing details. Note that `billingDetails.name` and `billingDetails.email` are required to save bank details from a Sofort payment.
-    ///   - metadata:     Additional information to attach to the PaymentMethod.
-    @objc
-    public convenience init(
-        sofort: STPPaymentMethodSofortParams,
-        billingDetails: STPPaymentMethodBillingDetails?,
-        metadata: [String: String]?
-    ) {
-        self.init()
-        self.type = .sofort
-        self.sofort = sofort
-        self.billingDetails = billingDetails
-        self.metadata = metadata
-    }
-
-    /// Creates params for a UPI PaymentMethod;
-    /// - Parameters:
-    ///   - upi:   An object containing additional UPI details.
-    ///   - billingDetails:  An object containing the user's billing details.
-    ///   - metadata:     Additional information to attach to the PaymentMethod.
-    @objc
-    public convenience init(
-        upi: STPPaymentMethodUPIParams,
-        billingDetails: STPPaymentMethodBillingDetails?,
-        metadata: [String: String]?
-    ) {
-        self.init()
-        self.type = .UPI
-        self.upi = upi
-        self.billingDetails = billingDetails
-        self.metadata = metadata
     }
 
     /// Creates params for an Alipay PaymentMethod.
@@ -616,6 +585,24 @@ public class STPPaymentMethodParams: NSObject, STPFormEncodable {
         self.metadata = metadata
     }
 
+    /// Creates params for a Vipps PaymentMethod.
+    /// - Parameters:
+    ///   - vipps:               An object containing additional Vipps details.
+    ///   - billingDetails:      An object containing the user's billing details.
+    ///   - metadata:            Additional information to attach to the PaymentMethod.
+    @objc
+    public convenience init(
+        vipps: STPPaymentMethodVippsParams,
+        billingDetails: STPPaymentMethodBillingDetails?,
+        metadata: [String: String]?
+    ) {
+        self.init()
+        self.type = .vipps
+        self.vipps = vipps
+        self.billingDetails = billingDetails
+        self.metadata = metadata
+    }
+
     /// Creates params for a AmazonPay PaymentMethod.
     /// - Parameters:
     ///   - amazonPay:           An object containing additional AmazonPay details.
@@ -742,99 +729,181 @@ public class STPPaymentMethodParams: NSObject, STPFormEncodable {
         self.metadata = metadata
     }
 
-    /// Creates params from a single-use PaymentMethod. This is useful for recreating a new payment method
-    /// with similar settings. It will return nil if used with a reusable PaymentMethod.
-    /// - Parameter paymentMethod:       An object containing the original single-use PaymentMethod.
-    @objc public convenience init?(
-        singleUsePaymentMethod paymentMethod: STPPaymentMethod
+    /// Creates params for a PayPay PaymentMethod. :nodoc:
+    /// - Parameters:
+    ///   - payPay:   An object containing additional PayPay details.
+    ///   - metadata:            Additional information to attach to the PaymentMethod.
+    @objc
+    public convenience init(
+        payPay: STPPaymentMethodPayPayParams,
+        metadata: [String: String]?
     ) {
         self.init()
-        self.type = paymentMethod.type
-        self.billingDetails = paymentMethod.billingDetails
-        switch paymentMethod.type {
-        case .EPS:
-            self.eps = STPPaymentMethodEPSParams()
-        case .FPX:
-            let fpx = STPPaymentMethodFPXParams()
-            fpx.rawBankString = paymentMethod.fpx?.bankIdentifierCode
-            self.fpx = fpx
-        case .iDEAL:
-            let iDEAL = STPPaymentMethodiDEALParams()
-            self.iDEAL = iDEAL
-            self.iDEAL?.bankName = paymentMethod.iDEAL?.bankName
-        case .giropay:
-            let giropay = STPPaymentMethodGiropayParams()
-            self.giropay = giropay
-        case .przelewy24:
-            let przelewy24 = STPPaymentMethodPrzelewy24Params()
-            self.przelewy24 = przelewy24
-        case .bancontact:
-            let bancontact = STPPaymentMethodBancontactParams()
-            self.bancontact = bancontact
-        case .netBanking:
-            let netBanking = STPPaymentMethodNetBankingParams()
-            self.netBanking = netBanking
-        case .OXXO:
-            let oxxo = STPPaymentMethodOXXOParams()
-            self.oxxo = oxxo
-        case .alipay:
-            self.alipay = STPPaymentMethodAlipayParams()
-            // Careful! In the future, when we add recurring Alipay, we'll need to look at this!
-        case .sofort:
-            let sofort = STPPaymentMethodSofortParams()
-            self.sofort = sofort
-        case .UPI:
-            let upi = STPPaymentMethodUPIParams()
-            self.upi = upi
-            self.billingDetails = paymentMethod.billingDetails
-        case .grabPay:
-            let grabpay = STPPaymentMethodGrabPayParams()
-            self.grabPay = grabpay
-            self.billingDetails = paymentMethod.billingDetails
-        case .afterpayClearpay:
-            self.afterpayClearpay = STPPaymentMethodAfterpayClearpayParams()
-        case .boleto:
-            let boleto = STPPaymentMethodBoletoParams()
-            self.boleto = boleto
-        case .klarna:
-            self.klarna = STPPaymentMethodKlarnaParams()
-        case .affirm:
-            self.affirm = STPPaymentMethodAffirmParams()
-        case .swish:
-            self.swish = STPPaymentMethodSwishParams()
-        case .amazonPay:
-            self.amazonPay = STPPaymentMethodAmazonPayParams()
-        case .alma:
-            self.alma = STPPaymentMethodAlmaParams()
-        case .sunbit:
-            self.sunbit = STPPaymentMethodSunbitParams()
-        case .billie:
-            self.billie = STPPaymentMethodBillieParams()
-        case .satispay:
-            self.satispay = STPPaymentMethodSatispayParams()
-        case .crypto:
-            self.crypto = STPPaymentMethodCryptoParams()
-        case .multibanco:
-            self.multibanco = STPPaymentMethodMultibancoParams()
-        case .paynow, .zip, .mobilePay, .konbini, .promptPay, .twint:
-            // No parameters
-            break
-        // All reusable PaymentMethods go below:
-        case .SEPADebit,
-            .bacsDebit,
-            .card,
-            .cardPresent,
-            .AUBECSDebit,
-            .payPal,
-            .blik,
-            .weChatPay,
-            .link,
-            .USBankAccount,
-            .cashApp,
-            .revolutPay,
-            .unknown:
-            return nil
-        }
+        self.type = .payPay
+        self.payPay = payPay
+        self.metadata = metadata
+    }
+
+    /// Creates params for a TWINT PaymentMethod.
+    /// - Parameters:
+    ///   - twint:               An object containing additional TWINT details.
+    ///   - billingDetails:      An object containing the user's billing details.
+    ///   - metadata:            Additional information to attach to the PaymentMethod.
+    @objc
+    public convenience init(
+        twint: STPPaymentMethodTwintParams,
+        billingDetails: STPPaymentMethodBillingDetails?,
+        metadata: [String: String]?
+    ) {
+        self.init()
+        self.type = .twint
+        self.twint = twint
+        self.billingDetails = billingDetails
+        self.metadata = metadata
+    }
+
+    /// Creates params for a Wero PaymentMethod.
+    /// - Parameters:
+    ///   - wero:                An object containing additional Wero details.
+    ///   - billingDetails:      An object containing the user's billing details.
+    ///   - metadata:            Additional information to attach to the PaymentMethod.
+    @objc
+    public convenience init(
+        wero: STPPaymentMethodWeroParams,
+        billingDetails: STPPaymentMethodBillingDetails?,
+        metadata: [String: String]?
+    ) {
+        self.init()
+        self.type = .wero
+        self.wero = wero
+        self.billingDetails = billingDetails
+        self.metadata = metadata
+    }
+
+    /// Creates params for a Pay by Bank PaymentMethod.
+    /// - Parameters:
+    ///   - payByBank:           An object containing additional Pay by Bank details.
+    ///   - billingDetails:      An object containing the user's billing details.
+    ///   - metadata:            Additional information to attach to the PaymentMethod.
+    @objc
+    public convenience init(
+        payByBank: STPPaymentMethodPayByBankParams,
+        billingDetails: STPPaymentMethodBillingDetails?,
+        metadata: [String: String]?
+    ) {
+        self.init()
+        self.type = .payByBank
+        self.payByBank = payByBank
+        self.billingDetails = billingDetails
+        self.metadata = metadata
+    }
+
+    /// Creates params for a Kakao Pay PaymentMethod.
+    /// - Parameters:
+    ///   - kakaoPay:      An object containing additional Kakao Pay details.
+    ///   - billingDetails: Billing information associated with the PaymentMethod.
+    ///   - metadata:       Additional information to attach to the PaymentMethod.
+    @objc
+    public convenience init(
+        kakaoPay: STPPaymentMethodKakaoPayParams,
+        billingDetails: STPPaymentMethodBillingDetails?,
+        metadata: [String: String]?
+    ) {
+        self.init()
+        self.type = .kakaoPay
+        self.kakaoPay = kakaoPay
+        self.billingDetails = billingDetails
+        self.metadata = metadata
+    }
+
+    /// Creates params for a Korean cards PaymentMethod.
+    /// - Parameters:
+    ///   - krCard:          An object containing additional Korean cards details.
+    ///   - billingDetails:  Billing information associated with the PaymentMethod.
+    ///   - metadata:        Additional information to attach to the PaymentMethod.
+    @objc
+    public convenience init(
+        krCard: STPPaymentMethodKrCardParams,
+        billingDetails: STPPaymentMethodBillingDetails?,
+        metadata: [String: String]?
+    ) {
+        self.init()
+        self.type = .krCard
+        self.krCard = krCard
+        self.billingDetails = billingDetails
+        self.metadata = metadata
+    }
+
+    /// Creates params for a Naver Pay PaymentMethod.
+    /// - Parameters:
+    ///   - naverPay:      An object containing Naver Pay details.
+    ///   - billingDetails: Billing information associated with the PaymentMethod.
+    ///   - metadata:       Additional information to attach to the PaymentMethod.
+    @objc
+    public convenience init(
+        naverPay: STPPaymentMethodNaverPayParams,
+        billingDetails: STPPaymentMethodBillingDetails?,
+        metadata: [String: String]?
+    ) {
+        self.init()
+        self.type = .naverPay
+        self.naverPay = naverPay
+        self.billingDetails = billingDetails
+        self.metadata = metadata
+    }
+
+    /// Creates params for a PAYCO PaymentMethod.
+    /// - Parameters:
+    ///   - payco:          An object containing additional PAYCO details.
+    ///   - billingDetails: Billing information associated with the PaymentMethod.
+    ///   - metadata:       Additional information to attach to the PaymentMethod.
+    @objc
+    public convenience init(
+        payco: STPPaymentMethodPaycoParams,
+        billingDetails: STPPaymentMethodBillingDetails?,
+        metadata: [String: String]?
+    ) {
+        self.init()
+        self.type = .payco
+        self.payco = payco
+        self.billingDetails = billingDetails
+        self.metadata = metadata
+    }
+
+    /// Creates params for a SeQura PaymentMethod.
+    /// - Parameters:
+    ///   - sequra:         An object containing additional SeQura details.
+    ///   - billingDetails: Billing information associated with the PaymentMethod.
+    ///   - metadata:       Additional information to attach to the PaymentMethod.
+    @objc
+    public convenience init(
+        sequra: STPPaymentMethodSequraParams,
+        billingDetails: STPPaymentMethodBillingDetails?,
+        metadata: [String: String]?
+    ) {
+        self.init()
+        self.type = .sequra
+        self.sequra = sequra
+        self.billingDetails = billingDetails
+        self.metadata = metadata
+    }
+
+    /// Creates params for a Scalapay PaymentMethod.
+    /// - Parameters:
+    ///   - scalapay:       An object containing additional Scalapay details.
+    ///   - billingDetails: Billing information associated with the PaymentMethod.
+    ///   - metadata:       Additional information to attach to the PaymentMethod.
+    @objc
+    public convenience init(
+        scalapay: STPPaymentMethodScalapayParams,
+        billingDetails: STPPaymentMethodBillingDetails?,
+        metadata: [String: String]?
+    ) {
+        self.init()
+        self.type = .scalapay
+        self.scalapay = scalapay
+        self.billingDetails = billingDetails
+        self.metadata = metadata
     }
 
     // MARK: - STPFormEncodable
@@ -856,14 +925,11 @@ public class STPPaymentMethodParams: NSObject, STPFormEncodable {
             NSStringFromSelector(#selector(getter: sepaDebit)): "sepa_debit",
             NSStringFromSelector(#selector(getter: bacsDebit)): "bacs_debit",
             NSStringFromSelector(#selector(getter: auBECSDebit)): "au_becs_debit",
-            NSStringFromSelector(#selector(getter: giropay)): "giropay",
             NSStringFromSelector(#selector(getter: grabPay)): "grabpay",
             NSStringFromSelector(#selector(getter: przelewy24)): "p24",
             NSStringFromSelector(#selector(getter: bancontact)): "bancontact",
             NSStringFromSelector(#selector(getter: netBanking)): "netbanking",
             NSStringFromSelector(#selector(getter: oxxo)): "oxxo",
-            NSStringFromSelector(#selector(getter: sofort)): "sofort",
-            NSStringFromSelector(#selector(getter: upi)): "upi",
             NSStringFromSelector(#selector(getter: afterpayClearpay)): "afterpayClearpay",
             NSStringFromSelector(#selector(getter: weChatPay)): "wechat_pay",
             NSStringFromSelector(#selector(getter: boleto)): "boleto",
@@ -874,6 +940,7 @@ public class STPPaymentMethodParams: NSObject, STPFormEncodable {
             NSStringFromSelector(#selector(getter: revolutPay)): "revolut_pay",
             NSStringFromSelector(#selector(getter: swish)): "swish",
             NSStringFromSelector(#selector(getter: mobilePay)): "mobilepay",
+            NSStringFromSelector(#selector(getter: vipps)): "vipps",
             NSStringFromSelector(#selector(getter: amazonPay)): "amazon_pay",
             NSStringFromSelector(#selector(getter: alma)): "alma",
             NSStringFromSelector(#selector(getter: sunbit)): "sunbit",
@@ -881,8 +948,20 @@ public class STPPaymentMethodParams: NSObject, STPFormEncodable {
             NSStringFromSelector(#selector(getter: satispay)): "satispay",
             NSStringFromSelector(#selector(getter: crypto)): "crypto",
             NSStringFromSelector(#selector(getter: multibanco)): "multibanco",
+            NSStringFromSelector(#selector(getter: payPay)): "paypay",
+            NSStringFromSelector(#selector(getter: twint)): "twint",
+            NSStringFromSelector(#selector(getter: wero)): "wero",
+            NSStringFromSelector(#selector(getter: payByBank)): "pay_by_bank",
+            NSStringFromSelector(#selector(getter: kakaoPay)): "kakao_pay",
+            NSStringFromSelector(#selector(getter: krCard)): "kr_card",
+            NSStringFromSelector(#selector(getter: naverPay)): "naver_pay",
+            NSStringFromSelector(#selector(getter: payco)): "payco",
+            NSStringFromSelector(#selector(getter: sequra)): "sequra",
+            NSStringFromSelector(#selector(getter: scalapay)): "scalapay",
             NSStringFromSelector(#selector(getter: link)): "link",
+            NSStringFromSelector(#selector(getter: radarOptions)): "radar_options",
             NSStringFromSelector(#selector(getter: metadata)): "metadata",
+            NSStringFromSelector(#selector(getter: clientAttributionMetadata)): "client_attribution_metadata",
         ]
     }
 
@@ -999,24 +1078,6 @@ extension STPPaymentMethodParams {
         )
     }
 
-    /// Creates params for a giropay PaymentMethod;
-    /// - Parameters:
-    ///   - giropay:   An object containing additional giropay details.
-    ///   - billingDetails:  An object containing the user's billing details. Note that `billingDetails.name` is required for giropay PaymentMethods.
-    ///   - metadata:     Additional information to attach to the PaymentMethod.
-    @objc(paramsWithGiropay:billingDetails:metadata:)
-    public class func paramsWith(
-        giropay: STPPaymentMethodGiropayParams,
-        billingDetails: STPPaymentMethodBillingDetails,
-        metadata: [String: String]?
-    ) -> STPPaymentMethodParams {
-        return STPPaymentMethodParams(
-            giropay: giropay,
-            billingDetails: billingDetails,
-            metadata: metadata
-        )
-    }
-
     /// Creates params for an EPS PaymentMethod;
     /// - Parameters:
     ///   - eps:   An object containing additional EPS details.
@@ -1116,42 +1177,6 @@ extension STPPaymentMethodParams {
     ) -> STPPaymentMethodParams {
         return STPPaymentMethodParams(
             grabPay: grabPay,
-            billingDetails: billingDetails,
-            metadata: metadata
-        )
-    }
-
-    /// Creates params for a Sofort PaymentMethod;
-    /// - Parameters:
-    ///   - sofort:   An object containing additional Sofort details.
-    ///   - billingDetails:  An object containing the user's billing details. Note that `billingDetails.name` and `billingDetails.email` are required to save bank details from a Sofort payment.
-    ///   - metadata:     Additional information to attach to the PaymentMethod.
-    @objc(paramsWithSofort:billingDetails:metadata:)
-    public class func paramsWith(
-        sofort: STPPaymentMethodSofortParams,
-        billingDetails: STPPaymentMethodBillingDetails?,
-        metadata: [String: String]?
-    ) -> STPPaymentMethodParams {
-        return STPPaymentMethodParams(
-            sofort: sofort,
-            billingDetails: billingDetails,
-            metadata: metadata
-        )
-    }
-
-    /// Creates params for a UPI PaymentMethod;
-    /// - Parameters:
-    ///   - upi:   An object containing additional UPI details.
-    ///   - billingDetails:  An object containing the user's billing details. Note that `billingDetails.name` and `billingDetails.email` are required to save bank details from a UPI payment.
-    ///   - metadata:     Additional information to attach to the PaymentMethod.
-    @objc(paramsWithUPI:billingDetails:metadata:)
-    public class func paramsWith(
-        upi: STPPaymentMethodUPIParams,
-        billingDetails: STPPaymentMethodBillingDetails?,
-        metadata: [String: String]?
-    ) -> STPPaymentMethodParams {
-        return STPPaymentMethodParams(
-            upi: upi,
             billingDetails: billingDetails,
             metadata: metadata
         )
@@ -1279,6 +1304,24 @@ extension STPPaymentMethodParams {
             metadata: metadata
         )
     }
+
+    /// Creates params for a TWINT PaymentMethod.
+    /// - Parameters:
+    ///   - twint:          An object containing additional TWINT details.
+    ///   - billingDetails: An object containing the user's billing details.
+    ///   - metadata:       Additional information to attach to the PaymentMethod.
+    @objc(paramsWithTwint:billingDetails:metadata:)
+    public class func paramsWith(
+        twint: STPPaymentMethodTwintParams,
+        billingDetails: STPPaymentMethodBillingDetails?,
+        metadata: [String: String]?
+    ) -> STPPaymentMethodParams {
+        return STPPaymentMethodParams(
+            twint: twint,
+            billingDetails: billingDetails,
+            metadata: metadata
+        )
+    }
 }
 
 extension STPPaymentMethodParams {
@@ -1304,8 +1347,6 @@ extension STPPaymentMethodParams {
             auBECSDebit = STPPaymentMethodAUBECSDebitParams()
         case .bacsDebit:
             bacsDebit = STPPaymentMethodBacsDebitParams()
-        case .giropay:
-            giropay = STPPaymentMethodGiropayParams()
         case .przelewy24:
             przelewy24 = STPPaymentMethodPrzelewy24Params()
         case .EPS:
@@ -1316,10 +1357,6 @@ extension STPPaymentMethodParams {
             netBanking = STPPaymentMethodNetBankingParams()
         case .OXXO:
             oxxo = STPPaymentMethodOXXOParams()
-        case .sofort:
-            sofort = STPPaymentMethodSofortParams()
-        case .UPI:
-            upi = STPPaymentMethodUPIParams()
         case .payPal:
             payPal = STPPaymentMethodPayPalParams()
         case .afterpayClearpay:
@@ -1346,6 +1383,8 @@ extension STPPaymentMethodParams {
             swish = STPPaymentMethodSwishParams()
         case .mobilePay:
             mobilePay = STPPaymentMethodMobilePayParams()
+        case .vipps:
+            vipps = STPPaymentMethodVippsParams()
         case .amazonPay:
             amazonPay = STPPaymentMethodAmazonPayParams()
         case .alma:
@@ -1360,7 +1399,27 @@ extension STPPaymentMethodParams {
             crypto = STPPaymentMethodCryptoParams()
         case .multibanco:
             multibanco = STPPaymentMethodMultibancoParams()
-        case .cardPresent, .paynow, .zip, .konbini, .promptPay, .twint:
+        case .payPay:
+            payPay = STPPaymentMethodPayPayParams()
+        case .twint:
+            twint = STPPaymentMethodTwintParams()
+        case .wero:
+            wero = STPPaymentMethodWeroParams()
+        case .payByBank:
+            payByBank = STPPaymentMethodPayByBankParams()
+        case .kakaoPay:
+            kakaoPay = STPPaymentMethodKakaoPayParams()
+        case .krCard:
+            krCard = STPPaymentMethodKrCardParams()
+        case .naverPay:
+            naverPay = STPPaymentMethodNaverPayParams()
+        case .payco:
+            payco = STPPaymentMethodPaycoParams()
+        case .sequra:
+            sequra = STPPaymentMethodSequraParams()
+        case .scalapay:
+            scalapay = STPPaymentMethodScalapayParams()
+        case .cardPresent, .paynow, .zip, .konbini, .promptPay, .mbWay, .bizum:
             // These payment methods don't have any params
             break
         case .unknown:

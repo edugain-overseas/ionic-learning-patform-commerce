@@ -13,6 +13,9 @@ import UIKit
 protocol LinkPaymentMethodPickerCellDelegate: AnyObject {
     func savedPaymentPickerCellDidSelect(_ cell: LinkPaymentMethodPicker.Cell)
     func savedPaymentPickerCell(_ cell: LinkPaymentMethodPicker.Cell, didTapMenuButton button: UIButton)
+    func savedPaymentPickerCellMenuActions(
+        for cell: LinkPaymentMethodPicker.Cell
+    ) -> [PayWithLinkViewController.WalletViewController.Action]?
 }
 
 extension LinkPaymentMethodPicker {
@@ -24,7 +27,7 @@ extension LinkPaymentMethodPicker {
             static let contentIndentation: CGFloat = 34
             static let menuSpacing: CGFloat = 8
             static let menuButtonSize: CGSize = .init(width: 24, height: 24)
-            static let separatorHeight: CGFloat = 1
+            static let separatorHeight: CGFloat = 0.5
             static let iconViewSize: CGSize = .init(width: 14, height: 20)
             static let disabledContentAlpha: CGFloat = 0.5
         }
@@ -80,7 +83,7 @@ extension LinkPaymentMethodPicker {
             let iconView = UIImageView()
             iconView.contentMode = .scaleAspectFit
             iconView.image = Image.icon_link_error.makeImage(template: true)
-            iconView.tintColor = .linkDangerForeground
+            iconView.tintColor = .linkIconCritical
             return iconView
         }()
 
@@ -92,6 +95,7 @@ extension LinkPaymentMethodPicker {
         private lazy var menuButton: UIButton = {
             let button = UIButton(type: .system)
             button.setImage(Image.icon_menu.makeImage(), for: .normal)
+            button.tintColor = .linkIconTertiary
             button.addTarget(self, action: #selector(onMenuButtonTapped(_:)), for: .touchUpInside)
             button.translatesAutoresizingMaskIntoConstraints = false
             return button
@@ -113,7 +117,7 @@ extension LinkPaymentMethodPicker {
 
         private let separator: UIView = {
             let separator = UIView()
-            separator.backgroundColor = .linkControlBorder
+            separator.backgroundColor = .linkBorderDefault
             separator.translatesAutoresizingMaskIntoConstraints = false
             return separator
         }()
@@ -125,7 +129,9 @@ extension LinkPaymentMethodPicker {
             directionalLayoutMargins = Constants.margins
 
             setupUI()
-            addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(onCellLongPressed)))
+
+            let interaction = UIContextMenuInteraction(delegate: self)
+            addInteraction(interaction)
         }
 
         required init?(coder: NSCoder) {
@@ -187,6 +193,12 @@ extension LinkPaymentMethodPicker {
                 separator.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
                 separator.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
             ])
+
+            if LinkUI.useLiquidGlass {
+                NSLayoutConstraint.activate([
+                    heightAnchor.constraint(greaterThanOrEqualToConstant: LinkUI.minimumItemHeightForLiquidGlass),
+                ])
+            }
         }
 
         private func update() {
@@ -201,7 +213,7 @@ extension LinkPaymentMethodPicker {
                 switch paymentMethod.details {
                 case .card(let card):
                     return card.hasExpired
-                case .bankAccount, .unparsable:
+                case .bankAccount, .generic:
                     return false
                 }
             }
@@ -222,7 +234,7 @@ extension LinkPaymentMethodPicker {
         override func layoutSubviews() {
             super.layoutSubviews()
             radioButton.isOn = isSelected
-            backgroundColor = isHighlighted ? .linkControlHighlight : .clear
+            backgroundColor = isHighlighted ? .linkSurfaceTertiary : .clear
         }
 
         private func updateAccessibilityContent() {
@@ -249,10 +261,6 @@ extension LinkPaymentMethodPicker {
             delegate?.savedPaymentPickerCell(self, didTapMenuButton: sender)
         }
 
-        @objc func onCellLongPressed() {
-            delegate?.savedPaymentPickerCell(self, didTapMenuButton: menuButton)
-        }
-
         override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
             if menuButtonFrame.contains(point) {
                 return menuButton
@@ -275,4 +283,29 @@ extension LinkPaymentMethodPicker {
 
     }
 
+}
+
+extension LinkPaymentMethodPicker.Cell {
+    override func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        configurationForMenuAtLocation location: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        guard let actions = delegate?.savedPaymentPickerCellMenuActions(for: self) else { return nil }
+
+        let actionsProvider: UIContextMenuActionProvider = { _ in
+            var menuActions: [UIAction] = []
+            for action in actions {
+                menuActions.append(
+                    UIAction(
+                        title: action.title,
+                        attributes: action.contextMenuAttribute,
+                        handler: { _ in action.action()
+                    })
+                )
+            }
+            return UIMenu(children: menuActions)
+        }
+
+        return UIContextMenuConfiguration(actionProvider: actionsProvider)
+    }
 }

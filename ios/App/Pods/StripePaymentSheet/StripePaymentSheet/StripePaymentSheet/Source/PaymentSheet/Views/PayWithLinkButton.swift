@@ -33,13 +33,33 @@ final class PayWithLinkButton: UIControl {
         let email: String
         let redactedPhoneNumber: String?
         let isRegistered: Bool
-        let isLoggedIn: Bool
+        let sessionState: PaymentSheetLinkAccount.SessionState
+        let consumerSessionClientSecret: String?
+        let linkSessionKey: String?
     }
 
     /// Link account of the current user.
     var linkAccount: PaymentSheetLinkAccountInfoProtocol? = LinkAccountContext.shared.account {
         didSet {
             updateUI()
+        }
+    }
+
+    var brand: LinkBrand {
+        didSet {
+            guard oldValue != brand else {
+                return
+            }
+            updateBrandUI()
+        }
+    }
+
+    var primaryLinkLogoImage: UIImage {
+        switch brand {
+        case .link, .unparsable:
+            return Image.link_logo_bw.makeImage(template: false)
+        case .onelink:
+            return Image.onelink_logo_bw.makeImage(template: false)
         }
     }
 
@@ -107,33 +127,7 @@ final class PayWithLinkButton: UIControl {
         linkView.translatesAutoresizingMaskIntoConstraints = false
         linkView.font = UIFont.systemFont(ofSize: 20, weight: .medium)
             .scaled(withTextStyle: .callout, maximumPointSize: 21)
-
-        let payWithLinkString = NSMutableAttributedString(string: String.Localized.pay_with_link)
-
-        // Create the Link logo attachment
-        let linkImage = Image.link_logo_bw.makeImage(template: false)
-        let linkAttachment = NSTextAttachment(image: linkImage)
-
-        let linkLogoRatio = linkImage.size.width / linkImage.size.height
-
-        let linkTextSpacing = 0.073 // the total top+bottom space outside the Link logo
-
-        let linkLogoHeight = (linkView.font.capHeight + (linkView.font.pointSize * 0.1)) *
-        (1.0 + linkTextSpacing)
-        let linkY = (linkTextSpacing) * linkLogoHeight
-        linkAttachment.bounds = CGRect(x: 0, y: -linkY, width: linkLogoHeight * linkLogoRatio, height: linkLogoHeight)
-
-        // Add a spacer before the Link logo and after the Link logo
-        let range = payWithLinkString.mutableString.range(of: "Link")
-        if range.location != NSNotFound {
-            payWithLinkString.insert(Self.makeSpacerString(width: 1), at: range.location + range.length)
-            payWithLinkString.insert(Self.makeSpacerString(width: 1), at: range.location)
-
-            // Add the Link attachment
-            payWithLinkString.replaceOccurrences(of: "Link", with: linkAttachment)
-        }
-
-        linkView.attributedText = payWithLinkString
+        linkView.attributedText = makePayWithLinkAttributedText(for: linkView.font)
         return linkView
     }()
 
@@ -148,22 +142,23 @@ final class PayWithLinkButton: UIControl {
         return stackView
     }()
 
+    private lazy var emailLogoView = makeLogoView()
     private lazy var emailSeparatorView: UIView = Self.makeSeparatorView()
     private lazy var emailStackView: UIStackView = {
-        let logoView = Self.makeLogoView()
         let stackView = UIStackView(arrangedSubviews: [
-            logoView,
+            emailLogoView,
             emailSeparatorView,
             emailLabel,
         ].compactMap({ $0 }))
         stackView.spacing = 10
-        stackView.setCustomSpacing(12, after: logoView)
+        stackView.setCustomSpacing(12, after: emailLogoView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.distribution = .fill
         stackView.alignment = .center
         return stackView
     }()
 
+    private lazy var cardLogoView = makeLogoView()
     private lazy var cardBrandSeparatorView: UIView = Self.makeSeparatorView()
     private lazy var cardBrandView: UIImageView = {
         let brandView = UIImageView(image: STPImageLibrary.unknownCardCardImage())
@@ -179,9 +174,8 @@ final class PayWithLinkButton: UIControl {
     }()
 
     private lazy var cardStackView: UIStackView = {
-        let logoView = Self.makeLogoView()
         let stackView = UIStackView(arrangedSubviews: [
-            logoView,
+            cardLogoView,
             cardBrandSeparatorView,
             cardBrandView,
             last4Label,
@@ -213,7 +207,8 @@ final class PayWithLinkButton: UIControl {
         return .noValidAccount
     }
 
-    init() {
+    init(brand: LinkBrand = .link) {
+        self.brand = brand
         super.init(frame: CGRect(origin: .zero, size: Constants.defaultSize))
         isAccessibilityElement = true
         self.linkAccount = LinkAccountContext.shared.account
@@ -253,23 +248,87 @@ final class PayWithLinkButton: UIControl {
 
 private extension PayWithLinkButton {
 
+    static let logoAspectRatioConstraintIdentifier = "PayWithLinkButton.logoAspectRatio"
+    static let logoHeightConstraintIdentifier = "PayWithLinkButton.logoHeight"
+    static let inlineLogoFontSizeBoost: CGFloat = 0.1
+    static let inlineLogoVerticalSpacing: CGFloat = 0.073 // the total top+bottom space outside the Link logo
+
     static func makeSpacerString(width: CGFloat) -> NSAttributedString {
         let spacerAttachment = NSTextAttachment()
         spacerAttachment.bounds = CGRect(x: 0, y: 0, width: width, height: 0)
         return NSAttributedString(attachment: spacerAttachment)
     }
 
-    static func makeLogoView() -> UIImageView {
-        let logoView = UIImageView(image: Image.link_logo_bw.makeImage(template: false))
-        logoView.translatesAutoresizingMaskIntoConstraints = false
-        logoView.contentMode = .scaleAspectFill
+    static func logoAspectRatio(for image: UIImage) -> CGFloat {
+        return image.size.width / max(image.size.height, 1)
+    }
 
-        NSLayoutConstraint.activate([
-            logoView.widthAnchor.constraint(equalToConstant: Constants.logoSize.width),
-            logoView.heightAnchor.constraint(equalToConstant: Constants.logoSize.height),
-        ])
+    func makePayWithLinkAttributedText(for font: UIFont) -> NSAttributedString {
+        let payWithLinkString = NSMutableAttributedString(string: String.Localized.pay_with_link(brand: brand))
+
+        let linkImage = primaryLinkLogoImage
+        let linkAttachment = NSTextAttachment(image: linkImage)
+        let linkLogoRatio = Self.logoAspectRatio(for: linkImage)
+        let linkTextSpacing = Self.inlineLogoVerticalSpacing
+        let linkLogoHeight = (font.capHeight + (font.pointSize * Self.inlineLogoFontSizeBoost)) * (1.0 + linkTextSpacing)
+        let linkY = linkTextSpacing * linkLogoHeight
+        linkAttachment.bounds = CGRect(x: 0, y: -linkY, width: linkLogoHeight * linkLogoRatio, height: linkLogoHeight)
+
+        let brandTokenToReplace = [brand.displayName, LinkBrand.link.displayName].first { token in
+            payWithLinkString.mutableString.range(of: token).location != NSNotFound
+        }
+        if let brandTokenToReplace,
+           let range = payWithLinkString.string.range(of: brandTokenToReplace) {
+            let nsRange = NSRange(range, in: payWithLinkString.string)
+            payWithLinkString.insert(Self.makeSpacerString(width: 1), at: nsRange.location + nsRange.length)
+            payWithLinkString.insert(Self.makeSpacerString(width: 1), at: nsRange.location)
+            payWithLinkString.replaceOccurrences(of: brandTokenToReplace, with: linkAttachment)
+        }
+
+        return payWithLinkString
+    }
+
+    func makeLogoView() -> UIImageView {
+        let image = primaryLinkLogoImage
+        let logoView = UIImageView(image: image)
+        logoView.translatesAutoresizingMaskIntoConstraints = false
+        logoView.contentMode = .scaleAspectFit
+        logoView.setContentCompressionResistancePriority(.required, for: .horizontal)
+        logoView.setContentCompressionResistancePriority(.required, for: .vertical)
+        logoView.setContentHuggingPriority(.required, for: .horizontal)
+        logoView.setContentHuggingPriority(.required, for: .vertical)
+        updateLogoView(logoView)
 
         return logoView
+    }
+
+    func updateLogoView(_ logoView: UIImageView) {
+        let image = primaryLinkLogoImage
+        logoView.image = image
+
+        if let aspectRatioConstraint = logoView.constraints.first(where: {
+            $0.identifier == Self.logoAspectRatioConstraintIdentifier
+        }) {
+            logoView.removeConstraint(aspectRatioConstraint)
+        }
+
+        let height = Constants.logoSize.height
+        if let heightConstraint = logoView.constraints.first(where: {
+            $0.identifier == Self.logoHeightConstraintIdentifier
+        }) {
+            heightConstraint.constant = height
+        } else {
+            let heightConstraint = logoView.heightAnchor.constraint(equalToConstant: height)
+            heightConstraint.identifier = Self.logoHeightConstraintIdentifier
+            heightConstraint.isActive = true
+        }
+
+        let aspectRatioConstraint = logoView.widthAnchor.constraint(
+            equalTo: logoView.heightAnchor,
+            multiplier: Self.logoAspectRatio(for: image)
+        )
+        aspectRatioConstraint.identifier = Self.logoAspectRatioConstraintIdentifier
+        aspectRatioConstraint.isActive = true
     }
 
     static func makeSeparatorView() -> UIView {
@@ -340,6 +399,14 @@ private extension PayWithLinkButton {
         updateAccessibilityContent()
     }
 
+    func updateBrandUI() {
+        payWithLinkView.attributedText = makePayWithLinkAttributedText(for: payWithLinkView.font)
+        updateLogoView(emailLogoView)
+        updateLogoView(cardLogoView)
+        updateAccessibilityContent()
+        setNeedsLayout()
+    }
+
 }
 
 // MARK: - Styling
@@ -386,31 +453,31 @@ private extension PayWithLinkButton {
     func foregroundColor(for state: State) -> UIColor {
         switch state {
         case .highlighted:
-            return UIColor.linkPrimaryButtonForeground.withAlphaComponent(0.8)
+            return UIColor.linkContentOnPrimaryButton.withAlphaComponent(0.8)
         default:
-            return UIColor.linkPrimaryButtonForeground
+            return UIColor.linkContentOnPrimaryButton
         }
     }
 
     func backgroundColor(for state: State) -> UIColor {
         switch state {
         case .highlighted:
-            return UIColor.linkBrand.darken(by: 0.2)
+            return UIColor.linkIconBrand.darken(by: 0.2)
         case .disabled:
-            return UIColor.linkBrand.withAlphaComponent(0.5)
+            return UIColor.linkIconBrand.withAlphaComponent(0.5)
         default:
-            return UIColor.linkBrand
+            return UIColor.linkIconBrand
         }
     }
 
     func separatorColor(for state: State) -> UIColor {
         switch state {
         case .highlighted:
-            return UIColor.linkBrand400.darken(by: 0.2)
+            return UIColor.linkSeparatorOnPrimaryButton.darken(by: 0.2)
         case .disabled:
-            return UIColor.linkBrand400.withAlphaComponent(0.5)
+            return UIColor.linkSeparatorOnPrimaryButton.withAlphaComponent(0.5)
         default:
-            return UIColor.linkBrand400
+            return UIColor.linkSeparatorOnPrimaryButton
         }
     }
 
@@ -428,7 +495,7 @@ private extension PayWithLinkButton {
         }
 
         // To use Xcode SwiftUI Previews, comment out the following `accessibilityLabel` setter:
-        accessibilityLabel = String.Localized.pay_with_link
+        accessibilityLabel = brand.accessibilityText(from: String.Localized.pay_with_link(brand: brand))
 
         switch linkAccountState {
         case .hasCard(let last4, let brand):
@@ -469,7 +536,9 @@ private func makeAccountStub(email: String, isRegistered: Bool, lastPM: LinkPMDi
         email: email,
         redactedPhoneNumber: nil,
         isRegistered: isRegistered,
-        isLoggedIn: false
+        sessionState: .verified,
+        consumerSessionClientSecret: nil,
+        linkSessionKey: nil
     )
 }
 

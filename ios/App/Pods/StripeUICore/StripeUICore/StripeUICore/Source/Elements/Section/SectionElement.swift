@@ -19,6 +19,7 @@ import UIKit
         isViewInitialized = true
         return SectionView(viewModel: viewModel)
     }()
+    private let selectionBehavior: SelectionBehavior
     var isViewInitialized: Bool = false
     var errorText: String? {
         // Find the first element that's 1. invalid and 2. has a displayable error
@@ -35,6 +36,8 @@ import UIKit
             title: title,
             errorText: errorText,
             subLabel: subLabel,
+            warningLabel: warningLabel,
+            selectionBehavior: selectionBehavior,
             theme: theme
         )
     }
@@ -55,11 +58,11 @@ import UIKit
         elements.compactMap({ $0.subLabelText }).first
     }
 
-    let theme: ElementsAppearance
-
-    public func disableAppearance() {
-        sectionView.containerView.disableAppearance()
+    var warningLabel: String? {
+        elements.compactMap({ $0.warningLabelText }).first
     }
+
+    let theme: ElementsAppearance
 
     // MARK: - ViewModel
 
@@ -68,14 +71,22 @@ import UIKit
         let title: String?
         let errorText: String?
         var subLabel: String?
+        var warningLabel: String?
+        let selectionBehavior: SelectionBehavior
         let theme: ElementsAppearance
     }
 
     // MARK: - Initializers
 
-    public init(title: String? = nil, elements: [Element], theme: ElementsAppearance = .default) {
+    public init(
+        title: String? = nil,
+        elements: [Element],
+        selectionBehavior: SelectionBehavior = .default,
+        theme: ElementsAppearance = .default
+    ) {
         self.title = title
         self.elements = elements
+        self.selectionBehavior = selectionBehavior
         self.theme = theme
         elements.forEach {
             $0.delegate = self
@@ -102,6 +113,7 @@ extension SectionElement: ElementDelegate {
         // Glue: Update the view and our delegate
         if isViewInitialized {
             sectionView.update(with: viewModel)
+            sectionView.updateBorder(for: element)
         }
         delegate?.didUpdate(element: self)
     }
@@ -110,9 +122,8 @@ extension SectionElement: ElementDelegate {
 // MARK: HiddenElement
 
 extension SectionElement {
-    /// A simple container element where the element's view is hidden
-    /// Useful when an element is a part of a section but it's view is embeded into another element
-    /// E.g. card brand drop down embedded into the PAN textfield
+    /// A container for an Element that should participate in the hierarchy
+    /// without rendering its view in the enclosing section.
     /// - Note: `HiddenElement`'s are skipped by the `ContainerElement`'s auto advance logic
     @_spi(STP) public final class HiddenElement: ContainerElement {
         final class HiddenView: UIView {}

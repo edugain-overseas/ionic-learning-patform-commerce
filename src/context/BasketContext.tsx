@@ -4,6 +4,7 @@ import { useCourses } from "./CoursesContext";
 import { groupByKey } from "../utils/groupByKey";
 import { useUser } from "./UserContext";
 import { useToast } from "../hooks/useToast";
+import { Capacitor } from "@capacitor/core";
 
 export interface ItemType {
   id: number;
@@ -28,6 +29,7 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const coursesInterface = useCourses();
   const userInterface = useUser();
   const [present] = useToast();
+  const isNative = Capacitor.isNativePlatform();
   const courses = coursesInterface?.courses;
   const categories = coursesInterface?.categories;
 
@@ -37,7 +39,7 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
         return prev.filter((item) => item.id !== id);
       } else {
         const categoryId = courses?.find(
-          (course) => course.id === id
+          (course) => course.id === id,
         )?.category_id;
 
         if (categoryId) {
@@ -60,8 +62,8 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const toggleConfirmItem = (id: number) => {
     setItems((prev) =>
       prev.map((item) =>
-        item.id === id ? { ...item, confirmed: !item.confirmed } : item
-      )
+        item.id === id ? { ...item, confirmed: !item.confirmed } : item,
+      ),
     );
   };
 
@@ -80,13 +82,13 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
     Array.from(groupedItemsByCategoryId, ([categoryId, items]) => {
       const categoryDiscount = categories?.find(
-        (category) => category.id === categoryId
+        (category) => category.id === categoryId,
       )?.discount;
       const categoryCourses = courses?.filter(
-        (course) => course.category_id === categoryId
+        (course) => course.category_id === categoryId,
       );
       const isDiscountShouldBeUsed = categoryCourses?.every((course) =>
-        [...items, ...userCourses].find((item) => item?.id === course.id)
+        [...items, ...userCourses].find((item) => item?.id === course.id),
       );
 
       if (isDiscountShouldBeUsed && categoryCourses && categoryDiscount) {
@@ -97,7 +99,7 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
             }
             return sumPrice;
           },
-          0
+          0,
         );
         const categoryItemsDiscount =
           (categoryItemsPrice * categoryDiscount) / 100;
@@ -124,7 +126,7 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const checkout = () => {
     const subTotal = calcSubTotal();
     const discount = calcDiscount();
-    const total = subTotal - discount;
+    const total = isNative ? subTotal : subTotal - discount;
     return { subTotal, discount, total };
   };
 
@@ -135,12 +137,12 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setItems((items) =>
         items.filter((item) => {
           const userCourseInBasket = userCourses.find(
-            (userCourse) => userCourse.course_id === item.id
+            (userCourse) => userCourse.course_id === item.id,
           );
 
           if (userCourseInBasket) {
             const courseData = courses?.find(
-              (course) => course.id === userCourseInBasket.course_id
+              (course) => course.id === userCourseInBasket.course_id,
             );
 
             const message = `You already have bought course ${
@@ -154,7 +156,7 @@ export const BasketProvider: FC<{ children: ReactNode }> = ({ children }) => {
             });
           }
           return !userCourseInBasket;
-        })
+        }),
       );
     }
   }, [userInterface?.user]);

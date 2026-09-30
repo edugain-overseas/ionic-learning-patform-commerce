@@ -1,4 +1,8 @@
+"%1$@ •••• %2$@" = "%1$@ •••• %2$@";
+
 "%@ (optional)" = "%@ (valgfrit)";
+
+"(not accepted)" = "(ikke accepteret)";
 
 "Account number" = "Kontonummer";
 
@@ -36,7 +40,7 @@
 
 "County" = "Amt";
 
-"Date is empty." = "Dato er tom.";
+"Date of Birth" = "Fødselsdato";
 
 "Department" = "Afdeling";
 
@@ -66,8 +70,6 @@
 
 "Incomplete phone number" = "Ufuldstændigt telefonnummer";
 
-"Invalid UPI ID" = "Ugyldigt UPI ID";
-
 "Island" = "Ø";
 
 "Last" = "Sidste";
@@ -90,6 +92,8 @@
 
 "Prefecture" = "Præfektur";
 
+"Processing..." = "Behandler ...";
+
 "Province" = "Provins";
 
 "Remove" = "Fjern";
@@ -102,9 +106,15 @@
 
 "Select card brand (optional)" = "Vælg kortbrand (valgfrit)";
 
+"Selection is empty." = "Der er ikke valgt noget.";
+
+"Something went wrong" = "Noget gik galt";
+
 "Sort code" = "Sort code";
 
 "State" = "Stat";
+
+"Submit" = "Indsend";
 
 "Suburb" = "Forstad";
 
@@ -120,8 +130,6 @@
 
 "Town or city" = "Landsby eller by";
 
-"UPI ID" = "UPI ID";
-
 "Unable to parse phone number" = "Kunne ikke analysere telefonnummer";
 
 "Use rotor to access links" = "Brug hjulet til at tilgå links";
@@ -130,12 +138,16 @@
 
 "Your BLIK code is invalid." = "Din BLIK-kode er ugyldig.";
 
-"Your ZIP is incomplete." = "Dit postnummer er ikke fuldendt.";
+"Your ZIP code is incomplete." = "Dit postnummer er ufuldstændigt.";
+
+"Your ZIP code is invalid." = "Dit postnummer er ugyldigt.";
 
 "Your email is invalid." = "Din e-mail er ugyldig.";
 
 "Your payment information will not be saved." = "Dine betalingsoplysninger gemmes ikke.";
 
 "Your postal code is incomplete." = "Dit postnummer er ikke fuldendt.";
+
+"Your postal code is invalid." = "Dit postnummer er ikke fuldendt.";
 
 "ZIP" = "ZIP";

@@ -90,14 +90,8 @@ import UIKit
         let payload = payload(withEventName: eventName, parameters: parameters)
 
         #if DEBUG
-        let jsonString = String(
-            data: try! JSONSerialization.data(
-                withJSONObject: payload,
-                options: [.sortedKeys, .prettyPrinted]
-            ),
-            encoding: .utf8
-        )!
-        NSLog("LOG ANALYTICS: \(jsonString)")
+        NSLog("V2 LOG ANALYTICS: \(eventName)")
+        STPAnalyticsClient.debugPrintPayload(payload)
         #endif
 
         guard AnalyticsClientV2.shouldCollectAnalytics else {
@@ -136,7 +130,10 @@ extension AnalyticsClientV2Protocol {
         }
         payload["app_name"] = Bundle.stp_applicationName() ?? ""
         payload["app_version"] = Bundle.stp_applicationVersion() ?? ""
+        payload["app_min_os_version"] = Bundle.stp_minimumOSVersion() ?? ""
         payload["plugin_type"] = PluginDetector.shared.pluginType?.rawValue
+        payload["react_native_is_new_architecture"] = ReactNativeAnalytics.isNewArchitecture
+        payload["react_native_version"] = ReactNativeAnalytics.reactNativeVersion
         payload["platform_info"] = [
             "install": InstallMethod.current.rawValue,
             "app_bundle_id": Bundle.stp_applicationBundleId() ?? "",

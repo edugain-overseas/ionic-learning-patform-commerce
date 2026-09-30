@@ -6,7 +6,9 @@
 //
 
 import Foundation
+@_spi(STP) import StripeCore
 @_spi(STP) import StripePayments
+@_spi(STP) import StripeUICore
 import UIKit
 
 /// Represents shared configuration properties between integration surfaces in mobile payment element.
@@ -17,6 +19,7 @@ protocol PaymentElementConfiguration: PaymentMethodRequirementProvider {
     var allowsPaymentMethodsRequiringShippingAddress: Bool { get set }
     var apiClient: STPAPIClient { get set }
     var applePay: PaymentSheet.ApplePayConfiguration? { get set }
+    var link: PaymentSheet.LinkConfiguration { get set }
     var primaryButtonColor: UIColor? { get set }
     var primaryButtonLabel: String? { get set }
     var style: PaymentSheet.UserInterfaceStyle { get set }
@@ -32,16 +35,36 @@ protocol PaymentElementConfiguration: PaymentMethodRequirementProvider {
     var billingDetailsCollectionConfiguration: PaymentSheet.BillingDetailsCollectionConfiguration { get set }
     var removeSavedPaymentMethodMessage: String? { get set }
     var externalPaymentMethodConfiguration: PaymentSheet.ExternalPaymentMethodConfiguration? { get set }
+    var customPaymentMethodConfiguration: PaymentSheet.CustomPaymentMethodConfiguration? { get set }
     var paymentMethodOrder: [String]? { get set }
     var allowsRemovalOfLastSavedPaymentMethod: Bool { get set }
     var cardBrandAcceptance: PaymentSheet.CardBrandAcceptance { get set }
+    var allowedCardFundingTypes: PaymentSheet.CardFundingType { get set }
     var analyticPayload: [String: Any] { get }
     var disableWalletPaymentMethodFiltering: Bool { get set }
-    var allowsSetAsDefaultPM: Bool { get set }
     var linkPaymentMethodsOnly: Bool { get set }
+    var opensCardScannerAutomatically: Bool { get set }
+    var termsDisplay: [STPPaymentMethodType: PaymentSheet.TermsDisplay] { get }
+    func resolveLayout(elementsSession: STPElementsSession, paymentMethodTypes: [PaymentSheet.PaymentMethodType]) -> PaymentSheet.PaymentMethodLayout.ResolvedLayout
 }
 
 extension PaymentElementConfiguration {
+    func resolvedLinkBrand(elementsSession: STPElementsSession, linkAccount: PaymentSheetLinkAccount?) -> LinkBrand {
+        if let brand = link.brand {
+            return brand
+        }
+        return linkAccount?.linkBrand ?? elementsSession.linkBrand ?? .link
+    }
+
+    var financialConnectionsLinkBrandOverride: LinkBrand? {
+        // Only Onelink should be treated as an explicit client override for Financial Connections.
+        // Link should behave like no override so backend and authenticated consumer updates can still win.
+        return link.brand == .onelink ? .onelink : nil
+    }
+
+    func financialConnectionsLinkBrandOverride(linkAccount: PaymentSheetLinkAccount?) -> LinkBrand? {
+        return financialConnectionsLinkBrandOverride ?? (linkAccount?.linkBrand == .onelink ? .onelink : nil)
+    }
 
     /// Returns `true` if the merchant requires the collection of _any_ billing detail fields - name, phone, email, address.
     func requiresBillingDetailCollection() -> Bool {
@@ -51,6 +74,7 @@ extension PaymentElementConfiguration {
         || billingDetailsCollectionConfiguration.address == .full
     }
 
+    @MainActor
     var fulfilledRequirements: [PaymentMethodTypeRequirement] {
         var reqs = [PaymentMethodTypeRequirement]()
         if returnURL != nil { reqs.append(.returnURL) }
@@ -61,7 +85,40 @@ extension PaymentElementConfiguration {
         }
         return reqs
     }
+
+    /// Returns the effective `PaymentSheet.BillingDetails`, which refers to billing details that have been supplemented with billing information
+    /// from the `linkAccount`. For instance, billing details with a missing email address can be supplemented with the Link account's email address.
+    func effectiveBillingDetails(for linkAccount: PaymentSheetLinkAccount) -> PaymentSheet.BillingDetails {
+        var billingDetails = defaultBillingDetails
+
+        if billingDetailsCollectionConfiguration.email == .always {
+            billingDetails.email = billingDetails.email ?? linkAccount.email
+        }
+
+        if billingDetailsCollectionConfiguration.phone == .always {
+            billingDetails.phone = billingDetails.phone ?? linkAccount.currentSession?.unredactedPhoneNumberWithPrefix ?? linkAccount.phoneNumberUsedInSignup
+        }
+
+        if billingDetailsCollectionConfiguration.name == .always {
+            // We can't get the name from the consumer session
+            billingDetails.name = billingDetails.name ?? linkAccount.nameUsedInSignup
+        }
+
+        return billingDetails
+    }
+    func termsDisplayFor(paymentMethodType: PaymentSheet.PaymentMethodType?) -> PaymentSheet.TermsDisplay {
+        guard let paymentMethodType = paymentMethodType,
+              case .stripe(let stpPaymentMethodType) = paymentMethodType,
+              let termsDisplay = termsDisplay[stpPaymentMethodType] else {
+            return .automatic
+        }
+        return termsDisplay
+    }
 }
 
 extension PaymentSheet.Configuration: PaymentElementConfiguration {}
-extension EmbeddedPaymentElement.Configuration: PaymentElementConfiguration {}
+extension EmbeddedPaymentElement.Configuration: PaymentElementConfiguration {
+    func resolveLayout(elementsSession: STPElementsSession, paymentMethodTypes: [PaymentSheet.PaymentMethodType]) -> PaymentSheet.PaymentMethodLayout.ResolvedLayout {
+        .vertical
+    }
+}

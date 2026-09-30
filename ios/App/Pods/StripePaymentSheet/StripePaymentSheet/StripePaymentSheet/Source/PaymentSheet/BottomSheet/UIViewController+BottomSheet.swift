@@ -15,15 +15,11 @@ extension UIViewController {
         completion: (() -> Void)? = nil
     ) {
         var presentAsFormSheet: Bool {
-            #if canImport(CompositorServices)
+            #if os(visionOS)
             return true
             #else
             // Present as form sheet in larger devices (iPad/Mac).
-            if #available(iOS 14.0, macCatalyst 14.0, *) {
-                return UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac
-            } else {
-                return UIDevice.current.userInterfaceIdiom == .pad
-            }
+            return UIDevice.current.userInterfaceIdiom == .pad || UIDevice.current.userInterfaceIdiom == .mac
             #endif
         }
 
@@ -41,6 +37,8 @@ extension UIViewController {
             viewControllerToPresent.transitioningDelegate = BottomSheetTransitioningDelegate.default
         }
 
+        // Prevent the presenting view from regaining focus when editing ends in the bottom sheet.
+        viewIfLoaded?.endEditing(true)
         present(viewControllerToPresent, animated: true, completion: completion)
     }
 

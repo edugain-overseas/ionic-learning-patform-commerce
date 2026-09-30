@@ -1,4 +1,8 @@
+"%1$@ •••• %2$@" = "%1$@ •••• %2$@";
+
 "%@ (optional)" = "%@(선택 사항)";
+
+"(not accepted)" = "(허용되지 않음)";
 
 "Account number" = "계좌 번호";
 
@@ -36,7 +40,7 @@
 
 "County" = "구/군";
 
-"Date is empty." = "날짜가 비어 있습니다.";
+"Date of Birth" = "생년월일";
 
 "Department" = "행정구/현";
 
@@ -66,8 +70,6 @@
 
 "Incomplete phone number" = "불완전한 전화번호";
 
-"Invalid UPI ID" = "잘못된 UPI ID";
-
 "Island" = "섬";
 
 "Last" = "성";
@@ -90,6 +92,8 @@
 
 "Prefecture" = "도/현";
 
+"Processing..." = "처리 중...";
+
 "Province" = "도";
 
 "Remove" = "제거";
@@ -102,9 +106,15 @@
 
 "Select card brand (optional)" = "카드 브랜드 선택(선택 사항)";
 
+"Selection is empty." = "선택 항목이 비어 있습니다.";
+
+"Something went wrong" = "문제가 발생했습니다";
+
 "Sort code" = "코드 정렬";
 
 "State" = "주";
+
+"Submit" = "제출";
 
 "Suburb" = "교외";
 
@@ -120,8 +130,6 @@
 
 "Town or city" = "마을 또는 도시";
 
-"UPI ID" = "UPI ID";
-
 "Unable to parse phone number" = "전화번호 구문 분석 불가능";
 
 "Use rotor to access links" = "링크 액세스에 로터 사용";
@@ -130,12 +138,16 @@
 
 "Your BLIK code is invalid." = "BLIK 코드가 유효하지 않습니다.";
 
-"Your ZIP is incomplete." = "우편번호가 불완전합니다.";
+"Your ZIP code is incomplete." = "우편 번호가 완전하지 않습니다.";
+
+"Your ZIP code is invalid." = "우편번호가 유효하지 않습니다.";
 
 "Your email is invalid." = "이메일이 잘못되었습니다.";
 
 "Your payment information will not be saved." = "귀하의 결제 정보가 저장되지 않습니다.";
 
 "Your postal code is incomplete." = "우편번호가 불완전합니다.";
+
+"Your postal code is invalid." = "우편번호가 유효하지 않습니다.";
 
 "ZIP" = "우편번호";

@@ -36,16 +36,12 @@ class CustomerSheetDataSource {
                                completion: @escaping (Result<([STPPaymentMethod], CustomerPaymentOption?, STPElementsSession), Error>) -> Void) {
         Task {
             do {
-                async let (elementsSessionResult, customerSessionClientSecret) = try customerSessionAdapter.elementsSessionWithCustomerSessionClientSecret()
+                let fetchSessionsTask = Task { try await customerSessionAdapter.elementsSessionWithCustomerSessionClientSecret() }
+                defer { fetchSessionsTask.cancel() }
 
-                // Ensure local specs are loaded prior to the ones from elementSession
-                await loadFormSpecs()
-                let customerId = try await customerSessionClientSecret.customerId
-                let elementSession = try await elementsSessionResult
-                let paymentOption = customerSessionAdapter.fetchSelectedPaymentOption(for: customerId, customer: elementSession.customer)
-
-                // Override with specs from elementSession
-                _ = FormSpecProvider.shared.loadFrom(elementSession.paymentMethodSpecs as Any)
+                let (elementSession, customerSessionClientSecret) = try await fetchSessionsTask.value
+                let customerId = customerSessionClientSecret.customerId
+                let paymentOption = customerSessionAdapter.fetchSelectedPaymentOption(for: customerId, elementsSession: elementSession)
 
                 let savedPaymentMethods = elementSession.customer?.paymentMethods.filter({ paymentMethod in
                     guard let card = paymentMethod.card else { return true }
@@ -61,36 +57,32 @@ class CustomerSheetDataSource {
     func loadPaymentMethodInfo(customerAdapter: CustomerAdapter, completion: @escaping (Result<([STPPaymentMethod], CustomerPaymentOption?, STPElementsSession), Error>) -> Void) {
         Task {
             do {
-                async let paymentMethodsResult = try customerAdapter.fetchPaymentMethods()
-                async let selectedPaymentMethodResult = try customerAdapter.fetchSelectedPaymentOption()
-                async let elementsSessionResult = try self.configuration.apiClient.retrieveDeferredElementsSessionForCustomerSheet(paymentMethodTypes: customerAdapter.paymentMethodTypes,
-                                                                                                                                   clientDefaultPaymentMethod: nil,
-                                                                                                                                   customerSessionClientSecret: nil)
+                let paymentMethodsTask = Task { try await customerAdapter.fetchPaymentMethods() }
+                let selectedPaymentMethodTask = Task { try await customerAdapter.fetchSelectedPaymentOption() }
+                let elementsSessionTask = Task {
+                    try await self.configuration.apiClient.retrieveDeferredElementsSessionForCustomerSheet(
+                        paymentMethodTypes: customerAdapter.paymentMethodTypes,
+                        onBehalfOf: nil,
+                        clientDefaultPaymentMethod: nil,
+                        customerSessionClientSecret: nil
+                    )
+                }
+                defer {
+                    paymentMethodsTask.cancel()
+                    selectedPaymentMethodTask.cancel()
+                    elementsSessionTask.cancel()
+                }
 
-                // Ensure local specs are loaded prior to the ones from elementSession
-                await loadFormSpecs()
-
-                let (paymentMethods, selectedPaymentMethod, elementSession) = try await (paymentMethodsResult.filter({ paymentMethod in
+                let paymentMethods = try await paymentMethodsTask.value.filter({ paymentMethod in
                     guard let card = paymentMethod.card else { return true }
                     return configuration.cardBrandFilter.isAccepted(cardBrand: card.preferredDisplayBrand)
-                }), selectedPaymentMethodResult, elementsSessionResult)
-
-                // Override with specs from elementSession
-                _ = FormSpecProvider.shared.loadFrom(elementSession.paymentMethodSpecs as Any)
+                })
+                let selectedPaymentMethod = try await selectedPaymentMethodTask.value
+                let elementSession = try await elementsSessionTask.value
 
                 completion(.success((paymentMethods, selectedPaymentMethod, elementSession)))
             } catch {
                 completion(.failure(error))
-            }
-        }
-    }
-
-    func loadFormSpecs() async {
-        await withCheckedContinuation { continuation in
-            Task {
-                FormSpecProvider.shared.load { _ in
-                    continuation.resume()
-                }
             }
         }
     }
@@ -181,6 +173,16 @@ extension CustomerSheetDataSource {
         }
     }
 
+    func setAsDefaultPaymentMethod(paymentMethodId: String) async throws -> STPCustomer? {
+        switch dataSource {
+        case .customerAdapter:
+            assertionFailure("CustomerAdapter does not support the set as default payment method feature")
+            return nil
+        case .customerSession(let customerSessionAdapter):
+            return try await customerSessionAdapter.setAsDefaultPaymentMethod(paymentMethodId: paymentMethodId)
+        }
+    }
+
     func savePaymentMethodConsentBehavior() -> PaymentSheetFormFactory.SavePaymentMethodConsentBehavior {
         switch dataSource {
         case .customerAdapter:
@@ -196,6 +198,32 @@ extension CustomerSheetDataSource {
             return true
         case .customerSession:
             return elementsSession.allowsRemovalOfPaymentMethodsForCustomerSheet()
+        }
+    }
+
+    func paymentMethodRemoveIsPartial(elementsSession: STPElementsSession) -> Bool {
+        switch dataSource {
+        case .customerAdapter:
+            return false
+        case .customerSession:
+            return elementsSession.paymentMethodRemoveIsPartialForCustomerSheet()
+        }
+    }
+
+    func paymentMethodUpdate(elementsSession: STPElementsSession) -> Bool {
+        switch dataSource {
+        case .customerAdapter:
+            return false
+        case .customerSession:
+            return elementsSession.paymentMethodUpdateForCustomerSheet
+        }
+    }
+    func paymentMethodSyncDefault(elementsSession: STPElementsSession) -> Bool {
+        switch dataSource {
+        case .customerAdapter:
+            return false
+        case .customerSession:
+            return elementsSession.paymentMethodSyncDefaultForCustomerSheet
         }
     }
 }

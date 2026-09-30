@@ -16,7 +16,6 @@ import arrowIcon from "../../assets/icons/arrow-right.svg";
 import BasketItemAccordion from "./BasketItemAccordion";
 import BasketCourseCard from "./BasketCourseCard";
 import styles from "./BasketList.module.scss";
-import { transition } from "@ionic/core/dist/types/utils/transition";
 
 type BasketItemType = {
   course?: CourseType;

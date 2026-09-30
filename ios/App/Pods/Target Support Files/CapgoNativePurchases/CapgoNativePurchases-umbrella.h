@@ -10,7 +10,6 @@
 #endif
 #endif
 
-#import "NativePurchasesPlugin.h"
 
 FOUNDATION_EXPORT double CapgoNativePurchasesVersionNumber;
 FOUNDATION_EXPORT const unsigned char CapgoNativePurchasesVersionString[];

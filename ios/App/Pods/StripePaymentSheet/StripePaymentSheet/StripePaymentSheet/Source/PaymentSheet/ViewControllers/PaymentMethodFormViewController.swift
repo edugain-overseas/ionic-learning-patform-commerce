@@ -22,17 +22,25 @@ class PaymentMethodFormViewController: UIViewController {
     let paymentMethodType: PaymentSheet.PaymentMethodType
     let configuration: PaymentElementConfiguration
     let analyticsHelper: PaymentSheetAnalyticsHelper
+    let paymentMethodMessagingPromotionsHelper: PaymentMethodMessagingPromotionsHelper?
     weak var delegate: PaymentMethodFormViewControllerDelegate?
+    private var linkAccountObserver: LinkAccountContextObserver?
+
+    /// Reference to the AddressSectionElement in the form, if present
+    private var addressSectionElement: AddressSectionElement?
+    private var selectedAutoCompleteAddress: PaymentSheet.Address?
+
     var paymentOption: PaymentOption? {
         let params = IntentConfirmParams(type: paymentMethodType)
         params.setDefaultBillingDetailsIfNecessary(for: configuration)
 
         if let params = form.updateParams(params: params) {
-            if let linkInlineSignupElement = form.getAllUnwrappedSubElements().compactMap({ $0 as? LinkInlineSignupElement }).first {
+            if let linkInlineSignupElement = form.linkInlineSignupElement {
                 switch linkInlineSignupElement.action {
                 case .signupAndPay(let account, let phoneNumber, let legalName):
                     return .link(
                         option: .signUp(
+                            brand: configuration.resolvedLinkBrand(elementsSession: elementsSession, linkAccount: account),
                             account: account,
                             phoneNumber: phoneNumber,
                             consentAction: linkInlineSignupElement.viewModel.consentAction,
@@ -44,7 +52,7 @@ class PaymentMethodFormViewController: UIViewController {
                     return .new(confirmParams: params)
                 case .none:
                     // Link is optional when in textFieldOnly mode
-                    if linkInlineSignupElement.viewModel.mode != .checkbox {
+                    if linkInlineSignupElement.viewModel.mode != .checkbox && linkInlineSignupElement.viewModel.mode != .checkboxWithDefaultOptIn {
                         return .new(confirmParams: params)
                     }
                     return nil
@@ -71,7 +79,8 @@ class PaymentMethodFormViewController: UIViewController {
 
     lazy var formStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [headerView, form.view].compactMap { $0 })
-        stackView.spacing = 24
+        // Forms with a subtitle get special spacing after the header view
+        stackView.spacing = form.getAllUnwrappedSubElements().contains(where: { $0 is SubtitleElement }) ? 4 : 24
         stackView.axis = .vertical
         return stackView
     }()
@@ -92,9 +101,14 @@ class PaymentMethodFormViewController: UIViewController {
         previousCustomerInput: IntentConfirmParams?,
         formCache: PaymentMethodFormCache,
         configuration: PaymentElementConfiguration,
+        paymentMethodOrientation: PaymentSheet.PaymentMethodLayout.ResolvedLayout,
         headerView: UIView?,
         analyticsHelper: PaymentSheetAnalyticsHelper,
-        delegate: PaymentMethodFormViewControllerDelegate
+        paymentMethodMessagingPromotionsHelper: PaymentMethodMessagingPromotionsHelper? = nil,
+        isLinkUI: Bool = false,
+        delegate: PaymentMethodFormViewControllerDelegate,
+        linkAppearance: LinkAppearance? = nil,
+        previousLinkInlineSignupAction: LinkInlineSignupViewModel.Action? = nil
     ) {
         self.paymentMethodType = type
         self.intent = intent
@@ -103,27 +117,44 @@ class PaymentMethodFormViewController: UIViewController {
         self.configuration = configuration
         self.headerView = headerView
         self.formCache = formCache
+        self.paymentMethodMessagingPromotionsHelper = paymentMethodMessagingPromotionsHelper
         if let form = self.formCache[type] {
             self.form = form
         } else {
             self.form = PaymentSheetFormFactory(
                 intent: intent,
                 elementsSession: elementsSession,
-                configuration: .paymentSheet(configuration),
+                configuration: .paymentElement(configuration, isLinkUI: isLinkUI),
                 paymentMethod: paymentMethodType,
+                paymentMethodOrientation: paymentMethodOrientation,
                 previousCustomerInput: previousCustomerInput,
                 linkAccount: LinkAccountContext.shared.account,
                 accountService: LinkAccountService(apiClient: configuration.apiClient, elementsSession: elementsSession),
-                analyticsHelper: analyticsHelper
+                analyticsHelper: analyticsHelper,
+                paymentMethodMessagingPromotionsHelper: paymentMethodMessagingPromotionsHelper,
+                linkAppearance: linkAppearance,
+                previousLinkInlineSignupAction: previousLinkInlineSignupAction
             ).make()
             self.formCache[type] = form
         }
         self.analyticsHelper = analyticsHelper
         super.init(nibName: nil, bundle: nil)
+
+        // Setup AddressSectionElement autocomplete callback after form creation
+        setupAddressSectionAutocompleteCallback()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        if form.linkInlineSignupElement != nil {
+            linkAccountObserver = LinkAccountContextObserver { [weak self] _ in
+                DispatchQueue.main.async {
+                    self?.syncLinkInlineSignupBrand()
+                }
+            }
+            _ = linkAccountObserver
+            syncLinkInlineSignupBrand()
+        }
         view.addAndPinSubview(formStackView)
     }
 
@@ -160,6 +191,45 @@ class PaymentMethodFormViewController: UIViewController {
     func clearTextFields() {
         form.clearTextFields()
     }
+
+    /// Sets up the autocomplete button callback for any AddressSectionElement in the form
+    /// TODO(porter) Make this more generic for when we have shipping address section in here too
+    private func setupAddressSectionAutocompleteCallback() {
+        let formElement = (form as? PaymentMethodElementWrapper<FormElement>)?.element ?? form
+        if let addressSection = formElement.getAllUnwrappedSubElements()
+            .compactMap({ $0 as? AddressSectionElement }).first {
+            // Store reference to the address section element
+            self.addressSectionElement = addressSection
+            addressSection.didTapAutocompleteButton = { [weak self] in
+                self?.presentAutocomplete()
+            }
+        }
+    }
+
+    /// Presents the autocomplete view controller
+    private func presentAutocomplete() {
+        guard let addressSectionElement = addressSectionElement else {
+            return
+        }
+
+        // Create a basic AddressViewController.Configuration for the autocomplete
+        var addressConfiguration = AddressViewController.Configuration(
+            appearance: configuration.appearance
+        )
+        addressConfiguration.apiClient = configuration.apiClient
+
+        let autoCompleteViewController = AutoCompleteViewController(
+            configuration: addressConfiguration,
+            initialLine1Text: addressSectionElement.line1?.text,
+            selectedCountry: addressSectionElement.selectedCountryCode,
+            addressSpecProvider: AddressSpecProvider.shared,
+            verticalOffset: PaymentSheetUI.navBarPadding(appearance: configuration.appearance),
+            useAutocompleteEndpoints: elementsSession.shouldUseAutocompleteProxyEndpoints
+        )
+        autoCompleteViewController.delegate = self
+
+        present(autoCompleteViewController, animated: true)
+    }
 }
 
 // MARK: - ElementDelegate
@@ -173,6 +243,51 @@ extension PaymentMethodFormViewController: ElementDelegate {
         analyticsHelper.logFormInteracted(paymentMethodTypeIdentifier: paymentMethodType.identifier)
         delegate?.didUpdate(self)
         animateHeightChange()
+
+        if let instantDebitsFormElement = form as? InstantDebitsPaymentMethodElement {
+            let incentive = instantDebitsFormElement.displayableIncentive
+
+            if let formHeaderView = headerView as? FormHeaderView {
+                // We already display a promo badge in the bank form, so we don't want
+                // to display another one in the header.
+                let headerIncentive = instantDebitsFormElement.showIncentiveInHeader ? incentive : nil
+                formHeaderView.setIncentive(headerIncentive)
+            }
+        }
+
+        if let linkSignup = form.linkInlineSignupElement, linkSignup.viewModel.mode == .signupOptIn, let mandateElement = form.mandateElement {
+            // Update the mandate based on the checkbox state
+            let variant = MandateVariant.updated(shouldSignUpToLink: linkSignup.viewModel.saveCheckboxChecked)
+            let text = PaymentSheetFormFactory.makeMandateText(
+                variant: variant,
+                merchantName: configuration.merchantDisplayName,
+                brand: configuration.resolvedLinkBrand(elementsSession: elementsSession, linkAccount: LinkAccountContext.shared.account)
+            )
+            mandateElement.mandateTextView.attributedText = text
+        }
+    }
+
+    private func syncLinkInlineSignupBrand() {
+        guard let linkInlineSignupElement = form.linkInlineSignupElement else {
+            return
+        }
+
+        let resolvedLinkBrand = configuration.resolvedLinkBrand(
+            elementsSession: elementsSession,
+            linkAccount: LinkAccountContext.shared.account
+        )
+        linkInlineSignupElement.updateBrand(resolvedLinkBrand)
+
+        if linkInlineSignupElement.viewModel.mode == .signupOptIn,
+           let mandateElement = form.mandateElement {
+            let variant = MandateVariant.updated(shouldSignUpToLink: linkInlineSignupElement.viewModel.saveCheckboxChecked)
+            let text = PaymentSheetFormFactory.makeMandateText(
+                variant: variant,
+                merchantName: configuration.merchantDisplayName,
+                brand: resolvedLinkBrand
+            )
+            mandateElement.mandateTextView.attributedText = text
+        }
     }
 }
 
@@ -247,7 +362,11 @@ extension PaymentMethodFormViewController {
             case .setupIntent(let setupIntent):
                 return .setup(setupIntent.stripeID)
             case .deferredIntent:
-                return nil
+                return .deferred(elementsSession.sessionID)
+            case .checkout(let session):
+                // This ID is used for financial incentive eligibility. Ideally we'd use the underlying
+                // paymentIntentId or setupIntentId, but those are not yet populated on CheckoutSession.
+                return .deferred(session.id)
             }
         }()
 
@@ -265,6 +384,11 @@ extension PaymentMethodFormViewController {
         let linkMode = elementsSession.linkSettings?.linkMode
         let billingDetails = instantDebitsFormElement?.billingDetails
 
+        let paymentMethodType: STPPaymentMethodType = elementsSession.useCardPaymentMethodTypeForIBP ? .card : .USBankAccount
+        let isSettingUp = intent.isSetupFutureUsageSet(for: paymentMethodType) || elementsSession.forceSaveFutureUseBehaviorAndNewMandateText
+        let allowRedisplay = elementsSession.computeAllowRedisplay(isSettingUp: isSettingUp)
+        let clientAttributionMetadata = STPClientAttributionMetadata.makeClientAttributionMetadataIfNecessary(analyticsHelper: analyticsHelper, intent: intent, elementsSession: elementsSession)
+
         return ElementsSessionContext(
             amount: intent.amount,
             currency: intent.currency,
@@ -272,8 +396,18 @@ extension PaymentMethodFormViewController {
             intentId: intentId,
             linkMode: linkMode,
             billingDetails: billingDetails,
-            eligibleForIncentive: instantDebitsFormElement?.incentive != nil
+            eligibleForIncentive: instantDebitsFormElement?.displayableIncentive != nil,
+            allowRedisplay: allowRedisplay?.stringValue,
+            clientAttributionMetadata: clientAttributionMetadata
         )
+    }
+
+    private var bankAccountCollectorStyle: STPBankAccountCollectorUserInterfaceStyle {
+        switch configuration.style {
+        case .automatic: return .automatic
+        case .alwaysLight: return .alwaysLight
+        case .alwaysDark: return .alwaysDark
+        }
     }
 
     private var shouldOverridePrimaryButton: Bool {
@@ -346,7 +480,7 @@ extension PaymentMethodFormViewController {
             with: name,
             email: email
         )
-        let client = STPBankAccountCollector()
+        let client = STPBankAccountCollector(style: bankAccountCollectorStyle)
         let genericError = PaymentSheetError.accountLinkFailure
 
         let financialConnectionsCompletion: STPBankAccountCollector.CollectBankAccountCompletionBlock = { result, _, error in
@@ -402,14 +536,14 @@ extension PaymentMethodFormViewController {
             let amount: Int?
             let currency: String?
             switch intentConfig.mode {
-            case let .payment(amount: _amount, currency: _currency, _, _):
+            case let .payment(amount: _amount, currency: _currency, _, _, _):
                 amount = _amount
                 currency = _currency
             case let .setup(currency: _currency, _):
                 amount = nil
                 currency = _currency
             }
-            client.collectBankAccountForDeferredIntent(
+            client.collectBankAccountForDeferredIntentOrCheckoutSession(
                 sessionId: elementsSession.sessionID,
                 returnURL: configuration.returnURL,
                 onEvent: nil,
@@ -419,6 +553,21 @@ extension PaymentMethodFormViewController {
                 additionalParameters: additionalParameters,
                 elementsSessionContext: elementsSessionContext,
                 from: viewController,
+                intentType: .deferred,
+                financialConnectionsCompletion: financialConnectionsCompletion
+            )
+        case .checkout(let session):
+            client.collectBankAccountForDeferredIntentOrCheckoutSession(
+                sessionId: elementsSession.sessionID,
+                returnURL: configuration.returnURL,
+                onEvent: nil,
+                amount: session.amount,
+                currency: session.activePresentmentCurrency,
+                onBehalfOf: nil,
+                additionalParameters: additionalParameters,
+                elementsSessionContext: elementsSessionContext,
+                from: viewController,
+                intentType: .checkoutSession,
                 financialConnectionsCompletion: financialConnectionsCompletion
             )
         }
@@ -438,7 +587,7 @@ extension PaymentMethodFormViewController {
         let params = STPCollectBankAccountParams.collectInstantDebitsParams(
             email: instantDebitsFormElement.email
         )
-        let client = STPBankAccountCollector()
+        let client = STPBankAccountCollector(style: bankAccountCollectorStyle)
         let genericError = PaymentSheetError.accountLinkFailure
 
         let financialConnectionsCompletion: STPBankAccountCollector.CollectBankAccountCompletionBlock = { result, _, error in
@@ -472,9 +621,13 @@ extension PaymentMethodFormViewController {
         switch intent {
         case .paymentIntent, .setupIntent:
             additionalParameters["attach_required"] = true
-        case .deferredIntent:
+        case .deferredIntent, .checkout:
             break
         }
+
+        let linkBrand = configuration.financialConnectionsLinkBrandOverride(
+            linkAccount: LinkAccountContext.shared.account
+        )
 
         switch intent {
         case .paymentIntent(let paymentIntent):
@@ -483,6 +636,7 @@ extension PaymentMethodFormViewController {
                 returnURL: configuration.returnURL,
                 additionalParameters: additionalParameters,
                 elementsSessionContext: elementsSessionContext,
+                linkBrand: linkBrand,
                 onEvent: nil,
                 params: params,
                 from: viewController,
@@ -494,6 +648,7 @@ extension PaymentMethodFormViewController {
                 returnURL: configuration.returnURL,
                 additionalParameters: additionalParameters,
                 elementsSessionContext: elementsSessionContext,
+                linkBrand: linkBrand,
                 onEvent: nil,
                 params: params,
                 from: viewController,
@@ -503,14 +658,14 @@ extension PaymentMethodFormViewController {
             let amount: Int?
             let currency: String?
             switch intentConfig.mode {
-            case let .payment(amount: _amount, currency: _currency, _, _):
+            case let .payment(amount: _amount, currency: _currency, _, _, _):
                 amount = _amount
                 currency = _currency
             case let .setup(currency: _currency, _):
                 amount = nil
                 currency = _currency
             }
-            client.collectBankAccountForDeferredIntent(
+            client.collectBankAccountForDeferredIntentOrCheckoutSession(
                 sessionId: elementsSession.sessionID,
                 returnURL: configuration.returnURL,
                 onEvent: nil,
@@ -519,7 +674,24 @@ extension PaymentMethodFormViewController {
                 onBehalfOf: intentConfig.onBehalfOf,
                 additionalParameters: additionalParameters,
                 elementsSessionContext: elementsSessionContext,
+                linkBrand: linkBrand,
                 from: viewController,
+                intentType: .deferred,
+                financialConnectionsCompletion: financialConnectionsCompletion
+            )
+        case .checkout(let session):
+            client.collectBankAccountForDeferredIntentOrCheckoutSession(
+                sessionId: elementsSession.sessionID,
+                returnURL: configuration.returnURL,
+                onEvent: nil,
+                amount: session.amount,
+                currency: session.activePresentmentCurrency,
+                onBehalfOf: nil,
+                additionalParameters: additionalParameters,
+                elementsSessionContext: elementsSessionContext,
+                linkBrand: linkBrand,
+                from: viewController,
+                intentType: .checkoutSession,
                 financialConnectionsCompletion: financialConnectionsCompletion
             )
         }
@@ -530,5 +702,67 @@ extension LinkBankPaymentMethod {
 
     func decode() -> STPPaymentMethod? {
         return STPPaymentMethod.decodedObject(fromAPIResponse: allResponseFields)
+    }
+}
+
+private extension Element {
+    var linkInlineSignupElement: LinkInlineSignupElement? {
+        return getAllUnwrappedSubElements().compactMap({ $0 as? LinkInlineSignupElement }).first
+    }
+
+    var mandateElement: SimpleMandateElement? {
+        return getAllUnwrappedSubElements().compactMap({ $0 as? SimpleMandateElement }).first
+    }
+}
+
+// MARK: - AutoCompleteViewControllerDelegate
+
+extension PaymentMethodFormViewController: AutoCompleteViewControllerDelegate {
+    func didSelectManualEntry(_ line1: String) {
+        guard let addressSectionElement = addressSectionElement else { return }
+
+        // Dismiss the autocomplete view controller
+        presentedViewController?.dismiss(animated: true) {
+            addressSectionElement.beginManualEntry(with: line1)
+            addressSectionElement.line1?.beginEditing()
+        }
+    }
+
+    func didSelectAddress(_ address: PaymentSheet.Address?) {
+        guard let addressSectionElement = addressSectionElement else { return }
+
+        // Dismiss the autocomplete view controller
+        presentedViewController?.dismiss(animated: true) {
+            guard let address = address else {
+                return
+            }
+
+            addressSectionElement.setAddress(address.addressSectionAddress)
+
+            // Read back from the element so field processing (e.g. postal code truncation) is reflected
+            let normalized = addressSectionElement.addressDetails.address
+            self.selectedAutoCompleteAddress = PaymentSheet.Address(
+                city: normalized.city, country: normalized.country, line1: normalized.line1,
+                line2: normalized.line2, postalCode: normalized.postalCode, state: normalized.state
+            )
+        }
+    }
+
+    func logBillingAddressCompletionIfNeeded() {
+        guard let addressSectionElement = addressSectionElement else { return }
+        let details = addressSectionElement.addressDetails.address
+        let submittedAddress = PaymentSheet.Address(
+            city: details.city,
+            country: details.country,
+            line1: details.line1,
+            line2: details.line2,
+            postalCode: details.postalCode,
+            state: details.state
+        )
+        var editDistance: Int?
+        if let autoCompleteAddress = selectedAutoCompleteAddress {
+            editDistance = submittedAddress.editDistance(from: autoCompleteAddress)
+        }
+        STPAnalyticsClient.sharedClient.logBillingAddressCompleted(addressCountryCode: addressSectionElement.selectedCountryCode, autoCompleteResultedSelected: selectedAutoCompleteAddress != nil, editDistance: editDistance, apiClient: configuration.apiClient)
     }
 }

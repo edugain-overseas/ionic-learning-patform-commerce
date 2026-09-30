@@ -1,99 +1,106 @@
 PODS:
   - Alamofire (5.10.2)
-  - AppAuth (1.7.6):
-    - AppAuth/Core (= 1.7.6)
-    - AppAuth/ExternalUserAgent (= 1.7.6)
-  - AppAuth/Core (1.7.6)
-  - AppAuth/ExternalUserAgent (1.7.6):
+  - AppAuth (2.1.0):
+    - AppAuth/Core (= 2.1.0)
+    - AppAuth/ExternalUserAgent (= 2.1.0)
+  - AppAuth/Core (2.1.0)
+  - AppAuth/ExternalUserAgent (2.1.0):
     - AppAuth/Core
-  - AppCheckCore (11.3.1):
+  - AppCheckCore (11.3.2):
     - GoogleUtilities/Environment (~> 8.0)
     - GoogleUtilities/UserDefaults (~> 8.0)
     - PromisesObjC (~> 2.4)
     - PromisesSwift (~> 2.4)
     - RecaptchaInterop (~> 101.0)
-  - Capacitor (6.2.0):
+  - Capacitor (8.5.2):
     - CapacitorCordova
-  - CapacitorApp (6.0.2):
+  - CapacitorApp (8.1.1):
     - Capacitor
-  - CapacitorCamera (6.1.2):
+  - CapacitorCamera (8.2.4):
     - Capacitor
-  - CapacitorCommunityAppleSignIn (6.0.0):
+    - IONCameraLib (~> 2.0.0)
+  - CapacitorCommunityAppleSignIn (7.1.0):
     - Capacitor
-  - CapacitorCommunityStripe (6.5.1):
+  - CapacitorCommunityStripe (8.2.1):
     - Capacitor
-    - StripeApplePay (~> 24.4.1)
-    - StripePaymentSheet (~> 24.4.1)
-  - CapacitorCordova (6.2.0)
-  - CapacitorFilesystem (6.0.3):
+    - StripeApplePay (~> 26.6)
+    - StripePaymentSheet (~> 26.6)
+  - CapacitorCordova (8.5.2)
+  - CapacitorFilesystem (8.1.3):
     - Capacitor
-  - CapacitorHaptics (6.0.2):
+    - IONFilesystemLib (~> 1.1.1)
+  - CapacitorHaptics (8.0.2):
     - Capacitor
-  - CapacitorKeyboard (6.0.3):
+  - CapacitorKeyboard (8.0.5):
     - Capacitor
-  - CapacitorShare (6.0.3):
+  - CapacitorShare (8.0.2):
     - Capacitor
-  - CapacitorSplashScreen (6.0.4):
+  - CapacitorSplashScreen (8.0.2):
     - Capacitor
-  - CapacitorStatusBar (6.0.2):
+  - CapacitorStatusBar (8.0.3):
     - Capacitor
-  - CapgoCapacitorSocialLogin (6.0.1):
+  - CapgoCapacitorSocialLogin (8.5.9):
     - Alamofire (~> 5.10.2)
     - Capacitor
-    - FBSDKCoreKit (= 17.4.0)
-    - FBSDKLoginKit (= 17.4.0)
-    - GoogleSignIn (~> 8.0.0)
-  - CapgoNativePurchases (6.0.42):
+    - FBSDKCoreKit (~> 18.0)
+    - FBSDKLoginKit (~> 18.0)
+    - GoogleSignIn (~> 9.0.0)
+  - CapgoNativePurchases (8.7.0):
     - Capacitor
-  - FBAEMKit (17.4.0):
-    - FBSDKCoreKit_Basics (= 17.4.0)
-  - FBSDKCoreKit (17.4.0):
-    - FBAEMKit (= 17.4.0)
-    - FBSDKCoreKit_Basics (= 17.4.0)
-  - FBSDKCoreKit_Basics (17.4.0)
-  - FBSDKLoginKit (17.4.0):
-    - FBSDKCoreKit (= 17.4.0)
-  - GoogleSignIn (8.0.0):
-    - AppAuth (< 2.0, >= 1.7.3)
+  - FBAEMKit (18.1.1):
+    - FBSDKCoreKit_Basics (= 18.1.1)
+  - FBSDKCoreKit (18.1.1):
+    - FBAEMKit (= 18.1.1)
+    - FBSDKCoreKit_Basics (= 18.1.1)
+  - FBSDKCoreKit_Basics (18.1.1)
+  - FBSDKLoginKit (18.1.1):
+    - FBSDKCoreKit (= 18.1.1)
+  - GoogleSignIn (9.0.0):
+    - AppAuth (~> 2.0)
     - AppCheckCore (~> 11.0)
-    - GTMAppAuth (< 5.0, >= 4.1.1)
+    - GTMAppAuth (~> 5.0)
     - GTMSessionFetcher/Core (~> 3.3)
-  - GoogleUtilities/Environment (8.1.2):
+  - GoogleUtilities/Environment (8.1.3):
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Logger (8.1.2):
+  - GoogleUtilities/Logger (8.1.3):
     - GoogleUtilities/Environment
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Privacy (8.1.2)
-  - GoogleUtilities/UserDefaults (8.1.2):
+  - GoogleUtilities/Privacy (8.1.3)
+  - GoogleUtilities/UserDefaults (8.1.3):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
-  - GTMAppAuth (4.1.1):
-    - AppAuth/Core (~> 1.7)
+  - GTMAppAuth (5.0.0):
+    - AppAuth/Core (~> 2.0)
     - GTMSessionFetcher/Core (< 4.0, >= 3.3)
   - GTMSessionFetcher/Core (3.5.0)
+  - IONCameraLib (2.0.0)
+  - IONFilesystemLib (1.1.4)
   - PromisesObjC (2.4.1)
   - PromisesSwift (2.4.1):
     - PromisesObjC (= 2.4.1)
   - RecaptchaInterop (101.0.0)
-  - StripeApplePay (24.4.1):
-    - StripeCore (= 24.4.1)
-  - StripeCore (24.4.1)
-  - StripePayments (24.4.1):
-    - StripeCore (= 24.4.1)
-    - StripePayments/Stripe3DS2 (= 24.4.1)
-  - StripePayments/Stripe3DS2 (24.4.1):
-    - StripeCore (= 24.4.1)
-  - StripePaymentSheet (24.4.1):
-    - StripeApplePay (= 24.4.1)
-    - StripeCore (= 24.4.1)
-    - StripePayments (= 24.4.1)
-    - StripePaymentsUI (= 24.4.1)
-  - StripePaymentsUI (24.4.1):
-    - StripeCore (= 24.4.1)
-    - StripePayments (= 24.4.1)
-    - StripeUICore (= 24.4.1)
-  - StripeUICore (24.4.1):
-    - StripeCore (= 24.4.1)
+  - StripeApplePay (26.11.0):
+    - StripeCore (= 26.11.0)
+  - StripeCore (26.11.0)
+  - StripeFinancialConnectionsLite (26.11.0):
+    - StripeCore (= 26.11.0)
+  - StripePayments (26.11.0):
+    - StripeCore (= 26.11.0)
+    - StripePayments/Stripe3DS2 (= 26.11.0)
+  - StripePayments/Stripe3DS2 (26.11.0):
+    - StripeCore (= 26.11.0)
+  - StripePaymentSheet (26.11.0):
+    - StripeApplePay (= 26.11.0)
+    - StripeCore (= 26.11.0)
+    - StripeFinancialConnectionsLite (= 26.11.0)
+    - StripePayments (= 26.11.0)
+    - StripePaymentsUI (= 26.11.0)
+  - StripePaymentsUI (26.11.0):
+    - StripeCore (= 26.11.0)
+    - StripePayments (= 26.11.0)
+    - StripeUICore (= 26.11.0)
+  - StripeUICore (26.11.0):
+    - StripeCore (= 26.11.0)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
@@ -124,11 +131,14 @@ SPEC REPOS:
     - GoogleUtilities
     - GTMAppAuth
     - GTMSessionFetcher
+    - IONCameraLib
+    - IONFilesystemLib
     - PromisesObjC
     - PromisesSwift
     - RecaptchaInterop
     - StripeApplePay
     - StripeCore
+    - StripeFinancialConnectionsLite
     - StripePayments
     - StripePaymentSheet
     - StripePaymentsUI
@@ -166,40 +176,43 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: 7193b3b92c74a07f85569e1a6c4f4237291e7496
-  AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
-  AppCheckCore: e215d35177a9cf469927863e69c13e220df32a8b
-  Capacitor: 05d35014f4425b0740fc8776481f6a369ad071bf
-  CapacitorApp: e1e6b7d05e444d593ca16fd6d76f2b7c48b5aea7
-  CapacitorCamera: 9bc7b005d0e6f1d5f525b8137045b60cffffce79
-  CapacitorCommunityAppleSignIn: c9c2541ee7580618055a91b3516c3f0313fe2544
-  CapacitorCommunityStripe: c340a7b79fce1fe015692992de58621058bfdc03
-  CapacitorCordova: b33e7f4aa4ed105dd43283acdd940964374a87d9
-  CapacitorFilesystem: 59270a63c60836248812671aa3b15df673fbaf74
-  CapacitorHaptics: 4fc15afe22b123d093e6ace24d95e8e3b1f261b9
-  CapacitorKeyboard: e89189ad398b815b6ff7e52271f0fb4f911a0a0a
-  CapacitorShare: d2a742baec21c8f3b92b361a2fbd2401cdd8288e
-  CapacitorSplashScreen: ef140a8b1ea7244e0c245ce2dd4ce5251e7ab86a
-  CapacitorStatusBar: b16799a26320ffa52f6c8b01737d5a95bbb8f3eb
-  CapgoCapacitorSocialLogin: 4fa119e5de63ae6599d5e8bcc2698e340731da7b
-  CapgoNativePurchases: 260513c14dadae1e5b32e885adb63e8cb19f9d7a
-  FBAEMKit: 58cb5f302cdd715a56d4c1d0dfdd2e423ac1421a
-  FBSDKCoreKit: 94d7461d0cecf441b1ba7c41acfff41daa8ccd41
-  FBSDKCoreKit_Basics: 151b43db8b834d3f0e02f95d36a44ffd36265e45
-  FBSDKLoginKit: 5c1cd53c91a2282b3a4fe6e6d3dcf2b8b0d33d55
-  GoogleSignIn: ce8c89bb9b37fb624b92e7514cc67335d1e277e4
-  GoogleUtilities: 766ace00c6b10d8148408f329d10c4f051931850
-  GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
+  AppAuth: ef4da5a3fc2e10b90c09a0a94a9baeaedc0341d5
+  AppCheckCore: be8fce5469f68d7f6a29aa94b25f097409ff7fdc
+  Capacitor: 89067779e14fb7ea56af07b4817f45d1f0c2a269
+  CapacitorApp: 305bd13c44f6f9d164e2ee66a4faa956ed8c0e06
+  CapacitorCamera: 4299fe8cf9b2b15e6ad602bce68d063b2008e8be
+  CapacitorCommunityAppleSignIn: 271cb2860576fd2961508bbfa7a82117d93eadca
+  CapacitorCommunityStripe: 872605f38acad247cf0a7a750173db06bb0920ca
+  CapacitorCordova: 5bec5648cbd09a176ce34ce5e7b6cdabb2c8a327
+  CapacitorFilesystem: b2bbd84bb91c177906c9dbc252864cb71ab9957b
+  CapacitorHaptics: 296f771ecd89c7a1bd92a7b6826a7d268e2e70f5
+  CapacitorKeyboard: b6b0744890cdb1d9a96e2cafcc9253fdcc55de3b
+  CapacitorShare: 2fde721d06a6f83ff5c7578e6a91b190d341ac6a
+  CapacitorSplashScreen: 7bf61c2001557ff9e195e601c6b87344480d3c65
+  CapacitorStatusBar: eca7bc2b58d9f886f1ef9edb66e57a9b29c121af
+  CapgoCapacitorSocialLogin: ce18e6c67ef988d6d22acc05da2c636f8d2f68d7
+  CapgoNativePurchases: b783b59dfca47435463be4857d32a066561581c1
+  FBAEMKit: fbb0a50e13109400d0615e7630a0db26ec6b8206
+  FBSDKCoreKit: 0063014b3b1f7e975e70b60232b0cf8003839746
+  FBSDKCoreKit_Basics: f4a1e0f38769eb71abaf6395b85e015318fcda49
+  FBSDKLoginKit: 0e6d0df30ae0a5b33f33d9050ca10ca21e0da234
+  GoogleSignIn: c7f09cfbc85a1abf69187be091997c317cc33b77
+  GoogleUtilities: 4e0c2ad9fa0d0d18b5c4df8bf57b461cba35b0bb
+  GTMAppAuth: 217a876b249c3c585a54fd6f73e6b58c4f5c4238
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
+  IONCameraLib: 729cae576e1a952602ce750a9790b6dc7d7e2e95
+  IONFilesystemLib: e6610c2b260d15e4b9cb9d5e37a87095479b669e
   PromisesObjC: 752c3227f599e3467650e47ea36f433eeb10c273
   PromisesSwift: 217dea0fd5d2ad65222a109c48698add13cc1c5b
   RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
-  StripeApplePay: e2adcc71d7a0a07e9de85e871eacf55ecce546a9
-  StripeCore: a2c2f331cf2e105aaadda60416cf405da2d5232b
-  StripePayments: 438ec8dc7320a7d601cb6152b88b37d4c34df161
-  StripePaymentSheet: da0ee282723f3c0c87c52b5e5cc3eb7e1344eeb9
-  StripePaymentsUI: 70414581d3d14089831e370008b705ef03c7cce0
-  StripeUICore: f11561a53f81e210398b4f1bd75f1e87b101197d
+  StripeApplePay: 6067bc754f87b41468ba67f2646a7fbc91abfa34
+  StripeCore: 21d74e81c1bb74b711a8d06988ca675d21fdbcf8
+  StripeFinancialConnectionsLite: 2949cecb41f00e40d93d47dd5a1fe9066f9e8b47
+  StripePayments: 58d9fadca7a02ab315f444840c8e95e4571b1244
+  StripePaymentSheet: b84165482cfe013aeca407c21b641909eb0b2f78
+  StripePaymentsUI: 3fb8af7977eef937c0950f0160bf252000f4f174
+  StripeUICore: 9e2582b98669b7e6e2d39bcada4667dc79e8223e
 
-PODFILE CHECKSUM: b4b48f8987214663eeef8ebe48afc43d36628be8
+PODFILE CHECKSUM: 3462af0204b7480c50ef125f8b6cc1758c9f4b40
 
 COCOAPODS: 1.16.2

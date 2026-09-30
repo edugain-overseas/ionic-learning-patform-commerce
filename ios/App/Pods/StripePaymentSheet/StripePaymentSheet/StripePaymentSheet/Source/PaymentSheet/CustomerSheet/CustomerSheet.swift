@@ -3,10 +3,6 @@
 //  StripePaymentSheet
 //
 //
-//  ⚠️🏗 This is feature has not been released yet, and is under construction
-//  Note: Do not import Stripe using `@_spi(STP)` in production.
-//  Doing so exposes internal functionality which may cause unexpected behavior if used directly.
-//
 import Foundation
 @_spi(STP) import StripeCore
 @_spi(STP) import StripePayments
@@ -94,10 +90,10 @@ public class CustomerSheet {
     ///   a new payment method
     /// - Parameter customerSessionClientSecretProvider: A callback that returns a newly created
     ///   instance of CustomerSessionClientSecret
-    @_spi(CustomerSessionBetaAccess)
     public init(configuration: CustomerSheet.Configuration,
                 intentConfiguration: CustomerSheet.IntentConfiguration,
                 customerSessionClientSecretProvider: @escaping () async throws -> CustomerSessionClientSecret) {
+        AnalyticsHelper.shared.generateSessionID()
         self.integrationType = .customerSession
         self.configuration = configuration
         self.customerAdapter = nil
@@ -108,6 +104,8 @@ public class CustomerSheet {
     let customerSessionClientSecretProvider: (() async throws -> CustomerSessionClientSecret)?
     let customerSheetIntentConfiguration: CustomerSheet.IntentConfiguration?
     let customerAdapter: CustomerAdapter?
+
+    var confirmationChallenge: ConfirmationChallenge?
 
     private var csCompletion: CustomerSheetCompletion?
 
@@ -125,8 +123,25 @@ public class CustomerSheet {
         case error(Error)
     }
 
+    public func present(from presentingViewController: UIViewController) async -> CustomerSheetResult {
+        await withCheckedContinuation { continuation in
+            Task { @MainActor in
+                present(from: presentingViewController) { result in
+                    continuation.resume(returning: result)
+                }
+            }
+        }
+    }
+
     public func present(from presentingViewController: UIViewController,
                         completion csCompletion: @escaping (CustomerSheetResult) -> Void
+    ) {
+        present(from: presentingViewController, completion: csCompletion, onDismiss: nil)
+    }
+
+    func present(from presentingViewController: UIViewController,
+                 completion csCompletion: @escaping (CustomerSheetResult) -> Void,
+                 onDismiss: (() -> Void)?
     ) {
         let loadingStartDate = Date()
         STPAnalyticsClient.sharedClient.logPaymentSheetEvent(event: self.initEvent)
@@ -141,6 +156,7 @@ public class CustomerSheet {
                 presentingViewController.dismiss(animated: true)
             }
             self.bottomSheetViewController.setViewControllers([self.loadingViewController])
+            onDismiss?()
             self.completion = nil
         }
         self.completion = completion
@@ -165,8 +181,12 @@ public class CustomerSheet {
         customerSheetDataSource.loadPaymentMethodInfo { result in
             switch result {
             case .success((let savedPaymentMethods, let selectedPaymentMethodOption, let elementsSession)):
+                self.confirmationChallenge = ConfirmationChallenge(elementsSession: elementsSession, stripeAttest: self.configuration.apiClient.stripeAttest)
                 let merchantSupportedPaymentMethodTypes = customerSheetDataSource.merchantSupportedPaymentMethodTypes(elementsSession: elementsSession)
                 let paymentMethodRemove = customerSheetDataSource.paymentMethodRemove(elementsSession: elementsSession)
+                let paymentMethodRemoveIsPartial = customerSheetDataSource.paymentMethodRemoveIsPartial(elementsSession: elementsSession)
+                let paymentMethodUpdate = customerSheetDataSource.paymentMethodUpdate(elementsSession: elementsSession)
+                let paymentMethodSyncDefault = customerSheetDataSource.paymentMethodSyncDefault(elementsSession: elementsSession)
                 let allowsRemovalOfLastSavedPaymentMethod = CustomerSheet.allowsRemovalOfLastPaymentMethod(elementsSession: elementsSession, configuration: self.configuration)
                 self.present(from: presentingViewController,
                              savedPaymentMethods: savedPaymentMethods,
@@ -174,10 +194,23 @@ public class CustomerSheet {
                              merchantSupportedPaymentMethodTypes: merchantSupportedPaymentMethodTypes,
                              customerSheetDataSource: customerSheetDataSource,
                              paymentMethodRemove: paymentMethodRemove,
+                             paymentMethodRemoveIsPartial: paymentMethodRemoveIsPartial,
+                             paymentMethodUpdate: paymentMethodUpdate,
+                             paymentMethodSyncDefault: paymentMethodSyncDefault,
                              allowsRemovalOfLastSavedPaymentMethod: allowsRemovalOfLastSavedPaymentMethod,
-                             cbcEligible: elementsSession.cardBrandChoice?.eligible ?? false)
+                             cbcEligible: elementsSession.cardBrandChoice?.eligible ?? false,
+                             useAutocompleteEndpoints: elementsSession.shouldUseAutocompleteProxyEndpoints,
+                             elementsSessionConfigId: elementsSession.configID)
+                var params: [String: Any] = [:]
+                if elementsSession.customer?.customerSession != nil {
+                    params["sync_default_enabled"] = paymentMethodSyncDefault
+                    if paymentMethodSyncDefault {
+                        params["has_default_payment_method"] = elementsSession.customer?.defaultPaymentMethod != nil
+                    }
+                }
                 STPAnalyticsClient.sharedClient.logPaymentSheetEvent(event: .customerSheetLoadSucceeded,
-                                                                     duration: Date().timeIntervalSince(loadingStartDate))
+                                                                     duration: Date().timeIntervalSince(loadingStartDate),
+                                                                     params: params)
             case .failure(let error):
                 STPAnalyticsClient.sharedClient.logPaymentSheetEvent(event: .customerSheetLoadFailed,
                                                                      duration: Date().timeIntervalSince(loadingStartDate),
@@ -198,8 +231,13 @@ public class CustomerSheet {
                  merchantSupportedPaymentMethodTypes: [STPPaymentMethodType],
                  customerSheetDataSource: CustomerSheetDataSource,
                  paymentMethodRemove: Bool,
+                 paymentMethodRemoveIsPartial: Bool,
+                 paymentMethodUpdate: Bool,
+                 paymentMethodSyncDefault: Bool,
                  allowsRemovalOfLastSavedPaymentMethod: Bool,
-                 cbcEligible: Bool) {
+                 cbcEligible: Bool,
+                 useAutocompleteEndpoints: Bool,
+                 elementsSessionConfigId: String?) {
         let loadSpecsPromise = Promise<Void>()
         AddressSpecProvider.shared.loadAddressSpecs {
             loadSpecsPromise.resolve(with: ())
@@ -214,8 +252,14 @@ public class CustomerSheet {
                                                                                 customerSheetDataSource: customerSheetDataSource,
                                                                                 isApplePayEnabled: isApplePayEnabled,
                                                                                 paymentMethodRemove: paymentMethodRemove,
+                                                                                paymentMethodRemoveIsPartial: paymentMethodRemoveIsPartial,
+                                                                                paymentMethodUpdate: paymentMethodUpdate,
+                                                                                paymentMethodSyncDefault: paymentMethodSyncDefault,
                                                                                 allowsRemovalOfLastSavedPaymentMethod: allowsRemovalOfLastSavedPaymentMethod,
                                                                                 cbcEligible: cbcEligible,
+                                                                                useAutocompleteEndpoints: useAutocompleteEndpoints,
+                                                                                confirmationChallenge: self.confirmationChallenge,
+                                                                                elementsSessionConfigId: elementsSessionConfigId,
                                                                                 csCompletion: self.csCompletion,
                                                                                 delegate: self)
             self.bottomSheetViewController.setViewControllers([savedPaymentSheetVC])
@@ -237,7 +281,6 @@ public class CustomerSheet {
 
     // MARK: - Internal Properties
     var completion: (() -> Void)?
-    var userCompletion: ((Result<PaymentOptionSelection?, Error>) -> Void)?
 }
 
 extension CustomerSheet {
@@ -262,7 +305,7 @@ extension CustomerSheet: CustomerSavedPaymentMethodsViewControllerDelegate {
             completion(.failed(error: CustomerSheetError.unknown(debugDescription: "No setup intent available")))
             return
         }
-        self.confirmIntent(intent: intent, elementsSession: elementsSession, paymentOption: paymentOption) { result in
+        self.confirmIntent(intent: intent, elementsSession: elementsSession, paymentOption: paymentOption, confirmationChallenge: confirmationChallenge) { result in
             completion(result)
         }
     }
@@ -318,7 +361,6 @@ extension CustomerSheet {
     /// Returns the selected Payment Option
     /// You can use this to obtain the selected payment method
     /// Calling this method causes CustomerSheet to load and throws an error if loading fails.
-    @_spi(CustomerSessionBetaAccess)
     public func retrievePaymentOptionSelection() async throws -> CustomerSheet.PaymentOptionSelection? {
         guard let customerSheetDataSource = createCustomerSheetDataSource() else {
             return nil
@@ -327,17 +369,7 @@ extension CustomerSheet {
         case .customerSession(let customerSessionAdapter):
             let (elementsSession, customerSessionClientSecret) = try await customerSessionAdapter.elementsSessionWithCustomerSessionClientSecret()
 
-            var selectedPaymentOption: CustomerPaymentOption?
-
-            // if opted in to the "set as default" feature, try to get default payment method from elements session
-            if configuration.allowsSetAsDefaultPM {
-                guard let customer = elementsSession.customer,
-                    let defaultPaymentMethod = customer.getDefaultOrFirstPaymentMethod() else { return nil }
-                selectedPaymentOption = CustomerPaymentOption.stripeId(defaultPaymentMethod.stripeId)
-            }
-            else {
-                selectedPaymentOption = CustomerPaymentOption.defaultPaymentMethod(for: customerSessionClientSecret.customerId)
-            }
+            let selectedPaymentOption = CustomerPaymentOption.selectedPaymentMethod(for: customerSessionClientSecret.customerId, elementsSession: elementsSession, surface: .customerSheet)
 
             switch selectedPaymentOption {
             case .applePay:
@@ -350,6 +382,7 @@ extension CustomerSheet {
                 guard let matchingPaymentMethod = paymentMethods.first(where: { $0.stripeId == paymentMethodId }) else {
                     return nil
                 }
+                matchingPaymentMethod.preloadCardArtImage()
                 return CustomerSheet.PaymentOptionSelection.paymentMethod(matchingPaymentMethod)
             default:
                 return nil
@@ -373,34 +406,39 @@ extension CustomerSheet {
 }
 
 public extension CustomerSheet {
-    @_spi(CustomerSessionBetaAccess)
     struct IntentConfiguration {
         internal var paymentMethodTypes: [String]?
+        internal var onBehalfOf: String?
         internal let setupIntentClientSecretProvider: () async throws -> String
 
         /// - Parameter paymentMethodTypes: A list of payment method types to display to the customers
         ///             Valid values include: "card", "us_bank_account", "sepa_debit"
         ///             If nil or empty, the SDK will dynamically determine the payment methods using your
         ///             Stripe Dashboard settings.
+        /// - Parameter onBehalfOf: The account (if any) whose payment method configurations will apply to the CustomerSheet session.
+        ///             Affects the allowed payment methods and whether card brand choice is enabled.
+        ///             When provided, the payment method will be saved to your platform account.
+        ///             See our [SetupIntent docs](https://docs.stripe.com/api/setup_intents/object#setup_intent_object-on_behalf_of) for more information.
         /// - Parameter setupIntentClientSecretProvider: Creates a SetupIntent configured to attach a new
         ///             payment method to a customer. Returns the client secret for the created SetupIntent.
         ///             This will be used to confirm a new payment method.
         public init(paymentMethodTypes: [String]? = nil,
+                    onBehalfOf: String? = nil,
                     setupIntentClientSecretProvider: @escaping (() async throws -> String)) {
             self.paymentMethodTypes = paymentMethodTypes
+            self.onBehalfOf = onBehalfOf
             self.setupIntentClientSecretProvider = setupIntentClientSecretProvider
         }
     }
 }
 
-@_spi(CustomerSessionBetaAccess)
 public struct CustomerSessionClientSecret {
     /// The identifier of the Stripe Customer object.
     /// See https://stripe.com/docs/api/customers/object#customer_object-id
     internal let customerId: String
 
     /// Customer session client secret
-    /// See: https://docs.corp.stripe.com/api/customer_sessions/object
+    /// See: https://docs.stripe.com/api/customer_sessions/object
     internal let clientSecret: String
 
     public init(customerId: String, clientSecret: String) {

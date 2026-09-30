@@ -52,6 +52,7 @@ import UIKit
     }
 
     // Stored STPPaymentConfiguration: Type checking handled in STPAPIClient+Payments.swift.
+    // TODO: Delete this, dead code
     @_spi(STP) public var _stored_configuration: NSObject?
 
     /// In order to perform API requests on behalf of a connected account, e.g. to
@@ -76,10 +77,8 @@ import UIKit
         configuration: StripeAPIConfiguration.sharedUrlSessionConfiguration
     )
 
-    @_spi(STP) public var sourcePollers: [String: NSObject]?
-    @_spi(STP) public var sourcePollersQueue: DispatchQueue?
-    /// A set of beta headers to add to Stripe API requests e.g. `Set(["alipay_beta=v1"])`.
-    @_spi(STP) public var betas: Set<String> = []
+    /// A set of beta headers to add to Stripe API requests e.g. `["alipay_beta=v1"]`.
+    public var betas: Set<String> = []
 
     /// Returns `true` if `publishableKey` is actually a user key, `false` otherwise.
     @_spi(STP) public var publishableKeyIsUserKey: Bool {
@@ -91,10 +90,14 @@ import UIKit
 
     @_spi(STP) public lazy var stripeAttest: StripeAttest = StripeAttest(apiClient: self)
 
+    private static var didSendTelemetryDataOnInit: Bool = false
+
     // MARK: Initializers
     override public init() {
-        sourcePollers = [:]
-        sourcePollersQueue = DispatchQueue(label: "com.stripe.sourcepollers")
+        if !Self.didSendTelemetryDataOnInit {
+            STPTelemetryClient.shared.sendTelemetryData()
+            Self.didSendTelemetryDataOnInit = true
+        }
     }
 
     /// Initializes an API client with the given publishable key.
@@ -112,12 +115,16 @@ import UIKit
     @_spi(STP) public func configuredRequest(
         for url: URL,
         using ephemeralKeySecret: String? = nil,
+        apiVersionOverride: String? = nil,
         additionalHeaders: [String: String] = [:]
     )
         -> URLRequest
     {
         var request = URLRequest(url: url)
-        var headers = defaultHeaders(ephemeralKeySecret: ephemeralKeySecret)
+        var headers = defaultHeaders(
+            ephemeralKeySecret: ephemeralKeySecret,
+            apiVersionOverride: apiVersionOverride
+        )
         // additionalHeaders can overwrite defaultHeaders.
         for (k, v) in additionalHeaders { headers[k] = v }
         headers.forEach { key, value in
@@ -127,10 +134,13 @@ import UIKit
     }
 
     /// Headers common to all API requests for a given API Client.
-    func defaultHeaders(ephemeralKeySecret: String?) -> [String: String] {
+    func defaultHeaders(
+        ephemeralKeySecret: String?,
+        apiVersionOverride: String? = nil
+    ) -> [String: String] {
         var defaultHeaders: [String: String] = [:]
         defaultHeaders["X-Stripe-User-Agent"] = STPAPIClient.stripeUserAgentDetails(with: appInfo)
-        var stripeVersion = APIVersion
+        var stripeVersion = apiVersionOverride ?? APIVersion
         for beta in betas {
             stripeVersion += "; \(beta)"
         }
@@ -153,10 +163,13 @@ import UIKit
             )
             return
         }
-        let secretKey = publishableKey.hasPrefix("sk_")
         assert(
-            !secretKey,
+            !publishableKey.hasPrefix("sk_"),
             "You are using a secret key. Use a publishable key instead. For more info, see https://stripe.com/docs/keys"
+        )
+        assert(
+            !publishableKey.hasPrefix("rk_"),
+            "You are using a restricted key. Use a publishable key instead. For more info, see https://stripe.com/docs/keys"
         )
         #if !DEBUG
             if publishableKey.lowercased().hasPrefix("pk_test") && !didShowTestmodeKeyWarning {
@@ -248,6 +261,7 @@ import UIKit
         client.userKeyLiveMode = userKeyLiveMode
         return client
     }
+
 }
 
 private let APIVersion = "2020-08-27"
@@ -256,11 +270,17 @@ private let APIBaseURL = "https://api.stripe.com/v1"
 // MARK: Modern bindings
 extension STPAPIClient {
     /// Make a GET request using the passed parameters.
+    /// - Parameters:
+    ///   - timeout: Optional timeout for each request attempt. The total request duration can be longer when retries are enabled.
+    ///   - retriesEnabled: Whether to retry HTTP 429 responses using the standard retry policy.
     @_spi(STP) public func get<T: Decodable>(
         resource: String,
         parameters: [String: Any],
         ephemeralKeySecret: String? = nil,
         consumerPublishableKey: String? = nil,
+        apiVersionOverride: String? = nil,
+        timeout: TimeInterval? = nil,
+        retriesEnabled: Bool = true,
         completion: @escaping (
             Result<T, Error>
         ) -> Void
@@ -270,7 +290,10 @@ extension STPAPIClient {
             parameters: parameters,
             ephemeralKeySecret: ephemeralKeySecret,
             consumerPublishableKey: consumerPublishableKey,
+            apiVersionOverride: apiVersionOverride,
             resource: resource,
+            timeout: timeout,
+            retryCount: retriesEnabled ? StripeAPI.maxRetries : 0,
             completion: completion
         )
     }
@@ -281,6 +304,7 @@ extension STPAPIClient {
         parameters: [String: Any],
         ephemeralKeySecret: String? = nil,
         consumerPublishableKey: String? = nil,
+        apiVersionOverride: String? = nil,
         completion: @escaping (
             Result<T, Error>
         ) -> Void
@@ -290,6 +314,7 @@ extension STPAPIClient {
             parameters: parameters,
             ephemeralKeySecret: ephemeralKeySecret,
             consumerPublishableKey: consumerPublishableKey,
+            apiVersionOverride: apiVersionOverride,
             url: url,
             completion: completion
         )
@@ -302,13 +327,15 @@ extension STPAPIClient {
         resource: String,
         parameters: [String: Any],
         ephemeralKeySecret: String? = nil,
-        consumerPublishableKey: String? = nil
+        consumerPublishableKey: String? = nil,
+        apiVersionOverride: String? = nil
     ) -> Promise<T> {
         return request(
             method: .get,
             parameters: parameters,
             ephemeralKeySecret: ephemeralKeySecret,
             consumerPublishableKey: consumerPublishableKey,
+            apiVersionOverride: apiVersionOverride,
             resource: resource
         )
     }
@@ -319,6 +346,7 @@ extension STPAPIClient {
         parameters: [String: Any],
         ephemeralKeySecret: String? = nil,
         consumerPublishableKey: String? = nil,
+        apiVersionOverride: String? = nil,
         completion: @escaping (Result<T, Error>) -> Void
     ) {
         request(
@@ -326,25 +354,8 @@ extension STPAPIClient {
             parameters: parameters,
             ephemeralKeySecret: ephemeralKeySecret,
             consumerPublishableKey: consumerPublishableKey,
+            apiVersionOverride: apiVersionOverride,
             resource: resource,
-            completion: completion
-        )
-    }
-
-    /// Make a POST request using the passed parameters.
-    @_spi(STP) public func post<T: Decodable>(
-        url: URL,
-        parameters: [String: Any],
-        ephemeralKeySecret: String? = nil,
-        consumerPublishableKey: String? = nil,
-        completion: @escaping (Result<T, Error>) -> Void
-    ) {
-        request(
-            method: .post,
-            parameters: parameters,
-            ephemeralKeySecret: ephemeralKeySecret,
-            consumerPublishableKey: consumerPublishableKey,
-            url: url,
             completion: completion
         )
     }
@@ -356,14 +367,36 @@ extension STPAPIClient {
         resource: String,
         parameters: [String: Any],
         ephemeralKeySecret: String? = nil,
-        consumerPublishableKey: String? = nil
+        consumerPublishableKey: String? = nil,
+        apiVersionOverride: String? = nil
     ) -> Promise<T> {
         return request(
             method: .post,
             parameters: parameters,
             ephemeralKeySecret: ephemeralKeySecret,
             consumerPublishableKey: consumerPublishableKey,
+            apiVersionOverride: apiVersionOverride,
             resource: resource
+        )
+    }
+
+    /// Make a DELETE request using the passed parameters.
+    @_spi(STP) public func delete<T: Decodable>(
+        resource: String,
+        parameters: [String: Any],
+        ephemeralKeySecret: String? = nil,
+        consumerPublishableKey: String? = nil,
+        apiVersionOverride: String? = nil,
+        completion: @escaping (Result<T, Error>) -> Void
+    ) {
+        request(
+            method: .delete,
+            parameters: parameters,
+            ephemeralKeySecret: ephemeralKeySecret,
+            consumerPublishableKey: consumerPublishableKey,
+            apiVersionOverride: apiVersionOverride,
+            resource: resource,
+            completion: completion
         )
     }
 
@@ -372,6 +405,7 @@ extension STPAPIClient {
         parameters: [String: Any],
         ephemeralKeySecret: String?,
         consumerPublishableKey: String?,
+        apiVersionOverride: String?,
         resource: String
     ) -> Promise<T> {
         let promise = Promise<T>()
@@ -380,6 +414,7 @@ extension STPAPIClient {
             parameters: parameters,
             ephemeralKeySecret: ephemeralKeySecret,
             consumerPublishableKey: consumerPublishableKey,
+            apiVersionOverride: apiVersionOverride,
             resource: resource
         ) { result in
             promise.fullfill(with: result)
@@ -392,7 +427,10 @@ extension STPAPIClient {
         parameters: [String: Any],
         ephemeralKeySecret: String?,
         consumerPublishableKey: String?,
+        apiVersionOverride: String?,
         resource: String,
+        timeout: TimeInterval? = nil,
+        retryCount: Int = StripeAPI.maxRetries,
         completion: @escaping (Result<T, Error>) -> Void
     ) {
         let url = apiURL.appendingPathComponent(resource)
@@ -401,7 +439,10 @@ extension STPAPIClient {
             parameters: parameters,
             ephemeralKeySecret: ephemeralKeySecret,
             consumerPublishableKey: consumerPublishableKey,
+            apiVersionOverride: apiVersionOverride,
             url: url,
+            timeout: timeout,
+            retryCount: retryCount,
             completion: completion
         )
     }
@@ -411,14 +452,20 @@ extension STPAPIClient {
         parameters: [String: Any],
         ephemeralKeySecret: String?,
         consumerPublishableKey: String?,
+        apiVersionOverride: String?,
         url: URL,
+        timeout: TimeInterval? = nil,
+        retryCount: Int = StripeAPI.maxRetries,
         completion: @escaping (Result<T, Error>) -> Void
     ) {
-        var request = configuredRequest(for: url)
+        var request = configuredRequest(for: url, apiVersionOverride: apiVersionOverride)
+        if let timeout {
+            request.timeoutInterval = timeout
+        }
         switch method {
         case .get:
             request.stp_addParameters(toURL: parameters)
-        case .post:
+        case .post, .delete:
             let formData = URLEncoder.queryString(from: parameters).data(using: .utf8)
             request.httpBody = formData
             request.setValue(
@@ -447,7 +494,11 @@ extension STPAPIClient {
             request.setValue(nil, forHTTPHeaderField: "Stripe-Account")
         }
 
-        self.sendRequest(request: request, completion: completion)
+        self.sendRequest(
+            request: request,
+            retryCount: retryCount,
+            completion: completion
+        )
     }
 
     /// Make a POST request using the passed Encodable object.
@@ -456,13 +507,15 @@ extension STPAPIClient {
     @_spi(STP) public func post<I: Encodable, O: Decodable>(
         resource: String,
         object: I,
-        ephemeralKeySecret: String? = nil
+        ephemeralKeySecret: String? = nil,
+        apiVersionOverride: String? = nil
     ) -> Promise<O> {
         let promise = Promise<O>()
         self.post(
             resource: resource,
             object: object,
-            ephemeralKeySecret: ephemeralKeySecret
+            ephemeralKeySecret: ephemeralKeySecret,
+            apiVersionOverride: apiVersionOverride
         ) { result in
             promise.fullfill(with: result)
         }
@@ -474,6 +527,7 @@ extension STPAPIClient {
         resource: String,
         object: I,
         ephemeralKeySecret: String? = nil,
+        apiVersionOverride: String? = nil,
         completion: @escaping (Result<O, Error>) -> Void
     ) {
         let url = apiURL.appendingPathComponent(resource)
@@ -481,6 +535,7 @@ extension STPAPIClient {
             url: url,
             object: object,
             ephemeralKeySecret: ephemeralKeySecret,
+            apiVersionOverride: apiVersionOverride,
             completion: completion
         )
     }
@@ -490,6 +545,7 @@ extension STPAPIClient {
         url: URL,
         object: I,
         ephemeralKeySecret: String? = nil,
+        apiVersionOverride: String? = nil,
         completion: @escaping (Result<O, Error>) -> Void
     ) {
         do {
@@ -498,6 +554,7 @@ extension STPAPIClient {
             var request = configuredRequest(
                 for: url,
                 using: ephemeralKeySecret,
+                apiVersionOverride: apiVersionOverride,
                 additionalHeaders: [
                     "Content-Length": String(format: "%lu", UInt(formData?.count ?? 0)),
                     "Content-Type": "application/x-www-form-urlencoded",
@@ -522,6 +579,7 @@ extension STPAPIClient {
 
     func sendRequest<T: Decodable>(
         request: URLRequest,
+        retryCount: Int = StripeAPI.maxRetries,
         completion: @escaping (Result<T, Error>) -> Void
     ) {
         urlSession.stp_performDataTask(
@@ -529,38 +587,45 @@ extension STPAPIClient {
             completionHandler: { (data, response, error) in
                 DispatchQueue.main.async {
                     completion(
-                        STPAPIClient.decodeResponse(data: data, error: error, response: response)
+                        STPAPIClient.decodeResponse(data: data, error: error, response: response, request: request)
                     )
                 }
-            }
+            },
+            retryCount: retryCount
         )
     }
 
     @_spi(STP) public static func decodeResponse<T: Decodable>(
         data: Data?,
         error: Error?,
-        response: URLResponse?
+        response: URLResponse?,
+        request: URLRequest? = nil
     ) -> Result<T, Error> {
-        if let error = error {
+        if let error {
             return .failure(error)
         }
-        guard let data = data else {
-            return .failure(NSError.stp_genericFailedToParseResponseError())
+        #if DEBUG
+        if let httpResponse = response as? HTTPURLResponse,
+           let method = request?.httpMethod,
+           let requestId = httpResponse.value(forHTTPHeaderField: "request-id"),
+           let url = httpResponse.value(forKey: "URL") as? URL {
+            print("[Stripe SDK]: \(method) \"\(url.relativePath)\" \(httpResponse.statusCode) \(requestId)")
         }
+        #endif
 
         do {
-            // HACK: We must first check if EmptyResponses contain an error since it'll always parse successfully.
-            if T.self == EmptyResponse.self,
-                let decodedStripeError = decodeStripeErrorResponse(data: data, response: response)
-            {
-                return .failure(decodedStripeError)
+            guard
+                let httpResponse = response as? HTTPURLResponse,
+                (200...299).contains(httpResponse.statusCode)
+            else {
+                throw NSError.stp_genericFailedToParseResponseError()
             }
 
-            let decodedObject: T = try StripeJSONDecoder.decode(jsonData: data)
+            let decodedObject: T = try StripeJSONDecoder.decode(jsonData: data ?? Data())
             return .success(decodedObject)
         } catch {
             // Try decoding the error from the service if one is available
-            if let decodedStripeError = decodeStripeErrorResponse(data: data, response: response) {
+            if let data, let decodedStripeError = decodeStripeErrorResponse(data: data, response: response) {
                 return .failure(decodedStripeError)
             } else {
                 // Return decoding error directly
@@ -581,7 +646,7 @@ extension STPAPIClient {
         ),
             var apiError = decodedErrorResponse.error
         {
-            apiError.statusCode = (response as? HTTPURLResponse)?.statusCode
+            apiError.httpStatusCode = (response as? HTTPURLResponse)?.statusCode
             apiError.requestID = (response as? HTTPURLResponse)?.value(forHTTPHeaderField: "request-id")
 
             decodedError = StripeError.apiError(apiError)
@@ -593,5 +658,6 @@ extension STPAPIClient {
     enum HTTPMethod: String {
         case get = "GET"
         case post = "POST"
+        case delete = "DELETE"
     }
 }

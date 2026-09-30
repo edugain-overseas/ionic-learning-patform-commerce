@@ -1,4 +1,8 @@
+"%1$@ •••• %2$@" = "%1$@ •••• %2$@";
+
 "%@ (optional)" = "%@(opsyonal)";
+
+"(not accepted)" = "(hindi tinatanggap)";
 
 "Account number" = "Numero ng account";
 
@@ -36,7 +40,7 @@
 
 "County" = "County";
 
-"Date is empty." = "Walang laman ang petsa.";
+"Date of Birth" = "Petsa ng Kapanganakan";
 
 "Department" = "Departamento";
 
@@ -66,8 +70,6 @@
 
 "Incomplete phone number" = "Kulang na numero ng telepono";
 
-"Invalid UPI ID" = "Di valid na UPI ID";
-
 "Island" = "Isla";
 
 "Last" = "Apelyido";
@@ -90,6 +92,8 @@
 
 "Prefecture" = "Prefecture";
 
+"Processing..." = "Pinoproseso...";
+
 "Province" = "Probinsiya";
 
 "Remove" = "Alisin";
@@ -102,9 +106,15 @@
 
 "Select card brand (optional)" = "Pumili ng brand ng kard (opsyonal)";
 
+"Selection is empty." = "Walang laman ang seleksyon.";
+
+"Something went wrong" = "Nagkaproblema";
+
 "Sort code" = "Sort code";
 
 "State" = "State";
+
+"Submit" = "Isumite";
 
 "Suburb" = "Suburb";
 
@@ -120,8 +130,6 @@
 
 "Town or city" = "Bayan o siyudad";
 
-"UPI ID" = "UPI ID";
-
 "Unable to parse phone number" = "Hindi ma=parse ang numero ng telepono";
 
 "Use rotor to access links" = "Gumamit ng rotor para i-access ang mga link";
@@ -130,12 +138,16 @@
 
 "Your BLIK code is invalid." = "Ang iyong BLIK code ay hindi valid.";
 
-"Your ZIP is incomplete." = "Ang iyong ZIP ay di kumpleto.";
+"Your ZIP code is incomplete." = "Hindi kumpleto ang iyong zip code.";
+
+"Your ZIP code is invalid." = "Ang iyong ZIP code ay hindi wasto.";
 
 "Your email is invalid." = "Ang iyong email ay imbalido.";
 
 "Your payment information will not be saved." = "Hindi mase-save ang iyong impormasyon ng pagbabayad.";
 
 "Your postal code is incomplete." = "Ang iyong postal code ay di kumpleto.";
+
+"Your postal code is invalid." = "Ang iyong postal code ay di balido.";
 
 "ZIP" = "ZIP";

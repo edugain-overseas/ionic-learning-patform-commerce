@@ -20,34 +20,83 @@ class VerticalPaymentMethodListViewController: UIViewController {
     var rowButtons: [RowButton] {
         return stackView.arrangedSubviews.compactMap { $0 as? RowButton }
     }
-    private(set) var currentSelection: VerticalPaymentMethodListSelection?
+    private var linkRowButton: RowButton? {
+        rowButtons.first(where: { $0.type == .link })
+    }
+    private(set) var currentSelection: RowButtonType?
     let stackView = UIStackView()
     let appearance: PaymentSheet.Appearance
+    let currency: String?
+    private(set) var incentive: PaymentMethodIncentive?
     weak var delegate: VerticalPaymentMethodListViewControllerDelegate?
+
+    // Properties moved from initializer captures
+    private var overrideHeaderView: UIView?
+    private var savedPaymentMethods: [STPPaymentMethod]
+    private var initialSelection: RowButtonType?
+    private var savedPaymentMethodAccessoryType: RowButton.RightAccessoryButton.AccessoryType?
+    private var shouldShowApplePay: Bool
+    private var shouldShowLink: Bool
+    private var linkBrand: LinkBrand
+    private let linkBrandProvider: () -> LinkBrand
+    private var paymentMethodTypes: [PaymentSheet.PaymentMethodType]
+    private let paymentMethodMessagingPromotionsHelper: PaymentMethodMessagingPromotionsHelper?
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func clearSelection() {
+        currentSelection = nil
+        initialSelection = nil
+        refreshContent()
+    }
+
     init(
-        initialSelection: VerticalPaymentMethodListSelection?,
-        savedPaymentMethod: STPPaymentMethod?,
+        initialSelection: RowButtonType?,
+        savedPaymentMethods: [STPPaymentMethod],
         paymentMethodTypes: [PaymentSheet.PaymentMethodType],
         shouldShowApplePay: Bool,
         shouldShowLink: Bool,
+        linkBrand: LinkBrand = .link,
+        linkBrandProvider: (() -> LinkBrand)? = nil,
         savedPaymentMethodAccessoryType: RowButton.RightAccessoryButton.AccessoryType?,
         overrideHeaderView: UIView?,
         appearance: PaymentSheet.Appearance,
         currency: String?,
         amount: Int?,
         incentive: PaymentMethodIncentive?,
+        paymentMethodMessagingPromotionsHelper: PaymentMethodMessagingPromotionsHelper? = nil,
         delegate: VerticalPaymentMethodListViewControllerDelegate
     ) {
-        self.delegate = delegate
         self.appearance = appearance
+        self.currency = currency
+        self.incentive = incentive
         self.delegate = delegate
-        super.init(nibName: nil, bundle: nil)
+        self.overrideHeaderView = overrideHeaderView
+        self.savedPaymentMethods = savedPaymentMethods
+        self.initialSelection = initialSelection
+        self.savedPaymentMethodAccessoryType = savedPaymentMethodAccessoryType
+        self.shouldShowApplePay = shouldShowApplePay
+        self.shouldShowLink = shouldShowLink
+        self.linkBrand = linkBrand
+        self.linkBrandProvider = linkBrandProvider ?? { linkBrand }
+        self.paymentMethodTypes = paymentMethodTypes
+        self.paymentMethodMessagingPromotionsHelper = paymentMethodMessagingPromotionsHelper
 
+        super.init(nibName: nil, bundle: nil)
+        self.renderContent()
+    }
+
+    private func refreshContent() {
+        stackView.arrangedSubviews.forEach { subview in
+            subview.removeFromSuperview()
+        }
+
+        renderContent()
+    }
+
+    private func renderContent() {
         // Add the header - either the passed in `header` or "Select payment method"
         let header = overrideHeaderView ?? PaymentSheetUI.makeHeaderLabel(title: .Localized.select_payment_method, appearance: appearance)
         stackView.addArrangedSubview(header)
@@ -56,8 +105,8 @@ class VerticalPaymentMethodListViewController: UIViewController {
         // Create stack view views after super.init so that we can reference `self`
         var views = [UIView]()
         // Saved payment method:
-        if let savedPaymentMethod {
-            let selection = VerticalPaymentMethodListSelection.saved(paymentMethod: savedPaymentMethod)
+        if let firstSavedPaymentMethod = savedPaymentMethods.first {
+            let selection = RowButtonType.saved(paymentMethod: firstSavedPaymentMethod)
             let accessoryButton: RowButton.RightAccessoryButton? = {
                 if let savedPaymentMethodAccessoryType {
                     return RowButton.RightAccessoryButton(accessoryType: savedPaymentMethodAccessoryType, appearance: appearance, didTap: didTapAccessoryButton)
@@ -66,11 +115,16 @@ class VerticalPaymentMethodListViewController: UIViewController {
                 }
             }()
 
-            let savedPaymentMethodButton = RowButton.makeForSavedPaymentMethod(paymentMethod: savedPaymentMethod, appearance: appearance, rightAccessoryView: accessoryButton) { [weak self] in
+            let savedPaymentMethodButton = RowButton.makeForSavedPaymentMethod(
+                paymentMethod: firstSavedPaymentMethod,
+                appearance: appearance,
+                accessoryView: accessoryButton,
+                linkBrand: linkBrand
+            ) { [weak self] in
                 self?.didTap(rowButton: $0, selection: selection)
             }
             if initialSelection == selection {
-                savedPaymentMethodButton.isSelected = true
+                savedPaymentMethodButton.updateSelectedState(true, willDisplayForm: delegate?.willDisplayForm(savedPaymentMethodButton.type) == true)
                 currentSelection = selection
             }
             views += [
@@ -84,24 +138,24 @@ class VerticalPaymentMethodListViewController: UIViewController {
         // Build Apple Pay and Link rows
         let applePay: RowButton? = {
             guard shouldShowApplePay else { return nil }
-            let selection = VerticalPaymentMethodListSelection.applePay
+            let selection = RowButtonType.applePay
             let rowButton = RowButton.makeForApplePay(appearance: appearance) { [weak self] in
                 self?.didTap(rowButton: $0, selection: .applePay)
             }
             if initialSelection == selection {
-                rowButton.isSelected = true
+                rowButton.updateSelectedState(true, willDisplayForm: delegate?.willDisplayForm(rowButton.type) == true)
                 currentSelection = selection
             }
             return rowButton
         }()
         let link: RowButton? = {
             guard shouldShowLink else { return nil }
-            let selection = VerticalPaymentMethodListSelection.link
-            let rowButton = RowButton.makeForLink(appearance: appearance) { [weak self] in
+            let selection = RowButtonType.link
+            let rowButton = RowButton.makeForLink(appearance: appearance, linkBrand: linkBrand) { [weak self] in
                 self?.didTap(rowButton: $0, selection: .link)
             }
             if initialSelection == selection {
-                rowButton.isSelected = true
+                rowButton.updateSelectedState(true, willDisplayForm: delegate?.willDisplayForm(rowButton.type) == true)
                 currentSelection = selection
             }
             return rowButton
@@ -111,15 +165,16 @@ class VerticalPaymentMethodListViewController: UIViewController {
         var indexAfterCards: Int?
         let paymentMethodTypes = paymentMethodTypes
         for paymentMethodType in paymentMethodTypes {
-            let selection = VerticalPaymentMethodListSelection.new(paymentMethodType: paymentMethodType)
+            let selection = RowButtonType.new(paymentMethodType: paymentMethodType)
             let rowButton = RowButton.makeForPaymentMethodType(
                 paymentMethodType: paymentMethodType,
-                subtitle: Self.subtitleText(for: paymentMethodType),
-                hasSavedCard: savedPaymentMethod?.type == .card, // TODO(RUN_MOBILESDK-3708)
+                currency: currency,
+                hasSavedCard: savedPaymentMethods.contains { $0.type == .card },
                 promoText: incentive?.takeIfAppliesTo(paymentMethodType)?.displayText,
+                promotionsHelper: paymentMethodMessagingPromotionsHelper,
                 appearance: appearance,
                 // Enable press animation if tapping this transitions the screen to a form instead of becoming selected
-                shouldAnimateOnPress: !delegate.shouldSelectPaymentMethod(selection)
+                shouldAnimateOnPress: delegate?.willDisplayForm(selection) == true
             ) { [weak self] in
                 self?.didTap(rowButton: $0, selection: selection)
             }
@@ -128,7 +183,7 @@ class VerticalPaymentMethodListViewController: UIViewController {
                 indexAfterCards = index + 1
             }
             if initialSelection == selection {
-                rowButton.isSelected = true
+                rowButton.updateSelectedState(true, willDisplayForm: delegate?.willDisplayForm(rowButton.type) == true)
                 currentSelection = selection
             }
         }
@@ -147,20 +202,65 @@ class VerticalPaymentMethodListViewController: UIViewController {
         stackView.spacing = 12.0
         view = stackView
         view.backgroundColor = appearance.colors.background
+
+        if linkRowButton != nil {
+            initializeLinkAccountObserver()
+        }
+    }
+
+    deinit {
+        LinkAccountContext.shared.removeObserver(self)
+    }
+
+    private func initializeLinkAccountObserver() {
+        LinkAccountContext.shared.addObserver(self, selector: #selector(onLinkAccountChange(_:)))
+
+        if let linkAccount = LinkAccountContext.shared.account, linkAccount.isRegistered {
+            updateLinkRow(for: linkAccount)
+        }
+    }
+
+    @objc
+    func onLinkAccountChange(_ notification: Notification) {
+        DispatchQueue.main.async { [weak self] in
+            let linkAccount = notification.object as? PaymentSheetLinkAccount
+            self?.updateLinkRow(for: linkAccount)
+        }
+    }
+
+    private func updateLinkRow(for linkAccount: PaymentSheetLinkAccount?) {
+        guard let linkRowButton else {
+            return
+        }
+
+        let resolvedBrand = linkBrandProvider()
+        if resolvedBrand != linkBrand {
+            linkBrand = resolvedBrand
+            linkRowButton.setLabel(text: resolvedBrand.displayName)
+            linkRowButton.setPrimaryAccessibilityLabel(
+                resolvedBrand.accessibilityText(from: String.Localized.pay_with_link(brand: resolvedBrand))
+            )
+        }
+
+        let sublabel = linkAccount?.email ?? .Localized.link_subtitle_text
+        linkRowButton.setSublabel(text: sublabel)
     }
 
     // MARK: - Helpers
 
-    func didTap(rowButton: RowButton, selection: VerticalPaymentMethodListSelection) {
+    func didTap(rowButton: RowButton, selection: RowButtonType) {
         guard let delegate else { return }
-        let shouldSelect = delegate.shouldSelectPaymentMethod(selection)
+        // We set shouldSelect to be false if the selection is not actually changing to avoid de-selecting and then re-selecting the row
+        // We intentionally do not guard / exit early on this condition to preserve the call to delegate.didTapPaymentMethod()
+        //      and the analytics logging it does, which historically has been called in this scenario.
+        let shouldSelect = !delegate.willDisplayForm(rowButton.type) && currentSelection != selection
         if shouldSelect {
             // Deselect previous row
             rowButtons.forEach {
-                $0.isSelected = false
+                $0.updateSelectedState(false, willDisplayForm: delegate.willDisplayForm($0.type))
             }
             // Select new row
-            rowButton.isSelected = shouldSelect
+            rowButton.updateSelectedState(shouldSelect, willDisplayForm: delegate.willDisplayForm(rowButton.type))
             currentSelection = selection
         }
         delegate.didTapPaymentMethod(selection)
@@ -171,6 +271,14 @@ class VerticalPaymentMethodListViewController: UIViewController {
         delegate?.didTapSavedPaymentMethodAccessoryButton()
     }
 
+    func setIncentive(_ incentive: PaymentMethodIncentive?) {
+        guard self.incentive != incentive else {
+            return
+        }
+
+        self.incentive = incentive
+        self.refreshContent()
+    }
     static func makeSectionLabel(text: String, appearance: PaymentSheet.Appearance) -> UILabel {
         let label = UILabel()
         label.font = appearance.scaledFont(for: appearance.font.base.regular, style: .subheadline, maximumPointSize: 25)
@@ -179,114 +287,17 @@ class VerticalPaymentMethodListViewController: UIViewController {
         label.text = text
         return label
     }
-
-    static func subtitleText(for paymentMethodType: PaymentSheet.PaymentMethodType) -> String? {
-        switch paymentMethodType {
-        case .stripe(.klarna):
-            return String.Localized.buy_now_or_pay_later_with_klarna
-        case .stripe(.afterpayClearpay):
-            if AfterpayPriceBreakdownView.shouldUseClearpayBrand(for: Locale.current) {
-                return String.Localized.buy_now_or_pay_later_with_clearpay
-            } else {
-                return String.Localized.buy_now_or_pay_later_with_afterpay
-            }
-        case .stripe(.affirm):
-            return String.Localized.pay_over_time_with_affirm
-        default:
-            return nil
-        }
-    }
 }
 
 // MARK: - VerticalPaymentMethodListViewControllerDelegate
 protocol VerticalPaymentMethodListViewControllerDelegate: AnyObject {
     /// Called when a row is tapped, before `didTapPaymentMethod` is called.
-    /// - Returns: Whether or not the payment method row button should appear selected.
-    func shouldSelectPaymentMethod(_ selection: VerticalPaymentMethodListSelection) -> Bool
+    /// - Returns: Whether or not selecting the RowButtonType will cause a form to be displayed.
+    func willDisplayForm(_ rowButtonType: RowButtonType) -> Bool
 
     /// Called after a row is tapped and after `shouldSelectPaymentMethod` is called
-    func didTapPaymentMethod(_ selection: VerticalPaymentMethodListSelection)
+    func didTapPaymentMethod(_ selection: RowButtonType)
 
     /// Called when the accessory button on the saved payment method row is tapped
     func didTapSavedPaymentMethodAccessoryButton()
-}
-
-// MARK: - VerticalPaymentMethodListSelection
-enum VerticalPaymentMethodListSelection: Equatable, Hashable {
-    case new(paymentMethodType: PaymentSheet.PaymentMethodType)
-    case saved(paymentMethod: STPPaymentMethod)
-    case applePay
-    case link
-
-    static func == (lhs: VerticalPaymentMethodListSelection, rhs: VerticalPaymentMethodListSelection) -> Bool {
-        switch (lhs, rhs) {
-        case (.link, .link):
-            return true
-        case (.applePay, .applePay):
-            return true
-        case let (.new(lhsPMType), .new(rhsPMType)):
-            return lhsPMType == rhsPMType
-        case let (.saved(lhsPM), .saved(rhsPM)):
-            return lhsPM.stripeId == rhsPM.stripeId && lhsPM.calculateCardBrandToDisplay() == rhsPM.calculateCardBrandToDisplay()
-        default:
-            return false
-        }
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        switch self {
-        case .new(let paymentMethodType):
-            hasher.combine(0)
-            hasher.combine(paymentMethodType.identifier)
-        case .saved(let paymentMethod):
-            hasher.combine(1)
-            hasher.combine(paymentMethod.stripeId)
-        case .applePay:
-            hasher.combine(2)
-        case .link:
-            hasher.combine(3)
-        }
-    }
-
-    var isSaved: Bool {
-        switch self {
-        case .saved:
-            return true
-        default:
-            return false
-        }
-    }
-
-    var analyticsIdentifier: String {
-        switch self {
-        case .applePay:
-            return "apple_pay"
-        case .link:
-            return "link"
-        case .saved:
-            return "saved"
-        case .new(paymentMethodType: let type):
-            return type.identifier
-        }
-    }
-
-    var savedPaymentMethod: STPPaymentMethod? {
-        switch self {
-        case .applePay, .link, .new:
-            return nil
-        case .saved(let paymentMethod):
-            return paymentMethod
-        }
-    }
-
-    var paymentMethodType: PaymentSheet.PaymentMethodType? {
-        switch self {
-        case .new(let paymentMethodType):
-            return paymentMethodType
-        case .saved(let paymentMethod):
-            return .stripe(paymentMethod.type)
-        case .applePay, .link:
-            return nil
-        }
-    }
 }

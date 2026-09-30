@@ -26,6 +26,13 @@ extension String.Localized {
         )
     }
 
+    static var continue_another_way: String {
+        STPLocalizedString(
+            "Continue another way",
+            "Label of a button that when tapped allows the user to select a different form of payment."
+        )
+    }
+
     static func pay_faster_at_$merchant_and_thousands_of_merchants(merchantDisplayName: String) -> String {
         String(
             format: STPLocalizedString(
@@ -38,15 +45,6 @@ extension String.Localized {
             ),
             merchantDisplayName
         )
-    }
-
-    static var save_your_payment_information_with_link: String {
-        STPLocalizedString(
-                "Save your payment information with Link, and securely check out in 1-click on Link-supported sites.",
-                """
-                Label describing the benefit of signing up for Link.
-                """
-                )
     }
 
     static var save_for_future_payments: String {
@@ -66,24 +64,52 @@ extension String.Localized {
         )
     }
 
-    static var ideal_bank: String {
-        STPLocalizedString("iDEAL Bank", "iDEAL bank section title for iDEAL form entry.")
-    }
-
     static var bank_account_sentence_case: String {
         STPLocalizedString("Bank account", "Title for collected bank account information")
     }
 
-    static var pay_with_link: String {
-        STPLocalizedString("Pay with Link", "Text for the 'Pay with Link' button. 'Link' is a Stripe brand, please do not translate the word 'Link'.")
+    static func pay_with_link(brand: LinkBrand) -> String {
+        switch brand {
+        case .link, .unparsable:
+            return STPLocalizedString(
+                "Pay with Link",
+                "Text for the 'Pay with Link' button. 'Link' is a Stripe brand, please do not translate the word 'Link'."
+            )
+        case .onelink:
+            return String(
+                format: STPLocalizedString(
+                    "Pay with %@",
+                    "Text for the 'Pay with Link' button. The placeholder is a Stripe brand name and should not be translated."
+                ),
+                brand.displayName
+            )
+        }
     }
 
     static var bank_continue_mandate_text: String {
         STPLocalizedString("By continuing, you agree to authorize payments pursuant to <terms>these terms</terms>.", "Text providing link to terms for ACH payments")
     }
 
+    static var bank_continue_mandate_text_with_seller: String {
+        STPLocalizedString("By submitting your order to %@ you agree to authorize payments pursuant to <terms>these terms</terms>.", "Text providing link to terms for bank payments")
+    }
+
+    static var bank_continue_mandate_and_reuse_text_with_seller: String {
+        STPLocalizedString(
+            "By submitting your order to %@ and %@, you agree to save your information with %@ for future purchases, and agree to authorize payments pursuant to <terms>these terms</terms>.",
+            "Text providing link to terms for bank payments when seller information is provided"
+        )
+    }
+
     static var back: String {
         STPLocalizedString("Back", "Text for back button")
+    }
+
+    static var manage_bank_account: String {
+        STPLocalizedString(
+            "Manage bank account",
+            "Title shown above a view containing the customer's bank account that they can delete"
+        )
     }
 
     static var manage_us_bank_account: String {
@@ -121,6 +147,13 @@ extension String.Localized {
         )
     }
 
+    static var payment_method_details_cannot_be_changed: String {
+        STPLocalizedString(
+            "Payment method details cannot be changed.",
+            "Text on a screen that indicates payment method details cannot be changed."
+        )
+    }
+
     static var sepa_debit_details_cannot_be_changed: String {
         STPLocalizedString(
             "SEPA debit details cannot be changed.",
@@ -155,6 +188,16 @@ extension String.Localized {
             """
             Title for a button that when tapped, presents a screen for updating a card. Also
             the heading the screen itself.
+            """
+        )
+    }
+
+    static var confirm_payment_details: String {
+        STPLocalizedString(
+            "Confirm payment details",
+            """
+            Title of a screen where the user can update their payment method before continuing
+            with the transaction.
             """
         )
     }
@@ -225,13 +268,6 @@ extension String.Localized {
         )
     }
 
-    static var open_upi_app: String {
-        STPLocalizedString(
-            "Open your UPI app to approve your payment within %@",
-            "Countdown timer text on a screen asking the user to approve a payment"
-        )
-    }
-
     static var payment_failed: String {
         STPLocalizedString(
             "Payment failed",
@@ -267,6 +303,13 @@ extension String.Localized {
         )
     }
 
+    static var alipay_mandate_text: String {
+        STPLocalizedString(
+            "By saving your payment information, you allow %@ to charge you for future payments in accordance with their terms.",
+            "Alipay mandate text"
+        )
+    }
+
     static var revolut_pay_mandate_text: String {
         STPLocalizedString(
             "By continuing to Revolut Pay, you allow %@ to charge your Revolut Pay account for future payments in accordance with their terms.",
@@ -288,6 +331,38 @@ extension String.Localized {
         )
     }
 
+    static var satispay_mandate_text: String {
+        STPLocalizedString(
+            "By continuing, you authorize %@ to automatically debit your Satispay Balance on a recurring basis in accordance with your purchase or subscription plan.",
+            "Satispay mandate text"
+        )
+    }
+
+    static var twint_mandate_text: String {
+        STPLocalizedString(
+            "By continuing, you authorize %@ to automatically debit your Twint Balance on a recurring basis in accordance with your purchase or subscription plan.",
+            "Twint mandate text"
+        )
+    }
+
+    static var korean_payment_method_mandate_text: String {
+        STPLocalizedString(
+            "By confirming your payment with NICEPAY, you allow %@ to charge this payment method for future payments in accordance with their terms.",
+            "Korean payment method mandate text"
+        )
+    }
+
+    static var naver_pay_funding_label: String {
+        STPLocalizedString("Select how you want to pay:", "Label for the Naver Pay funding source selector")
+    }
+
+    static var naver_pay_card: String {
+        STPLocalizedString("Naver Pay Card", "Naver Pay card funding source")
+    }
+
+    static var naver_pay_money_point: String {
+        STPLocalizedString("Naver Pay Money/Point", "Naver Pay money or points funding source")
+    }
     static var blik_confirm_payment: String {
         STPLocalizedString("Confirm the payment in your bank's app within %@ to complete the purchase.",
                            "Text for alert message when user needs to confirm payment in their banking app")
@@ -300,6 +375,16 @@ extension String.Localized {
     static var paynow_confirm_payment: String {
         STPLocalizedString("Confirm the payment in your bank or payment app within %@ to complete the purchase.",
                            "Text for alert message when user needs to confirm payment in their banking app")
+    }
+
+    static var mb_way_confirm_payment: String {
+        STPLocalizedString("Confirm the payment in your MB WAY app within %@ to complete the purchase.",
+                           "Instructions shown while waiting for an MB WAY payment authorization")
+    }
+
+    static var bizum_confirm_payment: String {
+        STPLocalizedString("Confirm the Bizum payment in your mobile banking application within %@ to complete the purchase.",
+                           "Instructions shown while waiting for a Bizum payment authorization")
     }
 
     static var cpf_cpnj: String {
@@ -334,6 +419,16 @@ extension String.Localized {
         STPLocalizedString(
             "Select card",
             "Title shown above a view containing the customer's card payment methods"
+        )
+    }
+
+    static func card_number_with_supported_brands(brandNames: String) -> String {
+        String(
+            format: STPLocalizedString(
+                "Card number. Supported cards include %@",
+                "Accessibility label for the card number field including a list of supported card brands. %@ is a comma-separated list of card brand names (e.g. 'Visa, Mastercard, American Express, Discover')"
+            ),
+            brandNames
         )
     }
 
@@ -400,16 +495,23 @@ extension String.Localized {
         )
     }
 
-    static var buy_now_or_pay_later_with_afterpay: String {
+    static var buy_now_pay_later_with_cash_app_afterpay: String {
         STPLocalizedString(
-            "Buy now or pay later with Afterpay",
+            "Buy Now, Pay Later with Cash App Afterpay",
             "Subtitle shown on a button allowing a user to select to pay with Afterpay."
         )
     }
 
-    static var buy_now_or_pay_later_with_clearpay: String {
+    static var buy_now_pay_later_with_afterpay: String {
         STPLocalizedString(
-            "Buy now or pay later with Clearpay",
+            "Buy Now, Pay Later with Afterpay",
+            "Subtitle shown on a button allowing a user to select to pay with Afterpay."
+        )
+    }
+
+    static var buy_now_pay_later_with_clearpay: String {
+        STPLocalizedString(
+            "Buy Now, Pay Later with Clearpay",
             "Subtitle shown on a button allowing a user to select to pay with Clearpay."
         )
     }
@@ -421,6 +523,24 @@ extension String.Localized {
         )
     }
 
+    static func pay_faster_everywhere_brand_is_accepted(brand: LinkBrand) -> String {
+        switch brand {
+        case .link, .unparsable:
+            return STPLocalizedString(
+                "Pay faster everywhere Link is accepted.",
+                "Subtitle for the Link signup screen"
+            )
+        case .onelink:
+            return String(
+                format: STPLocalizedString(
+                    "Pay faster everywhere %@ is accepted.",
+                    "Subtitle for the Link signup screen. The placeholder is a Stripe brand name and should not be translated."
+                ),
+                brand.displayName
+            )
+        }
+    }
+
     static var new_card: String {
         STPLocalizedString(
             "New card",
@@ -428,10 +548,118 @@ extension String.Localized {
         )
     }
 
+    static var save_this_account_for_future_payments: String {
+        STPLocalizedString(
+            "Save this account for future %@ payments",
+            "Prompt next to checkbox to save bank account."
+        )
+    }
+
     static var by_providing_your_card_information_text: String {
         STPLocalizedString(
             "By providing your card information, you allow %@ to charge your card for future payments in accordance with their terms.",
             "Text displayed below a credit card entry form when the card will be saved to make future payments."
+        )
+    }
+
+    static var by_continuing_you_agree_to_save_your_information_to_merchant: String {
+        STPLocalizedString(
+            "By continuing, you agree to save your information for future purchases with %@.",
+            "Text displayed below a credit card entry form when the card will be saved with the merchant."
+        )
+    }
+
+    static func by_continuing_you_agree_to_save_your_information_to_merchant_and_link(
+        merchantDisplayName: String,
+        brand: LinkBrand
+    ) -> String {
+        String(
+            format: STPLocalizedString(
+                "By continuing, you agree to save your information for future purchases with %1$@ and <link>%2$@</link> according to %2$@ <terms>terms</terms> and <privacy>privacy</privacy>.",
+                "Text displayed below a credit card entry form when the card will be saved with the merchant and saved to the Link brand. The first placeholder is a merchant name. The second placeholder is a Stripe brand name and should not be translated."
+            ),
+            merchantDisplayName,
+            brand.displayName
+        )
+    }
+
+    static func create_an_account_with_brand_for_faster_checkout_across_the_web(brand: LinkBrand) -> String {
+        String(
+            format: STPLocalizedString(
+                "Create an account with %@ for faster checkout across the web",
+                "Label for a checkbox that when checked allows payment information to be saved and used in future checkout sessions. The placeholder is a Stripe brand name and should not be translated."
+            ),
+            brand.displayName
+        )
+    }
+
+    static func save_my_info_for_faster_checkout(with brand: LinkBrand) -> String {
+        String(
+            format: STPLocalizedString(
+                "Save my info for faster checkout with %@",
+                "Label for a checkbox that when checked allows payment information to be saved and used in future checkout sessions. The placeholder is a Stripe brand name and should not be translated."
+            ),
+            brand.displayName
+        )
+    }
+
+    static func save_your_info_for_secure_1_click_checkout(with brand: LinkBrand) -> String {
+        String(
+            format: STPLocalizedString(
+                "Save your info for secure 1-click checkout with %@",
+                "Label for a checkbox that when checked allows payment information to be saved and used in future checkout sessions. The placeholder is a Stripe brand name and should not be translated."
+            ),
+            brand.displayName
+        )
+    }
+
+    static func log_out_of_brand(_ brand: LinkBrand) -> String {
+        String(
+            format: STPLocalizedString(
+                "Sign out of %@",
+                "Title of the sign-out action. The placeholder is a Stripe brand name and should not be translated."
+            ),
+            brand.displayName
+        )
+    }
+
+    static func by_joining_brand_you_agree_to_the_terms_and_privacy_policy(brand: LinkBrand) -> String {
+        String(
+            format: STPLocalizedString(
+                "By joining %@, you agree to the <terms>Terms</terms> and <privacy>Privacy Policy</privacy>.",
+                "Legal text shown when creating an account with the Link brand. The placeholder is a Stripe brand name and should not be translated."
+            ),
+            brand.displayName
+        )
+    }
+
+    static func by_providing_phone_number_and_email_you_agree_to_create_a_brand_account(brand: LinkBrand) -> String {
+        String(
+            format: STPLocalizedString(
+                "By providing phone number and email, you agree to create a %1$@ account subject to the %1$@ <terms>Terms</terms> and <privacy>Privacy Policy</privacy>.",
+                "Legal text shown when creating an account with the Link brand. The placeholder is a Stripe brand name and should not be translated."
+            ),
+            brand.displayName
+        )
+    }
+
+    static func by_providing_your_email_you_agree_to_create_a_brand_account_and_save_your_payment_info(brand: LinkBrand) -> String {
+        String(
+            format: STPLocalizedString(
+                "By providing your email, you agree to create a %1$@ account and save your payment info to %1$@, according to the %1$@ <terms>Terms</terms> and <privacy>Privacy Policy</privacy>.",
+                "Legal text shown when creating an account with the Link brand. The placeholder is a Stripe brand name and should not be translated."
+            ),
+            brand.displayName
+        )
+    }
+
+    static func by_providing_your_phone_number_you_agree_to_create_a_brand_account_and_save_your_payment_info(brand: LinkBrand) -> String {
+        String(
+            format: STPLocalizedString(
+                "By providing your phone number, you agree to create a %1$@ account and save your payment info to %1$@, according to the %1$@ <terms>Terms</terms> and <privacy>Privacy Policy</privacy>.",
+                "Legal text shown when creating an account with the Link brand. The placeholder is a Stripe brand name and should not be translated."
+            ),
+            brand.displayName
         )
     }
 
@@ -461,10 +689,150 @@ extension String.Localized {
        )
     }
 
-    @_spi(STP) public static var set_as_default_payment_method: String {
+    static var default_payment_method: String {
+        STPLocalizedString(
+            "Default payment method",
+            "Label for a disabled checked checkbox identifying the default payment method."
+       )
+    }
+
+    static var set_as_default_payment_method: String {
         STPLocalizedString(
             "Set as default payment method",
             "Label of a checkbox that when checked makes a payment method as the default one."
+        )
+    }
+
+    static var change: String {
+        STPLocalizedString(
+            "Change",
+            "Label for a button that lets you change the details of a payment method"
+       )
+    }
+
+    static var please_choose_a_valid_payment_method: String {
+        STPLocalizedString(
+            "Please choose a valid payment method.",
+            "Error message that's displayed when you try to confirm a payment without a valid payment method"
+       )
+    }
+
+    static var use_billing_address_for_shipping: String {
+        STPLocalizedString("Use billing address for shipping", "Label for checkbox in address form allowing user to use billing address")
+    }
+
+    static var discard_changes_title: String {
+        STPLocalizedString(
+            "Discard changes?",
+            "Title of a confirmation alert shown when the customer tries to close the address form after making changes."
+        )
+    }
+
+    static var discard_changes_message: String {
+        STPLocalizedString(
+            "Your address changes won't be saved.",
+            "Message of a confirmation alert warning the customer that closing the address form will discard their unsaved changes."
+        )
+    }
+
+    static var discard_changes: String {
+        STPLocalizedString(
+            "Discard Changes",
+            "Button title in a confirmation alert that discards the customer's unsaved address changes and closes the form."
+        )
+    }
+
+    static var keep_editing: String {
+        STPLocalizedString(
+            "Keep Editing",
+            "Button title in a confirmation alert that dismisses the alert and returns the customer to editing their address."
+        )
+    }
+
+    static var confirm_your_information: String {
+        STPLocalizedString("Confirm your information", "Title label for a know-your-customer (KYC) verification screen")
+    }
+
+    static var edit_address: String {
+        STPLocalizedString("Edit address", "Accessibility label for a button that lets the user update their address")
+    }
+
+    static var user_attestation: String {
+        STPLocalizedString("Declarations", "Title label for a screen showing user attestation")
+    }
+
+    static var accept: String {
+        STPLocalizedString("Accept", "Label for a button that confirms the user accepts an attestation")
+    }
+
+    static var last_4_digits_of_ssn: String {
+        STPLocalizedString("Last 4 digits of SSN", "Label for displaying the last 4 digits of the user's social security number")
+    }
+
+    static var bankExchangeRateDisclaimer: String {
+        STPLocalizedString(
+            "Exchange rate and fees of your bank may apply.",
+            "Disclaimer shown when the customer selects the merchant's currency, meaning their bank will handle any currency conversion"
+        )
+    }
+
+    static func exchangeRate(localCurrency: String, rate: String, integrationCurrency: String) -> String {
+        String(
+            format: STPLocalizedString(
+                "1 %@ = %@ %@",
+                "Exchange rate caption, e.g. '1 GBP = 1.2871 USD'"
+            ),
+            localCurrency, rate, integrationCurrency
+        )
+    }
+
+    static func exchangeRateWithConversionFee(localCurrency: String, rate: String, integrationCurrency: String, feePercent: String) -> String {
+        String(
+            format: STPLocalizedString(
+                "1 %1$@ = %2$@ %3$@ (includes %4$@%% conversion fee).",
+                "Exchange rate with conversion fee disclosure, e.g. '1 GBP = 1.2871 USD (includes 4% conversion fee).'"
+            ),
+            localCurrency, rate, integrationCurrency, feePercent
+        )
+    }
+
+    static var showDetails: String {
+        STPLocalizedString("Show details", "Button label to expand and show additional exchange rate details")
+    }
+
+    static var hideDetails: String {
+        STPLocalizedString("Hide details", "Button label to collapse and hide additional exchange rate details")
+    }
+
+    static var subtotal: String {
+        STPLocalizedString(
+            "Subtotal",
+            "Label for the subtotal row in an order summary, before tax/shipping/discounts."
+        )
+    }
+
+    static var tax: String {
+        STPLocalizedString(
+            "Tax",
+            "Label for the tax row in an order summary."
+        )
+    }
+
+    static var discount: String {
+        STPLocalizedString(
+            "Discount",
+            "Label for the discount row in an order summary, applied as a negative amount."
+        )
+    }
+
+    static func lineItemLabel(name: String, quantity: Int) -> String {
+        String(
+            format: STPLocalizedString(
+                "%1$@ ×%2$d",
+                "Order summary line item showing name and quantity, e.g. 'Shirt ×3'."
+            ),
+            name,
+            quantity
         )
     }
 }
