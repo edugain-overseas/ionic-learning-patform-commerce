@@ -32,8 +32,9 @@ type ModalType = {
 type CallbackType = (...ars: any) => void;
 
 type AuthUIContextType = {
-  openAuthUI: (type: modalName) => void;
+  openAuthUI: (type: modalName, enableWithToken?: boolean) => void;
   setSuccessAuthCallback: (callback: CallbackType) => void;
+  setTempEmail: (email: string) => void;
 };
 
 const AuthUIContext = createContext<AuthUIContextType | undefined>(undefined);
@@ -43,7 +44,7 @@ export const useAuthUi = () => useContext(AuthUIContext);
 export const AuthUIProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const accessToken = useUser()?.user.accessToken;
   const studentId = useUser()?.user.studentId;
-  const [tempEmail, setTempEmail] = useState<string>('');
+  const [tempEmail, setTempEmail] = useState<string>("");
 
   const [modals, setModals] = useState<ModalType[]>([]);
   const callbackRef = useRef<CallbackType | null>(null);
@@ -62,8 +63,8 @@ export const AuthUIProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   }, [accessToken, studentId]);
 
-  const openAuthUI = (type: modalName) => {
-    if (accessToken) return;
+  const openAuthUI = (type: modalName, enableWithToken = false) => {
+    if (accessToken && !enableWithToken) return;
     callbackRef.current = null;
     modals.find((modal) => {
       if (modal.name === type) {
@@ -73,7 +74,13 @@ export const AuthUIProvider: FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   return (
-    <AuthUIContext.Provider value={{ openAuthUI, setSuccessAuthCallback }}>
+    <AuthUIContext.Provider
+      value={{
+        openAuthUI,
+        setSuccessAuthCallback,
+        setTempEmail: (email) => setTempEmail(email),
+      }}
+    >
       <>
         {children}
         <SheetModalAuto

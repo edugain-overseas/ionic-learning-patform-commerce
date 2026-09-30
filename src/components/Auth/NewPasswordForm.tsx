@@ -33,8 +33,6 @@ const NewPasswordForm: React.FC<{
   });
 
   const onSubmit = async (data: FormValues) => {
-    console.log(data);
-
     try {
       await user?.setNewPassword({
         email: tempEmail,

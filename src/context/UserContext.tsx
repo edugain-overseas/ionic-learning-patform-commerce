@@ -41,6 +41,8 @@ const initialState: UserType = {
   changedSurname: false,
   chats: [],
   certificates: [],
+  registeredAt: null,
+  passwordChangedAt: null,
 };
 
 export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
@@ -219,6 +221,8 @@ export const UserProvider: React.FC<UserProviderType> = ({ children }) => {
       courses: data.courses,
       chats: data.chats,
       certificates: data.certificates,
+      registeredAt: data.registered_at,
+      passwordChangedAt: data.password_changed_at,
     }));
   };
 

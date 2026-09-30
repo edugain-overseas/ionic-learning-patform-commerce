@@ -13,12 +13,12 @@ import UserMainInfo from "./UserMainInfo";
 import UserProfileInfo from "./UserProfileInfo";
 import UserStatistics from "./UserStatistics";
 import UserCertificates from "./UserCertificates";
+import PageRefresher from "../../components/PageRefresher/PageRefresher";
 import styles from "./UserProfile.module.scss";
 
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
-import PageRefresher from "../../components/PageRefresher/PageRefresher";
 
 const headerProps = {
   left: [{ name: "back" }],

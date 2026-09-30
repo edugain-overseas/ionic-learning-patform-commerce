@@ -41,12 +41,12 @@ const UserProfileInfo: FC<{ userData?: UserType }> = ({ userData }) => {
                 {userData?.email === "" ? "-" : userData?.email}
               </span>
             </li>
-            <li className={styles.profileDataItem}>
+            {/* <li className={styles.profileDataItem}>
               <span className={styles.label}>Password:</span>
               <span className={styles.value}>
                 {userData?.username === "" ? "-" : "********"}
               </span>
-            </li>
+            </li> */}
             <li className={styles.profileDataItem}>
               <span className={styles.label}>Phone namber:</span>
               <span className={styles.value}>

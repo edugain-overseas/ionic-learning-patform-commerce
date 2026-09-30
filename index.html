@@ -26,12 +26,25 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
       rel="stylesheet"
     /> -->
-    <link href="https://googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+    <link
+      href="https://googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- add to homescreen for ios -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Ionic App" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <script>
+      (function () {
+        function adjustFontSize() {
+          var vw = window.innerWidth;
+          var fontSize = vw >= 992 ? vw / 1440 : vw / 375;
+          document.documentElement.style.fontSize = fontSize + "px";
+        }
+        adjustFontSize();
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -17,6 +17,7 @@
 // import { useCourses } from "../../context/CoursesContext";
 // import { useAuthUi } from "../../context/AuthUIContext";
 // import { useToast } from "../../hooks/useToast";
+// import { remToPx } from "../../utils/pxToRem";
 // import CheckoutBtn from "./CheckoutBtn";
 // import CommonButton from "../CommonButton/CommonButton";
 // import Spinner from "../Spinner/Spinner";
@@ -24,6 +25,9 @@
 
 // const stripePromise = loadStripe(
 //   import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY_DEV,
+//   {
+//     developerTools: { assistant: { enabled: false } },
+//   },
 // );
 
 // const expressCheckoutElementOptions: StripeExpressCheckoutElementOptions = {
@@ -33,6 +37,7 @@
 //     link: "never",
 //     paypal: "never",
 //     amazonPay: "never",
+//     klarna: "never",
 //   },
 //   buttonType: {
 //     applePay: "plain",
@@ -42,7 +47,7 @@
 //     applePay: "black",
 //     googlePay: "black",
 //   },
-//   buttonHeight: 40,
+//   buttonHeight: remToPx(40),
 //   layout: {
 //     maxRows: 1,
 //   },
@@ -66,15 +71,9 @@
 //     });
 
 //     if (error) {
-//       present({
-//         type: "error",
-//         message: error.message,
-//       });
+//       present({ type: "error", message: error.message });
 //     } else if (paymentIntent?.status === "succeeded") {
-//       present({
-//         type: "success",
-//         message: "Payment successful!",
-//       });
+//       present({ type: "success", message: "Payment successful!" });
 //       await onSuccess();
 //     }
 //     setIsLoading(false);
@@ -84,8 +83,6 @@
 //     <form onSubmit={handleSubmit} className={styles.checkoutForm}>
 //       <PaymentElement
 //         options={{ layout: { type: "accordion", defaultCollapsed: false } }}
-//         onLoadError={(e) => console.log("error", e)}
-//         onReady={(e) => console.log("ready", e)}
 //       />
 //       <CommonButton
 //         label="Pay"
@@ -104,9 +101,9 @@
 // };
 
 // const StripeWebPaymentButton: FC = () => {
-//   const [clientSecret, setClientSecret] = useState(null);
+//   const [clientSecret, setClientSecret] = useState<string | null>(null);
 //   const [isOpenModal, setIsOpenModal] = useState(false);
-//   const [canMakePayment, setCanMakePayment] = useState(false);
+//   const [isExpressAvailable, setIsExpressAvailable] = useState(false);
 //   const [isLoading, setIsLoading] = useState(false);
 
 //   const router = useIonRouter();
@@ -134,6 +131,8 @@
 //       router.push("/payment?status=success", "root", "push");
 //     } catch (error) {
 //       console.log(error);
+//     } finally {
+//       setIsLoading(false);
 //     }
 //   };
 
@@ -159,19 +158,13 @@
 //           cancel_url: "",
 //         });
 
-//         const paymentIntent = data.paymentIntent;
-
-//         console.log("fetchingClientSecret");
-
-//         setClientSecret(paymentIntent);
-//         return paymentIntent;
+//         setClientSecret(data.paymentIntent);
 //       } catch (error) {
 //         console.log(error);
 //       } finally {
 //         setIsLoading(false);
 //       }
 //     };
-//     console.log(items, studentId);
 
 //     if (items?.length !== 0 && studentId) {
 //       getClientSecret();
@@ -180,25 +173,6 @@
 //       setIsOpenModal(false);
 //     }
 //   }, [items?.length, studentId]);
-
-//   useEffect(() => {
-//     const checkPaymentAvailability = async () => {
-//       const stripe = await stripePromise;
-//       if (!stripe) return false;
-
-//       const pr = stripe.paymentRequest({
-//         country: "US",
-//         currency: "eur",
-//         total: { label: "Test", amount: 1 },
-//       });
-
-//       const result = await pr.canMakePayment();
-//       console.log(result);
-
-//       setCanMakePayment(!!result);
-//     };
-//     checkPaymentAvailability();
-//   }, []);
 
 //   return (
 //     <>
@@ -215,21 +189,30 @@
 //           </Elements>
 //         )}
 //       </IonModal>
+
 //       <div className={styles.paymentButtonsWrapper}>
 //         <CheckoutBtn
 //           handleClick={handleCheckoutBtnClick}
 //           disabled={items?.length === 0 || isLoading}
 //           isLoading={isLoading}
 //         />
-
-//         {clientSecret && canMakePayment && (
+//         {clientSecret && (
 //           <Elements stripe={stripePromise} options={{ clientSecret }}>
-//             <ExpressCheckoutElement
-//               options={expressCheckoutElementOptions}
-//               onConfirm={handleSuccessPayment}
-//               onLoadError={(e) => console.log("error", e)}
-//               onReady={(e) => console.log("ready", e)}
-//             />
+//             <div style={{ display: isExpressAvailable ? "block" : "none" }}>
+//               <ExpressCheckoutElement
+//                 options={expressCheckoutElementOptions}
+//                 onConfirm={handleSuccessPayment}
+//                 onLoadError={(e) => console.log("ExpressCheckout error", e)}
+//                 onReady={(e) => {
+//                   const methods = e.availablePaymentMethods;
+//                   if (methods && (methods.applePay || methods.googlePay)) {
+//                     setIsExpressAvailable(true);
+//                   } else {
+//                     setIsExpressAvailable(false);
+//                   }
+//                 }}
+//               />
+//             </div>
 //           </Elements>
 //         )}
 //       </div>
@@ -258,6 +241,7 @@ import { IonModal, useIonRouter } from "@ionic/react";
 import { useCourses } from "../../context/CoursesContext";
 import { useAuthUi } from "../../context/AuthUIContext";
 import { useToast } from "../../hooks/useToast";
+import { remToPx } from "../../utils/pxToRem";
 import CheckoutBtn from "./CheckoutBtn";
 import CommonButton from "../CommonButton/CommonButton";
 import Spinner from "../Spinner/Spinner";
@@ -265,6 +249,7 @@ import styles from "./BasketCheckoutPanel.module.scss";
 
 const stripePromise = loadStripe(
   import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY_DEV,
+  { developerTools: { assistant: { enabled: false } } },
 );
 
 const expressCheckoutElementOptions: StripeExpressCheckoutElementOptions = {
@@ -274,6 +259,7 @@ const expressCheckoutElementOptions: StripeExpressCheckoutElementOptions = {
     link: "never",
     paypal: "never",
     amazonPay: "never",
+    klarna: "never",
   },
   buttonType: {
     applePay: "plain",
@@ -283,13 +269,12 @@ const expressCheckoutElementOptions: StripeExpressCheckoutElementOptions = {
     applePay: "black",
     googlePay: "black",
   },
-  buttonHeight: 40,
+  buttonHeight: remToPx(40),
   layout: {
     maxRows: 1,
   },
 };
 
-// --- КОМПОНЕНТ 1: Форма для звичайної картки в модалці ---
 const CheckoutForm = ({ onSuccess }: { onSuccess: () => Promise<void> }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -337,32 +322,29 @@ const CheckoutForm = ({ onSuccess }: { onSuccess: () => Promise<void> }) => {
   );
 };
 
-// --- КОМПОНЕНТ 2: Окремий підкомпонент для кнопки Apple/Google Pay (ВИПРАВЛЕНО) ---
-const ExpressPayButton = ({ onSuccess }: { onSuccess: () => Promise<void> }) => {
+const ExpressCheckoutInner = ({
+  onSuccess,
+  setIsExpressAvailable,
+}: {
+  onSuccess: () => Promise<void>;
+  setIsExpressAvailable: (avail: boolean) => void;
+}) => {
   const stripe = useStripe();
   const elements = useElements();
   const [present] = useToast();
-  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleExpressConfirm = async () => {
     if (!stripe || !elements) return;
 
-    setIsProcessing(true);
-
-    // 1. Обов'язково валідуємо стан елементів перед списанням
     const { error: submitError } = await elements.submit();
     if (submitError) {
       present({ type: "error", message: submitError.message });
-      setIsProcessing(false);
       return;
     }
 
-    // 2. Викликаємо списання коштів через Apple Pay / Google Pay гаманець
     const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
-      confirmParams: {
-        return_url: `${window.location.origin}/payment-confirm`,
-      },
+      confirmParams: {},
       redirect: "if_required",
     });
 
@@ -370,34 +352,31 @@ const ExpressPayButton = ({ onSuccess }: { onSuccess: () => Promise<void> }) => 
       present({ type: "error", message: error.message });
     } else if (paymentIntent?.status === "succeeded") {
       present({ type: "success", message: "Express payment successful!" });
-      // 3. Тільки після успішного списання викликаємо ваш бекенд-обробник
       await onSuccess();
     }
-    setIsProcessing(false);
   };
 
   return (
-    <div style={{ width: "100%", position: "relative" }}>
-      {isProcessing && (
-        <div style={{ textAlign: "center", marginBottom: "5px" }}>
-          <Spinner color="#000" />
-        </div>
-      )}
-      <ExpressCheckoutElement
-        options={expressCheckoutElementOptions}
-        onConfirm={handleExpressConfirm}
-        onLoadError={(e) => console.log("ExpressCheckout error", e)}
-        onReady={(e) => console.log("ExpressCheckout ready", e)}
-      />
-    </div>
+    <ExpressCheckoutElement
+      options={expressCheckoutElementOptions}
+      onConfirm={handleExpressConfirm}
+      onLoadError={(e) => console.log("ExpressCheckout error", e)}
+      onReady={(e) => {
+        const methods = e.availablePaymentMethods;
+        if (methods && (methods.applePay || methods.googlePay)) {
+          setIsExpressAvailable(true);
+        } else {
+          setIsExpressAvailable(false);
+        }
+      }}
+    />
   );
 };
 
-// --- ГОЛОВНИЙ КОМПОНЕНТ ПАНЕЛІ ОПЛАТИ ---
 const StripeWebPaymentButton: FC = () => {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [canMakePayment, setCanMakePayment] = useState(false);
+  const [isExpressAvailable, setIsExpressAvailable] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useIonRouter();
@@ -468,25 +447,6 @@ const StripeWebPaymentButton: FC = () => {
     }
   }, [items?.length, studentId]);
 
-  useEffect(() => {
-    const checkPaymentAvailability = async () => {
-      const stripe = await stripePromise;
-      if (!stripe) return;
-
-      // Створюємо тимчасовий paymentRequest суто для перевірки наявності гаманців у користувача
-      const pr = stripe.paymentRequest({
-        country: "US",
-        currency: "eur",
-        total: { label: "Total", amount: 100 },
-      });
-
-      const result = await pr.canMakePayment();
-      setCanMakePayment(!!result);
-    };
-    
-    checkPaymentAvailability();
-  }, []);  
-
   return (
     <>
       <IonModal
@@ -502,18 +462,21 @@ const StripeWebPaymentButton: FC = () => {
           </Elements>
         )}
       </IonModal>
-      
+
       <div className={styles.paymentButtonsWrapper}>
         <CheckoutBtn
           handleClick={handleCheckoutBtnClick}
           disabled={items?.length === 0 || isLoading}
           isLoading={isLoading}
         />
-
-        {/* Рендеримо загорнуту у Elements експрес-кнопку тільки якщо є clientSecret та пристрій підтримує швидку оплату */}
-        {clientSecret && canMakePayment && (
+        {clientSecret && (
           <Elements stripe={stripePromise} options={{ clientSecret }}>
-            <ExpressPayButton onSuccess={handleSuccessPayment} />
+            <div style={{ display: isExpressAvailable ? "block" : "none" }}>
+              <ExpressCheckoutInner
+                onSuccess={handleSuccessPayment}
+                setIsExpressAvailable={setIsExpressAvailable}
+              />
+            </div>
           </Elements>
         )}
       </div>
@@ -522,4 +485,3 @@ const StripeWebPaymentButton: FC = () => {
 };
 
 export default StripeWebPaymentButton;
-

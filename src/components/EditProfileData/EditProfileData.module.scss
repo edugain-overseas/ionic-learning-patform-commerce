@@ -77,3 +77,22 @@
     color: var(--ion-color-dark);
   }
 }
+
+.passwordWrapper {
+  display: flex;
+  gap: 33rem;
+  padding-inline: 32rem;
+  margin-bottom: 18rem;
+  font-size: 14rem;
+  font-weight: 600;
+  color: var(--ion-color-light);
+
+  p {
+    font-size: 12rem;
+    font-weight: 400;
+  }
+
+  & > * {
+    flex: 1;
+  }
+}

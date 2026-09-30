@@ -6,6 +6,7 @@ import { UserInfoToUpdateType } from "../../types/user";
 import { getCountries } from "../../utils/countries";
 import { emailRegex } from "../../constants/regExps";
 import { useToast } from "../../hooks/useToast";
+import { useAuthUi } from "../../context/AuthUIContext";
 import EditIcon from "../../assets/icons/edit-bottom-line.svg";
 import ReLoadIcon from "../../assets/icons/re-load.svg";
 import SaveIcon from "../../assets/icons/save.svg";
@@ -15,6 +16,7 @@ import CommonButton from "../CommonButton/CommonButton";
 import InputWithLabel from "../InputWithLabel/InputWithLabel";
 import Select from "../Select/Select";
 import EqualSpaceContainer from "../EqualSpaceContainer/EqualSpaceContainer";
+import Spinner from "../Spinner/Spinner";
 import styles from "./EditProfileData.module.scss";
 
 type EditUserDataForm = {
@@ -38,13 +40,15 @@ const EditProfileData: FC<{
   closeModal?: () => void;
   openAvatarEditorModal?: () => void;
 }> = ({ closeModal, openAvatarEditorModal }) => {
+  const [isPasswordChangeLoading, setIsPasswordChangeLoading] = useState(false);
   const userInterface = useUser();
   const userData = userInterface?.user;
   const formRef = useRef<HTMLFormElement>(null);
   const [present] = useToast();
+  const authUi = useAuthUi();
 
   const [country, setCountry] = useState<string>(
-    userData?.country ? userData.country : ""
+    userData?.country ? userData.country : "",
   );
 
   const defaultValues = {
@@ -52,7 +56,6 @@ const EditProfileData: FC<{
     firstname: userData?.name,
     lastname: userData?.surname,
     email: userData?.email,
-    password: "",
     phone: userData?.phone,
   };
 
@@ -66,6 +69,25 @@ const EditProfileData: FC<{
     defaultValues,
   });
 
+  const onChangePasswordClick = async () => {
+    if (!userData || !authUi || !closeModal) return;
+
+    try {
+      setIsPasswordChangeLoading(true);
+      await userInterface.resetPassword(userData.email);
+
+      present({
+        type: "success",
+        message: `We have sent a password reset code to your email ${userData.email}`,
+      });
+      authUi.setTempEmail(userData.email);
+      authUi.openAuthUI("new-password", true);
+    } catch (error) {
+    } finally {
+      setIsPasswordChangeLoading(false);
+    }
+  };
+
   const onSubmit = async (data: EditUserDataForm) => {
     const dataToUpdate: UserInfoToUpdateType = {};
     if (userData?.name !== data.firstname) {
@@ -76,9 +98,6 @@ const EditProfileData: FC<{
     }
     if (userData?.email !== data.email) {
       dataToUpdate.email = data.email;
-    }
-    if (data.password !== "") {
-      dataToUpdate.password = data.password;
     }
     if (userData?.country !== country && country !== "") {
       dataToUpdate.country = country;
@@ -188,18 +207,6 @@ const EditProfileData: FC<{
               errorMessage={errors.email?.message}
             />
             <InputWithLabel
-              label="Password"
-              registerProps={register("password", {
-                minLength: {
-                  value: 8,
-                  message: "Your password must contain at least 8 characters",
-                },
-              })}
-              placeholder="********"
-              type="password"
-              errorMessage={errors.password?.message}
-            />
-            <InputWithLabel
               label="Phone number"
               registerProps={register("phone")}
               type="number"
@@ -223,6 +230,25 @@ const EditProfileData: FC<{
                 onChange={setCountry}
               />
             </div>
+          </div>
+          <div className={styles.passwordWrapper}>
+            <p>
+              Last changed:
+              <br />
+              28.09.2026 at 14:54
+            </p>
+            <CommonButton
+              width={152}
+              height={32}
+              backgroundColor="transparent"
+              borderRadius={5}
+              border="1rem solid #5D6977"
+              label={isPasswordChangeLoading ? "Loading" : "Change password"}
+              type="button"
+              onClick={onChangePasswordClick}
+              icon={isPasswordChangeLoading ? <Spinner /> : null}
+              disabled={isPasswordChangeLoading}
+            />
           </div>
           <div className={styles.formBtns}>
             <EqualSpaceContainer

@@ -60,6 +60,8 @@ export interface UserType {
   changedSurname: boolean;
   chats: any[];
   certificates: CategoryCertificate[];
+  registeredAt: string | null;
+  passwordChangedAt: string | null;
 }
 
 export type UserInfoToUpdateType = {
