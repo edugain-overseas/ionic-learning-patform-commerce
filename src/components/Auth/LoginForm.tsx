@@ -93,7 +93,7 @@ const LoginForm: React.FC<{
   return (
     <form className={styles.formWrapper} onSubmit={handleSubmit(onSubmit)}>
       <div className={styles.formHeader}>
-        <span className={styles.title}>Sing in</span>
+        <span className={styles.title}>Login</span>
         <span className={styles.link}>
           If you don't have an account yet,{" "}
           <span className={styles.modalReTrigger} onClick={handleOpenSingUp}>
@@ -130,7 +130,7 @@ const LoginForm: React.FC<{
       </InputsWrapper>
       <div className={styles.btnsWrapper}>
         <CommonButton
-          label="Sing in"
+          label="Login"
           icon={
             isLoading ? (
               <Spinner color="#fff" className={styles.formBtnIcon} />

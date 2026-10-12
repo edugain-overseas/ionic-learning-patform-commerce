@@ -48,19 +48,21 @@ const Avatar: React.FC<AvatarTypes> = ({
       ) : (
         <AvatarFallback size={size} iconFull={true} />
       )}
-      <button
-        className={styles.editBtn}
-        onClick={() => inputRef.current?.click()}
-      >
-        <IonIcon src={EditIcon} />
-        <span>Edit</span>
-        <input
-          type="file"
-          accept="image/*"
-          ref={inputRef}
-          onChange={onChange}
-        />
-      </button>
+      {editable && (
+        <button
+          className={styles.editBtn}
+          onClick={() => inputRef.current?.click()}
+        >
+          <IonIcon src={EditIcon} />
+          <span>Edit</span>
+          <input
+            type="file"
+            accept="image/*"
+            ref={inputRef}
+            onChange={onChange}
+          />
+        </button>
+      )}
     </div>
   );
 };

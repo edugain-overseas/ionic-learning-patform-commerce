@@ -30,24 +30,24 @@ const Auth: FC<AuthPropsType> = ({ containerClassname = "", hidden }) => {
           <EqualSpaceContainer
             leftItem={
               <CommonButton
-                width={138}
+                block={true}
                 height={32}
                 borderRadius={5}
                 color="#fcfcfc"
                 backgroundColor="#5F1314"
-                label="Sing up"
+                label="Register"
                 icon={<IonIcon src={userIcon} className={styles.btnIcon} />}
                 onClick={() => authUiInterface?.openAuthUI("sing-up")}
               />
             }
             rightItem={
               <CommonButton
-                width={138}
+                block={true}
                 height={32}
                 borderRadius={5}
                 color="#fcfcfc"
                 backgroundColor="#37384B"
-                label="Sing in"
+                label="Login"
                 icon={<IonIcon src={singInIcon} className={styles.btnIcon} />}
                 onClick={() => authUiInterface?.openAuthUI("sing-in")}
               />

@@ -217,3 +217,22 @@ div.contentFallbackContainer {
     font-size: 20rem;
   }
 }
+
+.categoriesLink {
+  width: 100%;
+  height: 32rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5rem;
+  box-shadow: var(--custom-box-shadow-primary);
+  padding: 6rem 12rem;
+  margin-top: 20rem;
+  position: relative;
+  color: var(--ion-color-dark);
+
+  span {
+    font-size: 16rem;
+    font-weight: 500;
+  }
+}

@@ -1,11 +1,11 @@
-import { FC, useEffect, useRef } from "react";
+import { FC, lazy, Suspense, useEffect, useRef } from "react";
 import { Capacitor } from "@capacitor/core";
 import { useBasket } from "../../context/BasketContext";
 import { priceFormatter } from "../../utils/priceFormatter";
-// import StripeNativePaymentButton from "./StripeNativePaymentButton";
-import StripeWebPaymentButton from "./StripeWebPaymentButton";
 import InAppPurchaseButton from "./InAppPurchaseButton";
 import styles from "./BasketCheckoutPanel.module.scss";
+
+const StripeWebPaymentButton = lazy(() => import("./StripeWebPaymentButton"));
 
 const CheckoutButton: FC = () => {
   const isNative = Capacitor.isNativePlatform();
@@ -13,7 +13,12 @@ const CheckoutButton: FC = () => {
   if (isNative) {
     return <InAppPurchaseButton />;
   }
-  return <StripeWebPaymentButton />;
+
+  return (
+    <Suspense fallback={null}>
+      <StripeWebPaymentButton />
+    </Suspense>
+  );
 };
 
 const BasketCheckoutPanel: FC = () => {

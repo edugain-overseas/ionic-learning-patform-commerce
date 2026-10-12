@@ -67,8 +67,8 @@ const InAppPurchaseButton = () => {
           productType: PURCHASE_TYPE.INAPP,
         });
 
-        console.log("[StoreKit] Purchase successful in Sandbox:", transaction);
-
+        console.log("[StoreKit] Purchase successful:", transaction);
+        
         if (transaction?.transactionId) {
           console.log(
             `[Server] Verifying transaction ${transaction.transactionId}...`,
@@ -90,9 +90,18 @@ const InAppPurchaseButton = () => {
         }
       }
     } catch (error: any) {
-      console.warn("[StoreKit] Payment cycle interrupted or canceled:", error);
+      console.error("[IAP] Purchase flow failed:", {
+        error,
+        message: error?.message,
+        code: error?.code,
+        verificationResults,
+      });
+
       if (verificationResults.length === 0) {
-        alert("Basket payment was canceled by the user.");
+        alert(
+          error?.message ||
+            "The purchase could not be completed. Please try again.",
+        );
         return;
       }
     } finally {

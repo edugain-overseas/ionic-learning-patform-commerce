@@ -27,8 +27,8 @@ import StickyScrollLayout from "../../../components/StickyScrollLayout/StickyScr
 import SheetModalAuto from "../../../components/SheetModalAuto/SheetModalAuto";
 import CommonButton from "../../../components/CommonButton/CommonButton";
 import ExamCredentionForm from "./ExamCredentionForm";
-import styles from "./CourseExamPage.module.scss";
 import TaskHeader from "../../TaskPage/TaskHeader";
+import styles from "./CourseExamPage.module.scss";
 
 export type ExamResult = "acceptable" | "absolute" | "failed" | "no_result";
 

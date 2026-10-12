@@ -67,19 +67,19 @@ const TaskItem: FC<TaskItemType> = ({ task }) => {
       : `/course/${task.course_id}/tasks/${task.id}`;
 
   const isCoursePurchased = useCourses()?.courses.find(
-    (course) => course.id === task.course_id
+    (course) => course.id === task.course_id,
   )?.bought;
 
   const isNavigationAllowed = !!(
     isCoursePurchased && task.status !== "blocked"
   );
 
+  const blockedMessage = isCoursePurchased
+    ? "This lesson is not availabel. Please complete previous lessons"
+    : "Please purchase the course to gain access to the lesson";
+
   const handleItemClick = () => {
-    protectedNavigate(
-      isNavigationAllowed,
-      taskLink,
-      "You can not access this lesson becouse it is blocked"
-    );
+    protectedNavigate(isNavigationAllowed, taskLink, blockedMessage);
   };
 
   return (

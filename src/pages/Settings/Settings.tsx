@@ -17,7 +17,7 @@ const Settings: FC = () => {
 
   const handleDeleteAccount = async () => {
     if (!isUser) {
-      present({ type: "error", message: "Please sing in your account first." });
+      present({ type: "error", message: "Please login your account first." });
       return;
     }
     try {

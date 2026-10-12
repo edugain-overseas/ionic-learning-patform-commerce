@@ -222,7 +222,6 @@
 }
 
 .courseSkills {
-  padding-inline: 11rem;
   margin-bottom: 16rem;
 
   .listTitle {
@@ -232,7 +231,8 @@
     margin-bottom: 6rem;
   }
 
-  ul {
+  ul, ol {
+    padding-inline-start: 10rem;
     li {
       padding-inline-start: 8rem;
       // font-family: Roboto;

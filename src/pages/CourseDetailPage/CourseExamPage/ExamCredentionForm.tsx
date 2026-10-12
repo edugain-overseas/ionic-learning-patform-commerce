@@ -34,7 +34,6 @@ const ExamCredentionForm = ({
   const updateUserInfo = useUser()?.updateUserInfo;
 
   console.log(defaultValues);
-  
 
   const { isDirty, dirtyFields } = formState;
 
@@ -44,6 +43,17 @@ const ExamCredentionForm = ({
   };
 
   const onSubmit = async (data: FieldValues) => {
+    const dataToUpdate = {} as ValuesType;
+    (Object.keys(data) as (keyof ValuesType)[])
+      .filter((key) => dirtyFields[key])
+      .forEach((key) => (dataToUpdate[key] = data[key]));
+
+    const hasChanges = Object.keys(dataToUpdate).length > 0;
+
+    if (!hasChanges) {
+      onSubmitCallback();
+      return;
+    }
     if (!updateUserInfo) {
       present({
         type: "error",
@@ -54,18 +64,9 @@ const ExamCredentionForm = ({
     }
 
     setIsLoading(true);
-
-    const dataToUpdate = {} as ValuesType;
-
-    (Object.keys(data) as (keyof ValuesType)[])
-      .filter((key) => dirtyFields[key])
-      .forEach((key) => (dataToUpdate[key] = data[key]));
-
-    console.log(dataToUpdate);
-
-    await updateUserInfo(dataToUpdate);
-
     try {
+      await updateUserInfo(dataToUpdate);
+      onSubmitCallback();
     } catch (error) {
       present({
         type: "error",
@@ -74,7 +75,6 @@ const ExamCredentionForm = ({
       });
     } finally {
       setIsLoading(false);
-      onSubmitCallback();
     }
   };
 

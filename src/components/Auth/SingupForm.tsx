@@ -13,6 +13,20 @@ import InputsWrapper from "./InputsWrapper";
 import ServicesAuth from "./ServicesAuth";
 import styles from "./Auth.module.scss";
 
+const basketMessage = (
+  <span>
+    Please fill in the required details.
+    <br />
+    <br />
+    Registration is required to save your learning progress, sync lessons across
+    devices, and issue an official personalized certificate upon successful
+    course completion.
+    <br />
+    <br />
+    {"If you already have an account, "}
+  </span>
+);
+
 type FormValues = {
   username: string;
   name?: string;
@@ -29,12 +43,10 @@ const FormHeader: FC<{ handleOpenLogin: () => void }> = ({
   return (
     <div className={styles.formHeader}>
       <span className={styles.title}>
-        {calledFromBasket ? "To continue your purchase," : "Sing up"}
+        {calledFromBasket ? "To continue your purchase," : "Register"}
       </span>
       <span className={styles.link}>
-        {calledFromBasket
-          ? "Please fill in the required details. If you already have an account, "
-          : "If you already have an account, "}
+        {calledFromBasket ? basketMessage : "If you already have an account, "}
         <span className={styles.modalReTrigger} onClick={handleOpenLogin}>
           sign in here!
         </span>
@@ -185,7 +197,7 @@ const SingupForm: FC<{
       </InputsWrapper>
       <div className={styles.btnsWrapper}>
         <CommonButton
-          label="Sing up"
+          label="Register"
           icon={
             isLoading ? (
               <Spinner color="#fff" className={styles.formBtnIcon} />

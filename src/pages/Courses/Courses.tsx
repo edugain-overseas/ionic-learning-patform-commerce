@@ -101,6 +101,7 @@ const Courses: React.FC = () => {
           scrollEvents={true}
           onIonScrollStart={() => setIsScrolling(true)}
           onIonScrollEnd={() => setIsScrolling(false)}
+          scrollY
         >
           <div style={{ marginBottom: "12rem" }}>
             <SegmentNavPanel

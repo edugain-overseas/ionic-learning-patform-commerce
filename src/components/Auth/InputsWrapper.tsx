@@ -14,6 +14,9 @@ const InputsWrapper: FC<{ children: ReactNode }> = ({ children }) => {
 
     let maxWidth = 0;
 
+    console.log(labels);
+    
+
     labels.forEach((label) => {
       const computedStyle = window.getComputedStyle(label);
       const font = `${computedStyle.fontWeight} ${computedStyle.fontSize} ${computedStyle.fontFamily}`;

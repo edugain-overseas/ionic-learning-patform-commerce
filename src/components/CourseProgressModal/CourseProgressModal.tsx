@@ -1,12 +1,12 @@
 import { FC } from "react";
-import { IonIcon, useIonViewDidLeave } from "@ionic/react";
+import { IonIcon } from "@ionic/react";
 import { useLocation, useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
+import { useProtectedNavigation } from "../../hooks/useProtectedNavigation";
 import ExamIcon from "../../assets/icons/document-grade-A.svg";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import CommonButton from "../CommonButton/CommonButton";
 import CustomSheetModal from "../CustomSheetModal/CustomSheetModal";
-import { useProtectedNavigation } from "../../hooks/useProtectedNavigation";
 import styles from "./CourseProgressModal.module.scss";
 
 interface CourseProgressModalType {
@@ -45,7 +45,7 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
     }`;
     const message = isCoursePurchased
       ? "This lesson is not availabel. Please complete previous lessons"
-      : "You can not access this lesson becouse it is blocked";
+      : "Please purchase the course to gain access to the lesson";
 
     protectedNavigate(isAllowed, path, message);
   };
@@ -57,8 +57,8 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
 
     handleTaskNavigate(examLessonId, true);
   };
-
-  if (!pathname.includes("tasks")) return null;
+  
+  if (!course) return null;
 
   return (
     <CustomSheetModal
@@ -69,7 +69,8 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
       initialBreakpoint={firstBreakpoint}
       allowFullViewOnLastBreakpoint={true}
       isAnimating={isAnimating}
-      id={`course-progress-modal-${pathname}`}
+      // id={`course-progress-modal-${courseId}`}
+      id={`course-progress-modal`}
     >
       <div className={styles.modalHeader}>
         <div className={styles.btnsContainer}>

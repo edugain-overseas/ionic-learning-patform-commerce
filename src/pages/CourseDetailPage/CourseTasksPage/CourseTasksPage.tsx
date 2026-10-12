@@ -10,7 +10,6 @@ import Header from "../../../components/Header/Header";
 import CourseNavPanel from "../../../components/CourseNavPanel/CourseNavPanel";
 import InsetBtn from "../../../components/InsetBtn/InsetBtn";
 import TaskItem from "../../../components/TaskItem/TaskItem";
-import CourseProgressModal from "../../../components/CourseProgressModal/CourseProgressModal";
 import PageRefresher from "../../../components/PageRefresher/PageRefresher";
 import Auth from "../../../components/Auth/Auth";
 import styles from "./CourseTasksPage.module.scss";
@@ -22,11 +21,11 @@ const CourseTasksPage: FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
 
   const course = useCourses()?.courses.find(
-    (course) => course.id === +courseId
+    (course) => course.id === +courseId,
   );
 
   const lectures = course?.lessons.filter(
-    (lesson) => lesson.type === "lecture"
+    (lesson) => lesson.type === "lecture",
   );
   const tests = course?.lessons.filter((lesson) => lesson.type === "test");
 
@@ -99,7 +98,6 @@ const CourseTasksPage: FC = () => {
               .sort((a, b) => a.number - b.number)
               .map((task) => <TaskItem task={task} key={task.id} />)}
         </ul>
-        <CourseProgressModal isAnimating={animatingModal} />
       </IonContent>
       <Auth containerClassname={styles.tasksAuth} />
     </IonPage>

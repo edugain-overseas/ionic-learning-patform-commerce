@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { IonApp, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { SplashScreen } from "@capacitor/splash-screen";
@@ -41,7 +41,7 @@ import "./theme/variables.css";
 setupIonicReact();
 
 const AppContent: React.FC = () => {
-  const { initPayments } = useSetupPayment();
+  const { initPayments } = useSetupPayment();  
 
   useEffect(() => {
     const initializeApp = async () => {
@@ -75,7 +75,7 @@ const App: React.FC = () => {
   useDynamicFontSize();
   useStatusBar();
   useKeyboard();
-  useGoogleAuthInit();
+  useGoogleAuthInit();  
 
   return (
     <IonApp className="App">

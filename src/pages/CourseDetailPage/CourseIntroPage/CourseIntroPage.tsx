@@ -6,6 +6,7 @@ import { useCourses } from "../../../context/CoursesContext";
 import { serverName } from "../../../http/server";
 import { useUser } from "../../../context/UserContext";
 import { clamp } from "../../../utils/clamp";
+import { hoursFloatToHoursAndMinutes } from "../../../utils/formatTime";
 import laptop from "../../../assets/icons/laptop.svg";
 import clock from "../../../assets/icons/clock.svg";
 import award from "../../../assets/icons/award.svg";
@@ -32,18 +33,20 @@ const CourseIntroPage: React.FC = () => {
   const courses = useCourses()?.courses;
   const course = courses?.find(({ id }) => id === +courseId);
   const isCoursePurchased = useUser()?.user.courses?.find(
-    (userCourse) => userCourse.course_id === +courseId
+    (userCourse) => userCourse.course_id === +courseId,
   );
 
   const coursesToPropose = courses?.filter(
-    (courseItem) => courseItem.id !== +courseId && !courseItem.bought
+    (courseItem) => courseItem.id !== +courseId && !courseItem.bought,
   );
 
   const navPanelProgress = clamp(
     0,
     (scrollProgress - threshold) / (1 - threshold),
-    1
+    1,
   );
+
+  const duration = hoursFloatToHoursAndMinutes(course?.c_duration);
 
   return (
     <IonPage className="primaryPage">
@@ -92,7 +95,9 @@ const CourseIntroPage: React.FC = () => {
                     <div className={styles.propName}>Duration:</div>
                   </div>
                   <div className={styles.right}>
-                    <div className={styles.propValue}>{course?.c_duration}</div>
+                    <div
+                      className={styles.propValue}
+                    >{`${duration.hours} hours ${duration.minutes} minutes`}</div>
                   </div>
                 </li>
                 <li>
@@ -125,7 +130,7 @@ const CourseIntroPage: React.FC = () => {
                 <li>
                   <div className={styles.left}>
                     <IonIcon src={access} className={styles.propIcon} />
-                    <div className={styles.propName}>Credits:</div>
+                    <div className={styles.propName}>ECTS:</div>
                   </div>
                   <div className={styles.right}>
                     <div className={styles.propValue}>{course?.c_credits}</div>

@@ -159,6 +159,7 @@
   .serviceBtn {
     flex-direction: row-reverse;
     gap: 4rem;
+    padding: 0;
   }
 
   span {
@@ -167,6 +168,7 @@
 
   .servicesIcon {
     font-size: 22rem;
+    flex-shrink: 0;
   }
 }
 

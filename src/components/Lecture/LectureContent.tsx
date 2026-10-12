@@ -12,8 +12,6 @@ import styles from "./Lecture.module.scss";
 const LectureContent: FC<{ lectureContent: LectureContentType[] }> = ({
   lectureContent,
 }) => {
-  console.log(lectureContent);
-
   const renderLectureContent = () =>
     [...lectureContent]
       ?.sort((attrA, attrB) => attrA.a_number - attrB.a_number)

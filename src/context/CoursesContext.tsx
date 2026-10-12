@@ -127,7 +127,7 @@ export interface CourseType {
   about_main_text?: string;
   c_credits?: number;
   c_award?: string;
-  c_duration?: string;
+  c_duration?: number;
   c_language?: string;
   c_level?: string;
   c_type?: string;
@@ -184,7 +184,7 @@ interface CoursesContextType {
   getCourseDetailById: (courseId: string | number) => Promise<void>;
   getLessonById: (
     lessonId: string | number,
-    courseId: number | string
+    courseId: number | string,
   ) => Promise<void>;
   confirmLecture: (lessonId: number) => Promise<void>;
 }
@@ -201,6 +201,7 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
   children,
 }) => {
   const accessToken = useUser()?.user.accessToken;
+  const isTokenInit = useUser()?.user.isTokenInit;
   const [courses, setCourses] = useState<CourseType[]>([]);
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [instructions, setInstruction] = useState<{
@@ -244,7 +245,7 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
 
   const getLessonById = async (
     lessonId: number | string,
-    courseId: number | string
+    courseId: number | string,
   ) => {
     try {
       if (!instance.defaults.headers["Authorization"]) {
@@ -317,7 +318,7 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
     const getGeneralInstruction = async () => {
       try {
         const response = await instance.get<InstructionType[]>(
-          "/instruction/general"
+          "/instruction/general",
         );
         setInstruction((prev) => ({
           general: response.data,
@@ -329,18 +330,20 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
     };
 
     getAllCategories();
-    getAllCourses();
+    // getAllCourses();
     getGeneralInstruction();
   }, []);
 
   useEffect(() => {
+    if (!isTokenInit) return;
+
     const getCoursesInstructions = async () => {
       try {
         const response = await instance.get<InstructionType[]>(
-          "/instruction/courses"
+          "/instruction/courses",
         );
         setInstruction((prev) => ({
-          general: prev.general,
+          ...prev,
           courses: response.data,
         }));
       } catch (error) {
@@ -348,12 +351,19 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
       }
     };
 
-    if (accessToken) {
-      instance.defaults.headers.Authorization = `Bearer ${accessToken}`;
-      getCoursesInstructions();
-    }
-    getAllCourses();
-  }, [accessToken]);
+    const initAppData = async () => {
+      if (accessToken) {
+        instance.defaults.headers.Authorization = `Bearer ${accessToken}`;
+      }
+      await getAllCourses();
+
+      if (accessToken) {
+        await getCoursesInstructions();
+      }
+    };
+
+    initAppData();
+  }, [accessToken, isTokenInit]);
 
   return (
     <CoursesContext.Provider

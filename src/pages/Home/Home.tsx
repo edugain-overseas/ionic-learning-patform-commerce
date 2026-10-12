@@ -103,8 +103,8 @@ const Home: React.FC = () => {
             </div>
             <div className={styles.benefitsText}>
               <span>
-                You will acquire the skills necessary to achieve success in
-                today's business world.
+                In our courses, you will learn the skills to understand today’s
+                economy and succeed in the modern business world.
               </span>
             </div>
             <HomeSearch />

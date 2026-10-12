@@ -10,7 +10,7 @@ import {
 } from "@ionic/react";
 import { clamp } from "../../utils/clamp";
 import { pxToRem } from "../../utils/pxToRem";
-import { useLocation, useParams } from "react-router";
+import { useLocation } from "react-router";
 
 type CustomSheetModalType = {
   portalTo?: HTMLElement | HTMLIonTabsElement;

@@ -1,8 +1,9 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef } from "react";
 import {
   IonContent,
   IonIcon,
   IonPage,
+  IonRippleEffect,
   IonSegment,
   IonSegmentButton,
   ScrollDetail,
@@ -25,9 +26,9 @@ import Header from "../../components/Header/Header";
 import CourseItem from "../../components/CourseItem/CourseItem";
 import PageRefresher from "../../components/PageRefresher/PageRefresher";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
-import Auth from "../../components/Auth/Auth";
 import CommonButton from "../../components/CommonButton/CommonButton";
 import styles from "./CategoryDetailPage.module.scss";
+import { Link } from "react-router-dom";
 
 const MAX_SCROLL_VALUE = 91;
 const MY_STUDY_MAX_SCROLL_VALUE = 162;
@@ -38,8 +39,7 @@ const CategoryDetailPage: React.FC = () => {
   const bottomInnerRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLSpanElement>(null);
   const router = useIonRouter();
-  const [isScrolling, setIsScrolling] = useState(false);
-  const accessToken = useUser()?.user.accessToken;
+  // const accessToken = useUser()?.user.accessToken;
   const basketInterface = useBasket();
 
   const tab = router.routeInfo.tab;
@@ -94,7 +94,6 @@ const CategoryDetailPage: React.FC = () => {
   };
 
   const handleScroll = (e: CustomEvent<ScrollDetail>) => {
-    setIsScrolling(true);
     const hideCoef =
       e.detail.scrollTop /
       remToPx(isMyStudyTab ? MY_STUDY_MAX_SCROLL_VALUE : MAX_SCROLL_VALUE);
@@ -107,7 +106,6 @@ const CategoryDetailPage: React.FC = () => {
   };
 
   const handleScrollEnd = async () => {
-    setIsScrolling(false);
     const scrollEl = await contentRef.current?.getScrollElement();
     const currentScroll = scrollEl?.scrollTop;
 
@@ -300,9 +298,7 @@ const CategoryDetailPage: React.FC = () => {
         <div
           className={`${styles.bottomOuter} ${styles.background}`}
           style={{
-            paddingBottom: `calc(var(--tabbar-offset) + ${
-              accessToken ? "0px" : "65rem"
-            })`,
+            paddingBottom: `var(--tabbar-offset)`,
           }}
         >
           <div className={styles.controllerWrapper}>
@@ -323,10 +319,18 @@ const CategoryDetailPage: React.FC = () => {
                 <CourseItem course={course} key={course.id} />
               ))}
             </ul>
+            {!isMyStudyTab && (
+              <Link
+                to="/courses"
+                className={`${styles.categoriesLink} ion-activatable`}
+              >
+                <span>View Categories</span>
+                <IonRippleEffect></IonRippleEffect>
+              </Link>
+            )}
           </div>
         </div>
       </IonContent>
-      <Auth containerClassname={styles.authContainer} hidden={isScrolling} />
     </IonPage>
   );
 };
