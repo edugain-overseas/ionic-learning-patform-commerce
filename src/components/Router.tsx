@@ -49,8 +49,32 @@ const Router: React.FC = () => {
             <Route path="/course/:courseId" component={CourseDetailPage} />
             <Route path="/payment" component={CourseBuyStatusPage} exact />
 
-            <Route path="/login" render={() => <Redirect to="/home" />} />
-            <Route path="/register" render={() => <Redirect to="/home" />} />
+            {/* <Route path="/login" render={() => <Redirect to="/home" />} />
+            <Route path="/register" render={() => <Redirect to="/home" />} /> */}
+            <Route
+              path="/login"
+              render={() => (
+                <Redirect
+                  to={{
+                    pathname: "/home",
+                    state: { from: "/login" },
+                  }}
+                />
+              )}
+              exact
+            />
+            <Route
+              path="/register"
+              render={() => (
+                <Redirect
+                  to={{
+                    pathname: "/home",
+                    state: { from: "/register" },
+                  }}
+                />
+              )}
+              exact
+            />
             <Route exact path="/" render={() => <Redirect to="/home" />} />
             <Route render={() => <Redirect to="/home" />} />
           </Tabs>

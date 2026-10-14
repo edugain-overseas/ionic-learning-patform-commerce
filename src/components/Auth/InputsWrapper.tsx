@@ -12,10 +12,7 @@ const InputsWrapper: FC<{ children: ReactNode }> = ({ children }) => {
       wrapperRef.current.querySelectorAll<HTMLSpanElement>("label > span");
     if (!labels.length) return;
 
-    let maxWidth = 0;
-
-    console.log(labels);
-    
+    let maxWidth = 0;    
 
     labels.forEach((label) => {
       const computedStyle = window.getComputedStyle(label);

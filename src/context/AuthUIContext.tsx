@@ -15,6 +15,7 @@ import PasswordRecoveryForm from "../components/Auth/PasswordRecoveryForm";
 import UserActivationForm from "../components/Auth/UserActivationForm";
 import CorrectEmailForm from "../components/Auth/CorrectEmailForm";
 import NewPasswordForm from "../components/Auth/NewPasswordForm";
+import { useHistory, useLocation } from "react-router";
 
 type modalName =
   | "sing-up"
@@ -35,6 +36,7 @@ type AuthUIContextType = {
   openAuthUI: (type: modalName, enableWithToken?: boolean) => void;
   setSuccessAuthCallback: (callback: CallbackType) => void;
   setTempEmail: (email: string) => void;
+  modals: ModalType[];
 };
 
 const AuthUIContext = createContext<AuthUIContextType | undefined>(undefined);
@@ -66,11 +68,9 @@ export const AuthUIProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const openAuthUI = (type: modalName, enableWithToken = false) => {
     if (accessToken && !enableWithToken) return;
     callbackRef.current = null;
-    modals.find((modal) => {
-      if (modal.name === type) {
-        modal.ref?.current?.present();
-      }
-    });
+
+    const targetModal = modals.find((modal) => modal.name === type);
+    targetModal?.ref?.current?.present();
   };
 
   return (
@@ -79,6 +79,7 @@ export const AuthUIProvider: FC<{ children: ReactNode }> = ({ children }) => {
         openAuthUI,
         setSuccessAuthCallback,
         setTempEmail: (email) => setTempEmail(email),
+        modals,
       }}
     >
       <>

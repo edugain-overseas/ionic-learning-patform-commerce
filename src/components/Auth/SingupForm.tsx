@@ -48,7 +48,7 @@ const FormHeader: FC<{ handleOpenLogin: () => void }> = ({
       <span className={styles.link}>
         {calledFromBasket ? basketMessage : "If you already have an account, "}
         <span className={styles.modalReTrigger} onClick={handleOpenLogin}>
-          sign in here!
+          Login here!
         </span>
       </span>
     </div>

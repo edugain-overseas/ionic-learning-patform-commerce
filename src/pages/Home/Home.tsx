@@ -17,6 +17,9 @@ import HomeOfferInfo from "../../components/HomeOfferInfo/HomeOfferInfo";
 import HomeFooter from "../../components/HomeFooter/HomeFooter";
 import PageRefresher from "../../components/PageRefresher/PageRefresher";
 import styles from "./Home.module.scss";
+import { useHistory, useLocation } from "react-router";
+import { useEffect } from "react";
+import { useAuthUi } from "../../context/AuthUIContext";
 
 const renderCategoryCard = (category: CategoryType) => {
   return <CategoryItem category={category} />;
@@ -61,7 +64,34 @@ export const Courses = () => {
 
 const Home: React.FC = () => {
   const isAuthShown = !useUser()?.user.accessToken;
+  const isTokenInit = useUser()?.user.isTokenInit;
   const router = useIonRouter();
+  const location = useLocation<{ from?: string }>();
+  const history = useHistory();
+  const authUiInterface = useAuthUi();
+  const modals = authUiInterface?.modals;
+
+  useEffect(() => {
+    if (!isTokenInit) return;
+    if (
+      location.state &&
+      (location.state.from === "/login" || location.state.from === "/register")
+    ) {
+      const isModalsReady = !!modals?.length;
+      if (!isModalsReady) return;
+
+      if (location.state.from === "/login") {
+        authUiInterface?.openAuthUI("sing-in");
+      } else {
+        authUiInterface?.openAuthUI("sing-up");
+      }
+
+      history.replace({
+        pathname: "/home",
+        state: {},
+      });
+    }
+  }, [location.state, history, modals, isTokenInit]);
 
   const headerProps = {
     left: [{ name: "logo", onClick: () => router.push("/home") }],

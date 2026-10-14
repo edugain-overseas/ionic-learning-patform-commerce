@@ -97,7 +97,7 @@ const LoginForm: React.FC<{
         <span className={styles.link}>
           If you don't have an account yet,{" "}
           <span className={styles.modalReTrigger} onClick={handleOpenSingUp}>
-            sign up here!
+            Register here!
           </span>
         </span>
       </div>
