@@ -53,15 +53,18 @@ const CategoryDetailPage: React.FC = () => {
   });
 
   const { categoryId } = useParams<{ categoryId: string }>();
+  const urlMatch = window.location.pathname.match(/\/category\/(\d+)/);
+  const fallbackCategoryId = urlMatch ? urlMatch[1] : null;
+  const activeCategoryId = categoryId || fallbackCategoryId || "";
 
   const coursesInterface = useCourses();
 
   const category = coursesInterface?.categories.find(
-    ({ id }) => id === +categoryId,
+    ({ id }) => id === +activeCategoryId,
   );
 
   const courses = coursesInterface?.courses.filter(
-    (course) => course.category_id === +categoryId,
+    (course) => course.category_id === +activeCategoryId,
   );
 
   const userCourses = useUser()?.user.courses;
@@ -83,7 +86,7 @@ const CategoryDetailPage: React.FC = () => {
         ) / (courses.length ? courses.length : 1),
       );
     }
-  }, [userCourses, categoryId]);
+  }, [userCourses, activeCategoryId]);
 
   const toggleHeaderTitleVisibility = (visible: Boolean) => {
     if (visible) {

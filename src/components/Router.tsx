@@ -1,5 +1,4 @@
-import React from "react";
-import { Redirect, Route } from "react-router";
+import { matchPath, Redirect, Route } from "react-router";
 import { IonPage, IonRouterOutlet } from "@ionic/react";
 import Tabs from "./Tabs";
 import Menu from "./Menu/Menu";
@@ -29,6 +28,7 @@ const Router: React.FC = () => {
         <IonRouterOutlet id="main-content" animated={false}>
           <Tabs>
             <Route path="/home" component={Home} exact />
+            <Route exact path="/" render={() => <Redirect to="/home" />} />
             <Route path="/my-profile" component={UserProfile} exact />
             <Route path="/courses" component={Courses} exact />
             <Route path="/my-education" component={MyStudy} exact />
@@ -45,12 +45,14 @@ const Router: React.FC = () => {
             <Route
               path="/category/:categoryId"
               component={CategoryDetailPage}
-              exact
             />
             <Route path="/course/:courseId" component={CourseDetailPage} />
             <Route path="/payment" component={CourseBuyStatusPage} exact />
+
+            <Route path="/login" render={() => <Redirect to="/home" />} />
+            <Route path="/register" render={() => <Redirect to="/home" />} />
             <Route exact path="/" render={() => <Redirect to="/home" />} />
-            <Route component={NotFound} />
+            <Route render={() => <Redirect to="/home" />} />
           </Tabs>
         </IonRouterOutlet>
       </IonPage>
