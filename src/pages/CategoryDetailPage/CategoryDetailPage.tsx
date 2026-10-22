@@ -311,7 +311,7 @@ const CategoryDetailPage: React.FC = () => {
             <div className={styles.innerHeader}>
               <div>{isMyStudyTab ? filter : "Available"}</div>
               <div>
-                <span>Purchased:</span>{" "}
+                <span>Purchase in Category:</span>{" "}
                 {`${courses?.filter((course) => course.bought).length} / ${
                   courses?.length
                 }`}

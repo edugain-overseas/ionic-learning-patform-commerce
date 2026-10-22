@@ -21,6 +21,7 @@ import MenuNav from "./MenuNav";
 import InsetBtn from "../InsetBtn/InsetBtn";
 import Spinner from "../Spinner/Spinner";
 import styles from "./Menu.module.scss";
+import MenuPlatformLinks from "./MenuPlatformLinks";
 
 const Menu = () => {
   const isUserLoggedIn = useUser()?.user.accessToken !== null;
@@ -108,6 +109,7 @@ const Menu = () => {
         <div className={styles.navPanel}>
           <div className={styles.navWrapper}>
             <MenuNav />
+            <MenuPlatformLinks />
           </div>
           <MenuBottomTools />
         </div>

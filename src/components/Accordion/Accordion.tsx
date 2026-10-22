@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { IonIcon } from "@ionic/react";
 import ChevronIcon from "../../assets/icons/chevron.svg";
 import InsetBtn from "../../components/InsetBtn/InsetBtn";

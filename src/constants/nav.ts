@@ -5,6 +5,9 @@ import myProfileIcon from "../assets/icons/nav/my-profile.svg";
 import aboutIEUIcon from "../assets/icons/nav/aboutIEU.svg";
 import instructionsIcon from "../assets/icons/nav/instruction.svg";
 import contactsIcon from "../assets/icons/nav/contacts.svg";
+import webIcon from "../assets/icons/social/web.svg";
+import appStoreIcon from "../assets/icons/social/app-store.svg";
+import playMarketIcon from "../assets/icons/social/play-market.svg";
 
 export type TabNameType = "Home" | "All Courses" | "My Study" | "Basket";
 export type TabHrefType = "/home" | "/courses" | "/my-education" | "/basket";
@@ -71,6 +74,27 @@ export const menuNav = [
     label: "Contacts",
     to: "/contacts",
     iconSrc: contactsIcon,
+  },
+];
+
+export const platformLinks = [
+  {
+    label: "Website",
+    href: "/home",
+    platform: "web",
+    iconSrc: webIcon,
+  },
+  {
+    label: "App Store",
+    href: "/home",
+    platform: "ios",
+    iconSrc: appStoreIcon,
+  },
+  {
+    label: "Google Play",
+    href: "/home",
+    platform: "android",
+    iconSrc: playMarketIcon,
   },
 ];
 

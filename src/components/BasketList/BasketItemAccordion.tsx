@@ -29,14 +29,16 @@ const BasketItemAccordion: FC<BasketItemAccordionType> = ({ courses }) => {
               <BasketCourseCard
                 course={course}
                 confirmed={false}
-                subItem={true}  
+                subItem={true}
               />
             </li>
           ))}
         </ul>
       </div>
       <div className={styles.header} onClick={handleToggle}>
-        <span>{`${isOpen ? "Hide" : "See"} all available courses`}</span>
+        <span>{`${
+          isOpen ? "Hide" : "See"
+        } All Available Courses in This Category`}</span>
       </div>
     </div>
   );

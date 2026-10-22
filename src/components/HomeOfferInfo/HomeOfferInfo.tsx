@@ -29,7 +29,7 @@ const getlabelByType = (type: PlatformType) => {
     case "ios":
       return "App Store";
     case "android":
-      return "Google play";
+      return "Google Play";
     default:
       return;
   }

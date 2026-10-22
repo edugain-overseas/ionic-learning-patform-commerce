@@ -96,3 +96,31 @@
     margin-bottom: 4rem;
   }
 }
+
+.buttonsBlock {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 32rem;
+
+  a {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32rem;
+    border-radius: 5rem;
+
+    span {
+      font-size: 14rem;
+      color: var(--ion-color-primary-contrast);
+    }
+
+    &:first-child {
+      background-color: var(--ion-color-primary);
+    }
+    &:last-child {
+      background-color: var(--ion-color-dark);
+    }
+  }
+}

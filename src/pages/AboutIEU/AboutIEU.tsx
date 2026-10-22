@@ -5,6 +5,7 @@ import textIcon from "../../assets/images/TextIcon.png";
 import styles from "./AboutIEU.module.scss";
 import StickyScrollLayout from "../../components/StickyScrollLayout/StickyScrollLayout";
 import IntroHeader from "../CourseDetailPage/CourseIntroPage/IntroHeader";
+import { Link } from "react-router-dom";
 
 const threshold = 0.9;
 
@@ -31,11 +32,11 @@ const AboutIEU: React.FC = () => {
             <div className={styles.textBlock}>
               <IonImg src={textIcon} className={styles.floatIcon} />
               <p>
-                Welcome to the website of the{" "}
-                <b>First European University</b>. We are the most modern
-                multidisciplinary University in Malta and the European Union. We
-                offer English-taught medical programs, professional degrees in
-                Malta, and affordable medical internships <b>in Europe</b>.
+                Welcome to the website of the <b>First European University</b>.
+                We are the most modern multidisciplinary University in Malta and
+                the European Union. We offer English-taught medical programs,
+                professional degrees in Malta, and affordable medical
+                internships <b>in Europe</b>.
               </p>
               <p>
                 <b>First European University</b>, is excited to welcome{" "}
@@ -80,6 +81,14 @@ const AboutIEU: React.FC = () => {
                 student community is an active participant. Student community is
                 an active participant.
               </p>
+            </div>
+            <div className={styles.buttonsBlock}>
+              <Link to="/courses">
+                <span>View All Courses</span>
+              </Link>
+              <a href="https://feu.com.ua" target="_blank" rel="noreferrer">
+                <span>Visit University Website</span>
+              </a>
             </div>
           </div>
         </StickyScrollLayout>

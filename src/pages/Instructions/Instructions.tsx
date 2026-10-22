@@ -30,7 +30,7 @@ export const IntructionAccordion = ({
             <IonIcon src={CalendarIcon} className={styles.updateInfoIcon} />
             <span className={styles.updateInfoText}>
               {`Last update: ${getFormattedStrFromDate(
-                instruction.last_update
+                instruction.last_update,
               )}`}
             </span>
           </div>
@@ -74,34 +74,6 @@ const Instructions: React.FC = () => {
                 key={instruction.id}
                 instruction={instruction}
               />
-              // <Accordion
-              //   key={instruction.id}
-              //   header={
-              //     <div className={styles.header}>
-              //       <div className={styles.iconWrapper}>
-              //         <IonIcon
-              //           src={TaskIcon}
-              //           className={styles.intructionIcon}
-              //         />
-              //       </div>
-              //       <div className={styles.intructionTitleWrapper}>
-              //         <span className={styles.title}>{instruction.name}</span>
-              //         <div className={styles.updateInfoWrapper}>
-              //           <IonIcon
-              //             src={CalendarIcon}
-              //             className={styles.updateInfoIcon}
-              //           />
-              //           <span className={styles.updateInfoText}>
-              //             {`Last update: ${getFormattedStrFromDate(
-              //               instruction.last_update
-              //             )}`}
-              //           </span>
-              //         </div>
-              //       </div>
-              //     </div>
-              //   }
-              //   content={<InstructionContent instruction={instruction} />}
-              // />
             ))}
         </div>
       </IonContent>
