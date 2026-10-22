@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { IonIcon } from "@ionic/react";
-import { useLocation, useParams } from "react-router";
+import { useParams } from "react-router";
 import { useCourses } from "../../context/CoursesContext";
 import { useProtectedNavigation } from "../../hooks/useProtectedNavigation";
 import ExamIcon from "../../assets/icons/document-grade-A.svg";
@@ -19,7 +19,6 @@ const secondBreackpoint = 72 / modalHeight;
 
 const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
   const { courseId } = useParams<{ courseId: string }>();
-  const { pathname } = useLocation();
 
   const modalParent = document.querySelector("ion-tabs");
 
@@ -82,7 +81,7 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
               </span>
               <ProgressBar
                 value={course?.progress}
-                width={100}
+                width={90}
                 height={10}
                 showValue={false}
                 wrapperStyles={{ flexGrow: 1 }}

@@ -68,6 +68,14 @@
   display: flex;
   gap: 6rem;
   align-items: center;
+
+  span.showBtn {
+    flex-shrink: 0;
+    font-size: 16rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .errorMessage {

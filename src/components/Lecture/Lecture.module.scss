@@ -83,6 +83,16 @@
 
 .lectureFooter {
   margin: 24rem -18rem 0;
+
+  .lectureWarningInfo {
+    margin-top: 16rem;
+    text-align: center;
+    font-size: 12rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 16rem;
+    color: var(--ion-color-light);
+  }
 }
 
 .btnsWrapper {
@@ -95,5 +105,4 @@ section[id="picture"] {
   .sectionTitle {
     margin-bottom: 0;
   }
-  
 }

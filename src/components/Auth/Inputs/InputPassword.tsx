@@ -1,9 +1,9 @@
 import React, { useState } from "react";
+import { UseFormRegisterReturn } from "react-hook-form";
 import { IonIcon } from "@ionic/react";
 import EyeOpen from "../../../assets/icons/auth/eye-open.svg";
 import EyeHide from "../../../assets/icons/auth/eye-hide.svg";
 import styles from "./Inputs.module.scss";
-import { UseFormRegisterReturn } from "react-hook-form";
 
 interface InputPasswordTypes {
   name: string;

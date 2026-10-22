@@ -28,6 +28,7 @@ import CompleteLessonBtn from "../CompleteLessonBtn/CompleteLessonBtn";
 import styles from "./Test.module.scss";
 import { useParams } from "react-router";
 import ExpiredAttemptsMessage from "../ExpiredAttemptsMessage/ExpiredAttemptsMessage";
+import ManualClearAttemptsButton from "./ManualClearAttemptsButton";
 
 type CurrentAttempt = {
   studentAnswers: any[];
@@ -221,6 +222,17 @@ const Test: React.FC<{
     }
   };
 
+  const handleManualResetAttempts = async () => {
+    try {
+      await instance.delete(
+        `/student-test/attempts/clear?test_id=${testData.test_id}`,
+      );
+      await fetchAttempts();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const closeAttemptsModal = () => setIsOpenAttemptsModal(false);
   const openAttemptsModal = () => setIsOpenAttemptsModal(true);
 
@@ -343,7 +355,7 @@ const Test: React.FC<{
     }
   };
 
-
+  console.log(attemptsLeft === 0);
 
   return (
     <>
@@ -442,7 +454,7 @@ const Test: React.FC<{
               maxScore={bestAttempt?.attempt_score}
             />
             <div className={styles.landingBtnsContainer}>
-              {attemptsLeft === 0 && (
+              {attemptsLeft === 0 && !isBestAttemptPassed && (
                 <ExpiredAttemptsMessage
                   testId={testData?.test_id}
                   fetchAttempts={fetchAttempts}
@@ -450,7 +462,7 @@ const Test: React.FC<{
               )}
               {isBestAttemptPassed && (
                 <CommonButton
-                  label="Complete"
+                  label="Submit"
                   block={true}
                   height={32}
                   className={styles.landingBtn}
@@ -460,6 +472,11 @@ const Test: React.FC<{
                   onClick={() =>
                     handleCompleteTestWithAttemptId(bestAttempt.id)
                   }
+                />
+              )}
+              {!isAttemptAvailabel && isBestAttemptPassed && (
+                <ManualClearAttemptsButton
+                  handleClear={handleManualResetAttempts}
                 />
               )}
               {isAttemptAvailabel && !isAttemptLoading && (

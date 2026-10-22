@@ -16,7 +16,7 @@ const Lecture: React.FC<{
   const coursesInterface = useCourses();
 
   const course = coursesInterface?.courses.find(
-    (course) => course.id === taskData.course_id
+    (course) => course.id === taskData.course_id,
   );
 
   const lectureNumber =
@@ -77,6 +77,12 @@ const Lecture: React.FC<{
                 )
               }
             />
+            {taskData.status !== "completed" && (
+              <p className={styles.lectureWarningInfo}>
+                Make sure this lecture is marked as Complete to ensure your
+                learning progress is properly recorded.
+              </p>
+            )}
           </div>
         )}
       </div>
