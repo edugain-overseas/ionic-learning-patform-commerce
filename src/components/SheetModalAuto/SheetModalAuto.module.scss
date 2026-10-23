@@ -12,7 +12,10 @@
 
   &::part(content) {
     border-radius: 16rem 16rem 0 0;
-    padding-bottom: max(calc(var(--keyboard-height) - 20px), 0px);
+    padding-bottom: max(
+      calc(var(--keyboard-height) - 20px),
+      var(--ion-safe-area-bottom)
+    );
     transition: padding-bottom var(--custom-tr-time-min) ease-in-out;
   }
 }

@@ -53,7 +53,7 @@ const QuestionMatching: React.FC<QuestionMatchingType> = ({
         <ul>
           {leftOptions.map(({ id: leftOptionId }, index) => {
             const currentValue = state?.find(
-              (answer) => answer.left_id === leftOptionId
+              (answer) => answer.left_id === leftOptionId,
             )?.right_uuid;
             return (
               <li key={leftOptionId} className={styles.answerOption}>
@@ -71,10 +71,11 @@ const QuestionMatching: React.FC<QuestionMatchingType> = ({
                     paddingInline: "4rem",
                     gap: "0rem",
                     fontSize: "12rem",
-                    maxWidth: 'max-content',
+                    maxWidth: "max-content",
+                    minWidth: "3.2em",
                   }}
                   dropDownWrapperStyles={{
-                    boxShadow: 'var(--custom-box-shadow-primary)'
+                    boxShadow: "var(--custom-box-shadow-primary)",
                   }}
                   dropDownOpenDirection="up"
                 />

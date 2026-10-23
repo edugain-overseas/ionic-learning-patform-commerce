@@ -16,6 +16,12 @@ export type CertificateItemDataType = {
   courseId?: number;
 };
 
+const STATUS_PRIORITY: Record<string, number> = {
+  in_progress: 1,
+  completed: 2,
+  unknown: 3,
+};
+
 const CertificateList = () => {
   const certificatesData = useUser()?.user.certificates;
 
@@ -26,9 +32,22 @@ const CertificateList = () => {
       </p>
     );
   }
+
+  const sortedCertificates = [...certificatesData].sort((a, b) => {
+    const aHasInProgress = a.course_certificate_data.some(
+      (course) => course.course_status === "in_progress",
+    );
+    const bHasInProgress = b.course_certificate_data.some(
+      (course) => course.course_status === "in_progress",
+    );
+    if (aHasInProgress && !bHasInProgress) return -1;
+    if (!aHasInProgress && bHasInProgress) return 1;
+    return 0;
+  });
+
   return (
     <ul className={styles.certificateList}>
-      {certificatesData.map((certificate) => {
+      {sortedCertificates.map((certificate) => {
         const data: CertificateItemDataType = {
           type: "category",
           name: certificate.category_name,
@@ -37,6 +56,19 @@ const CertificateList = () => {
           categoryId: certificate.category_id,
         };
 
+        const sortedCourses = [...certificate.course_certificate_data].sort(
+          (a, b) => {
+            const priorityA =
+              STATUS_PRIORITY[a.course_status ?? "unknown"] ??
+              STATUS_PRIORITY.unknown;
+            const priorityB =
+              STATUS_PRIORITY[b.course_status ?? "unknown"] ??
+              STATUS_PRIORITY.unknown;
+
+            return priorityA - priorityB;
+          },
+        );
+
         return (
           <li key={certificate.category_id}>
             <Accordion
@@ -44,25 +76,23 @@ const CertificateList = () => {
               header={<CertificateItem data={data} />}
               content={
                 <ul className={styles.courseCertificatesList}>
-                  {certificate.course_certificate_data.map(
-                    (courseCertificate) => {
-                      const data: CertificateItemDataType = {
-                        type: "course",
-                        name: courseCertificate.course_name,
-                        certificateLink:
-                          courseCertificate.course_certificate_link,
-                        status: courseCertificate.course_status,
-                        link: `/course/${courseCertificate.course_id}`,
-                        courseId: courseCertificate.course_id,
-                      };
+                  {sortedCourses.map((courseCertificate) => {
+                    const data: CertificateItemDataType = {
+                      type: "course",
+                      name: courseCertificate.course_name,
+                      certificateLink:
+                        courseCertificate.course_certificate_link,
+                      status: courseCertificate.course_status,
+                      link: `/course/${courseCertificate.course_id}`,
+                      courseId: courseCertificate.course_id,
+                    };
 
-                      return (
-                        <li key={courseCertificate.course_id}>
-                          <CertificateItem data={data} />
-                        </li>
-                      );
-                    }
-                  )}
+                    return (
+                      <li key={courseCertificate.course_id}>
+                        <CertificateItem data={data} />
+                      </li>
+                    );
+                  })}
                 </ul>
               }
             />

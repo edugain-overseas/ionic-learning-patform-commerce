@@ -4,6 +4,7 @@ import {
   CategoryType,
   CourseType,
   InstructionType,
+  useCourses,
 } from "../../context/CoursesContext";
 import { IntructionAccordion } from "../Instructions/Instructions";
 import CategoryItem from "../../components/CategoryItem/CategoryItem";
@@ -16,6 +17,7 @@ type SearchReslutSectionProps = {
 };
 
 const SearchReslutSection: FC<SearchReslutSectionProps> = ({ data, type }) => {
+  const courses = useCourses()?.courses;
   const elementsByType = useCallback(() => {
     switch (type) {
       case "categories":
@@ -23,9 +25,12 @@ const SearchReslutSection: FC<SearchReslutSectionProps> = ({ data, type }) => {
           <CategoryItem category={category} key={category.id} />
         ));
       case "courses":
-        return (data as CourseType[]).map((course) => (
-          <CourseItem course={course} key={course.id} />
-        ));
+        return (data as CourseType[]).map((course) => {
+          const courseData =
+            courses?.find((courseData) => courseData.id === course.id) ||
+            course;
+          return <CourseItem course={courseData} key={course.id} />;
+        });
       case "instructions":
         return (data as InstructionType[]).map((instruction) => (
           <IntructionAccordion key={instruction.id} instruction={instruction} />

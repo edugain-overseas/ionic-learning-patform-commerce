@@ -291,8 +291,6 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
           let lessonNumber = 0;
           if (course.lessons.find((lesson) => lesson.id === lessonId)) {
             const updatedLessons = course.lessons.map((lesson) => {
-              console.log(lessonNumber, lesson.title);
-
               if (lesson.id === lessonId) {
                 lessonNumber = lesson.number;
                 return { ...lesson, status: "completed" };
@@ -330,7 +328,6 @@ export const CoursesProvider: React.FC<CoursesProviderType> = ({
     };
 
     getAllCategories();
-    // getAllCourses();
     getGeneralInstruction();
   }, []);
 

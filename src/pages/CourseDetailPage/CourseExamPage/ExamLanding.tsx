@@ -4,6 +4,7 @@ import Spinner from "../../../components/Spinner/Spinner";
 import CommonButton from "../../../components/CommonButton/CommonButton";
 import ExamLandingStats from "./ExamLandingStats";
 import styles from "./CourseExamPage.module.scss";
+import ManualClearAttemptsButton from "../../../components/Test/ManualClearAttemptsButton";
 
 export type Status = ExamResult | "completed" | null;
 
@@ -297,7 +298,7 @@ const getTemplateText = (status: Status, attempts: ExamAttempt[]) => {
 const getTemplateBtns = (
   status: Status,
   callbacks: LandingBtnCallbacks,
-  hasAttempt: boolean
+  hasAttempt: boolean,
 ) => {
   switch (status) {
     case "no_result":
@@ -326,9 +327,7 @@ const getTemplateBtns = (
               onClick={callbacks.startAttempt}
             />
           ) : (
-            <p>
-              You are out of attempts! More attempts will charge in 24 hours
-            </p>
+            <ManualClearAttemptsButton handleClear={callbacks.clearAttempts} />
           )}
           <ExamLandingBtn
             label="Complete your course"
@@ -345,7 +344,7 @@ const getTemplateBtns = (
           onClick={callbacks.startAttempt}
         />
       ) : (
-        <p>You are out of attempts! More attempts will charge in 24 hours</p>
+        <p>You are out of attempts! More attempts will charge in 2 hours</p>
       );
     case "completed":
       return (

@@ -53,8 +53,6 @@ const ExpiredAttemptsMessage = ({
     return null;
   }
 
-  console.log("qweqweqe");
-
   return (
     <p className={wrapperClassname}>
       Your attempts have expired. You will receive new attempts in{" "}

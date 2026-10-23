@@ -24,7 +24,7 @@ const ExamCredentionForm = ({
   defaultValues,
   disabledFields,
 }: {
-  onSubmitCallback: () => void;
+  onSubmitCallback: () => Promise<void>;
   defaultValues: ValuesType;
   disabledFields: FieldData[];
 }) => {
@@ -33,8 +33,6 @@ const ExamCredentionForm = ({
   const [present] = useToast();
   const updateUserInfo = useUser()?.updateUserInfo;
 
-  console.log(defaultValues);
-
   const { isDirty, dirtyFields } = formState;
 
   const isFieldDisabled = (name: keyof ValuesType) => {
@@ -42,7 +40,23 @@ const ExamCredentionForm = ({
       ?.disabled;
   };
 
+  const handleNoChangesSubmit = async () => {
+    try {
+      setIsLoading(true);
+      await onSubmitCallback();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const onSubmit = async (data: FieldValues) => {
+    if (!isDirty) {
+      await handleNoChangesSubmit();
+      return;
+    }
+
     const dataToUpdate = {} as ValuesType;
     (Object.keys(data) as (keyof ValuesType)[])
       .filter((key) => dirtyFields[key])
@@ -51,7 +65,7 @@ const ExamCredentionForm = ({
     const hasChanges = Object.keys(dataToUpdate).length > 0;
 
     if (!hasChanges) {
-      onSubmitCallback();
+      await handleNoChangesSubmit();
       return;
     }
     if (!updateUserInfo) {
@@ -66,7 +80,7 @@ const ExamCredentionForm = ({
     setIsLoading(true);
     try {
       await updateUserInfo(dataToUpdate);
-      onSubmitCallback();
+      await onSubmitCallback();
     } catch (error) {
       present({
         type: "error",
@@ -113,7 +127,7 @@ const ExamCredentionForm = ({
           backgroundColor="#37384B"
           height={32}
           block={true}
-          disabled={!isDirty}
+          disabled={isLoading}
         />
       </div>
     </form>

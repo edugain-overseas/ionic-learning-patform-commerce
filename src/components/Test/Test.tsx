@@ -315,6 +315,8 @@ const Test: React.FC<{
   const isBestAttemptPassed =
     bestAttempt?.attempt_score >= Math.round(testData?.score * 0.6);
 
+  const isMaximumScoreReached = bestAttempt?.attempt_score === testData?.score;
+
   const isStudentHasCompleteAttept = testAttempts.length !== 0;
 
   const attemptsLeft = testData?.attempts - testAttempts.length;
@@ -354,8 +356,6 @@ const Test: React.FC<{
       }
     }
   };
-
-  console.log(attemptsLeft === 0);
 
   return (
     <>
@@ -474,11 +474,13 @@ const Test: React.FC<{
                   }
                 />
               )}
-              {!isAttemptAvailabel && isBestAttemptPassed && (
-                <ManualClearAttemptsButton
-                  handleClear={handleManualResetAttempts}
-                />
-              )}
+              {!isAttemptAvailabel &&
+                isBestAttemptPassed &&
+                !isMaximumScoreReached && (
+                  <ManualClearAttemptsButton
+                    handleClear={handleManualResetAttempts}
+                  />
+                )}
               {isAttemptAvailabel && !isAttemptLoading && (
                 <CommonButton
                   label={testAttempts.length ? "Retake" : "Start"}

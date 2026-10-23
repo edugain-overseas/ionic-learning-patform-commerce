@@ -35,8 +35,6 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
       return;
     }
 
-    console.log(lesson, isExam);
-
     const isLessonAvailable = lesson?.status !== "blocked";
     const isAllowed = !!(isCoursePurchased && isLessonAvailable);
     const path = `/course/${courseId}/${
@@ -56,7 +54,11 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
 
     handleTaskNavigate(examLessonId, true);
   };
-  
+
+  const isExamAvailable =
+    course?.lessons.find((lesson) => lesson.type === "exam")?.status ===
+    "active";
+
   if (!course) return null;
 
   return (
@@ -91,7 +93,7 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
           <CommonButton
             icon={<IonIcon src={ExamIcon} className={styles.examIcon} />}
             label="Exam"
-            backgroundColor="#BDC4D2"
+            backgroundColor={isExamAvailable ? "#37384B" : "#BDC4D2"}
             color="#fcfcfc"
             width={103}
             height={32}

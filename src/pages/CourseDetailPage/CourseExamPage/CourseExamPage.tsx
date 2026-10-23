@@ -58,6 +58,7 @@ export type LandingBtnCallbacks = {
   startAttempt: () => Promise<void>;
   completeCourse: () => Promise<void>;
   downloadCertificate: () => Promise<void>;
+  clearAttempts: () => Promise<void>;
   goToAllCourses: () => void;
 };
 
@@ -119,8 +120,8 @@ const CourseExamPage: FC = () => {
       const { data: attempts } = await instance.get(
         `student-exam/attempts?exam_id=${examId}`,
       );
-      if (attempts) {
-        attempts && setAttempts(attempts);
+      if (attempts !== undefined) {
+        setAttempts(attempts || []);
       }
     } catch (error) {
       console.log(error);
@@ -161,7 +162,7 @@ const CourseExamPage: FC = () => {
       } else return "failed";
     };
     setExamResult(getExamResult(attempts));
-  }, [attempts]);
+  }, [attempts, examLessonData]);
 
   useEffect(() => {
     setCurrentAttempt((prev) =>
@@ -170,13 +171,10 @@ const CourseExamPage: FC = () => {
   }, [studentAnswers]);
 
   useIonViewWillEnter(() => {
-    console.log("will enter");
-
     hideTabbar();
   });
 
   useEffect(() => {
-    console.log(`/course/${courseId}/exam`, router.routeInfo.pathname);
     if (router.routeInfo.pathname !== `/course/${courseId}/exam`) {
       showTabbar();
     }
@@ -342,10 +340,24 @@ const CourseExamPage: FC = () => {
   };
 
   const downloadCertificate = async () => {
+    const downloadCertificateFileFromLink = async () => {
+      if (!certificate) return;
+      const certificateName = `Certificate of ${certificate.course_name} course.pdf`;
+      const certificateUrl = `${serverName}/${certificateLink}`;
+
+      await downloadFile(certificateUrl, certificateName);
+    };
+
     const certificateLink = certificate?.course_certificate_link;
 
     if (!certificateLink) {
       await userInterface?.getUser();
+
+      const updatedCertificateLink = certificate?.course_certificate_link;
+      if (updatedCertificateLink) {
+        await downloadCertificateFileFromLink();
+        return;
+      }
 
       present({
         type: "warning",
@@ -355,10 +367,7 @@ const CourseExamPage: FC = () => {
       return;
     }
 
-    const certificateName = `Certificate of ${certificate.course_name} course.pdf`;
-    const certificateUrl = `${serverName}/${certificateLink}`;
-
-    await downloadFile(certificateUrl, certificateName);
+    await downloadCertificateFileFromLink();
   };
 
   const handleLeaveAttempt = async () => {
@@ -374,12 +383,26 @@ const CourseExamPage: FC = () => {
     router.push("/courses", "forward", "push");
   };
 
+  const clearAttempts = async () => {
+    try {
+      await instance.delete(
+        `/student-exam/attempts/clear?exam_id=${
+          (exam?.lessonData as ExamDataType).exam_id
+        }`,
+      );
+      await getExamAttempts();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const landingStatus = exam?.status === "completed" ? "completed" : examResult;
   const landingBtnCallbacks: LandingBtnCallbacks = {
     startAttempt,
     completeCourse: onCompleteCourseClick,
     downloadCertificate,
     goToAllCourses,
+    clearAttempts,
   };
 
   const userHasAttempt =
@@ -426,7 +449,6 @@ const CourseExamPage: FC = () => {
 
   return (
     <IonPage className="primaryPage">
-      {/* <Header {...headerProps} /> */}
       <TaskHeader
         scrollProgress={scrollProgress}
         taskData={exam}

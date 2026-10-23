@@ -1,5 +1,4 @@
-import { FC, useState } from "react";
-import { certificates } from "../../constants";
+import { FC } from "react";
 import { useUser } from "../../context/UserContext";
 import { useObserver } from "../../hooks/useObserver";
 import InfoBtn from "../../components/InfoBtn/InfoBtn";
@@ -8,12 +7,6 @@ import UnauthorizedUserContentFallback from "../../components/UnauthorizedUserCo
 import CertificateList from "../../components/CertificateList/CertificateList";
 import styles from "./UserProfile.module.scss";
 
-const pagination = {
-  clickable: true,
-  renderBullet: function (_: any, className: string) {
-    return `<span class="${className} ${styles.customBullet}"></span>`;
-  },
-};
 
 const UserCertificates: FC = () => {
   const isUserLoggedIn = useUser()?.user.accessToken !== null;
