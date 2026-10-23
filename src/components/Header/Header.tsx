@@ -15,7 +15,7 @@ import backIcon from "../../assets/icons/header/back.svg";
 import rowIcon from "../../assets/icons/header/list-style-row.svg";
 import gridIcon from "../../assets/icons/header/list-style-grid.svg";
 import filterIcon from "../../assets/icons/header/filter.svg";
-import SettingsIcon from "../../assets/icons/menu/settings.svg";
+import SettingsIcon from "../../assets/icons/pencil-filled.svg";
 import SaveIcon from "../../assets/icons/save.svg";
 import logoFEU from "../../assets/images/logo_feu.png";
 import detailsIcon from "../../assets/icons/header/details.svg";
@@ -111,6 +111,7 @@ const renderBtn = (props: ButtonPropsTypes, handleNotification: () => void) => {
             props.className ? props.className : ""
           }`}
           id={props.id}
+          onClick={props.onClick}
         >
           <IonIcon src={SettingsIcon} className={styles.settingsIcon} />
         </IonButton>

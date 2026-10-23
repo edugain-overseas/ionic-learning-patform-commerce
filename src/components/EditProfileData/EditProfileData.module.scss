@@ -78,6 +78,15 @@
   }
 }
 
+.changeAvatarButton,
+.changePasswordButton {
+  min-width: 152rem;
+
+  span {
+    white-space: nowrap;
+  }
+}
+
 .passwordWrapper {
   display: flex;
   gap: 33rem;
@@ -94,5 +103,9 @@
 
   & > * {
     flex: 1;
+  }
+
+  button {
+    flex-shrink: 0;
   }
 }

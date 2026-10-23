@@ -155,7 +155,7 @@ const EditProfileData: FC<{
               editable={false}
             />
             <CommonButton
-              width={152}
+              className={styles.changeAvatarButton}
               height={32}
               backgroundColor="transparent"
               borderRadius={5}
@@ -238,8 +238,8 @@ const EditProfileData: FC<{
               28.09.2026 at 14:54
             </p>
             <CommonButton
-              width={152}
               height={32}
+              className={styles.changePasswordButton}
               backgroundColor="transparent"
               borderRadius={5}
               border="1rem solid #5D6977"

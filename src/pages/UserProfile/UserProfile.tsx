@@ -1,8 +1,4 @@
-import {
-  IonContent,
-  IonModal,
-  IonPage,
-} from "@ionic/react";
+import { IonContent, IonModal, IonPage } from "@ionic/react";
 import React, { useEffect, useRef, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import Header from "../../components/Header/Header";
@@ -19,15 +15,7 @@ import styles from "./UserProfile.module.scss";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
-
-const headerProps = {
-  left: [{ name: "back" }],
-  title: "My Profile",
-  right: [
-    { name: "notification", onClick: () => {} },
-    { name: "settings", id: "open-edit-profile-modal", onClick: () => {} },
-  ],
-};
+import { useToast } from "../../hooks/useToast";
 
 const UserProfile: React.FC = () => {
   const pageRef = useRef(null);
@@ -37,6 +25,8 @@ const UserProfile: React.FC = () => {
     useState<HTMLElement | null>(null);
   const userInterface = useUser();
   const userData = userInterface?.user;
+  const isUserLoggedIn = userData?.accessToken !== null;
+  const [api] = useToast();
 
   const closeEditUserDataModal = () => {
     if (editUserDataModalRef.current) {
@@ -54,6 +44,13 @@ const UserProfile: React.FC = () => {
   };
 
   const openAvatarEditorModal = () => {
+    if (!isUserLoggedIn) {
+      api({
+        type: "guard",
+        message: "Available to registered users, please login.",
+      });
+      return;
+    }
     if (editUserDataModalRef.current) {
       editUserDataModalRef.current.dismiss();
     }
@@ -68,6 +65,28 @@ const UserProfile: React.FC = () => {
     setPresentingElement(pageRef.current);
   }, []);
 
+  const headerProps = {
+    left: [{ name: "back" }],
+    title: "My Profile",
+    right: [
+      { name: "notification", onClick: () => {} },
+      {
+        name: "settings",
+        id: isUserLoggedIn ? "open-edit-profile-modal" : "",
+        onClick: () => {
+          if (isUserLoggedIn) return;
+
+          api({
+            type: "guard",
+            message: "Available to registered users, please login.",
+          });
+        },
+      },
+    ],
+  };
+
+  console.log(headerProps);
+
   return (
     <IonPage id="profile" ref={pageRef} className="primaryPage">
       <Header {...headerProps} />
@@ -80,18 +99,20 @@ const UserProfile: React.FC = () => {
         <UserProfileInfo userData={userData} />
         <UserStatistics userData={userData} />
         <UserCertificates />
-        <IonModal
-          ref={editUserDataModalRef}
-          className={styles.editDataModal}
-          trigger="open-edit-profile-modal"
-          presentingElement={presentingElement!}
-          mode="ios"
-        >
-          <EditProfileData
-            closeModal={closeEditUserDataModal}
-            openAvatarEditorModal={openAvatarEditorModal}
-          />
-        </IonModal>
+        {isUserLoggedIn && (
+          <IonModal
+            ref={editUserDataModalRef}
+            className={styles.editDataModal}
+            trigger="open-edit-profile-modal"
+            presentingElement={presentingElement!}
+            mode="ios"
+          >
+            <EditProfileData
+              closeModal={closeEditUserDataModal}
+              openAvatarEditorModal={openAvatarEditorModal}
+            />
+          </IonModal>
+        )}
         <SheetModalAuto refModal={editUserAvatarRef} keyboardClose={false}>
           <UserAvatarEditor closeModal={closeEditAvatarModal} />
         </SheetModalAuto>
