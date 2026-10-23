@@ -210,33 +210,32 @@
 .mediaObject {
   position: absolute;
   inset: 0;
-  background-image: url("../../assets/images/HomeHero/happy-student.png");
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: 0.95;
-  opacity: 1;
   z-index: 1;
 
   -webkit-mask-image: -webkit-radial-gradient(white, black);
   transform: translateZ(0);
   will-change: transform;
+  text-align: center;
+
+  img {
+    height: 100%;
+  }
 }
 
 .mediaObjectShadow {
   position: absolute;
   inset: 0;
-  background-image: url("../../assets/images/HomeHero/happy-student.png");
   filter: blur(2rem);
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
   z-index: 0;
-  opacity: 0;
 
   -webkit-mask-image: -webkit-radial-gradient(white, black);
   transform: translateZ(0);
   will-change: transform;
+  text-align: center;
+
+  img {
+    height: 100%;
+  }
 }
 
 @keyframes fadeIn {
