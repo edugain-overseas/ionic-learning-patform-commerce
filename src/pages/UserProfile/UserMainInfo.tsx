@@ -19,10 +19,10 @@ const UserMainInfo: FC<{
     : { hours: 0, minutes: 0 };
 
   const userCoursesCompleted =
-    userData?.courses.filter((course) => course.status === "completed") || [];
+    userData?.courses?.filter((course) => course.status === "completed") || [];
 
   const userCoursesInProgress =
-    userData?.courses.filter((course) => course.status === "in_progress") || [];
+    userData?.courses?.filter((course) => course.status === "in_progress") || [];
 
   return (
     <div className={styles.mainInfoBlock}>

@@ -11,7 +11,7 @@ const BasketList: FC = () => {
   const courses = coursesInterface?.courses;
   const items = basketInterface?.items;
   const availableCourses = courses?.filter(
-    (course) => !items?.find((item) => item.id === course.id) && !course.bought
+    (course) => !items?.find((item) => item.id === course.id) && !course.bought,
   );
 
   const groupedItemsByCategoryId = groupByKey(items, "categoryId");
@@ -28,15 +28,19 @@ const BasketList: FC = () => {
         return (
           <li key={categoryId}>
             <ul>
-              {categoryItems.map((item, index, array) => (
-                <BasketItem
-                  key={item.id}
-                  course={courses?.find(({ id }) => item.id === id)}
-                  confirmed={item.confirmed}
-                  availableCourses={availableCourses}
-                  hasAccordion={index + 1 === array.length}
-                />
-              ))}
+              {categoryItems.map((item, index, array) => {
+                const course = courses?.find(({ id }) => item.id === id);
+                if (!course) return null;
+                return (
+                  <BasketItem
+                    key={item.id}
+                    course={course}
+                    confirmed={item.confirmed}
+                    availableCourses={availableCourses}
+                    hasAccordion={index + 1 === array.length}
+                  />
+                );
+              })}
             </ul>
           </li>
         );

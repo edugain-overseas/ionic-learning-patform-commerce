@@ -9,8 +9,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion 36
 
-        versionCode 39
-        versionName "1.39"
+        versionCode 41
+        versionName "1.41"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {

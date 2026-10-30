@@ -24,7 +24,7 @@ import Spinner from "../Spinner/Spinner";
 import styles from "./BasketCheckoutPanel.module.scss";
 
 const stripePromise = loadStripe(
-  import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY_DEV,
+  import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY_PROD,
   { developerTools: { assistant: { enabled: false } } },
 );
 

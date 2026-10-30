@@ -18,7 +18,7 @@ import BasketCourseCard from "./BasketCourseCard";
 import styles from "./BasketList.module.scss";
 
 type BasketItemType = {
-  course?: CourseType;
+  course: CourseType;
   confirmed: boolean;
   availableCourses?: CourseType[];
   hasAccordion: boolean;
@@ -33,9 +33,9 @@ const BasketItem: FC<BasketItemType> = ({
   availableCourses,
   hasAccordion,
 }) => {
-  if (!course) {
-    return null;
-  }
+  // if (!course) {
+  //   return null;
+  // }
   const cardRef = useRef<HTMLDivElement | null>(null);
   const iconWrapperRef = useRef<HTMLDivElement | null>(null);
   const animation = useRef<Animation | null>(null);
@@ -47,7 +47,7 @@ const BasketItem: FC<BasketItemType> = ({
   const basketInterface = useBasket();
 
   const category = useCourses()?.categories?.find(
-    (category) => category.id === course?.category_id
+    (category) => category.id === course?.category_id,
   );
   const userCourses = useUser()?.user.courses;
 
@@ -57,8 +57,8 @@ const BasketItem: FC<BasketItemType> = ({
     (availableCourse) =>
       availableCourse.category_id === course?.category_id &&
       !userCourses?.find(
-        (userCourse) => userCourse.course_id === availableCourse.id
-      )
+        (userCourse) => userCourse.course_id === availableCourse.id,
+      ),
   );
 
   useEffect(() => {
