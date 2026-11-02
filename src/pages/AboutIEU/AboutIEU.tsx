@@ -180,14 +180,14 @@ const AboutIEU: React.FC = () => {
                 their academic and professional lives.
               </p>
             </div>
-          </div>
-          <div className={styles.buttonsBlock}>
-            <Link to="/courses">
-              <span>View All Courses</span>
-            </Link>
-            <a href="https://feu.com.ua" target="_blank" rel="noreferrer">
-              <span>Visit University Website</span>
-            </a>
+            <div className={styles.buttonsBlock}>
+              <Link to="/courses">
+                <span>View All Courses</span>
+              </Link>
+              <a href="https://feu.com.ua" target="_blank" rel="noreferrer">
+                <span>Visit University Website</span>
+              </a>
+            </div>
           </div>
         </StickyScrollLayout>
       </IonContent>
