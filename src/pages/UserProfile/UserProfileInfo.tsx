@@ -5,7 +5,6 @@ import Accordion from "../../components/Accordion/Accordion";
 import { UserType } from "../../types/user";
 
 const UserProfileInfo: FC<{ userData?: UserType }> = ({ userData }) => {
-
   return (
     <div className={styles.profileData}>
       <Accordion
@@ -41,14 +40,8 @@ const UserProfileInfo: FC<{ userData?: UserType }> = ({ userData }) => {
                 {userData?.email === "" ? "-" : userData?.email}
               </span>
             </li>
-            {/* <li className={styles.profileDataItem}>
-              <span className={styles.label}>Password:</span>
-              <span className={styles.value}>
-                {userData?.username === "" ? "-" : "********"}
-              </span>
-            </li> */}
             <li className={styles.profileDataItem}>
-              <span className={styles.label}>Phone namber:</span>
+              <span className={styles.label}>Phone number:</span>
               <span className={styles.value}>
                 {userData?.phone === "" || !userData?.phone
                   ? "-"

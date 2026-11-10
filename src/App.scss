@@ -250,3 +250,27 @@ pwa-camera-modal,
 pwa-camera-modal-instance {
   font-size: 10rem;
 }
+
+//quill text styles
+
+.quillText {
+  ul,
+  ol {
+    padding-inline-start: 10rem;
+    li {
+      padding-inline-start: 8rem;
+      position: relative;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0.5em;
+        left: 0;
+        width: 3rem;
+        height: 3rem;
+        background-color: var(--ion-color-primary);
+        border-radius: 1rem;
+      }
+    }
+  }
+}

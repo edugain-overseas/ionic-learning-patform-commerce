@@ -1,23 +1,29 @@
-import { FC } from "react";
+import { FC, MouseEvent } from "react";
+import { Link } from "react-router-dom";
 import { IonIcon, IonRippleEffect } from "@ionic/react";
+import { useUser } from "../../context/UserContext";
+import { useClipboardCopy } from "../../hooks/useClipboardCopy";
 import InsetBtn from "../InsetBtn/InsetBtn";
 import WhatsupIcon from "../../assets/icons/social/whatsup.svg";
 import EmailIcon from "../../assets/icons/social/email.svg";
 import LocationIcon from "../../assets/icons/social/location.svg";
 import FacebookIcon from "../../assets/icons/social/facebook.svg";
 import InstagramIcon from "../../assets/icons/social/instagram.svg";
-// import LinkedinIcon from "../../assets/icons/social/linkedin.svg";
-// import YoutubeIcon from "../../assets/icons/social/youtube.svg";
-// import TiktokIcon from "../../assets/icons/social/tiktok.svg";
-import styles from "./HomeFooter.module.scss";
 import EqualSpaceContainer from "../EqualSpaceContainer/EqualSpaceContainer";
 import SheetModalAuto from "../SheetModalAuto/SheetModalAuto";
 import ContactForm from "../ContactForm/ContactForm";
-import { Link } from "react-router-dom";
-import { useUser } from "../../context/UserContext";
+import styles from "./HomeFooter.module.scss";
+
+const OFFICE_ADDRESS = "Academician Glushkova Avenue.42, Kyiv 03187";
 
 const HomeFooter: FC = () => {
   const isAuthorized = useUser()?.user.accessToken;
+  const [copy] = useClipboardCopy();
+
+  const handleAdressClick = async (e: MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    copy(OFFICE_ADDRESS, { successMessage: "Address copied" });
+  };
 
   return (
     <>
@@ -67,7 +73,7 @@ const HomeFooter: FC = () => {
             </a>
           </li>
           <li>
-            <a href="/" onClick={(e) => e.preventDefault()}>
+            <a href="/" onClick={handleAdressClick}>
               <InsetBtn
                 width="32rem"
                 height="32rem"
@@ -75,9 +81,7 @@ const HomeFooter: FC = () => {
               />
               <div className={styles.linkText}>
                 <span className={styles.label}>Our office:</span>
-                <span className={styles.value}>
-                  Academician Glushkova Avenue.42, Kyiv 03187
-                </span>
+                <span className={styles.value}>{OFFICE_ADDRESS}</span>
               </div>
             </a>
           </li>

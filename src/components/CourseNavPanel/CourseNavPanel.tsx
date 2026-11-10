@@ -17,7 +17,7 @@ const CourseNavPanel: React.FC = () => {
     "blocked";
 
   const denyMessage = isCoursePurchased
-    ? "This lesson is not availabel. Please complete previous lessons"
+    ? "This lesson is not available. Please complete previous lessons"
     : "You can not access this lesson becouse it is blocked";
 
   const examItem: SegmentItem = {

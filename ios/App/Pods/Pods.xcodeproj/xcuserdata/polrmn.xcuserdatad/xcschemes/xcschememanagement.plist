@@ -44,7 +44,17 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>CapacitorBrowser.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>CapacitorCamera.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>CapacitorClipboard.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>

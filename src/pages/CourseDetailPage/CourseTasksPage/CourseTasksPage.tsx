@@ -37,7 +37,7 @@ const CourseTasksPage: FC = () => {
 
   const CourseStats = () => (
     <div className={styles.courseStats}>
-      <span className={styles.type}>Details Course:</span>
+      <span className={styles.type}>Course Details:</span>
       <div className={styles.details}>
         <ul className={styles.statsList}>
           <li className={styles.statsItem}>

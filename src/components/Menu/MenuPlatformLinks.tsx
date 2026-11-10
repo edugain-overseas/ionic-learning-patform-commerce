@@ -1,7 +1,8 @@
 import { platformLinks } from "../../constants/nav";
 import { IonIcon, IonMenuToggle, IonRippleEffect } from "@ionic/react";
-import styles from "./Menu.module.scss";
 import { Capacitor } from "@capacitor/core";
+import { ExternalLink } from "../ExternalLink/ExternalLink";
+import styles from "./Menu.module.scss";
 
 const MenuPlatformLinks = () => {
   const platform = Capacitor.getPlatform();
@@ -14,7 +15,7 @@ const MenuPlatformLinks = () => {
         return (
           <li key={link.label}>
             <IonMenuToggle>
-              <a
+              <ExternalLink
                 href={link.href}
                 target="_blank"
                 rel="noreferrer"
@@ -30,7 +31,7 @@ const MenuPlatformLinks = () => {
                   <span className={styles.navItemLabel}>{link.label}</span>
                 </div>
                 <IonRippleEffect type="unbounded"></IonRippleEffect>
-              </a>
+              </ExternalLink>
             </IonMenuToggle>
           </li>
         );

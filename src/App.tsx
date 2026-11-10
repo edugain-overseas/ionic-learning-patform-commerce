@@ -50,12 +50,11 @@ const AppContent: React.FC = () => {
       } catch (error) {
         console.error("Помилка ініціалізації додатка:", error);
       } finally {
-        // await SplashScreen.hide({ fadeOutDuration: 400 });
         setTimeout(async () => {
           try {
             await SplashScreen.hide({ fadeOutDuration: 500 });
           } catch (e) {
-            console.warn("Сплеш-скрін вже приховано або виникла помилка:", e);
+            console.warn("SplashScreen error:", e);
           }
         }, 350);
       }

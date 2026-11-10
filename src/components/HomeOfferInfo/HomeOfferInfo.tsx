@@ -1,64 +1,33 @@
-import { FC, useRef } from "react";
+import { FC, MouseEvent, useRef, useState } from "react";
 import { IonIcon } from "@ionic/react";
 import { useObserver } from "../../hooks/useObserver";
-import WebIcon from "../../assets/icons/social/web.svg";
-import AppstoreIcon from "../../assets/icons/social/app-store.svg";
-import Playmarketcon from "../../assets/icons/social/play-market.svg";
+import { platformLinks } from "../../constants/nav";
+import { ExternalLink } from "../ExternalLink/ExternalLink";
 import desktopImg from "../../assets/images/home_device_desktop.png";
 import mobileImg from "../../assets/images/home_device_mobile.png";
 import styles from "./HomeOfferInfo.module.scss";
 
-type PlatformType = "web" | "ios" | "android";
-
-const getIconByType = (type: PlatformType) => {
-  switch (type) {
-    case "web":
-      return WebIcon;
-    case "ios":
-      return AppstoreIcon;
-    case "android":
-      return Playmarketcon;
-    default:
-      return;
-  }
-};
-const getlabelByType = (type: PlatformType) => {
-  switch (type) {
-    case "web":
-      return "Website";
-    case "ios":
-      return "App Store";
-    case "android":
-      return "Google Play";
-    default:
-      return;
-  }
-};
-
-const PlartofrmLink: FC<{ type: PlatformType }> = ({ type }) => {
+const PlartofrmLink: FC<{ link: (typeof platformLinks)[0] }> = ({ link }) => {
+  const [isActive, setIsActive] = useState(false);
   const spanRef = useRef<HTMLSpanElement>(null);
 
-  const handleClick = () => {
+  const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    if (isActive) return;
+    e.preventDefault();
     if (spanRef.current) {
-      console.dir(spanRef.current);
       spanRef.current.style.maxWidth = `calc(${spanRef.current.scrollWidth}px + 8rem)`;
       spanRef.current.style.paddingLeft = `8rem`;
     }
+    setIsActive(true);
   };
 
   return (
-    <a
-      href="/"
-      onClick={(e) => {
-        e.preventDefault();
-        handleClick();
-      }}
-    >
-      <IonIcon src={getIconByType(type)} />
+    <ExternalLink href={isActive ? link.href : "/"} onClick={handleClick}>
+      <IonIcon src={link.iconSrc} />
       <span className={styles.label} ref={spanRef}>
-        {getlabelByType(type)}
+        {link.label}
       </span>
-    </a>
+    </ExternalLink>
   );
 };
 
@@ -116,9 +85,9 @@ const HomeOfferInfo: FC = () => {
           professional goals.
         </p>
         <div className={styles.links}>
-          <PlartofrmLink type="web" />
-          <PlartofrmLink type="ios" />
-          <PlartofrmLink type="android" />
+          {platformLinks.map((link) => (
+            <PlartofrmLink key={link.platform} link={link} />
+          ))}
         </div>
       </div>
     </div>

@@ -80,19 +80,19 @@ export const menuNav = [
 export const platformLinks = [
   {
     label: "Website",
-    href: "/home",
+    href: "https://courses.feu.com.ua",
     platform: "web",
     iconSrc: webIcon,
   },
   {
     label: "App Store",
-    href: "/home",
+    href: "https://apps.apple.com/gb/app/feu-courses/id6742498936",
     platform: "ios",
     iconSrc: appStoreIcon,
   },
   {
     label: "Google Play",
-    href: "/home",
+    href: "https://play.google.com/store/apps/details?id=io.ieucourses.app",
     platform: "android",
     iconSrc: playMarketIcon,
   },

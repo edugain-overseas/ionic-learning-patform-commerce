@@ -1,123 +1,77 @@
-import { AxiosError } from "axios";
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { instance } from "../instance";
-import { Dispatch, SetStateAction } from "react";
+import { getAccessToken } from "./tokenStore";
 
-let isRefreshing = false;
+type RetriableConfig = InternalAxiosRequestConfig & { _retry?: boolean };
 
-let failedQueue: {
-  resolve: (token: string) => void;
-  reject: (error: any) => void;
-}[] = [];
+const refreshClient = axios.create({
+  baseURL: instance.defaults.baseURL,
+  withCredentials: true,
+});
+
+const SKIP_REFRESH_URLS = [
+  "/user/login",
+  "/user/refresh",
+  "/user/logout",
+  "/user/activate",
+  "/user/login-with-google",
+  "/user/login-with-apple",
+];
+
+const shouldSkip = (url?: string) =>
+  SKIP_REFRESH_URLS.some((u) => url?.includes(u));
 
 let refreshPromise: Promise<string> | null = null;
 
-const processQueue = (error: any, token: string | null = null) => {
-  failedQueue.forEach((p) => {
-    if (error) {
-      p.reject(error);
-    } else {
-      p.resolve(token!);
-    }
-  });
-
-  failedQueue = [];
-};
-
 export const setupInterceptors = (
-  logout: () => void,
-  setAccessToken: Dispatch<SetStateAction<null>>,
+  clearSession: () => void,
+  onTokenRefreshed: (token: string) => void,
 ) => {
-  instance.interceptors.response.use(
-    (response) => response,
-
-    async (error: AxiosError<any>) => {
-      const originalRequest: any = error.config;
-
-      const status = error.response?.status;
-      const detail = error.response?.data?.detail;
-
-      const isRefreshRequest = originalRequest?.url?.includes(
-        "/user/refresh-token",
-      );
-
-      const isRefreshExpired =
-        status === 401 && detail === "Invalid refresh token";
-
-      if (isRefreshExpired) {
-        logout();
-        return Promise.reject(error);
-      }
-
-      // refresh token помер -> logout
-      if (isRefreshRequest && status === 401) {
-        logout();
-        return Promise.reject(error);
-      }
-
-      const isAccessExpired =
-        status === 401 && detail === "Access token expired";
-
-      if (!isAccessExpired) {
-        return Promise.reject(error);
-      }
-
-      // already retried
-      if (originalRequest._retry) {
-        return Promise.reject(error);
-      }
-
-      originalRequest._retry = true;
-
-      // якщо refresh already running
-      if (isRefreshing && refreshPromise) {
-        return new Promise((resolve, reject) => {
-          failedQueue.push({ resolve, reject });
+  const refreshAccessToken = () => {
+    if (!refreshPromise) {
+      refreshPromise = refreshClient
+        .get<{ access_token: string }>("/user/refresh")
+        .then(({ data }) => {
+          onTokenRefreshed(data.access_token);
+          return data.access_token;
         })
-          .then((token) => {
-            originalRequest.headers.Authorization = `Bearer ${token}`;
-            return instance(originalRequest);
-          })
-          .catch((err) => Promise.reject(err));
+        .catch((error) => {
+          clearSession();
+          throw error;
+        })
+        .finally(() => {
+          refreshPromise = null;
+        });
+    }
+    return refreshPromise;
+  };
+
+  const interceptorId = instance.interceptors.response.use(
+    (response) => response,
+    async (error: AxiosError) => {
+      const original = error.config as RetriableConfig | undefined;
+
+      if (
+        !original ||
+        error.response?.status !== 401 ||
+        original._retry ||
+        shouldSkip(original.url) ||
+        !getAccessToken()
+      ) {
+        return Promise.reject(error);
       }
 
-      isRefreshing = true;
-
-      refreshPromise = new Promise(async (resolve, reject) => {
-        try {
-          const { data } = await instance.get("/user/refresh", {
-            withCredentials: true,
-          });
-
-          const newToken = data.access_token;
-
-          instance.defaults.headers.Authorization = `Bearer ${newToken}`;
-
-          setAccessToken(newToken);
-
-          processQueue(null, newToken);
-
-          resolve(newToken);
-        } catch (err) {
-          processQueue(err, null);
-
-          logout();
-
-          reject(err);
-        } finally {
-          isRefreshing = false;
-          refreshPromise = null;
-        }
-      });
+      original._retry = true;
 
       try {
-        const token = await refreshPromise;
-
-        originalRequest.headers.Authorization = `Bearer ${token}`;
-
-        return instance(originalRequest);
-      } catch (err) {
-        return Promise.reject(err);
+        const token = await refreshAccessToken();
+        original.headers.Authorization = `Bearer ${token}`;
+        return instance(original);
+      } catch (refreshError) {
+        return Promise.reject(refreshError);
       }
     },
   );
+
+  return () => instance.interceptors.response.eject(interceptorId);
 };

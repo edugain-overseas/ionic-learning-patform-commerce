@@ -75,7 +75,7 @@ const TaskItem: FC<TaskItemType> = ({ task }) => {
   );
 
   const blockedMessage = isCoursePurchased
-    ? "This lesson is not availabel. Please complete previous lessons"
+    ? "This lesson is not available. Please complete previous lessons"
     : "Please purchase the course to gain access to the lesson";
 
   const handleItemClick = () => {

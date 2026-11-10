@@ -1,4 +1,5 @@
 import { ToastOptions, useIonToast } from "@ionic/react";
+import { useCallback } from "react";
 import error from "../assets/icons/toast/error.svg";
 import warning from "../assets/icons/toast/warning.svg";
 import success from "../assets/icons/toast/success.svg";
@@ -20,16 +21,18 @@ const toastIcons = {
 export const useToast = () => {
   const [present] = useIonToast();
 
-  const api = ({ type = "info", ...config }: ToastApiConfig) => {
-    return present({
-      cssClass: ["toast", `toast-${type}`],
-      mode: "ios",
-      swipeGesture: "vertical",
-      position: "top",
-      icon: toastIcons[type],
-      duration: 5000,
-      ...config,
-    });
-  };
-  return [api];
+  const api = useCallback(
+    ({ type = "info", ...config }: ToastApiConfig) =>
+      present({
+        cssClass: ["toast", `toast-${type}`],
+        mode: "ios",
+        swipeGesture: "vertical",
+        position: "top",
+        icon: toastIcons[type],
+        duration: 5000,
+        ...config,
+      }),
+    [present],
+  );
+  return [api] as const;
 };

@@ -74,7 +74,7 @@ const CourseIntroPage: React.FC = () => {
             </div>
             <div className={styles.contentBlock}>
               <p
-                className={styles.infoText}
+                className={`${styles.infoText} quillText`}
                 dangerouslySetInnerHTML={{
                   __html: course?.intro_text ? course.intro_text : "",
                 }}
@@ -140,7 +140,7 @@ const CourseIntroPage: React.FC = () => {
               <div className={styles.courseSkills}>
                 <span className={styles.listTitle}>Skills you will learn:</span>
                 <div
-                  className={styles.infoText}
+                  className={`${styles.infoText} quillText`}
                   dangerouslySetInnerHTML={{
                     __html: course?.skills_text ? course?.skills_text : "",
                   }}
@@ -156,7 +156,7 @@ const CourseIntroPage: React.FC = () => {
                 <span className={styles.title}>About this course</span>
               </div>
               <p
-                className={styles.infoText}
+                className={`${styles.infoText} quillText`}
                 dangerouslySetInnerHTML={{
                   __html: course?.about_main_text
                     ? course?.about_main_text
@@ -164,7 +164,7 @@ const CourseIntroPage: React.FC = () => {
                 }}
               ></p>
               <p
-                className={styles.infoText}
+                className={`${styles.infoText} quillText`}
                 dangerouslySetInnerHTML={{
                   __html: course?.about_text ? course?.about_text : "",
                 }}

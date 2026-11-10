@@ -41,7 +41,7 @@ const LectureContent: FC<{ lectureContent: LectureContentType[] }> = ({
                 )}
                 {text && (
                   <div
-                    className={styles.sectionContentWrapper}
+                    className={`${styles.sectionContentWrapper} .quillText`}
                     dangerouslySetInnerHTML={{ __html: text }}
                   ></div>
                 )}
@@ -61,7 +61,7 @@ const LectureContent: FC<{ lectureContent: LectureContentType[] }> = ({
                 </div>
                 {text && text !== "" && (
                   <div
-                    className={styles.sectionContentWrapper}
+                    className={`${styles.sectionContentWrapper} .quillText`}
                     dangerouslySetInnerHTML={{ __html: text }}
                   ></div>
                 )}
@@ -79,7 +79,7 @@ const LectureContent: FC<{ lectureContent: LectureContentType[] }> = ({
                 <AudioPlayer src={`${serverName}/${encodedFilePathAudio}`} />
                 {text && text !== "" && (
                   <div
-                    className={styles.sectionContentWrapper}
+                    className={`${styles.sectionContentWrapper} .quillText`}
                     dangerouslySetInnerHTML={{ __html: text }}
                   ></div>
                 )}
@@ -97,7 +97,7 @@ const LectureContent: FC<{ lectureContent: LectureContentType[] }> = ({
                 <VideoPlayer url={`${serverName}/${encodedFilePathVideo}`} />
                 {text && text !== "" && (
                   <div
-                    className={styles.sectionContentWrapper}
+                    className={`${styles.sectionContentWrapper} .quillText`}
                     dangerouslySetInnerHTML={{ __html: text }}
                   ></div>
                 )}
@@ -119,7 +119,7 @@ const LectureContent: FC<{ lectureContent: LectureContentType[] }> = ({
                 )}
                 {text && text !== "" && (
                   <div
-                    className={styles.sectionContentWrapper}
+                    className={`${styles.sectionContentWrapper} .quillText`}
                     dangerouslySetInnerHTML={{ __html: text }}
                   ></div>
                 )}
@@ -146,7 +146,7 @@ const LectureContent: FC<{ lectureContent: LectureContentType[] }> = ({
                 )}
                 {text && text !== "" && (
                   <div
-                    className={styles.sectionContentWrapper}
+                    className={`${styles.sectionContentWrapper} .quillText`}
                     dangerouslySetInnerHTML={{ __html: text }}
                   ></div>
                 )}
@@ -162,7 +162,7 @@ const LectureContent: FC<{ lectureContent: LectureContentType[] }> = ({
                 <ImageGroup imagesData={files} />
                 {text && (
                   <div
-                    className={styles.sectionContentWrapper}
+                    className={`${styles.sectionContentWrapper} .quillText`}
                     dangerouslySetInnerHTML={{ __html: text }}
                   ></div>
                 )}

@@ -234,23 +234,23 @@
   ul, ol {
     padding-inline-start: 10rem;
     li {
-      padding-inline-start: 8rem;
+      // padding-inline-start: 8rem;
       // font-family: Roboto;
       font-size: 12rem;
       line-height: 16rem;
       font-weight: 400;
-      position: relative;
+      // position: relative;
 
-      &::before {
-        content: "";
-        position: absolute;
-        top: 0.5em;
-        left: 0;
-        width: 3rem;
-        height: 3rem;
-        background-color: var(--ion-color-primary);
-        border-radius: 1rem;
-      }
+      // &::before {
+      //   content: "";
+      //   position: absolute;
+      //   top: 0.5em;
+      //   left: 0;
+      //   width: 3rem;
+      //   height: 3rem;
+      //   background-color: var(--ion-color-primary);
+      //   border-radius: 1rem;
+      // }
     }
   }
 }

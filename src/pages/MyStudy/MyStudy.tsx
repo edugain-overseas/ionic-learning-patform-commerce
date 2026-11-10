@@ -111,7 +111,7 @@ const MyStudy: React.FC = () => {
               <div className={styles.empty} style={{ height: "500rem" }}>
                 <Empty description={null} />
                 <span className={styles.emptyMessage}>
-                  There are nothing here yet.
+                  There is nothing here yet.
                 </span>
                 <IonRouterLink routerLink="/courses">
                   <span className={styles.emptyMessage}>Go to courses</span>

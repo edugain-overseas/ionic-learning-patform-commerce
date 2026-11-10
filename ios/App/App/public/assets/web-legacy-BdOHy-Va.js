@@ -1,0 +1,1 @@
+System.register(["./index-legacy-CiZ0n_0n.js"],(function(e,s){"use strict";var t;return{setters:[e=>{t=e.W}],execute:function(){e("SplashScreenWeb",class extends t{async show(e){}async hide(e){}})}}}));

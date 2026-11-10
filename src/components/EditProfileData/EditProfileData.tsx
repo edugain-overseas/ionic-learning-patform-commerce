@@ -70,7 +70,11 @@ const EditProfileData: FC<{
   });
 
   const onChangePasswordClick = async () => {
-    if (!userData || !authUi || !closeModal || userData.email) return;
+    console.log(userData, authUi, closeModal);
+    console.log(authUi);
+    console.log(closeModal);
+    
+    if (!userData || !authUi || !closeModal || !userData.email) return;
 
     try {
       setIsPasswordChangeLoading(true);

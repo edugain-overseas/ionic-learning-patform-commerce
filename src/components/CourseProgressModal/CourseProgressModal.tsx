@@ -41,7 +41,7 @@ const CourseProgressModal: FC<CourseProgressModalType> = ({ isAnimating }) => {
       isExam ? "exam" : `tasks/${lesson.id}`
     }`;
     const message = isCoursePurchased
-      ? "This lesson is not availabel. Please complete previous lessons"
+      ? "This lesson is not available. Please complete previous lessons"
       : "Please purchase the course to gain access to the lesson";
 
     protectedNavigate(isAllowed, path, message);
